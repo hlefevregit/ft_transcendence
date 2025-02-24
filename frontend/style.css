@@ -1,0 +1,80 @@
+/* 🔹 Effet de fondu */
+.fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+body {
+    image-rendering: pixelated;
+}
+
+
+#scene-museum {
+    opacity: 0;
+    transform: translateX(100%);
+    visibility: hidden; /* Assure que c'est caché par défaut */
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out, visibility 0s 1s;
+}
+
+.fade-in {
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+    visibility: visible !important;
+}
+/* Animation de fondu au noir */
+.fade-to-black {
+    opacity: 1 !important;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Animation de fondu depuis le noir */
+.fade-from-black {
+    opacity: 0 !important;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/****************************************************/
+/*            🔹 Animation de marche                */
+/****************************************************/
+
+
+.sprite-character {
+    width: 128px;
+    height: 128px;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+
+}
+
+/* Spritesheet pour l'état idle */
+.sprite-idle {
+    background-image: url('assets/spriteshesh/City_men_1/Idle.png');
+    background-position: 0 0;
+    animation: idle-animation 1s steps(6) infinite;
+}
+
+.sprite-move {
+    background-image: url('assets/spriteshesh/City_men_1/Walk.png');
+    background-repeat: no-repeat;
+    /* Animation pour l'état en mouvement */
+    animation: walk-animation 1.5s steps(10) infinite;
+  }
+
+@keyframes idle-animation {
+from {
+    background-position: 0 0;
+}
+to {
+    background-position: -768px 0;
+}
+}
+
+@keyframes walk-animation {
+from {
+    background-position: 0 0;
+}
+to {
+    background-position: -1280px 0;
+}
+}
+

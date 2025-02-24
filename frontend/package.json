@@ -1,0 +1,24 @@
+{
+  "name": "ft_transcendence",
+  "version": "1.0.0",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hlefevregit/ft_transcendence.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hlefevregit/ft_transcendence/issues"
+  },
+  "homepage": "https://github.com/hlefevregit/ft_transcendence#readme",
+  "description": "",
+  "dependencies": {
+    "babylonjs": "^7.50.0",
+    "tailwindcss": "^4.0.7"
+  }
+}

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Art Museum</title>
+    <script defer src="script.js"></script> 
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body class="overflow-hidden bg-gray-900">
+    <div id="app">
+
+        <!------------------------------------------------------------------------------------------------------------>
+        <!------------------------------------------------- ENTREE---------------------------------------------------->
+        <!------------------------------------------------------------------------------------------------------------>
+
+        
+        <div id="scene-city" class="scene">
+            <div id="game-container" class="relative w-screen h-screen overflow-hidden">
+                <img src="./assets/2.jpg" id="background" class="absolute w-full h-full object-cover">
+                <div id="character-container" class="absolute bottom-20 left-10">
+                    <!-- L'élément du sprite qui sera agrandi -->
+                    <div id="character" class="sprite-character sprite-idle w-16 h-32"></div>
+                  </div>
+                <div id="museum-zone" class="absolute bottom-10 right-10 w-32 h-64 bg-transparent border border-white"></div>
+            </div>
+        </div>
+        
+        <!------------------------------------------------------------------------------------------------------------>
+        <!--------------------------------------------- Login form---------------------------------------------------->
+        <!------------------------------------------------------------------------------------------------------------>
+
+        
+        <div class="font-[sans-serif] hidden" id="log_form">
+            <div class="min-h-screen flex flex-col items-center justify-center py-6 px-4">
+              <div class="grid md:grid-cols-2 items-center gap-10 max-w-6xl max-md:max-w-md w-full">
+                <div>
+                  <h2 class="lg:text-5xl text-3xl font-extrabold lg:leading-[55px] text-gray-800">
+                    Seamless Login for Exclusive Access
+                  </h2>
+                  <p class="text-sm mt-6 text-gray-800">
+                    Immerse yourself in a hassle-free login journey with our intuitively designed login form. Effortlessly access your account.
+                  </p>
+                  <p class="text-sm mt-12 text-gray-800">
+                    Don't have an account 
+                    <a href="javascript:void(0);" id="register-link" class="text-blue-600 font-semibold hover:underline ml-1">Register here</a>
+                  </p>
+                </div>
+          
+                <form class="max-w-md md:ml-auto w-full">
+                  <h3 class="text-gray-800 text-3xl font-extrabold mb-8">Sign in</h3>
+          
+                  <div class="space-y-4">
+                    <div>
+                      <input name="email" type="email" autocomplete="email" required class="bg-gray-100 w-full text-sm text-gray-800 px-4 py-3.5 rounded-md outline-blue-600 focus:bg-transparent" placeholder="Email address" />
+                    </div>
+                    <div>
+                      <input name="password" type="password" autocomplete="current-password" required class="bg-gray-100 w-full text-sm text-gray-800 px-4 py-3.5 rounded-md outline-blue-600 focus:bg-transparent" placeholder="Password" />
+                    </div>
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                      <div class="flex items-center">
+                        <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+                        <label for="remember-me" class="ml-3 block text-sm text-gray-800">
+                          Remember me
+                        </label>
+                      </div>
+                      <div class="text-sm">
+                        <a href="javascript:void(0);" id="forgot-password-link" class="text-blue-600 hover:text-blue-500 font-semibold">
+                          Forgot your password?
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+          
+                  <div class="mt-8">
+                    <button type="button" id="login-btn" class="w-full shadow-xl py-2.5 px-4 text-sm font-semibold rounded text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
+                      Log in
+                    </button>
+                  </div>
+          
+                  <div class="my-4 flex items-center gap-4">
+                    <hr class="w-full border-gray-300" />
+                    <p class="text-sm text-gray-800 text-center">or</p>
+                    <hr class="w-full border-gray-300" />
+                  </div>
+          
+                  <div class="flex justify-center">
+                    <button type="button" id="google-login-btn" class="border-none outline-none">
+                      <!-- Bouton Google avec SVG -->
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32px" viewBox="0 0 512 512">
+                        <!-- Chemins SVG ici -->
+                      </svg>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+        </div>
+
+        
+        <!------------------------------------------------------------------------------------------------------------>
+        <!--------------------------------------------- FIRST ROOM --------------------------------------------------->
+        <!------------------------------------------------------------------------------------------------------------>
+
+
+
+        <div id="scene-museum" class="scene hidden relative w-screen h-screen flex items-center justify-center text-white">
+            <img src="./assets/3.jpg" id="museum-background" class="absolute w-full h-full object-cover">
+            <h1 class="text-4xl font-bold">Bienvenue dans le Musée !</h1>
+            <button id="exit-museum" class="absolute bottom-10 right-10 px-4 py-2 bg-red-600 text-white rounded-lg">
+                Quitter le Musée
+            </button>
+        </div>
+    </div>
+    <div id="transition-overlay" class="fixed top-0 left-0 w-full h-full bg-black opacity-0 pointer-events-none z-50"></div>
+</body>
+</html>
