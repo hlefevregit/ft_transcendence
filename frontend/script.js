@@ -55,6 +55,34 @@ function createForm() {
         }, 500);
     }, 500);
 }
+function showGoogleLogin(idToken) {
+    console.log('Affichage de la modale de connexion avec Google.');
+    fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_token: idToken })
+    })
+        .then(function (response) {
+        if (!response.ok) {
+            throw new Error('Erreur de connexion Google.');
+        }
+        return response.json();
+    })
+        .then(function (data) {
+        if (data.success) {
+            console.log('Connexion Google réussie !');
+            localStorage.setItem('authToken', data.token);
+            enterMuseum();
+        }
+        else {
+            alert("Erreur : ".concat(data.message));
+        }
+    })
+        .catch(function (error) {
+        console.error('Erreur :', error);
+        alert('Une erreur est survenue lors de la connexion avec Google.');
+    });
+}
 document.addEventListener("DOMContentLoaded", function () {
     var logBtn = document.getElementById("login-btn");
     var registerLink = document.getElementById("register-link");
@@ -80,10 +108,17 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Redirection vers la page de réinitialisation du mot de passe");
         showForgotPasswordForm();
     });
-    googleLoginBtn.addEventListener("click", function () {
-        console.log("Connexion avec Google");
-        // showGoogleLogin();
+    google.accounts.id.initialize({
+        client_id: "930883947615-3ful7pfe6k38qbdqfph7ja2lp76spahf.apps.googleusercontent.com",
+        callback: function (response) {
+            console.log("Réponse Google :", response);
+            // response.credential contient le id_token généré par Google
+            showGoogleLogin(response.credential);
+        }
     });
+    // Rendre le bouton Google (ceci remplacera l'appel manuel à showGoogleLogin)
+    google.accounts.id.renderButton(googleLoginBtn, { theme: "outline", size: "large" } // options de personnalisation
+    );
 });
 function showForgotPasswordForm() {
     console.log('Affichage de la modale de réinitialisation du mot de passe.');
@@ -201,13 +236,12 @@ function handleEmailLogin(email, password) {
     })
         .catch(function (error) {
         console.error('Erreur :', error);
-        showErrorMessage('Une erreur est survenue lors de la connexion.');
+        showErrorMessage('Email ou mot de passe invalide');
     });
 }
 function showErrorMessage(message) {
     var errorMessage = document.getElementById('error-message');
     if (errorMessage) {
-        alert(message);
         errorMessage.textContent = message;
         errorMessage.classList.remove('hidden');
     }

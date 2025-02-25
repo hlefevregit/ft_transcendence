@@ -49,6 +49,7 @@ function enterMuseum() {
     }, 500);
 }
 
+
 function createForm() {
     const cityScene = document.getElementById("scene-city")!;
     const form = document.getElementById("log_form")!;
@@ -71,6 +72,34 @@ function createForm() {
             }, 500);
         }, 500);
     }, 500);
+}
+
+function showGoogleLogin(idToken: string) {
+    console.log('Affichage de la modale de connexion avec Google.');
+    fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_token: idToken })
+    })
+    .then(response => {
+    if (!response.ok) {
+        throw new Error('Erreur de connexion Google.');
+    }
+    return response.json();
+    })
+    .then(data => {
+    if (data.success) {
+        console.log('Connexion Google réussie !');
+        localStorage.setItem('authToken', data.token);
+        enterMuseum();
+    } else {
+        alert(`Erreur : ${data.message}`);
+    }
+    })
+    .catch(error => {
+    console.error('Erreur :', error);
+    alert('Une erreur est survenue lors de la connexion avec Google.');
+    });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -101,11 +130,21 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Redirection vers la page de réinitialisation du mot de passe");
         showForgotPasswordForm();
     });
-
-    googleLoginBtn.addEventListener("click", () => {
-        console.log("Connexion avec Google");
-        // showGoogleLogin();
+    
+    
+    google.accounts.id.initialize({
+        client_id: "930883947615-3ful7pfe6k38qbdqfph7ja2lp76spahf.apps.googleusercontent.com", 
+        callback: (response: any) => {
+            console.log("Réponse Google :", response);
+            // response.credential contient le id_token généré par Google
+            showGoogleLogin(response.credential);
+        }
     });
+    // Rendre le bouton Google (ceci remplacera l'appel manuel à showGoogleLogin)
+    google.accounts.id.renderButton(
+        googleLoginBtn, 
+        { theme: "outline", size: "large" } // options de personnalisation
+    );
 
 });
 

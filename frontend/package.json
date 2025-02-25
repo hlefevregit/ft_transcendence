@@ -19,6 +19,7 @@
   "description": "",
   "dependencies": {
     "babylonjs": "^7.50.0",
+    "dotenv": "^16.4.7",
     "tailwindcss": "^4.0.7"
   }
 }
