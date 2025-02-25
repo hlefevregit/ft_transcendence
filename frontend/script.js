@@ -68,8 +68,11 @@ document.addEventListener("DOMContentLoaded", function () {
         handleEmailLogin(email, password);
     });
     registerLink.addEventListener("click", function (e) {
+        var _a, _b;
         e.preventDefault();
         console.log("Redirection vers la page d'inscription");
+        (_a = document.getElementById("log_form")) === null || _a === void 0 ? void 0 : _a.classList.add("hidden");
+        (_b = document.getElementById("register_form")) === null || _b === void 0 ? void 0 : _b.classList.remove("hidden");
         showRegistrationForm();
     });
     forgotPasswordLink.addEventListener("click", function (e) {
@@ -86,8 +89,77 @@ function showForgotPasswordForm() {
     console.log('Affichage de la modale de réinitialisation du mot de passe.');
 }
 function showRegistrationForm() {
-    console.log('Affichage du formulaire d\'inscription.');
+    var _a;
+    // Attache l'écouteur sur le lien de retour au login
+    (_a = document.getElementById('reg-login-link')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function (event) {
+        var _a, _b;
+        event.preventDefault();
+        (_a = document.getElementById('register_form')) === null || _a === void 0 ? void 0 : _a.classList.add('hidden');
+        (_b = document.getElementById('log_form')) === null || _b === void 0 ? void 0 : _b.classList.remove('hidden');
+    });
+    // Attache directement l'écouteur sur le bouton "Create Account"
+    var registerBtn = document.getElementById("reg-create-btn");
+    if (registerBtn) {
+        registerBtn.addEventListener("click", function (event) {
+            event.preventDefault(); // Empêche le comportement par défaut (soumission du formulaire)
+            handleRegister();
+        });
+    }
 }
+// Fonction qui gère l'inscription
+function handleRegister() {
+    // Récupérer les valeurs du formulaire
+    var nameInput = document.getElementById('reg-name');
+    var emailInput = document.getElementById('reg-email');
+    var passwordInput = document.getElementById('reg-password');
+    if (!nameInput || !emailInput || !passwordInput) {
+        console.error("Un ou plusieurs champs sont introuvables.");
+        return;
+    }
+    var name = nameInput.value.trim();
+    var email = emailInput.value.trim();
+    var password = passwordInput.value; // On peut aussi faire .trim() si nécessaire
+    // Vérification simple (on peut ajouter d'autres validations)
+    if (!name || !email || !password) {
+        alert("Veuillez remplir tous les champs.");
+        if (!name)
+            alert("Le champ 'Nom' est obligatoire.");
+        if (!email)
+            alert("Le champ 'Email' est obligatoire.");
+        if (!password)
+            alert("Le champ 'Mot de passe' est obligatoire.");
+        return;
+    }
+    // Envoi de la requête POST vers le backend
+    fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, email: email, password: password })
+    })
+        .then(function (response) {
+        if (!response.ok) {
+            throw new Error('Erreur lors de l’inscription');
+        }
+        return response.json();
+    })
+        .then(function (data) {
+        var _a, _b;
+        if (data.success) {
+            console.log('Inscription réussie !');
+            (_a = document.getElementById('register_form')) === null || _a === void 0 ? void 0 : _a.classList.add('hidden');
+            (_b = document.getElementById('log_form')) === null || _b === void 0 ? void 0 : _b.classList.remove('hidden');
+        }
+        else {
+            console.error('Erreur d’inscription :', data.message);
+            alert("Erreur : ".concat(data.message));
+        }
+    })
+        .catch(function (error) {
+        console.error('Erreur lors de l’inscription :', error);
+        alert('Une erreur est survenue lors de l’inscription. Veuillez réessayer.');
+    });
+}
+// Attacher l'écouteur d'événement au bouton d'inscription
 function handleEmailLogin(email, password) {
     console.log("Email :", email);
     var loginUrl = '/api/auth/sign_in';
@@ -116,54 +188,37 @@ function handleEmailLogin(email, password) {
             if (data.token) {
                 localStorage.setItem('authToken', data.token);
             }
+            // Masquer le message d'erreur si présent
+            var errorMessage = document.getElementById('error-message');
+            if (errorMessage)
+                errorMessage.classList.add('hidden');
             enterMuseum();
         }
         else {
             console.error('Échec de la connexion :', data.message);
-            alert('Échec de la connexion : ${data.message}');
+            showErrorMessage('Email ou mot de passe invalide');
         }
     })
         .catch(function (error) {
         console.error('Erreur :', error);
+        showErrorMessage('Une erreur est survenue lors de la connexion.');
     });
 }
+function showErrorMessage(message) {
+    var errorMessage = document.getElementById('error-message');
+    if (errorMessage) {
+        alert(message);
+        errorMessage.textContent = message;
+        errorMessage.classList.remove('hidden');
+    }
+}
 var scaleFactor = 1.7;
-// document.addEventListener("DOMContentLoaded", () => {
-//     const characterContainer = document.getElementById("character-container") as HTMLElement;
-//     const character = document.getElementById("character") as HTMLElement;
-//     const museumZone = document.getElementById("museum-zone") as HTMLElement;
-//     const app = document.getElementById("app") as HTMLElement;
-//     let positionX = 40;
-//     const speed = 20;
-//     const screenWidth = window.innerWidth;
-//     character.style.transform = `scale(${scaleFactor})`;
-//     // Déplacement du personnage
-//     document.addEventListener("keydown", (event) => {
-//         if (event.key === "ArrowRight" && positionX + speed < screenWidth - character.clientWidth) {
-//             positionX += speed;
-//         } else if (event.key === "ArrowLeft" && positionX - speed > 0) {
-//             positionX -= speed;
-//         }
-//         characterContainer.style.transform = `translateX(${positionX}px)`;
-//         // Vérifier si le joueur est dans la zone du musée
-//         const charRect = character.getBoundingClientRect();
-//         const zoneRect = museumZone.getBoundingClientRect();
-//         if (
-//             charRect.right > zoneRect.left &&
-//             charRect.left < zoneRect.right
-//         ) {
-//             console.log("Le joueur est dans la zone du musée !");
-//             createForm();
-//             // enterMuseum();
-//         }
-//     });
-// });
 document.addEventListener("DOMContentLoaded", function () {
     var characterContainer = document.getElementById("character-container");
     var character = document.getElementById("character");
     var museumZone = document.getElementById("museum-zone");
     var positionX = 40;
-    var speed = 10;
+    var speed = 30;
     var screenWidth = window.innerWidth;
     character.style.transform = "scale(".concat(scaleFactor, ")");
     // Pour le déplacement, on agit sur le conteneur
