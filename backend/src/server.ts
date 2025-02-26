@@ -19,8 +19,16 @@ const fastify = Fastify({ logger: true });
 
 // Configuration CORS pour autoriser ton frontend
 fastify.register(fastifyCors, {
-	origin: 'http://localhost:8080', // ou ton URL de production
+	origin: 'http://localhost:8080',
+	methods: ['GET', 'POST', 'PUT', 'DELETE']
 });
+
+
+fastify.get('/api/ping', async (request, reply) => {
+	console.log("🔥 Route /api/ping appelée");
+	reply.send({ success: true, message: "pong" });
+});
+  
 
 // Plugin JWT avec une clé secrète
 fastify.register(fastifyJwt, {
@@ -35,6 +43,13 @@ fastify.register(fastifyStatic, {
 	root: path.join(process.cwd(), 'public'),
 	prefix: '/',
 });
+
+fastify.ready(err => {
+	if (err) throw err;
+		console.log("🚀 Routes enregistrées :");
+		fastify.printRoutes();
+});
+  
 
 // --- INITIALISATION DE LA BASE DE DONNÉES ---
 import fs from 'fs';
@@ -73,52 +88,53 @@ let dbPromise = initDb();
 
 // --- Endpoint d'inscription via Google ---
 fastify.post('/api/auth/google', async (request, reply) => {
-  const { id_token } = request.body as { id_token: string };
+	console.log("🔥 Route /api/auth/google appelée");
+	const { id_token } = request.body as { id_token: string };
 	console.log(process.env.GOOGLE_CLIENT_ID);
-  if (!id_token) {
-    return reply.status(400).send({ success: false, message: "Token manquant" });
-  }
+  	if (!id_token) {
+    	return reply.status(400).send({ success: false, message: "Token manquant" });
+  	}
 
   // Vérifier le token Google
-  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID); // Assurez-vous que GOOGLE_CLIENT_ID est défini dans vos variables d'environnement
-  let ticket;
-  try {
-    ticket = await client.verifyIdToken({
-      idToken: id_token,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
-  } catch (error) {
-    return reply.status(401).send({ success: false, message: "Token Google invalide" });
-  }
+  	const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID); // Assurez-vous que GOOGLE_CLIENT_ID est défini dans vos variables d'environnement
+  	let ticket;
+  	try {
+		ticket = await client.verifyIdToken({
+  	    idToken: id_token,
+  	    audience: process.env.GOOGLE_CLIENT_ID,
+    	});
+  	} catch (error) {
+    	return reply.status(401).send({ success: false, message: "Token Google invalide" });
+	}
   
-  const payload = ticket.getPayload();
-  if (!payload || !payload.email) {
-    return reply.status(400).send({ success: false, message: "Informations introuvables dans le token" });
-  }
+  	const payload = ticket.getPayload();
+  	if (!payload || !payload.email) {
+  	  return reply.status(400).send({ success: false, message: "Informations introuvables dans le token" });
+  	}
 
-  const email = payload.email;
-  const name = payload.name || "Utilisateur Google";
+  	const email = payload.email;
+  	const name = payload.name || "Utilisateur Google";
   
-  try {
-    const db = await dbPromise;
-    // Vérifier si l'utilisateur existe déjà
-    let user = await db.get(`SELECT * FROM users WHERE email = ?`, [email]);
-    if (!user) {
-      // Créer un nouvel utilisateur
-      // Vous pouvez stocker une chaîne vide ou un mot de passe aléatoire, car l'authentification se fait via Google.
-      const defaultPassword = ""; // Optionnel, ou utilisez un token généré
-      await db.run(
-        `INSERT INTO users (name, email, password) VALUES (?, ?, ?)`,
-        [name, email, defaultPassword]
-      );
-      user = await db.get(`SELECT * FROM users WHERE email = ?`, [email]);
-    }
-    // Générer un token JWT pour votre application
-    const token = fastify.jwt.sign({ id: user.id, email: user.email });
-    reply.send({ success: true, token });
-  } catch (err: any) {
-    reply.status(500).send({ success: false, message: err.message });
-  }
+  	try {
+  	  const db = await dbPromise;
+  	  // Vérifier si l'utilisateur existe déjà
+  	  let user = await db.get(`SELECT * FROM users WHERE email = ?`, [email]);
+  	  if (!user) {
+  	    // Créer un nouvel utilisateur
+  	    // Vous pouvez stocker une chaîne vide ou un mot de passe aléatoire, car l'authentification se fait via Google.
+  	    const defaultPassword = ""; // Optionnel, ou utilisez un token généré
+  	    await db.run(
+  	      `INSERT INTO users (name, email, password) VALUES (?, ?, ?)`,
+  	      [name, email, defaultPassword]
+  	    );
+  	    user = await db.get(`SELECT * FROM users WHERE email = ?`, [email]);
+  	  }
+  	  // Générer un token JWT pour votre application
+  	  const token = fastify.jwt.sign({ id: user.id, email: user.email });
+  	  reply.send({ success: true, token });
+  	} catch (err: any) {
+  	  reply.status(500).send({ success: false, message: err.message });
+  	}
 });
 
 // Endpoint d'inscription (register)
