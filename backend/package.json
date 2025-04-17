@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "dist/server.js",
   "scripts": {
-  "dev": "nodemon src/server.ts",
-  "build": "npx tsc --pretty",
-  "start": "node dist/server.js"
+    "dev": "pm2-runtime start config/dev.ecosystem.config.js",
+    "build": "tsc",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
@@ -20,14 +20,17 @@
     "dotenv": "^16.4.7",
     "fastify": "^5.2.1",
     "google-auth-library": "^9.15.1",
+    "pm2": "^6.0.5",
     "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
-    "@types/node": "^22.13.4",
+    "@types/node": "^22.14.1",
     "@types/ws": "^8.5.14",
+    "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.8.3"
   }
 }

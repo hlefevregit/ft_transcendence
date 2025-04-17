@@ -1,29 +1,19 @@
 {
   "name": "ft_transcendence",
   "version": "1.0.0",
-  "main": "script.js",
+  "description": "Frontend for ft_transcendence",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hlefevregit/ft_transcendence.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/hlefevregit/ft_transcendence/issues"
-  },
-  "homepage": "https://github.com/hlefevregit/ft_transcendence#readme",
-  "description": "",
   "dependencies": {
     "babylonjs": "^7.50.0",
     "dotenv": "^16.4.7",
     "tailwindcss": "^4.0.7"
   },
   "devDependencies": {
-    "vite": "^6.2.0"
+    "vite": "^6.2.0",
+    "typescript": "^5.3.3"
   }
 }

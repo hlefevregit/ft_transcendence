@@ -1,0 +1,73 @@
+
+services:
+  backend:
+    build:
+      context: ${BACKEND_PATH}
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - backend_data:${BACKEND_PATH}
+      - db-data:/app/data
+    environment:
+      - NODE_ENV=development
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - JWT_SECRET=${JWT_SECRET}
+    command: npm run dev
+    working_dir: ${BACKEND_PATH}
+    depends_on:
+      - db
+    networks:
+      - ft_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    expose:
+      - "5173"
+    volumes:
+      - frontend_data:${FRONTEND_PATH}
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend
+    networks:
+      - ft_network
+
+  db:
+    image: mongo:latest
+    volumes:
+      - db-data:/app/data
+    networks:
+      - ft_network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "5173:80"
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - ft_network
+
+volumes:
+  db-data:
+  backend_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${BACKEND_PATH}
+      o: bind
+  frontend_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${FRONTEND_PATH}
+      o: bind
+networks:
+  ft_network:

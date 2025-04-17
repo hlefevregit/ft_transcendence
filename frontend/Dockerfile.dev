@@ -1,0 +1,14 @@
+FROM node:20-slim
+
+WORKDIR /bakcend
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+
+# Ouvre le port pour vite
+EXPOSE 5173
+
+CMD ["npm", "run", "dev"]

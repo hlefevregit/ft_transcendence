@@ -6,20 +6,29 @@ import fastifyWebsocket from '@fastify/websocket';
 import fastifyStatic from '@fastify/static';
 import path from 'path';
 import sqlite3 from 'sqlite3';
-import { open } from 'sqlite';
+import { open, Database } from 'sqlite';
 import bcrypt from 'bcrypt';
 import { OAuth2Client } from 'google-auth-library';
 import dotenv from 'dotenv';
+import fs from 'fs';
 
 // Charger les variables d'environnement depuis le fichier .env
 dotenv.config();
 
+process.on('uncaughtException', (err) => {
+	console.error('🛑 Uncaught Exception:', err.stack || err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+	console.error('🛑 Unhandled Rejection:', reason);
+});
+  
 
 const fastify = Fastify({ logger: true });
 
 // Configuration CORS pour autoriser ton frontend
 fastify.register(fastifyCors, {
-	origin: 'http://localhost:8080',
+	origin: ["http://localhost:8080", "http://localhost:5173"],
 	methods: ['GET', 'POST', 'PUT', 'DELETE']
 });
 
@@ -39,10 +48,17 @@ fastify.register(fastifyJwt, {
 fastify.register(fastifyWebsocket);
 
 // Servir les fichiers statiques (ton frontend) depuis le dossier "public"
-fastify.register(fastifyStatic, {
-	root: path.join(process.cwd(), 'public'),
-	prefix: '/',
-});
+const staticDir = path.join(process.cwd(), 'public');
+
+if (fs.existsSync(staticDir)) {
+  fastify.register(fastifyStatic, {
+    root: staticDir,
+    prefix: '/',
+  });
+  fastify.log.info("📂 Dossier public servi statiquement.");
+} else {
+  fastify.log.warn(`⚠️ Dossier "public" introuvable à ${staticDir}`);
+}
 
 fastify.ready(err => {
 	if (err) throw err;
@@ -50,9 +66,12 @@ fastify.ready(err => {
 		fastify.printRoutes();
 });
   
+// fastify.get('/api/test', async (request, reply) => {
 
+// 	console.log("🔥 Route /api/test appelée");
+// 	reply.send({ success: true, message: "Test réussi" });
+// });
 // --- INITIALISATION DE LA BASE DE DONNÉES ---
-import fs from 'fs';
 async function initDb() {
 	const dbDir = path.join(process.cwd(), 'data');
 	const dbPath = path.join(dbDir, 'users.db');
@@ -79,7 +98,19 @@ async function initDb() {
 	return db;
 }
 
-let dbPromise = initDb();
+let dbPromise: Promise<Database>;
+
+(async () => {
+  try {
+    console.log("🔧 Initialisation de la base de données...");
+    dbPromise = initDb();
+    await dbPromise;
+    console.log("✅ Base de données initialisée.");
+  } catch (err) {
+    console.error("❌ Erreur lors de l'init DB :", err);
+    process.exit(1); // crash net avec message
+  }
+})();
 
 
 
@@ -91,6 +122,15 @@ fastify.post('/api/auth/google', async (request, reply) => {
 	console.log("🔥 Route /api/auth/google appelée");
 	const { id_token } = request.body as { id_token: string };
 	console.log(process.env.GOOGLE_CLIENT_ID);
+
+	process.on('uncaughtException', (err) => {
+		console.error('🛑 Uncaught Exception:', err.stack || err);
+	});
+	
+	process.on('unhandledRejection', (reason, promise) => {
+		console.error('🛑 Unhandled Rejection:', reason);
+	});
+
   	if (!id_token) {
     	return reply.status(400).send({ success: false, message: "Token manquant" });
   	}
@@ -199,10 +239,17 @@ fastify.post('/api/auth/sign_in', async (request, reply) => {
 // Démarrage du serveur
 const start = async () => {
 	try {
+		console.log("🟡 Tentative de démarrage du serveur...");
 		await fastify.listen({ port: 3000, host: '0.0.0.0' });
-		fastify.log.info(`Server is running on port 3000`);
+		fastify.log.info("✅ Server is running on port 3000");
+		
+		// On attend 5 secondes pour détecter un crash éventuel
+		console.log("⏳ Serveur lancé, on attend 5 secondes pour voir s'il crashe...");
+		setTimeout(() => {
+			console.log("✅ Pas de crash dans les 5 secondes !");
+		}, 5000);
 	} catch (err) {
-		fastify.log.error(err);
+		fastify.log.error("❌ Erreur au lancement du serveur :", err);
 		process.exit(1);
 	}
 };

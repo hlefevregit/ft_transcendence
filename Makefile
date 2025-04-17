@@ -6,60 +6,87 @@
 #    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/02/26 17:45:32 by hulefevr         ###   ########.fr        #
+#    Updated: 2025/04/16 17:12:45 by hulefevr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Variables
-COMPOSE_FILE = docker-compose.yml
+# Variables
 PROJECT_NAME = ft_transcendence
+DEV_COMPOSE = docker-compose.dev.yml
+PROD_COMPOSE = docker-compose.yml
 
-.PHONY: build up down restart logs prune clean rebuild
+.PHONY: build up down restart logs prune clean rebuild \
+        build-dev up-dev down-dev restart-dev logs-dev rebuild-dev \
+        build-prod up-prod down-prod restart-prod logs-prod rebuild-prod
 
-# Build des images Docker pour tous les services
-build:
-	docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) build
+#########################################################
+### ------------------ ENV DEV ---------------------- ###
+#########################################################
 
-# Lance les containers en arrière-plan
-up:
-	docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) up -d
+build-dev:
+	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) build
 
-# Stoppe et supprime les containers
-down:
-	docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) down
+up-dev:
+	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up -d
 
-# Restart les containers (ne supprime pas les volumes)
-restart:
-	docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) down
-	docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) up -d
+down-dev:
+	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down
 
-# Affiche les logs en continu
-logs:
-	docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) logs -f
+restart-dev:
+	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down
+	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up -d
 
-# Supprime toutes les images et volumes pour un nettoyage complet
-prune:
-	docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) down -v --rmi all --remove-orphans
+logs-dev:
+	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) logs -f
+
+rebuild-dev:
+	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down -v --remove-orphans
 	docker system prune -af
 	docker volume prune -f
+	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) build --no-cache
+	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up -d
 
-# Supprime tous les containers, images et volumes Docker
+#########################################################
+### ------------------ ENV PROD --------------------- ###
+#########################################################
+
+build-prod:
+	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) build
+
+up-prod:
+	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) up -d
+
+down-prod:
+	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) down
+
+restart-prod:
+	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) down
+	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) up -d
+
+logs-prod:
+	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) logs -f
+
+rebuild-prod:
+	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) down -v --remove-orphans
+	docker system prune -af
+	docker volume prune -f
+	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) build --no-cache
+	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) up -d
+
+#########################################################
+### ------------------ GLOBALES --------------------- ###
+#########################################################
+
 clean:
-	docker stop $$(docker ps -aq)
-	docker rm $$(docker ps -aq)
-	docker rmi -f $$(docker images -aq)
-	docker volume rm $$(docker volume ls -q)
-	docker network prune -f
+	docker stop $$(docker ps -aq) || true
+	docker rm $$(docker ps -aq) || true
+	docker rmi -f $$(docker images -aq) || true
+	docker volume rm $$(docker volume ls -q) || true
+	docker network prune -f || true
 
-# Nouvelle règle: Rebuild propre
-rebuild:
-	@echo "⛔️ Arrêt de tous les services..."
-	-docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) down -v --remove-orphans
-	@echo "🧹 Nettoyage des images et volumes..."
+prune:
+	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down -v --remove-orphans
+	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) down -v --remove-orphans
 	docker system prune -af
 	docker volume prune -f
-	@echo "🔨 Reconstruction des images sans cache..."
-	docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) build --no-cache
-	@echo "🚀 Redémarrage des services..."
-	docker-compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) up -d
-	@echo "✅ Rebuild complet terminé avec succès !"

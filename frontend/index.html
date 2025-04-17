@@ -6,7 +6,7 @@
     <title>Pixel Art Museum</title>
     <!-- <script defer src="script.ts"></script>  -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./src/styles/style.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="overflow-hidden bg-gray-900">
@@ -17,9 +17,9 @@
         <!------------------------------------------------------------------------------------------------------------>
 
         
-        <div id="scene-city" class="scene hidden">
+        <div id="scene-city" class="scene">
             <div id="game-container" class="relative w-screen h-screen overflow-hidden">
-                <img src="./assets/2.jpg" id="background" class="absolute w-full h-full object-cover">
+                <img src="./src/assets/2.jpg" id="background" class="absolute w-full h-full object-cover">
                 <div id="character-container" class="absolute bottom-20 left-10">
                     <!-- L'élément du sprite qui sera agrandi -->
                     <div id="character" class="sprite-character sprite-idle w-16 h-32"></div>
@@ -33,7 +33,7 @@
         <!------------------------------------------------------------------------------------------------------------>
 
         
-        <div class="font-[sans-serif]" id="log_form">
+        <div class="font-[sans-serif] hidden" id="log_form">
             <div class="min-h-screen flex flex-col items-center justify-center py-6 px-4">
               <div class="grid md:grid-cols-2 items-center gap-10 max-w-6xl max-md:max-w-md w-full">
                 <div>
@@ -212,7 +212,7 @@
 
 
         <div id="scene-museum" class="scene hidden relative w-screen h-screen flex items-center justify-center text-white">
-            <img src="./assets/3.jpg" id="museum-background" class="absolute w-full h-full object-cover">
+            <img src="./src/assets/3.jpg" id="museum-background" class="absolute w-full h-full object-cover">
             <h1 class="text-4xl font-bold">Bienvenue dans le Musée !</h1>
             <button id="exit-museum" class="absolute bottom-10 right-10 px-4 py-2 bg-red-600 text-white rounded-lg">
                 Quitter le Musée
@@ -222,6 +222,6 @@
 
     <div id="transition-overlay" class="fixed top-0 left-0 w-full h-full bg-black opacity-0 pointer-events-none z-50"></div>
 
-    <script type="module" src="script.ts"></script>
+    <script type="module" src="./src/script.ts"></script>
 </body>
 </html>

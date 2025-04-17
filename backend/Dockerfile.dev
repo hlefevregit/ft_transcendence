@@ -1,0 +1,26 @@
+# Étape de dev pour le backend
+FROM node:20-slim
+
+RUN apt-get update && apt-get install -y \
+	git \
+	zsh \
+	net-tools \
+	bash
+
+# Creer le fichier de configuration pour sqlite
+# RUN mkdir -p /var/lib/sqlite
+# RUN touch /var/lib/sqlite/db.sqlite
+
+# Copie les fichiers package.json + lock
+COPY package*.json ./
+
+# Copie le reste du code
+COPY . .
+
+# Expose le port si besoin
+EXPOSE 3000
+
+RUN chmod +x ./config/start.sh
+
+# Commande de dev
+ENTRYPOINT ["/bin/sh", "./config/start.sh"]

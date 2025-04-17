@@ -2,25 +2,33 @@ import { defineConfig } from 'vite'
 import path from 'path'
 
 export default defineConfig({
-  root: './',  // Assurez-vous que c'est le dossier où se trouve index.html
+  root: './',
   build: {
     outDir: 'dist',
     rollupOptions: {
       input: './index.html'
     }
   },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src')
-    }
-  },
   server: {
+    host: true,
+    port: 5173,
+    strictPort: true,
     proxy: {
-      // Redirige les appels à /api vers le backend
       '/api': {
         target: 'http://backend:3000',
         changeOrigin: true,
+        secure: false
+      },
+      '/ws': {
+        target: 'ws://backend:3000',
+        changeOrigin: true,
+        ws: true
       }
+    }
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src')
     }
   }
 })
