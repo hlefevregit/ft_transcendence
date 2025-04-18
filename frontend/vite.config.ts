@@ -1,8 +1,13 @@
-import { defineConfig } from 'vite'
-import path from 'path'
+import { defineConfig } from 'vite';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import react from '@vitejs/plugin-react';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 
 export default defineConfig({
   root: './',
+  plugins: [react()],
   build: {
     outDir: 'dist',
     rollupOptions: {
@@ -13,22 +18,28 @@ export default defineConfig({
     host: true,
     port: 5173,
     strictPort: true,
+    hmr: {
+			protocol: 'wss',
+			host: 'localhost',
+			port: 5173,
+		},
     proxy: {
       '/api': {
-        target: 'http://backend:3000',
+        target: 'https://backend:3000',
         changeOrigin: true,
         secure: false
       },
-      '/ws': {
-        target: 'ws://backend:3000',
+      '/wss': {
+        target: 'wss://backend:3000',
         changeOrigin: true,
-        ws: true
-      }
+        ws: true,
+        secure: false,
+      },
     }
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
+      '@': path.resolve(__dirname, 'src')
     }
   }
 })

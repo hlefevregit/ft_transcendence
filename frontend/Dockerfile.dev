@@ -1,6 +1,6 @@
 FROM node:20-slim
 
-WORKDIR /bakcend
+WORKDIR /app
 
 COPY package*.json ./
 RUN npm install
@@ -10,5 +10,7 @@ COPY . .
 
 # Ouvre le port pour vite
 EXPOSE 5173
+
+RUN npm run build:css
 
 CMD ["npm", "run", "dev"]

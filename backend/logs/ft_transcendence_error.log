@@ -342,3 +342,975 @@ Error: Unknown or unexpected option: --trace-warnings
 }
 
 Node.js v18.20.8
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+}
+🛑 Uncaught Exception: Error: ENOENT: no such file or directory, open '/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/certs/key.pem'
+    at Object.openSync (node:fs:574:18)
+    at Object.readFileSync (node:fs:453:35)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/src/server.ts:30:12)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Object.<anonymous> (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/node_modules/pm2/lib/ProcessContainerFork.js:33:23)

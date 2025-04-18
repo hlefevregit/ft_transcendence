@@ -9,6 +9,7 @@ services:
     volumes:
       - backend_data:${BACKEND_PATH}
       - db-data:/app/data
+      - ./backend/certs:/app/certs:ro
     environment:
       - NODE_ENV=development
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
@@ -29,7 +30,7 @@ services:
     volumes:
       - frontend_data:${FRONTEND_PATH}
       - /app/node_modules
-    environment:
+    environment:  
       - NODE_ENV=development
     depends_on:
       - backend
@@ -46,9 +47,10 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "5173:80"
+      - "5173:8080"
     volumes:
       - ./nginx.dev.conf:/etc/nginx/nginx.conf
+      - ./backend/certs:/etc/nginx/certs:ro
     depends_on:
       - frontend
       - backend

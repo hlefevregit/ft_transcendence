@@ -24,11 +24,17 @@ process.on('unhandledRejection', (reason, promise) => {
 });
   
 
-const fastify = Fastify({ logger: true });
+const fastify = Fastify({
+	logger: true,
+	https: {
+	  key: fs.readFileSync(path.join(__dirname, '../certs/key.pem')),
+	  cert: fs.readFileSync(path.join(__dirname, '../certs/cert.pem')),
+	}
+});
 
 // Configuration CORS pour autoriser ton frontend
 fastify.register(fastifyCors, {
-	origin: ["http://localhost:8080", "http://localhost:5173"],
+	origin: ["https://localhost:8080", "https://localhost:5173"],
 	methods: ['GET', 'POST', 'PUT', 'DELETE']
 });
 

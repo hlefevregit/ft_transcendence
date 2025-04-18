@@ -1,6 +1,6 @@
 /// <reference path="./global.d.ts" />
 
-const socket = new WebSocket('ws://localhost:3000/ws');
+const socket = new WebSocket('wss://localhost:3000/ws');
 
 socket.addEventListener('open', () => {
   console.log('Connexion WebSocket établie');

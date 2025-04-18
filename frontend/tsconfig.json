@@ -13,10 +13,10 @@
       "outDir": "dist",
       "baseUrl": ".",
       "paths": {
-        "@/*": ["src/*"]
-      }
+        "@/*": ["./src/*"]
+      },
+      "typeRoots": ["./node_modules/@types", "./global.d.ts"],
     },
     "include": ["src"],
     "exclude": ["node_modules", "dist"]
-  }
-  
+}

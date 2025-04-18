@@ -1,4 +1,4 @@
-FROM node:18-alpine AS builder
+FROM node:18-slim AS builder
 
 WORKDIR /app
 COPY package*.json ./
@@ -6,7 +6,7 @@ RUN npm install
 COPY . .
 RUN npx tsc --pretty
 
-FROM node:18-alpine
+FROM node:18-slim
 
 WORKDIR /app
 COPY --from=builder /app/dist /app

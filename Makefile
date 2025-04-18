@@ -6,7 +6,7 @@
 #    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/04/16 17:12:45 by hulefevr         ###   ########.fr        #
+#    Updated: 2025/04/17 22:20:30 by hulefevr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,12 @@ restart-dev:
 
 logs-dev:
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) logs -f
+
+re-dev: 
+	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) down --volumes --remove-orphans --rmi all
+	docker volume prune -f
+	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up --build -d
+
 
 rebuild-dev:
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down -v --remove-orphans
