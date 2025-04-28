@@ -39,13 +39,14 @@ body {
 /****************************************************/
 
 
+
 .sprite-character {
     width: 128px;
     height: 128px;
     background-repeat: no-repeat;
     image-rendering: pixelated;
-
 }
+
 
 /* Spritesheet pour l'état idle */
 .sprite-idle {

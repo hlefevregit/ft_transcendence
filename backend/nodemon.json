@@ -1,7 +1,0 @@
-{
-    "watch": ["src"],
-    "ext": "ts",
-    "delay": "100",
-    "exec": "node --enable-source-maps --trace-warnings --require ts-node/register src/server.ts --project tsconfig.json",
-    "verbose": true
-}

@@ -1,5 +1,5 @@
 import React from 'react';
-import museumBackground from '../assets/3.jpg';
+import museumBackground from '@/assets/3.jpg';
 import { useNavigate } from 'react-router-dom';
 import '@/styles/style.css';
 

@@ -33,7 +33,7 @@ const CityScene: React.FC = () => {
         <div id="character-container" className="absolute bottom-20 left-10">
           <div
             id="character"
-            className="sprite-character sprite-idle w-16 h-32"
+            className="sprite-character sprite-idle"
           ></div>
         </div>
 
