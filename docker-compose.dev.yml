@@ -26,9 +26,9 @@ services:
       context: ./frontend
       dockerfile: Dockerfile.dev
     expose:
-      - "5173"
+      - "5173:5173"
     volumes:
-      - frontend_data:${FRONTEND_PATH}
+      - ./frontend:/app
       - /app/node_modules
     environment:  
       - NODE_ENV=development
@@ -47,7 +47,7 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "5173:8080"
+      - "8080:8080"
     volumes:
       - ./nginx.dev.conf:/etc/nginx/nginx.conf
       - ./backend/certs:/etc/nginx/certs:ro

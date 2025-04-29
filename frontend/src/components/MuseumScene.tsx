@@ -11,7 +11,7 @@ const MuseumScene: React.FC = () => {
   };
 
   return (
-    <div id="scene-museum" className="scene relative w-screen h-screen flex items-center justify-center text-white">
+    <div className="scene relative w-screen h-screen flex items-center justify-center text-white">
       <img
         src={museumBackground}
         alt="Musée"

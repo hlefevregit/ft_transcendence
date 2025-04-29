@@ -86,7 +86,7 @@ const RegisterForm: React.FC = () => {
                   placeholder="Enter password"
                 />
               </div>
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 <input
                   id="reg-remember-me"
                   name="reg-remember-me"
@@ -97,7 +97,7 @@ const RegisterForm: React.FC = () => {
                   I accept the <a href="#" className="text-blue-600 font-semibold hover:underline ml-1">Terms and Conditions</a>
                 </label>
               </div>
-              {error && <div className="text-red-600 text-sm mt-2">{error}</div>}
+              {error && <div className="text-red-600 text-sm mt-2">{error}</div>} */}
             </div>
 
             <div className="!mt-8">

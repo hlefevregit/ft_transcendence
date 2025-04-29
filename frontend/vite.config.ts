@@ -18,11 +18,15 @@ export default defineConfig({
     host: true,
     port: 5173,
     strictPort: true,
+    watch: {
+      usePolling: true,
+      interval: 100,
+    },
     hmr: {
-			protocol: 'wss',
-			host: 'localhost',
-			port: 5173,
-		},
+      host: 'localhost',
+      clientPort: 8080,
+      path: '/@vite/client',
+    },
     proxy: {
       '/api': {
         target: 'https://backend:3000',

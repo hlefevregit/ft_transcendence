@@ -29,7 +29,6 @@ const CityScene: React.FC = () => {
           id="background"
           className="absolute w-full h-full object-cover"
         />
-
         <div id="character-container" className="absolute bottom-20 left-10">
           <div
             id="character"
