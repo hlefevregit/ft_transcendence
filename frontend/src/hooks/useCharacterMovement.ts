@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 export const useCharacterMovement = () => {
   useEffect(() => {
     const scaleFactor = 1.7;
-    let positionX = 40;
+    let positionX = 0;
     const speed = 30;
 
     const characterContainer = document.getElementById("character-container") as HTMLElement;
@@ -26,7 +26,7 @@ export const useCharacterMovement = () => {
 
       if (event.key === "ArrowRight" && positionX + speed < screenWidth - characterContainer.clientWidth) {
         positionX += speed;
-      } else if (event.key === "ArrowLeft" && positionX - speed > 0) {
+      } else if (event.key === "ArrowLeft" && positionX - speed >= -140) {
         positionX -= speed;
       }
 

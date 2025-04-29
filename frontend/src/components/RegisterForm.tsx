@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { handleRegister, googleLogin } from '@/services/authServices';
 import '@/styles/style.css';
-
 
 const RegisterForm: React.FC = () => {
   const navigate = useNavigate();
@@ -23,6 +22,36 @@ const RegisterForm: React.FC = () => {
       setError('An error occurred during registration.');
     }
   };
+  const handleGoogleLogin = async (idToken: string) => {
+      try {
+        const res = await googleLogin(idToken);
+        if (res.success) {
+          localStorage.setItem('authToken', res.token);
+          navigate('/museum');
+        } else {
+          setError(res.message || 'Google login failed');
+        }
+      } catch {
+        setError('Google login error.');
+      }
+    };
+    useEffect(() => {
+      if (window.google && window.google.accounts) {
+        window.google.accounts.id.initialize({
+          client_id: '930883947615-3ful7pfe6k38qbdqfph7ja2lp76spahf.apps.googleusercontent.com',
+          callback: (response: any) => {
+            handleGoogleLogin(response.credential);
+          },
+        });
+  
+        window.google.accounts.id.renderButton(
+          document.getElementById('google-login-btn'),
+          { theme: 'outline', size: 'large' }
+        );
+      }
+    }, []);
+  
+    
 
   return (
     <div className="font-[sans-serif] bg-gray-50 flex items-center md:h-screen p-4">
@@ -33,14 +62,7 @@ const RegisterForm: React.FC = () => {
               <h3 className="text-gray-800 text-xl">Instant Access</h3>
             </div>
             <div className="space-y-4">
-              <button
-                type="button"
-                onClick={() => {}}
-                className="px-4 py-2.5 flex items-center justify-center rounded-md text-gray-800 text-sm tracking-wider border-none outline-none bg-white hover:bg-gray-200"
-              >
-                <img src="/assets/icons8-google.svg" width="22" className="mr-3" alt="Google logo" />
-                Continue with Google
-              </button>
+              <div id="google-login-btn"></div>
             </div>
           </div>
 
