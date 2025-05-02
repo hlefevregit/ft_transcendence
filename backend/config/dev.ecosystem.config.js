@@ -5,7 +5,7 @@ module.exports = {
 			script: "./src/server.ts",
 			interpreter: "ts-node",
 			interpreter_args: " --project tsconfig.json",
-			watch: ["src"],
+			watch: ["src", "prisma"],
 			ignore_watch: ["node_modules"],
 			watch_options: {
 				usePolling: true,

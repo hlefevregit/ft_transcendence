@@ -31,7 +31,8 @@ export default defineConfig({
       '/api': {
         target: 'https://backend:3000',
         changeOrigin: true,
-        secure: false
+        secure: false,
+        ws: true,
       },
       '/wss': {
         target: 'wss://backend:3000',

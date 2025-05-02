@@ -5,5 +5,6 @@ export const setupCors = (fastify: FastifyInstance) => {
   fastify.register(fastifyCors, {
     origin: ["https://localhost:8080", "https://localhost:5173"],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
   });
 };

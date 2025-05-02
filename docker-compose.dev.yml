@@ -8,16 +8,15 @@ services:
       - "3000:3000"
     volumes:
       - backend_data:${BACKEND_PATH}
-      - db-data:/app/data
       - ./backend/certs:/app/certs:ro
+      - sqlite_data:/app/prisma/sqlite
     environment:
       - NODE_ENV=development
+      - DATABASE_URL=file:./prisma/sqlite/dev.db
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - JWT_SECRET=${JWT_SECRET}
-    command: npm run dev
+    command: sh -c "npx prisma migrate deploy && npm run dev"
     working_dir: ${BACKEND_PATH}
-    depends_on:
-      - db
     networks:
       - ft_network
 
@@ -30,19 +29,14 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    environment:  
+    environment:
       - NODE_ENV=development
     depends_on:
       - backend
     networks:
       - ft_network
 
-  db:
-    image: mongo:latest
-    volumes:
-      - db-data:/app/data
-    networks:
-      - ft_network
+
 
   nginx:
     image: nginx:alpine
@@ -58,7 +52,6 @@ services:
       - ft_network
 
 volumes:
-  db-data:
   backend_data:
     driver: local
     driver_opts:
@@ -71,5 +64,12 @@ volumes:
       type: none
       device: ${FRONTEND_PATH}
       o: bind
+  sqlite_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${BACKEND_PATH}/prisma/sqlite
+      o: bind
+  
 networks:
   ft_network:

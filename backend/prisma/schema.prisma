@@ -1,0 +1,24 @@
+// 1. Définition du client
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 2. Définition de la base de données SQLite
+datasource db {
+  provider = "sqlite"
+  url      = "file:./prisma/sqlite/dev.db"
+}
+
+// 3. Modèles
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  pseudo    String   @unique
+  status    String   @default("offline") // ex: "online", "offline"
+  password  String?
+  avatarUrl String?  // URL de la photo de profil
+  friends   User[]   @relation("UserFriends")
+  friendOf  User[]   @relation("UserFriends")
+  createdAt DateTime @default(now())
+}

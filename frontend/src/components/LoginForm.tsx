@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { handleEmailLogin, googleLogin } from '../services/authServices';
 import '../styles/style.css';
 
+
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');

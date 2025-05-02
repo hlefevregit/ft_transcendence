@@ -59,7 +59,14 @@ body {
     background-repeat: no-repeat;
     /* Animation pour l'état en mouvement */
     animation: walk-animation 1.5s steps(10) infinite;
-  }
+}
+
+.sprite-move-left {
+    background-image: url('../assets/spriteshesh/City_men_1/Backward.png');
+    background-repeat: no-repeat;
+    /* Animation pour l'état en mouvement */
+    animation: walk-animation 1.5s steps(10) infinite;
+}
 
 @keyframes idle-animation {
 from {

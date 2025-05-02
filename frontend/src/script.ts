@@ -78,8 +78,9 @@ function showGoogleLogin(idToken: string) {
     console.log('Affichage de la modale de connexion avec Google.');
     fetch('/api/auth/google', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id_token: idToken })
+        headers: { 'Content-Type': 'application/json' ,
+        credentials: 'include'}, // Assurez-vous d'inclure les cookies
+        body: JSON.stringify({ id_token: idToken }),
     })
     .then(response => {
     if (!response.ok) {
@@ -201,7 +202,8 @@ function handleRegister() {
     // Envoi de la requête POST vers le backend
     fetch('/api/register', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' ,
+    credentials: 'include'}, // Assurez-vous d'inclure les cookies
     body: JSON.stringify({ name, email, password })
     })
     .then(response => {
@@ -245,6 +247,7 @@ function handleEmailLogin(email: string, password: string) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            credentials: 'include'
         },
         body: JSON.stringify(loginData),
     })

@@ -12,6 +12,8 @@ import { setupRegisterRoute } from './routes/register';
 import { setupPingRoute } from './routes/ping';
 import { dbPromise } from './db/database'; // assure l'init DB
 import './config/env'; // charge .env
+import prismaPlugin from './plugins/prisma'; // Prisma DB
+import { setupUserRoutes } from './routes/user';
 
 setupGlobalErrorHandling();
 
@@ -23,26 +25,37 @@ const fastify = Fastify({
   }
 });
 
-// Plugins
-setupCors(fastify);
-setupJwt(fastify);
-setupWebsocket(fastify);
-setupStaticFiles(fastify);
 
-// Routes
-setupAuthRoutes(fastify);
-setupRegisterRoute(fastify);
-setupPingRoute(fastify);
+
+
 
 // Lancement du serveur
 const start = async () => {
   try {
-	await fastify.listen({ port: 3000, host: '0.0.0.0' });
-	fastify.log.info('✅ Server running at https://localhost:3000');
+    // Plugins
+    setupCors(fastify);
+    setupJwt(fastify);
+    setupWebsocket(fastify);
+    setupStaticFiles(fastify);
+    fastify.register(prismaPlugin);
+    await fastify.register(setupUserRoutes as any); // ici OK
+    
+    // Routes
+    setupAuthRoutes(fastify);
+    setupRegisterRoute(fastify);
+    setupPingRoute(fastify);
+    
+    await fastify.ready(); // ✅ après tous les .register()
+    console.log(fastify.printRoutes());
+    
+    fastify.ready().then(() => {
+      console.log(fastify.printRoutes());
+    });
+    await fastify.listen({ port: 3000, host: '0.0.0.0' });
+    fastify.log.info('✅ Server running at https://localhost:3000');
   } catch (err) {
-	fastify.log.error(err);
-	process.exit(1);
+    fastify.log.error(err);
+    process.exit(1);
   }
 };
-
 start();

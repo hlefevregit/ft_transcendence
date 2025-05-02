@@ -17,6 +17,6 @@
       },
       "typeRoots": ["./node_modules/@types", "./global.d.ts"],
     },
-    "include": ["src"],
+    "include": ["src", "../backend/src/types"],
     "exclude": ["node_modules", "dist"]
 }

@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 
 export const useCharacterMovement = () => {
   useEffect(() => {
-    const scaleFactor = 1.7;
+    const scaleFactor = 2;
     let positionX = 0;
     const speed = 30;
 

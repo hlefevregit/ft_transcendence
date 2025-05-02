@@ -24,4 +24,3 @@ export const handleEmailLogin = async (email: string, password: string) => {
     });
     return response.json();
 };
-  

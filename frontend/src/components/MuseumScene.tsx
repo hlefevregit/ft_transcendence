@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
-import museumBackground from '@/assets/3.jpg';
+import museumBackground from '@/assets/4.jpg';
 import { useNavigate } from 'react-router-dom';
 import '@/styles/style.css';
-import { useCharacterMovement } from '@/hooks/useCharacterMovement';
+import { useCharacterMovementBoth } from '@/hooks/useCharMovementBoth';
 
 const MuseumScene: React.FC = () => {
   const navigate = useNavigate();
 
   // Active les mouvements du personnage
-  useCharacterMovement();
+  useCharacterMovementBoth();
 
   useEffect(() => {
     const characterContainer = document.getElementById('character-container');
@@ -85,10 +85,7 @@ const MuseumScene: React.FC = () => {
           </div>
         </div>
 
-        {/* Titre (optionnel) */}
-        <h1 className="text-4xl font-bold z-10 absolute top-10 left-1/2 transform -translate-x-1/2 text-white">
-          Bienvenue dans le Musée !
-        </h1>
+
       </div>
     </div>
   );
