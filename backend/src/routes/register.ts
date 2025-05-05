@@ -1,5 +1,4 @@
 import { FastifyInstance } from 'fastify';
-import { dbPromise } from '../db/database';
 import bcrypt from 'bcrypt';
 
 export const setupRegisterRoute = (fastify: FastifyInstance) => {
@@ -19,7 +18,7 @@ export const setupRegisterRoute = (fastify: FastifyInstance) => {
           pseudo: name,
           email,
           password: await bcrypt.hash(password, 10), // Hash the password
-          avatarUrl: 'https://example.com/default-avatar.png', // Default avatar URL
+          avatarUrl: 'https://i1.sndcdn.com/artworks-RK9z0md6Fh0mkDYz-KAfiQg-t500x500.jpg', // Default avatar URL
           status: 'Hello, I am using this app!', // Default status
       },
   });
@@ -34,6 +33,5 @@ export const setupRegisterRoute = (fastify: FastifyInstance) => {
 
     reply.send({ success: true, message: "Inscription réussie", token });
     console.log('✅ User registered:', newUser);
-    console.log('✅ Token generated:', token);
   });
 };

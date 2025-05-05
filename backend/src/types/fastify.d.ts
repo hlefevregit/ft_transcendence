@@ -11,15 +11,6 @@ declare module 'fastify' {
     authenticate: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
   }
 
-  interface FastifyRequest {
-    user?: {
-      id: number;
-      email: string;
-      pseudo: string;
-      avatarUrl?: string;
-      status?: string;
-    };
-  }
 }
 
 declare module '@fastify/jwt' {

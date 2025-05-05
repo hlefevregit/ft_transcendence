@@ -10,10 +10,10 @@ import { setupStaticFiles } from './plugins/static';
 import { setupAuthRoutes } from './routes/auth';
 import { setupRegisterRoute } from './routes/register';
 import { setupPingRoute } from './routes/ping';
-import { dbPromise } from './db/database'; // assure l'init DB
 import './config/env'; // charge .env
 import prismaPlugin from './plugins/prisma'; // Prisma DB
 import { setupUserRoutes } from './routes/user';
+import { setupFriendRoutes } from './routes/friends';
 
 setupGlobalErrorHandling();
 
@@ -44,6 +44,7 @@ const start = async () => {
     setupAuthRoutes(fastify);
     setupRegisterRoute(fastify);
     setupPingRoute(fastify);
+    await fastify.register(setupFriendRoutes as any); // ici OK
     
     await fastify.ready(); // ✅ après tous les .register()
     console.log(fastify.printRoutes());

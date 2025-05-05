@@ -14,11 +14,29 @@ datasource db {
 model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
-  pseudo    String   @unique
-  status    String   @default("offline") // ex: "online", "offline"
+  pseudo    String
+  avatarUrl String?
+  status    String?
   password  String?
-  avatarUrl String?  // URL de la photo de profil
-  friends   User[]   @relation("UserFriends")
-  friendOf  User[]   @relation("UserFriends")
+  createdAt DateTime @default(now())
+
+  // Friends (relation many-to-many implicite)
+  friends  User[] @relation("UserFriends")
+  friendOf User[] @relation("UserFriends")
+
+  // Friend requests
+  sentRequests     FriendRequest[] @relation("SentRequests")
+  receivedRequests FriendRequest[] @relation("ReceivedRequests")
+}
+
+model FriendRequest {
+  id         Int  @id @default(autoincrement())
+  fromUser   User @relation("SentRequests", fields: [fromUserId], references: [id])
+  fromUserId Int
+
+  toUser   User @relation("ReceivedRequests", fields: [toUserId], references: [id])
+  toUserId Int
+
+  status    String   @default("pending") // "pending", "accepted", "declined"
   createdAt DateTime @default(now())
 }

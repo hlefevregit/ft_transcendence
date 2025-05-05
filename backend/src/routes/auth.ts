@@ -33,7 +33,7 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
 			data: {
 				email,
 				pseudo: name,
-				avatarUrl: 'https://example.com/default-avatar.png', // Default avatar URL
+				avatarUrl: "https://i1.sndcdn.com/artworks-RK9z0md6Fh0mkDYz-KAfiQg-t500x500.jpg", // Default avatar URL
 				status: 'Hello, I am using this app!', // Default status
 			},
 		});
@@ -51,8 +51,11 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
 
 	fastify.post('/api/auth/sign_in', async (request, reply) => {
 		const { email, password } = request.body as { email: string; password: string };
-		const db = await dbPromise;
-		const user = await db.get(`SELECT * FROM users WHERE email = ?`, [email]);
+		
+		const user = await fastify.prisma.user.findUnique({
+			where: { email },
+		});
+
 		if (!user) return reply.status(401).send({ success: false, message: "Utilisateur non trouvé" });
 
 		const match = await bcrypt.compare(password, user.password);
