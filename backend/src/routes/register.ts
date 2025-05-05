@@ -13,6 +13,13 @@ export const setupRegisterRoute = (fastify: FastifyInstance) => {
       return reply.status(400).send({ message: 'Email already registered' });
   }
 
+  const existingPseudo = await fastify.prisma.user.findUnique({
+      where: { pseudo: name },
+  });
+  if (existingPseudo) {
+      return reply.status(400).send({ message: 'Pseudo already taken' });
+  }
+
   const newUser = await fastify.prisma.user.create({
       data: {
           pseudo: name,
@@ -27,8 +34,6 @@ export const setupRegisterRoute = (fastify: FastifyInstance) => {
     id: newUser.id, 
     email: newUser.email, 
     pseudo: newUser.pseudo, 
-    avatarUrl: newUser.avatarUrl, 
-    status: newUser.status 
   });
 
     reply.send({ success: true, message: "Inscription réussie", token });

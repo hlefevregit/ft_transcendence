@@ -6,7 +6,7 @@
 #    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/04/17 22:20:30 by hulefevr         ###   ########.fr        #
+#    Updated: 2025/05/05 16:58:58 by hulefevr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -96,3 +96,13 @@ prune:
 	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) down -v --remove-orphans
 	docker system prune -af
 	docker volume prune -f
+
+
+
+reset-db:
+	@echo "🗑️  Suppression de la base SQLite..."
+	rm -f ./backend/dev.db
+	@echo "🔄 Réinitialisation de la base avec Prisma..."
+	cd backend && npx prisma migrate reset --force
+	@echo "✅ Base de données réinitialisée."
+

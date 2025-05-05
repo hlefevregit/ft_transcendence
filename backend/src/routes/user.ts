@@ -35,7 +35,23 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
     };
     console.log('✅ User routes registered');
 
+    const existingPseudo = await fastify.prisma.user.findUnique({
+      where: { pseudo },
+    });
+    if (existingPseudo && existingPseudo.id !== userId) {
+      return reply.status(400).send({ message: 'Pseudo already taken' });
+    }
+
+    const user = req.user as { id: number; email: string };
+    const existingEmail = await fastify.prisma.user.findUnique({
+      where: { email: (req.user as any).email },
+    });
+    if (existingEmail && existingEmail.id !== userId) {
+      return reply.status(400).send({ message: 'Email already taken' });
+    }
+
     try {
+
       const user = await fastify.prisma.user.update({
         where: { id: userId },
         data: { pseudo, avatarUrl, status },
