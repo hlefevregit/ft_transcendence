@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
 import MuseumScene from './components/MuseumScene'
 import Settings from './components/Settings';
+import Pong from './components/Pong';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/museum" element={<MuseumScene />} />
         <Route path="/settings" element={<Settings/>} />
+        <Route path="/pong" element={<Pong />} />
       </Routes>
     </BrowserRouter>
   );
