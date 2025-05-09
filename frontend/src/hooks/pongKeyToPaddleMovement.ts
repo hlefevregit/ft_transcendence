@@ -6,26 +6,61 @@ import { Engine, Scene } from 'babylonjs';
 import { Vector3, HemisphericLight, MeshBuilder } from 'babylonjs';
 import { FreeCamera, KeyboardEventTypes } from 'babylonjs';
 import { SceneLoader } from 'babylonjs';
+import { pongGameRef } from '@/utils/pongSetup';
 
-// Paddle movement
-export	const	doPaddleMovement = (pressedKeys: Set<string>, paddle1: Mesh, paddle2: Mesh, arenaHeight: number, paddleSpeed: number): void =>
+// Move paddle Up
+const movePaddleUp = (pong: pongGameRef, paddleZ: number): number =>
 {
-	if (pressedKeys.has('arrowup'))
+	if (!pong.paddle1 ) return(0);
+	return(
+		Math.max
+		(
+			- pong.arenaHeight + (pong.paddleHeight / 2),
+			Math.min
+			(
+				pong.arenaHeight - (pong.paddleHeight / 2),
+				paddleZ - pong.paddleSpeed
+			)
+		)
+	)
+}
+
+// Move paddle Down
+const movePaddleDown = (pong: pongGameRef, paddleZ: number): number =>
+{
+	if (!pong.paddle2 ) return(0);
+	return(
+		Math.max
+		(
+			- pong.arenaHeight + (pong.paddleHeight / 2),
+			Math.min
+			(
+				pong.arenaHeight - (pong.paddleHeight / 2),
+				paddleZ + pong.paddleSpeed
+			)
+		)
+	)
+}
+
+export	const	doPaddleMovement = (pong: pongGameRef): void =>
+{
+	if (!pong.paddle1 || !pong.paddle2) return;
+	if (pong.pressedKeys.has('arrowup'))
 	{
-		paddle1.position.z = Math.max(-arenaHeight, Math.min(arenaHeight, paddle1.position.z - paddleSpeed));
+		pong.paddle1.position.z = movePaddleUp(pong, pong.paddle1.position.z);
 	}
-	if (pressedKeys.has('arrowdown'))
+	if (pong.pressedKeys.has('arrowdown'))
 	{
-		paddle1.position.z = Math.max(-arenaHeight, Math.min(arenaHeight, paddle1.position.z + paddleSpeed));
+		pong.paddle1.position.z = movePaddleDown(pong, pong.paddle1.position.z);
 	}
-	if (pressedKeys.has('w'))
+	if (pong.pressedKeys.has('w'))
 	{
-		paddle2.position.z = Math.max(-arenaHeight, Math.min(arenaHeight, paddle2.position.z - paddleSpeed));
+		pong.paddle2.position.z = movePaddleUp(pong, pong.paddle2.position.z);
 	}
-	if (pressedKeys.has('s'))
+	if (pong.pressedKeys.has('s'))
 	{
-		paddle2.position.z = Math.max(-arenaHeight, Math.min(arenaHeight, paddle2.position.z + paddleSpeed));
+		pong.paddle2.position.z = movePaddleDown(pong, pong.paddle2.position.z);
 	}
-	// console.log("Pressed keys: ", pressedKeys);
-	// console.log("Paddle2 position: ", paddle2.position.z);
+	// console.log("Pressed keys: ", pong.pressedKeys);
+	// console.log("Paddle2 position: ", pong.paddle2.position.z);
 }
