@@ -1,13 +1,13 @@
+npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
 npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
 npm warn deprecated rimraf@2.7.1: Rimraf versions prior to v4 are no longer supported
-npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
 
-added 248 packages in 4s
+added 248 packages in 5s
 
 29 packages are looking for funding
   run `npm fund` for details
 
-up to date, audited 731 packages in 658ms
+up to date, audited 731 packages in 717ms
 
 79 packages are looking for funding
   run `npm fund` for details
@@ -17,11 +17,11 @@ found 0 vulnerabilities
 > backend@1.0.0 dev
 > pm2-runtime start config/dev.ecosystem.config.js
 
-2025-05-09T14:02:26: PM2 log: Launching in no daemon mode
-2025-05-09T14:02:26: PM2 log: [Watch] Start watching ft_transcendence
-2025-05-09T14:02:26: PM2 log: App [ft_transcendence:0] starting in -fork mode-
-2025-05-09T14:02:26: PM2 log: App [ft_transcendence:0] online
-{"level":40,"time":1746799349210,"pid":52,"hostname":"431d4799f247","msg":"⚠️ Dossier \"public\" introuvable à /home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/public"}
+2025-05-09T14:54:51: PM2 log: Launching in no daemon mode
+2025-05-09T14:54:51: PM2 log: [Watch] Start watching ft_transcendence
+2025-05-09T14:54:51: PM2 log: App [ft_transcendence:0] starting in -fork mode-
+2025-05-09T14:54:51: PM2 log: App [ft_transcendence:0] online
+{"level":40,"time":1746802493836,"pid":52,"hostname":"262c9975e534","msg":"⚠️ Dossier \"public\" introuvable à /home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/public"}
 └── (empty root node)
     ├── /
     │   └── api/
@@ -64,6 +64,296 @@ found 0 vulnerabilities
     │               │       └── sent (GET, HEAD)
     │               └── :id (DELETE)
     └── * (OPTIONS)
-{"level":30,"time":1746799349223,"pid":52,"hostname":"431d4799f247","msg":"Server listening at https://127.0.0.1:3000"}
-{"level":30,"time":1746799349223,"pid":52,"hostname":"431d4799f247","msg":"Server listening at https://172.18.0.2:3000"}
-{"level":30,"time":1746799349223,"pid":52,"hostname":"431d4799f247","msg":"✅ Server running at https://localhost:3000"}
+{"level":30,"time":1746802493848,"pid":52,"hostname":"262c9975e534","msg":"Server listening at https://127.0.0.1:3000"}
+{"level":30,"time":1746802493848,"pid":52,"hostname":"262c9975e534","msg":"Server listening at https://172.18.0.2:3000"}
+{"level":30,"time":1746802493848,"pid":52,"hostname":"262c9975e534","msg":"✅ Server running at https://localhost:3000"}
+{"level":30,"time":1746802626942,"pid":52,"hostname":"262c9975e534","reqId":"req-1","req":{"method":"GET","url":"/ws","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":46958},"msg":"incoming request"}
+{"level":30,"time":1746802626942,"pid":52,"hostname":"262c9975e534","reqId":"req-1","msg":"Route GET:/ws not found"}
+{"level":30,"time":1746802626943,"pid":52,"hostname":"262c9975e534","reqId":"req-1","res":{"statusCode":404},"responseTime":1.5940299034118652,"msg":"request completed"}
+{"level":30,"time":1746802626955,"pid":52,"hostname":"262c9975e534","reqId":"req-2","req":{"method":"GET","url":"/ws","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":46970},"msg":"incoming request"}
+{"level":30,"time":1746802626955,"pid":52,"hostname":"262c9975e534","reqId":"req-2","msg":"Route GET:/ws not found"}
+{"level":30,"time":1746802626955,"pid":52,"hostname":"262c9975e534","reqId":"req-2","res":{"statusCode":404},"responseTime":0.21092700958251953,"msg":"request completed"}
+{"level":30,"time":1746802631840,"pid":52,"hostname":"262c9975e534","reqId":"req-3","req":{"method":"POST","url":"/api/auth/google","host":"localhost","remoteAddress":"172.18.0.7","remotePort":56916},"msg":"incoming request"}
+{"level":30,"time":1746802631889,"pid":52,"hostname":"262c9975e534","reqId":"req-3","res":{"statusCode":200},"responseTime":48.436986207962036,"msg":"request completed"}
+{"level":30,"time":1746802649479,"pid":52,"hostname":"262c9975e534","reqId":"req-4","req":{"method":"GET","url":"/api/friends","host":"localhost","remoteAddress":"172.18.0.7","remotePort":45586},"msg":"incoming request"}
+{"level":30,"time":1746802649480,"pid":52,"hostname":"262c9975e534","reqId":"req-5","req":{"method":"GET","url":"/api/friends/requests/sent","host":"localhost","remoteAddress":"172.18.0.7","remotePort":45588},"msg":"incoming request"}
+{"level":30,"time":1746802649481,"pid":52,"hostname":"262c9975e534","reqId":"req-6","req":{"method":"GET","url":"/api/friends/requests/received","host":"localhost","remoteAddress":"172.18.0.7","remotePort":45600},"msg":"incoming request"}
+{"level":30,"time":1746802649485,"pid":52,"hostname":"262c9975e534","reqId":"req-6","res":{"statusCode":200},"responseTime":3.566248893737793,"msg":"request completed"}
+{"level":30,"time":1746802649485,"pid":52,"hostname":"262c9975e534","reqId":"req-7","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.7","remotePort":45608},"msg":"incoming request"}
+Payload: {
+  id: 1,
+  email: 'hugo.lef06@gmail.com',
+  pseudo: 'Hugo Lefèvre',
+  avatarUrl: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FMr._Meeseeks&psig=AOvVaw2mrNoci2UIO8rvBs4IRBbc&ust=1746524770031000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKjlx_WFjI0DFQAAAAAdAAAAABAE',
+  status: 'Hello, I am using this app!',
+  iat: 1746802631
+}
+✅ User routes registered
+id =  1
+✅ User found: {
+  id: 1,
+  email: 'hugo.lef06@gmail.com',
+  pseudo: 'Hugo Lefèvre',
+  avatarUrl: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FMr._Meeseeks&psig=AOvVaw2mrNoci2UIO8rvBs4IRBbc&ust=1746524770031000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKjlx_WFjI0DFQAAAAAdAAAAABAE',
+  status: 'Hello, I am using this app!',
+  password: null,
+  createdAt: 2025-05-02T17:53:08.704Z
+}
+✅ User found
+{"level":30,"time":1746802649492,"pid":52,"hostname":"262c9975e534","reqId":"req-4","res":{"statusCode":200},"responseTime":13.355573177337646,"msg":"request completed"}
+{"level":30,"time":1746802649492,"pid":52,"hostname":"262c9975e534","reqId":"req-5","res":{"statusCode":200},"responseTime":11.78450608253479,"msg":"request completed"}
+{"level":30,"time":1746802649492,"pid":52,"hostname":"262c9975e534","reqId":"req-7","res":{"statusCode":200},"responseTime":7.127352952957153,"msg":"request completed"}
+{"level":30,"time":1746802649493,"pid":52,"hostname":"262c9975e534","reqId":"req-8","req":{"method":"GET","url":"/api/friends/requests/received","host":"localhost","remoteAddress":"172.18.0.7","remotePort":45610},"msg":"incoming request"}
+{"level":30,"time":1746802649494,"pid":52,"hostname":"262c9975e534","reqId":"req-8","res":{"statusCode":200},"responseTime":1.0325169563293457,"msg":"request completed"}
+{"level":30,"time":1746802649495,"pid":52,"hostname":"262c9975e534","reqId":"req-9","req":{"method":"GET","url":"/api/friends","host":"localhost","remoteAddress":"172.18.0.7","remotePort":45626},"msg":"incoming request"}
+{"level":30,"time":1746802649495,"pid":52,"hostname":"262c9975e534","reqId":"req-a","req":{"method":"GET","url":"/api/friends/requests/sent","host":"localhost","remoteAddress":"172.18.0.7","remotePort":45628},"msg":"incoming request"}
+{"level":30,"time":1746802649497,"pid":52,"hostname":"262c9975e534","reqId":"req-9","res":{"statusCode":200},"responseTime":2.7319741249084473,"msg":"request completed"}
+{"level":30,"time":1746802649497,"pid":52,"hostname":"262c9975e534","reqId":"req-a","res":{"statusCode":200},"responseTime":1.9680240154266357,"msg":"request completed"}
+Payload: {
+  id: 1,
+  email: 'hugo.lef06@gmail.com',
+  pseudo: 'Hugo Lefèvre',
+  avatarUrl: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FMr._Meeseeks&psig=AOvVaw2mrNoci2UIO8rvBs4IRBbc&ust=1746524770031000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKjlx_WFjI0DFQAAAAAdAAAAABAE',
+  status: 'Hello, I am using this app!',
+  iat: 1746802631
+}
+✅ User routes registered
+{"level":30,"time":1746802649498,"pid":52,"hostname":"262c9975e534","reqId":"req-b","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.7","remotePort":45642},"msg":"incoming request"}
+id =  1
+✅ User found: {
+  id: 1,
+  email: 'hugo.lef06@gmail.com',
+  pseudo: 'Hugo Lefèvre',
+  avatarUrl: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FMr._Meeseeks&psig=AOvVaw2mrNoci2UIO8rvBs4IRBbc&ust=1746524770031000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKjlx_WFjI0DFQAAAAAdAAAAABAE',
+  status: 'Hello, I am using this app!',
+  password: null,
+  createdAt: 2025-05-02T17:53:08.704Z
+}
+✅ User found
+{"level":30,"time":1746802649499,"pid":52,"hostname":"262c9975e534","reqId":"req-b","res":{"statusCode":200},"responseTime":1.0497589111328125,"msg":"request completed"}
+{"level":30,"time":1746802653906,"pid":52,"hostname":"262c9975e534","reqId":"req-c","req":{"method":"PUT","url":"/api/user/me","host":"localhost","remoteAddress":"172.18.0.7","remotePort":49544},"msg":"incoming request"}
+✅ User routes registered
+✅ User updated
+{"level":30,"time":1746802653931,"pid":52,"hostname":"262c9975e534","reqId":"req-c","res":{"statusCode":200},"responseTime":24.365570068359375,"msg":"request completed"}
+2025-05-09T14:57:33: PM2 log: Change detected on path prisma/prisma/sqlite/dev.db for app ft_transcendence - restarting
+2025-05-09T14:57:33: PM2 log: Stopping app:ft_transcendence id:0
+2025-05-09T14:57:33: PM2 error: Error: spawn ps ENOENT
+2025-05-09T14:57:34: PM2 log: App [ft_transcendence:0] exited with code [0] via signal [SIGINT]
+2025-05-09T14:57:34: PM2 log: pid=52 msg=process killed
+2025-05-09T14:57:34: PM2 log: App [ft_transcendence:0] starting in -fork mode-
+2025-05-09T14:57:34: PM2 log: App [ft_transcendence:0] online
+{"level":40,"time":1746802655219,"pid":97,"hostname":"262c9975e534","msg":"⚠️ Dossier \"public\" introuvable à /home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/public"}
+└── (empty root node)
+    ├── /
+    │   └── api/
+    │       ├── me (GET, HEAD)
+    │       ├── user/me (PUT)
+    │       ├── auth/
+    │       │   ├── google (POST)
+    │       │   └── sign_in (POST)
+    │       ├── register (POST)
+    │       ├── ping (GET, HEAD)
+    │       └── friends (GET, HEAD)
+    │           └── /
+    │               ├── request (POST)
+    │               │   ├── /
+    │               │   │   └── :id
+    │               │   │       └── /accept (POST)
+    │               │   └── s/
+    │               │       ├── received (GET, HEAD)
+    │               │       └── sent (GET, HEAD)
+    │               └── :id (DELETE)
+    └── * (OPTIONS)
+└── (empty root node)
+    ├── /
+    │   └── api/
+    │       ├── me (GET, HEAD)
+    │       ├── user/me (PUT)
+    │       ├── auth/
+    │       │   ├── google (POST)
+    │       │   └── sign_in (POST)
+    │       ├── register (POST)
+    │       ├── ping (GET, HEAD)
+    │       └── friends (GET, HEAD)
+    │           └── /
+    │               ├── request (POST)
+    │               │   ├── /
+    │               │   │   └── :id
+    │               │   │       └── /accept (POST)
+    │               │   └── s/
+    │               │       ├── received (GET, HEAD)
+    │               │       └── sent (GET, HEAD)
+    │               └── :id (DELETE)
+    └── * (OPTIONS)
+{"level":30,"time":1746802655231,"pid":97,"hostname":"262c9975e534","msg":"Server listening at https://127.0.0.1:3000"}
+{"level":30,"time":1746802655231,"pid":97,"hostname":"262c9975e534","msg":"Server listening at https://172.18.0.2:3000"}
+{"level":30,"time":1746802655231,"pid":97,"hostname":"262c9975e534","msg":"✅ Server running at https://localhost:3000"}
+{"level":30,"time":1746802671799,"pid":97,"hostname":"262c9975e534","reqId":"req-1","req":{"method":"PUT","url":"/api/user/me","host":"localhost","remoteAddress":"172.18.0.7","remotePort":35200},"msg":"incoming request"}
+✅ User routes registered
+✅ User updated
+{"level":30,"time":1746802671831,"pid":97,"hostname":"262c9975e534","reqId":"req-1","res":{"statusCode":200},"responseTime":31.281836986541748,"msg":"request completed"}
+2025-05-09T14:57:51: PM2 log: Change detected on path prisma/prisma/sqlite/dev.db for app ft_transcendence - restarting
+2025-05-09T14:57:51: PM2 log: Stopping app:ft_transcendence id:0
+2025-05-09T14:57:51: PM2 error: Error: spawn ps ENOENT
+2025-05-09T14:57:51: PM2 log: App [ft_transcendence:0] exited with code [0] via signal [SIGINT]
+2025-05-09T14:57:52: PM2 log: pid=97 msg=process killed
+2025-05-09T14:57:52: PM2 log: App [ft_transcendence:0] starting in -fork mode-
+2025-05-09T14:57:52: PM2 log: App [ft_transcendence:0] online
+{"level":40,"time":1746802673133,"pid":138,"hostname":"262c9975e534","msg":"⚠️ Dossier \"public\" introuvable à /home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/public"}
+└── (empty root node)
+    ├── /
+    │   └── api/
+    │       ├── me (GET, HEAD)
+    │       ├── user/me (PUT)
+    │       ├── auth/
+    │       │   ├── google (POST)
+    │       │   └── sign_in (POST)
+    │       ├── register (POST)
+    │       ├── ping (GET, HEAD)
+    │       └── friends (GET, HEAD)
+    │           └── /
+    │               ├── request (POST)
+    │               │   ├── /
+    │               │   │   └── :id
+    │               │   │       └── /accept (POST)
+    │               │   └── s/
+    │               │       ├── received (GET, HEAD)
+    │               │       └── sent (GET, HEAD)
+    │               └── :id (DELETE)
+    └── * (OPTIONS)
+└── (empty root node)
+    ├── /
+    │   └── api/
+    │       ├── me (GET, HEAD)
+    │       ├── user/me (PUT)
+    │       ├── auth/
+    │       │   ├── google (POST)
+    │       │   └── sign_in (POST)
+    │       ├── register (POST)
+    │       ├── ping (GET, HEAD)
+    │       └── friends (GET, HEAD)
+    │           └── /
+    │               ├── request (POST)
+    │               │   ├── /
+    │               │   │   └── :id
+    │               │   │       └── /accept (POST)
+    │               │   └── s/
+    │               │       ├── received (GET, HEAD)
+    │               │       └── sent (GET, HEAD)
+    │               └── :id (DELETE)
+    └── * (OPTIONS)
+{"level":30,"time":1746802673145,"pid":138,"hostname":"262c9975e534","msg":"Server listening at https://127.0.0.1:3000"}
+{"level":30,"time":1746802673145,"pid":138,"hostname":"262c9975e534","msg":"Server listening at https://172.18.0.2:3000"}
+{"level":30,"time":1746802673145,"pid":138,"hostname":"262c9975e534","msg":"✅ Server running at https://localhost:3000"}
+{"level":30,"time":1746802835629,"pid":138,"hostname":"262c9975e534","reqId":"req-1","req":{"method":"GET","url":"/api/friends","host":"localhost","remoteAddress":"172.18.0.7","remotePort":40518},"msg":"incoming request"}
+{"level":30,"time":1746802835636,"pid":138,"hostname":"262c9975e534","reqId":"req-2","req":{"method":"GET","url":"/api/friends/requests/received","host":"localhost","remoteAddress":"172.18.0.7","remotePort":40522},"msg":"incoming request"}
+{"level":30,"time":1746802835641,"pid":138,"hostname":"262c9975e534","reqId":"req-3","req":{"method":"GET","url":"/api/friends/requests/sent","host":"localhost","remoteAddress":"172.18.0.7","remotePort":40528},"msg":"incoming request"}
+{"level":30,"time":1746802835642,"pid":138,"hostname":"262c9975e534","reqId":"req-1","res":{"statusCode":200},"responseTime":12.566724061965942,"msg":"request completed"}
+{"level":30,"time":1746802835642,"pid":138,"hostname":"262c9975e534","reqId":"req-2","res":{"statusCode":200},"responseTime":6.577712059020996,"msg":"request completed"}
+Payload: {
+  id: 1,
+  email: 'hugo.lef06@gmail.com',
+  pseudo: 'Hugo Lefèvre',
+  avatarUrl: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FMr._Meeseeks&psig=AOvVaw2mrNoci2UIO8rvBs4IRBbc&ust=1746524770031000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKjlx_WFjI0DFQAAAAAdAAAAABAE',
+  status: 'Hello, I am using this app!',
+  iat: 1746802631
+}
+✅ User routes registered
+{"level":30,"time":1746802835644,"pid":138,"hostname":"262c9975e534","reqId":"req-4","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.7","remotePort":40542},"msg":"incoming request"}
+{"level":30,"time":1746802835646,"pid":138,"hostname":"262c9975e534","reqId":"req-3","res":{"statusCode":200},"responseTime":4.481689929962158,"msg":"request completed"}
+id =  1
+✅ User found: {
+  id: 1,
+  email: 'hugo.lef06@gmail.com',
+  pseudo: 'Hug',
+  avatarUrl: 'data:image/jpeg;base64,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'... 61803 more characters,
+  status: 'Hello, I am using this app!',
+  password: null,
+  createdAt: 2025-05-02T17:53:08.704Z
+}
+✅ User found
+{"level":30,"time":1746802835648,"pid":138,"hostname":"262c9975e534","reqId":"req-4","res":{"statusCode":200},"responseTime":3.2996928691864014,"msg":"request completed"}
+{"level":30,"time":1746802835648,"pid":138,"hostname":"262c9975e534","reqId":"req-5","req":{"method":"GET","url":"/api/friends","host":"localhost","remoteAddress":"172.18.0.7","remotePort":40554},"msg":"incoming request"}
+{"level":30,"time":1746802835649,"pid":138,"hostname":"262c9975e534","reqId":"req-6","req":{"method":"GET","url":"/api/friends/requests/received","host":"localhost","remoteAddress":"172.18.0.7","remotePort":40570},"msg":"incoming request"}
+{"level":30,"time":1746802835650,"pid":138,"hostname":"262c9975e534","reqId":"req-6","res":{"statusCode":200},"responseTime":0.5564761161804199,"msg":"request completed"}
+{"level":30,"time":1746802835651,"pid":138,"hostname":"262c9975e534","reqId":"req-5","res":{"statusCode":200},"responseTime":2.0536949634552,"msg":"request completed"}
+{"level":30,"time":1746802835652,"pid":138,"hostname":"262c9975e534","reqId":"req-7","req":{"method":"GET","url":"/api/friends/requests/sent","host":"localhost","remoteAddress":"172.18.0.7","remotePort":40578},"msg":"incoming request"}
+{"level":30,"time":1746802835655,"pid":138,"hostname":"262c9975e534","reqId":"req-7","res":{"statusCode":200},"responseTime":3.8975160121917725,"msg":"request completed"}
+Payload: {
+  id: 1,
+  email: 'hugo.lef06@gmail.com',
+  pseudo: 'Hugo Lefèvre',
+  avatarUrl: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FMr._Meeseeks&psig=AOvVaw2mrNoci2UIO8rvBs4IRBbc&ust=1746524770031000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKjlx_WFjI0DFQAAAAAdAAAAABAE',
+  status: 'Hello, I am using this app!',
+  iat: 1746802631
+}
+✅ User routes registered
+{"level":30,"time":1746802835656,"pid":138,"hostname":"262c9975e534","reqId":"req-8","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.7","remotePort":40582},"msg":"incoming request"}
+id =  1
+✅ User found: {
+  id: 1,
+  email: 'hugo.lef06@gmail.com',
+  pseudo: 'Hug',
+  avatarUrl: 'data:image/jpeg;base64,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'... 61803 more characters,
+  status: 'Hello, I am using this app!',
+  password: null,
+  createdAt: 2025-05-02T17:53:08.704Z
+}
+✅ User found
+{"level":30,"time":1746802835658,"pid":138,"hostname":"262c9975e534","reqId":"req-8","res":{"statusCode":200},"responseTime":2.2758898735046387,"msg":"request completed"}
+{"level":30,"time":1746803556617,"pid":138,"hostname":"262c9975e534","reqId":"req-9","req":{"method":"GET","url":"/api/friends","host":"localhost","remoteAddress":"172.18.0.7","remotePort":40628},"msg":"incoming request"}
+{"level":30,"time":1746803556618,"pid":138,"hostname":"262c9975e534","reqId":"req-a","req":{"method":"GET","url":"/api/friends/requests/sent","host":"localhost","remoteAddress":"172.18.0.7","remotePort":40640},"msg":"incoming request"}
+{"level":30,"time":1746803556621,"pid":138,"hostname":"262c9975e534","reqId":"req-9","res":{"statusCode":200},"responseTime":4.362087965011597,"msg":"request completed"}
+{"level":30,"time":1746803556621,"pid":138,"hostname":"262c9975e534","reqId":"req-a","res":{"statusCode":200},"responseTime":3.44435715675354,"msg":"request completed"}
+{"level":30,"time":1746803556622,"pid":138,"hostname":"262c9975e534","reqId":"req-b","req":{"method":"GET","url":"/api/friends/requests/received","host":"localhost","remoteAddress":"172.18.0.7","remotePort":40654},"msg":"incoming request"}
+{"level":30,"time":1746803556628,"pid":138,"hostname":"262c9975e534","reqId":"req-b","res":{"statusCode":200},"responseTime":6.569489002227783,"msg":"request completed"}
+{"level":30,"time":1746803556628,"pid":138,"hostname":"262c9975e534","reqId":"req-c","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.7","remotePort":40668},"msg":"incoming request"}
+Payload: {
+  id: 1,
+  email: 'hugo.lef06@gmail.com',
+  pseudo: 'Hugo Lefèvre',
+  avatarUrl: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FMr._Meeseeks&psig=AOvVaw2mrNoci2UIO8rvBs4IRBbc&ust=1746524770031000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKjlx_WFjI0DFQAAAAAdAAAAABAE',
+  status: 'Hello, I am using this app!',
+  iat: 1746802631
+}
+✅ User routes registered
+id =  1
+✅ User found: {
+  id: 1,
+  email: 'hugo.lef06@gmail.com',
+  pseudo: 'Hug',
+  avatarUrl: 'data:image/jpeg;base64,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'... 61803 more characters,
+  status: 'Hello, I am using this app!',
+  password: null,
+  createdAt: 2025-05-02T17:53:08.704Z
+}
+✅ User found
+{"level":30,"time":1746803556633,"pid":138,"hostname":"262c9975e534","reqId":"req-d","req":{"method":"GET","url":"/api/friends","host":"localhost","remoteAddress":"172.18.0.7","remotePort":40674},"msg":"incoming request"}
+{"level":30,"time":1746803556634,"pid":138,"hostname":"262c9975e534","reqId":"req-c","res":{"statusCode":200},"responseTime":5.182855129241943,"msg":"request completed"}
+{"level":30,"time":1746803556634,"pid":138,"hostname":"262c9975e534","reqId":"req-e","req":{"method":"GET","url":"/api/friends/requests/sent","host":"localhost","remoteAddress":"172.18.0.7","remotePort":40690},"msg":"incoming request"}
+{"level":30,"time":1746803556639,"pid":138,"hostname":"262c9975e534","reqId":"req-d","res":{"statusCode":200},"responseTime":5.857190132141113,"msg":"request completed"}
+{"level":30,"time":1746803556639,"pid":138,"hostname":"262c9975e534","reqId":"req-e","res":{"statusCode":200},"responseTime":5.113682985305786,"msg":"request completed"}
+{"level":30,"time":1746803556640,"pid":138,"hostname":"262c9975e534","reqId":"req-f","req":{"method":"GET","url":"/api/friends/requests/received","host":"localhost","remoteAddress":"172.18.0.7","remotePort":40702},"msg":"incoming request"}
+{"level":30,"time":1746803556641,"pid":138,"hostname":"262c9975e534","reqId":"req-f","res":{"statusCode":200},"responseTime":0.7859859466552734,"msg":"request completed"}
+{"level":30,"time":1746803556644,"pid":138,"hostname":"262c9975e534","reqId":"req-g","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.7","remotePort":40708},"msg":"incoming request"}
+Payload: {
+  id: 1,
+  email: 'hugo.lef06@gmail.com',
+  pseudo: 'Hugo Lefèvre',
+  avatarUrl: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FMr._Meeseeks&psig=AOvVaw2mrNoci2UIO8rvBs4IRBbc&ust=1746524770031000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKjlx_WFjI0DFQAAAAAdAAAAABAE',
+  status: 'Hello, I am using this app!',
+  iat: 1746802631
+}
+✅ User routes registered
+id =  1
+✅ User found: {
+  id: 1,
+  email: 'hugo.lef06@gmail.com',
+  pseudo: 'Hug',
+  avatarUrl: 'data:image/jpeg;base64,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'... 61803 more characters,
+  status: 'Hello, I am using this app!',
+  password: null,
+  createdAt: 2025-05-02T17:53:08.704Z
+}
+✅ User found
+{"level":30,"time":1746803556645,"pid":138,"hostname":"262c9975e534","reqId":"req-g","res":{"statusCode":200},"responseTime":1.3183331489562988,"msg":"request completed"}

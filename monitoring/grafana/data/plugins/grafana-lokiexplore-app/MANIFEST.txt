@@ -1,0 +1,66 @@
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+{
+  "manifestVersion": "2.0.0",
+  "signatureType": "grafana",
+  "signedByOrg": "grafana",
+  "signedByOrgName": "Grafana Labs",
+  "plugin": "grafana-lokiexplore-app",
+  "version": "1.0.15",
+  "time": 1746726361421,
+  "keyId": "7e4d0c6a708866e7",
+  "files": {
+    "854.js": "421be9b543902b99c85c30153ce2da0ff9822dfefae9229dd201f0e9208dc0bd",
+    "854.js.map": "2da9b6cb9484c9e5a06b3eb1b9e5fbfd3c1e7436137273d53fa4433e066edde8",
+    "328.js": "9878fcf2be0c714e6dce9104bfc0eb76ff1bea98fa11bab9d3a417dbd0bdbb24",
+    "826.js.map": "c4a667442cfcbeead10f8efbc575a89aed318ad7480e60e605c6f9cdd41e1c5b",
+    "919.js.map": "9dab59db94d0aaf463408479f598ab931acceb52730ee782a219f379207f42de",
+    "115.js.LICENSE.txt": "9e0cb6b0d82ee46be39b054a3f76419242945d9dbfced78bca42fd65c082e71a",
+    "LICENSE": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+    "82.js": "faff7daac1d8d8119aaee2e30d02bd39534950726e592e23f0df8356f6d0a4d5",
+    "470.js.map": "7c1f79602e5b10d8b4d89e270f6ff7ba93ecdab4b5c2871b173945501a94fcb1",
+    "82.js.map": "bff90d6dc618a59ba2ed4f0955b2d351a83d831594b5e6912be3f8f649e967be",
+    "115.js.map": "81548a03da2ca72d6fa51ab3a8030069f04790d9f0851ed2cec23b4a744516b9",
+    "CHANGELOG.md": "df88d6ae218ab1498b37082534a6575320ad319dfeac0aefccbf0263a8d59698",
+    "546.js": "79ecd141f81ae989b32a4fa39498fd806fdd04c827492efe3408b921deddb7e4",
+    "115.js": "ec78120f4b95369649699bd2a91dd9ba6f8672a01297df69c99a8e0bf0e3761a",
+    "README.md": "860a469ddc8cb370958c5d2bb044d258fcf383e72bee36d933e72d2e727e720b",
+    "944.js": "50d0e55fc61eb78dc3137f90347bca6523c925e295b304043f6a80d87852df97",
+    "470.js": "6b6601759960132707ae93546acd1032f6ee3c9ed214e618258a62ff52aec250",
+    "919.js": "8ee49f61aa7634f0addb040853b33fab92d12ed51ef276e5643bce6c6423aafe",
+    "328.js.map": "e0e31ad8c16ebcf42d8e719b0899225c0b442b4d5f54206d8bd3ad08d8d06218",
+    "546.js.map": "31070d537b1f22abb72e0547d111747e9a10b4ccb1deea07ca1484a37eedb128",
+    "470.js.LICENSE.txt": "e25e5f78cf2b2fbbf8d4865193c9642bea9f75a1ba1323a8476a534310b26d58",
+    "649058283f564041551d.wasm": "84a1635aaca10061a9fad641983327dc9d261fb2cd3ca5ff3dd26bf3072664df",
+    "module.js.map": "38ca6bf1f15dd6b0ac647afeca08092621b12dabc447065fcf6ebcb5c39f655c",
+    "module.js": "5f082285235d4bc5ea36ae96a4ac488c59bc6ceced1073d475cdd266ab9cb9b8",
+    "img/grot_loki.svg": "299c18dd3db308247925207b1623c2c16f465982866b9b60b78b927a9bfa5820",
+    "img/logo.svg": "11ca1cf6edec87db3a9725b071f17c93c2313d9130d31d37da3458509a8ff67b",
+    "img/table.png": "fe2fa65a8a761feb0a93c62231644645fb60ee06c44dda3ab16dc4e432286572",
+    "img/drilldown-features.png": "f43cb1e498df7c4f70e10768306e52cb00bc8f24e66259a4dd91d55cf3be0948",
+    "img/grot_err.svg": "6f535973a005418084ad6218f78f2e0e92a7a06efb7e66a05a89c35be59eb154",
+    "img/grot_err_light.svg": "eb43595481ac03b7569f9909d9e093629dfbf7001f4c95c435c53a6987397662",
+    "img/service_logs.jpg": "42f41204403337358ae437a7ad052daec6f9b6f9bef7f297fd065c1e68133bf4",
+    "img/patterns.png": "bf100549ec168420e9a7b6d759f492a761f964d33d45a3217ba30b9827b2bece",
+    "img/explore-logs-features.jpeg": "18675a62a579da52f0b1cc58796eba8896c38333de4b28f0b1e67476b6f63dd6",
+    "img/fields.png": "0b087967a82bb1a6026c35b03bfe2073b35c4da13972abf59bb9a4a404256727",
+    "3d96a93cfcb32df74eef.svg": "11ca1cf6edec87db3a9725b071f17c93c2313d9130d31d37da3458509a8ff67b",
+    "826.js": "da7ee9b2307499ba7e3f7f4fc46f7422c31b984fcda54570e7a8910009b9832d",
+    "plugin.json": "a421a7ef2234009d9c24fe956cda42ced9f65f384ab164b0bc7a1fd0abaed2dc",
+    "1759fd27b2c9f73dea05.wasm": "c79b8fa1bea557bdcd6b743a00e5c47aef7f71a457dcbaa63218dd4a706475b6",
+    "944.js.map": "b2a93650921f2dbe9917a3b382ba0627ae2d67d74c8d6f9a4422877a2882adff"
+  }
+}
+-----BEGIN PGP SIGNATURE-----
+Version: OpenPGP.js v4.10.11
+Comment: https://openpgpjs.org
+
+wrkEARMKAAYFAmgc7dkAIQkQfk0ManCIZucWIQTzOyW2kQdOhGNlcPN+TQxq
+cIhm5/U5AgkAEVPLPUKz8GfRWkewIeiEimd30dMmAMQekPZzYix0rxcDpF3u
+z7SniSkOWxj6hL07BOyZCmeCAUUftIHw5iFjeaACCQHdSu+vqY6siF/0c7LZ
+VvN20VB+XzHtwXUsAOaXJFaM9AH/f35uxrb8FU4OjP6LWMYmjRgu9KWpmHVH
+jR67MnmEZw==
+=DkCv
+-----END PGP SIGNATURE-----
