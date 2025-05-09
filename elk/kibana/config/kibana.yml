@@ -1,0 +1,28 @@
+# ==================== Basic settings ====================
+server.name: kibana
+server.host: "0.0.0.0"
+server.port: 5601
+
+# Reverse proxy path (si nécessaire)
+server.basePath: "/kibana"
+server.rewriteBasePath: true
+server.publicBaseUrl: "http://localhost:5601/kibana"
+
+# ==================== Elasticsearch ====================
+elasticsearch.hosts: ["http://elasticsearch:9200"]
+
+# Utilisation d'un service account token au lieu du compte "elastic"
+elasticsearch.serviceAccountToken: ${T_KIBANA_TOKEN}
+
+# ==================== Security ====================
+xpack.security.encryptionKey: ${T_ENCRYPTION_PASSKEY_3}
+xpack.encryptedSavedObjects.encryptionKey: ${T_ENCRYPTION_PASSKEY_3}
+xpack.reporting.encryptionKey: ${T_ENCRYPTION_PASSKEY_3}
+
+# ==================== Monitoring ====================
+monitoring.ui.enabled: true
+monitoring.ui.elasticsearch.hosts: ["http://elasticsearch:9200"]
+monitoring.ui.elasticsearch.serviceAccountToken: ${T_KIBANA_TOKEN}
+
+# ==================== Optional ====================
+elasticsearch.ssl.verificationMode: none
