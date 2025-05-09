@@ -40,6 +40,7 @@ services:
     image: nginx:alpine
     ports:
       - "8080:8080"
+      - "8082:8082"  # pour nginx_status
     volumes:
       - ./nginx.dev.conf:/etc/nginx/nginx.conf
       - ./backend/certs:/etc/nginx/certs:ro
@@ -49,7 +50,11 @@ services:
     networks:
       - ft_network
 
-    # ---------------- ELK -----------------
+
+    #---------------------------------------------------------------------------------------
+    # ---------------- ELK ----------------------------------------------------------------
+    #---------------------------------------------------------------------------------------  
+
 
   elasticsearch:
     build:
@@ -120,6 +125,70 @@ services:
     networks:
       - ft_network
 
+  # ------------------ ELK END -----------------------------------------------------------
+  #---------------------------------------------------------------------------------------
+
+  # --------------------------------------------------------------------------------------
+  # ------------------ PROMETHEUS / GRAFANA ----------------------------------------------
+  # --------------------------------------------------------------------------------------
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/prometheus/alert.rules.yml:/etc/prometheus/alert.rules.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.retention.time=30d'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    networks:
+      - ft_network
+  
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - "8081:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - ft_network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - ft_network
+
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    container_name: nginx-exporter
+    command:
+      - '-nginx.scrape-uri=http://nginx:8082/nginx_status'
+    ports:
+      - "9113:9113"
+    depends_on:
+      - nginx
+    networks:
+      - ft_network
+
+
+
 volumes:
   backend_data:
     driver: local
@@ -148,6 +217,20 @@ volumes:
   # volumes:
   #   elastic_data:
   #     driver: local
+
+  prometheus_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PROMETHEUS_DATA_PATH}
+      o: bind
+
+  grafana_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${GRAFANA_DATA_PATH}
+      o: bind
   
 networks:
   ft_network:

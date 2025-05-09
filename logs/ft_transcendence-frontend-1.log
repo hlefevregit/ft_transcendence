@@ -3,7 +3,12 @@
 > vite
 
 
-  VITE v6.3.1  ready in 113 ms
+  VITE v6.3.1  ready in 115 ms
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: http://172.18.0.4:5173/
+npm error path /app
+npm error command failed
+npm error signal SIGTERM
+npm error command sh -c vite
+npm error A complete log of this run can be found in: /root/.npm/_logs/2025-05-09T14_54_45_343Z-debug-0.log

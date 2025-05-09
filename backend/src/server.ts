@@ -14,6 +14,7 @@ import './config/env'; // charge .env
 import prismaPlugin from './plugins/prisma'; // Prisma DB
 import { setupUserRoutes } from './routes/user';
 import { setupFriendRoutes } from './routes/friends';
+import metricsPlugin from 'fastify-metrics';
 
 setupGlobalErrorHandling();
 
@@ -25,7 +26,9 @@ const fastify = Fastify({
   }
 });
 
-
+fastify.register(metricsPlugin, {
+  endpoint: '/metrics',
+});
 
 
 

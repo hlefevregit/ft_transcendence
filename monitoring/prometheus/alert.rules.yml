@@ -1,0 +1,29 @@
+groups:
+  - name: general-alerts
+    rules:
+      - alert: InstanceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Instance {{ $labels.instance }} down"
+          description: "Instance {{ $labels.instance }} has been down for more than 1 minute."
+
+      - alert: HighCPULoad
+        expr: rate(container_cpu_usage_seconds_total[2m]) > 0.85
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage on {{ $labels.instance }}"
+          description: "CPU usage is above 85% for more than 2 minutes."
+
+      - alert: BackendUnreachable
+        expr: absent(http_request_duration_seconds_count{route="/api/ping"})
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "No HTTP metrics from backend"
+          description: "Backend may be down or not instrumented properly."
