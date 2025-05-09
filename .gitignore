@@ -5,4 +5,6 @@
 .DS_Store
 backend/logs/*
 elk/elasticsearch/data/*
-./logs/*
+logs/*
+monitoring/grafana/data/*
+monitoring/prometheus/data/*
