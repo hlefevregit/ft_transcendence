@@ -1,0 +1,69 @@
+npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+npm warn deprecated rimraf@2.7.1: Rimraf versions prior to v4 are no longer supported
+npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+
+added 248 packages in 4s
+
+29 packages are looking for funding
+  run `npm fund` for details
+
+up to date, audited 731 packages in 658ms
+
+79 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+> backend@1.0.0 dev
+> pm2-runtime start config/dev.ecosystem.config.js
+
+2025-05-09T14:02:26: PM2 log: Launching in no daemon mode
+2025-05-09T14:02:26: PM2 log: [Watch] Start watching ft_transcendence
+2025-05-09T14:02:26: PM2 log: App [ft_transcendence:0] starting in -fork mode-
+2025-05-09T14:02:26: PM2 log: App [ft_transcendence:0] online
+{"level":40,"time":1746799349210,"pid":52,"hostname":"431d4799f247","msg":"⚠️ Dossier \"public\" introuvable à /home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/public"}
+└── (empty root node)
+    ├── /
+    │   └── api/
+    │       ├── me (GET, HEAD)
+    │       ├── user/me (PUT)
+    │       ├── auth/
+    │       │   ├── google (POST)
+    │       │   └── sign_in (POST)
+    │       ├── register (POST)
+    │       ├── ping (GET, HEAD)
+    │       └── friends (GET, HEAD)
+    │           └── /
+    │               ├── request (POST)
+    │               │   ├── /
+    │               │   │   └── :id
+    │               │   │       └── /accept (POST)
+    │               │   └── s/
+    │               │       ├── received (GET, HEAD)
+    │               │       └── sent (GET, HEAD)
+    │               └── :id (DELETE)
+    └── * (OPTIONS)
+└── (empty root node)
+    ├── /
+    │   └── api/
+    │       ├── me (GET, HEAD)
+    │       ├── user/me (PUT)
+    │       ├── auth/
+    │       │   ├── google (POST)
+    │       │   └── sign_in (POST)
+    │       ├── register (POST)
+    │       ├── ping (GET, HEAD)
+    │       └── friends (GET, HEAD)
+    │           └── /
+    │               ├── request (POST)
+    │               │   ├── /
+    │               │   │   └── :id
+    │               │   │       └── /accept (POST)
+    │               │   └── s/
+    │               │       ├── received (GET, HEAD)
+    │               │       └── sent (GET, HEAD)
+    │               └── :id (DELETE)
+    └── * (OPTIONS)
+{"level":30,"time":1746799349223,"pid":52,"hostname":"431d4799f247","msg":"Server listening at https://127.0.0.1:3000"}
+{"level":30,"time":1746799349223,"pid":52,"hostname":"431d4799f247","msg":"Server listening at https://172.18.0.2:3000"}
+{"level":30,"time":1746799349223,"pid":52,"hostname":"431d4799f247","msg":"✅ Server running at https://localhost:3000"}
