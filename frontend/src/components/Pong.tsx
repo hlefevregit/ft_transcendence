@@ -60,8 +60,11 @@ const Pong: React.FC = () =>
 		const	skyboxMesh = MeshBuilder.CreateBox("skyBox", { size: 1000 }, sceneInstance);
 		pong.current.skybox = skyboxMesh;
 
-		const	paddle1Mesh = MeshBuilder.CreateBox("paddle1", { width: 0.25, height: 1, depth: pong.current.paddleHeight }, sceneInstance);
-		const	paddle2Mesh = MeshBuilder.CreateBox("paddle2", { width: 0.25, height: 1, depth: pong.current.paddleHeight }, sceneInstance);
+		//                                                       width: width, height: depth, depth: height
+		const	paddle1Mesh = MeshBuilder.CreateBox("paddle1", { width: pong.current.paddleWidth, height: 0.75, depth: 1 }, sceneInstance);
+		const	paddle2Mesh = MeshBuilder.CreateBox("paddle2", { width: pong.current.paddleWidth, height: 0.75, depth: 1 }, sceneInstance);
+		paddle1Mesh.scaling.z = pong.current.paddleHeight;
+		paddle2Mesh.scaling.z = pong.current.paddleHeight;
 		paddle1Mesh.position = new Vector3(-(pong.current.arenaHeight - 1), 0, 0);
 		paddle2Mesh.position = new Vector3((pong.current.arenaWidth - 1), 0, 0);
 		pong.current.paddle1 = paddle1Mesh;
@@ -72,7 +75,7 @@ const Pong: React.FC = () =>
 		cameraInstance.inputs.clear();
 		pong.current.camera = cameraInstance;
 
-		const	ballMesh = MeshBuilder.CreateSphere("ball", { diameter: 1 }, sceneInstance);
+		const	ballMesh = MeshBuilder.CreateSphere("ball", { diameter: pong.current.ballDiameter }, sceneInstance);
 		ballMesh.position = new Vector3(0, 0, 0);
 		pong.current.ball = ballMesh;
 
@@ -99,6 +102,7 @@ const Pong: React.FC = () =>
 		engineInstance.runRenderLoop(() =>
 		{
 			if (!pong.current.paddle1 || !pong.current.paddle2 || !pong.current.ball) return;
+			fitCameraToArena(pong.current);
 
 			// Paddle movement
 			doPaddleMovement(pong.current);
@@ -107,47 +111,12 @@ const Pong: React.FC = () =>
 			pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
 			pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;
 
+			// Ball collisions
 			makeBallBounce(pong.current);
 			
 
 			sceneInstance.render();
-			fitCameraToArena(pong.current);
 		});
-
-
-		// const handleResize = (): void =>
-		// {
-		// 	engineInstance.resize(); // Resize engine
-		// 	const aspectRatio = engineInstance.getRenderWidth() / engineInstance.getRenderHeight();
-		// 	const newFOV = Math.atan(Math.tan(Math.PI / 4) / aspectRatio); // This is just one approach
-		// 	cameraInstance.fov = newFOV;
-		// 	cameraInstance.position.y = 30 + (aspectRatio - 1) * 5;
-		// }
-
-		// const handleResize = () => {
-		// 	if (!pong.current.engine || !pong.current.scene) return;
-		
-		// 	// Resize engine
-		// 	pong.current.engine.resize();
-		
-		// 	// Get the current aspect ratio of the window
-		// 	const aspectRatio = window.innerWidth / window.innerHeight;
-		
-		// 	// Adjust camera's Y offset based on the aspect ratio
-		// 	if (pong.current.camera) {
-		// 		const camera = pong.current.camera;
-		
-		// 		// Adjust the camera's Y position to maintain a consistent view of the scene
-		// 		camera.position.y = 30 * aspectRatio; // Scaling the Y offset based on the aspect ratio
-		
-		// 		// Optionally, adjust the FOV to maintain a consistent field of view with the new aspect ratio
-		// 		camera.fov = Math.atan(Math.tan(Math.PI / 4) / aspectRatio); // Optional adjustment of FOV
-		// 		camera.update(); // Update camera to apply the changes
-		// 	}
-		// };
-		
-		
-	
 
 		window.addEventListener('resize', () => engineInstance.resize());
 		window.addEventListener('orientationchange', () => engineInstance.resize());

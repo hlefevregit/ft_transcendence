@@ -27,9 +27,11 @@ export type pongGameRef =
 	ballDirection: Vector3;
 	ballSpeedModifier: number;
 	ballSpeed: number;
+	ballDiameter: number;
 	maxBallSpeed: number;
 	paddleSpeed: number;
 	paddleHeight: number;
+	paddleWidth: number;
 };
 
 export function initPongStruct(): pongGameRef
@@ -53,9 +55,11 @@ export function initPongStruct(): pongGameRef
 		ballDirection: new Vector3(0.1, 0, 0),
 		ballSpeedModifier: 1,
 		ballSpeed: 0.1,
+		ballDiameter: 1,
 		maxBallSpeed: 0.5,
 		paddleSpeed: 0.25,
-		paddleHeight: 4
+		paddleHeight: 4,
+		paddleWidth: 0.25
 	};
 }
 
