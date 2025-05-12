@@ -6,7 +6,7 @@
 #    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/05/09 15:47:32 by hulefevr         ###   ########.fr        #
+#    Updated: 2025/05/12 18:48:35 by hulefevr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -103,3 +103,10 @@ logs:
 		echo "Redirecting logs for $$container"; \
 		docker logs -f $$container > ./logs/$$container.log 2>&1 & \
 	done
+
+reset-db:
+	@echo "🗑️  Suppression de la base SQLite..."
+	rm -f ./backend/dev.db
+	@echo "🔄 Réinitialisation de la base avec Prisma..."
+	cd backend && npx prisma migrate reset --force
+	@echo "✅ Base de données réinitialisée."
