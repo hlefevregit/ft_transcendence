@@ -1,20 +1,16 @@
-
 services:
   backend:
     build:
-      context: ./backend
+      context: ${BACKEND_PATH}
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    volumes:
-      - db-data:/app/data
-  
     environment:
       - NODE_ENV=production
+      - DATABASE_URL=file:./prisma/sqlite/dev.db
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - JWT_SECRET=${JWT_SECRET}
-    depends_on:
-      - db
+    volumes:
+      - sqlite_data:/app/prisma/sqlite
+    command: sh -c "npx prisma migrate deploy && npm run start"
     networks:
       - ft_network
 
@@ -22,33 +18,162 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    networks:
-      - ft_network
     expose:
       - "80"
-
-  db:
-    image: mongo:latest
-    volumes:
-      - db-data:/app/data
+    environment:
+      - NODE_ENV=production
     networks:
       - ft_network
+    depends_on:
+      - backend
 
   nginx:
     image: nginx:alpine
     ports:
-      - "8080:80"
+      - "8080:8080"
+      
+      - "8082:8082"
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./certs:/etc/nginx/certs:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./backend/certs:/etc/nginx/certs:ro
     depends_on:
       - frontend
       - backend
     networks:
       - ft_network
 
+  # -------------------- ELK --------------------------------
+  elasticsearch:
+    build:
+      context: ./elk/elasticsearch
+      dockerfile: Dockerfile
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - es_data:/app/storage
+      - ./elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+    networks:
+      - ft_network
+
+  logstash:
+    build:
+      context: ./elk/logstash
+      dockerfile: Dockerfile
+    container_name: logstash
+    ports:
+      - "5044:5044"
+      - "9600:9600"
+    volumes:
+      - ./logs:/app/logs:ro
+    environment:
+      - LS_JAVA_OPTS=-Xms512m -Xmx512m
+    depends_on:
+      - elasticsearch
+    networks:
+      - ft_network
+
+  filebeat:
+    build:
+      context: ./elk/filebeat
+      dockerfile: Dockerfile
+    user: root
+    volumes:
+      - ./elk/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./logs:/app/logs:ro
+    command: ["--strict.perms=false", "-e"]
+    depends_on:
+      - logstash
+    networks:
+      - ft_network
+
+  kibana:
+    build:
+      context: ./elk/kibana
+      dockerfile: Dockerfile
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - T_PORT_INTERN_LOGGING=9200
+      - T_ENDPOINT_LOGGING=kibana
+      - T_SERVER_NAME=localhost
+      - T_ELASTIC_SYSPASS_1=changeme
+      - T_ENCRYPTION_PASSKEY_3=${KIBANA_ENCRYPTION_KEY}
+      - T_KIBANA_MAXSOCKS=100
+      - T_KIBANA_TOKEN=${KIBANA_TOKEN}
+    depends_on:
+      - elasticsearch
+    networks:
+      - ft_network
+
+  # ----------------- Monitoring ------------------
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/alert.rules.yml:/etc/prometheus/alert.rules.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.retention.time=30d'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    networks:
+      - ft_network
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - "8081:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - ft_network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - ft_network
+
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    container_name: nginx-exporter
+    command:
+      - '-nginx.scrape-uri=http://nginx:8082/nginx_status'
+    ports:
+      - "9113:9113"
+    depends_on:
+      - nginx
+    networks:
+      - ft_network
+
+# ---------------------- Volumes ----------------------
+
 volumes:
-  db-data:
+  sqlite_data:
+  es_data:
+  prometheus_data:
+  grafana_data:
+
+# ---------------------- Networks ---------------------
 
 networks:
   ft_network:
