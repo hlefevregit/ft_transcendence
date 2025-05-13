@@ -6,11 +6,10 @@
 #    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/05/05 16:58:58 by hulefevr         ###   ########.fr        #
+#    Updated: 2025/05/13 15:34:40 by hulefevr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# Variables
 # Variables
 PROJECT_NAME = ft_transcendence
 DEV_COMPOSE = docker-compose.dev.yml
@@ -98,6 +97,12 @@ prune:
 	docker volume prune -f
 
 
+logs:
+	@mkdir -p ./logs
+	@for container in $$(docker ps --format '{{.Names}}'); do \
+		echo "Redirecting logs for $$container"; \
+		docker logs -f $$container > ./logs/$$container.log 2>&1 & \
+	done
 
 reset-db:
 	@echo "🗑️  Suppression de la base SQLite..."
@@ -105,4 +110,3 @@ reset-db:
 	@echo "🔄 Réinitialisation de la base avec Prisma..."
 	cd backend && npx prisma migrate reset --force
 	@echo "✅ Base de données réinitialisée."
-
