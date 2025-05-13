@@ -2,129 +2,80 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { KeyboardInfo, Mesh, MeshBlock } from 'babylonjs';
-import { Engine, Scene } from 'babylonjs';
-import { Vector3, HemisphericLight, MeshBuilder } from 'babylonjs';
-import { FreeCamera, KeyboardEventTypes } from 'babylonjs';
-import { SceneLoader } from 'babylonjs';
+import * as baby from '@/libs/babylonLibs';
+import * as game from '@/libs/pongLibs';
 
 
-// import { pongGame } from '../utils/pongSetup';
-import { pongGameRef, initPongStruct } from '@/utils/pongSetup';
-import { fitCameraToArena } from '@/utils/babylonUtils';
-import { doBallCollideWithWall, doBallCollideWithCeiling, makeBallBounce } from '@/utils/pongBallCollisions';
-import { doPaddleMovement } from '@/hooks/pongKeyToPaddleMovement';
 
 const Pong: React.FC = () =>
 {
+	const	states = React.useRef<game.states>(game.states.main_menu);
 	const	canvasRef = React.useRef<HTMLCanvasElement | null>(null);
-	const	pong = React.useRef<pongGameRef>(initPongStruct());
-
-	/* GAME LOGIC / GAME STATE SHOULD USE React.useState() or React.useReducer() !!! */
-	/* WHAT TO CHOOSE BETWEEN React.useState() or React.useReducer() */
-	/* WHAT TO CHOOSE BETWEEN React.useState() or React.useReducer() */
-
-	// Simple values (toggle, input) should use React.useState()
-	// Multiple related values should use React.useReducer()
-	// Complex logic or conditionals should use React.useReducer()
-	// Game state (like "paused", "running", "scored") should use React.useReducer()
-	// You need debugging-friendly logic should use React.useReducer()
-
-	// React.useState
-	// <{
-		
-	// }>
-	// ({
-
-	// })
-	// React.useReducer
-	// <{
-		
-	// }>
-	// ({
-
-	// })
+	const	pong = React.useRef<game.pongGameRef>(game.initPongStruct());
+	const	pongGUI = React.useRef<game.pongGUIRef>(game.initpongArenaGUI());
 
 	React.useEffect(() =>
 	{
 		if (!canvasRef.current) return;
 		canvasRef.current.focus();
 
-		const	engineInstance = new Engine(canvasRef.current, true);
-		const	sceneInstance = new Scene(engineInstance);
-		pong.current.engine = engineInstance;
-		pong.current.scene = sceneInstance;
+		// Initialize the game
+		game.instantiateArena(pong.current, canvasRef.current);
 
-		new HemisphericLight("light", new Vector3(1, 1, 0), sceneInstance);
-
-		const	skyboxMesh = MeshBuilder.CreateBox("skyBox", { size: 1000 }, sceneInstance);
-		pong.current.skybox = skyboxMesh;
-
-		//                                                       width: width, height: depth, depth: height
-		const	paddle1Mesh = MeshBuilder.CreateBox("paddle1", { width: pong.current.paddleWidth, height: 0.75, depth: 1 }, sceneInstance);
-		const	paddle2Mesh = MeshBuilder.CreateBox("paddle2", { width: pong.current.paddleWidth, height: 0.75, depth: 1 }, sceneInstance);
-		paddle1Mesh.scaling.z = pong.current.paddleHeight;
-		paddle2Mesh.scaling.z = pong.current.paddleHeight;
-		paddle1Mesh.position = new Vector3(-(pong.current.arenaHeight - 1), 0, 0);
-		paddle2Mesh.position = new Vector3((pong.current.arenaWidth - 1), 0, 0);
-		pong.current.paddle1 = paddle1Mesh;
-		pong.current.paddle2 = paddle2Mesh;
-
-		const	cameraInstance = new FreeCamera("camera", new Vector3(0, 30, 0), sceneInstance);
-		cameraInstance.setTarget(Vector3.Zero());
-		cameraInstance.inputs.clear();
-		pong.current.camera = cameraInstance;
-
-		const	ballMesh = MeshBuilder.CreateSphere("ball", { diameter: pong.current.ballDiameter }, sceneInstance);
-		ballMesh.position = new Vector3(0, 0, 0);
-		pong.current.ball = ballMesh;
-
-		// Initial ball direction
-		pong.current.ballDirection = Math.random() > 0.5
-			? new Vector3(pong.current.ballSpeed, 0, 0)
-			: new Vector3(-pong.current.ballSpeed, 0, 0);
+		// Initialize all the GUI
+		if (!pong.current.engine || !pong.current.scene) return;
+		console.log("Initializing GUI...");
+		game.initializeAllGUIScreens(pongGUI, pong.current, states);
+		console.log("GUI initialization complete");
 
 		// Keyboard input
-		sceneInstance.onKeyboardObservable.add((kbInfo) =>
-		{
-			const	key = kbInfo.event.key.toLowerCase();
-			if (kbInfo.type === KeyboardEventTypes.KEYDOWN)
-			{
-				pong.current.pressedKeys.add(key);
-			}
-			else if (kbInfo.type === KeyboardEventTypes.KEYUP)
-			{
-				pong.current.pressedKeys.delete(key);
-			}
-		});
+		game.manageLocalKeyboardInputs(pong.current);
 
 		// Game loop
-		engineInstance.runRenderLoop(() =>
+		if (!pong.current.engine || !pong.current.scene) return;
+		pong.current.engine.runRenderLoop(() =>
 		{
-			if (!pong.current.paddle1 || !pong.current.paddle2 || !pong.current.ball) return;
-			fitCameraToArena(pong.current);
+			game.updateGUIVisibility(pongGUI.current, states.current);
+			if
+			(
+				!pong.current.scene ||
+				!pong.current.engine ||
+				!pong.current.paddle1 ||
+				!pong.current.paddle2 ||
+				!pong.current.ball
+			) return;
 
-			// Paddle movement
-			doPaddleMovement(pong.current);
+			switch (states.current)
+			{
+				default:
+					break;
+				case game.states.waiting_to_start:
+					game.setBallDirectionRandom(pong.current);
+					break;
+				case game.states.in_game:
+					game.doPaddleMovement(pong.current);
+					game.fitCameraToArena(pong.current);
+					pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
+					pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;
+					game.makeBallBounce(pong.current);
+					break;
+			}
 
-			// Ball movement
-			pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
-			pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;
-
-			// Ball collisions
-			makeBallBounce(pong.current);
+			console.log("Current game state: ", states.current);
 			
-
-			sceneInstance.render();
+			pong.current.scene.render();
 		});
 
-		window.addEventListener('resize', () => engineInstance.resize());
-		window.addEventListener('orientationchange', () => engineInstance.resize());
-		window.addEventListener('visibilitychange', () => engineInstance.resize());
-
+		window.addEventListener('resize', () => 
+		{
+			if (!pong.current.engine) return;
+			pong.current.engine.resize();
+		})
+		
 		return () =>
 		{
-			engineInstance.dispose();
+			if (!pong.current.engine) return;
+			pong.current.engine.dispose();
 		};
 	}, []);
 

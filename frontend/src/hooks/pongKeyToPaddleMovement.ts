@@ -1,15 +1,41 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { KeyboardInfo, Mesh, MeshBlock } from 'babylonjs';
-import { Engine, Scene } from 'babylonjs';
-import { Vector3, HemisphericLight, MeshBuilder } from 'babylonjs';
-import { FreeCamera, KeyboardEventTypes } from 'babylonjs';
-import { SceneLoader } from 'babylonjs';
-import { pongGameRef } from '@/utils/pongSetup';
+import { AdvancedDynamicTexture, Button, TextBlock, StackPanel } from "@babylonjs/gui/2D";
+import { KeyboardInfo,
+    Mesh,
+    MeshBlock,
+    Engine,
+    Scene,
+    Vector3,
+    HemisphericLight,
+    MeshBuilder,
+    FreeCamera,
+    KeyboardEventTypes
+} from '@babylonjs/core';
+import {
+	states,
+	pongGameRef,
+	pongGUIRef,
+	initpongArenaGUI,
+	initPongStruct,
+	setBallPosition,
+	resetBall,
+	setPaddleHeight,
+	resetPaddlesHeight,
+	setPaddlePosition,
+	resetPaddlesPosition,
+	setBallDirection,
+	setBallDirectionRight,
+	setBallDirectionLeft,
+	setBallDirectionRandom,
+	reflectBallCeiling,
+	reflectBallWall,
+	reflectBallPaddles,
+} from '@/utils/pongSetup';
 
 // Move paddle Up
-const movePaddleUp = (pong: pongGameRef, paddleZ: number): number =>
+export const	movePaddleUp = (pong: pongGameRef, paddleZ: number): number =>
 {
 	if (!pong.paddle1 ) return(0);
 	return(
@@ -26,7 +52,7 @@ const movePaddleUp = (pong: pongGameRef, paddleZ: number): number =>
 }
 
 // Move paddle Down
-const movePaddleDown = (pong: pongGameRef, paddleZ: number): number =>
+export const	movePaddleDown = (pong: pongGameRef, paddleZ: number): number =>
 {
 	if (!pong.paddle2 ) return(0);
 	return(
@@ -63,4 +89,21 @@ export	const	doPaddleMovement = (pong: pongGameRef): void =>
 	}
 	// console.log("Pressed keys: ", pong.pressedKeys);
 	// console.log("Paddle2 position: ", pong.paddle2.position.z);
+}
+
+export const	manageLocalKeyboardInputs = (pong: pongGameRef): void =>
+{
+	// Keyboard input
+	pong.scene?.onKeyboardObservable.add((kbInfo) =>
+	{
+		const	key = kbInfo.event.key.toLowerCase();
+		if (kbInfo.type === KeyboardEventTypes.KEYDOWN)
+		{
+			pong.pressedKeys.add(key);
+		}
+		else if (kbInfo.type === KeyboardEventTypes.KEYUP)
+		{
+			pong.pressedKeys.delete(key);
+		}
+	});
 }

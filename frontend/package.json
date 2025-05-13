@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@babylonjs/core": "^8.7.0",
+    "@babylonjs/gui": "^8.7.0",
     "autoprefixer": "^10.4.21",
     "babylonjs": "^7.50.0",
     "dotenv": "^16.4.7",
