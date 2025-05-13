@@ -6,11 +6,10 @@
 #    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/05/12 18:48:35 by hulefevr         ###   ########.fr        #
+#    Updated: 2025/05/13 15:34:40 by hulefevr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# Variables
 # Variables
 PROJECT_NAME = ft_transcendence
 DEV_COMPOSE = docker-compose.dev.yml
@@ -96,6 +95,7 @@ prune:
 	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) down -v --remove-orphans
 	docker system prune -af
 	docker volume prune -f
+
 
 logs:
 	@mkdir -p ./logs

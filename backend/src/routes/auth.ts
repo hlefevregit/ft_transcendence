@@ -65,8 +65,6 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
 			id: user.id,
 			email: user.email,
 			pseudo: user.pseudo,
-			avatarUrl: user.avatarUrl,
-			status: user.status
 		});
 		reply.send({ success: true, token });
 	});
