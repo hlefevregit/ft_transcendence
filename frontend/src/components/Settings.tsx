@@ -87,7 +87,7 @@ const Settings: React.FC = () => {
 	const [friends, setFriends] = useState<Friend[]>([]);
 	const [sentRequests, setSentRequests] = useState<FriendRequest[]>([]);
 	const [receivedRequests, setReceivedRequests] = useState<FriendRequest[]>([]);
-	const [newFriendEmail, setNewFriendEmail] = useState('');
+	const [newFriendPseudo, setNewFriendPseudo] = useState('');
 
 	const token = localStorage.getItem('authToken');
 	if (!token) {
@@ -211,7 +211,7 @@ const Settings: React.FC = () => {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${token}`,
 		  },
-		  body: JSON.stringify({ email: newFriendEmail }),
+		  body: JSON.stringify({ pseudo: newFriendPseudo }),
 		});
 	  
 		await fetchSentRequests();
@@ -345,8 +345,32 @@ const Settings: React.FC = () => {
 					<h2 className="text-xl font-semibold">👥 Friends</h2>
 					<ul className="space-y-2">
 					{friends.map((f) => (
-						<li key={f.id} className="flex items-center justify-between bg-white/90 p-2 rounded">
-						<span>{f.pseudo}</span>
+						<li
+						key={f.id}
+						className="flex items-center justify-between bg-white/90 p-2 rounded"
+						>
+						<div className="flex items-center gap-2">
+							{/* ✅ Pastille */}
+							<span
+							className={`inline-block w-3 h-3 rounded-full ${
+								f.status === 'active' ? 'bg-green-500' : 'bg-gray-400'
+							}`}
+							title={f.status === 'active' ? 'Online' : 'Offline'}
+							></span>
+
+							{/* ✅ Avatar si dispo */}
+							{f.avatarUrl && (
+							<img
+								src={f.avatarUrl}
+								alt="avatar"
+								className="w-6 h-6 rounded-full object-cover"
+							/>
+							)}
+
+							<span>{f.pseudo}</span>
+						</div>
+
+						{/* ✅ Supprimer */}
 						<button
 							className="text-sm bg-red-500 text-white px-2 py-1 rounded"
 							onClick={() => removeFriend(f.id)}
@@ -382,10 +406,10 @@ const Settings: React.FC = () => {
 					<div className="mt-4">
 					<h2 className="text-xl font-semibold mb-2">➕ Send Friend Request</h2>
 					<input
-						type="email"
-						value={newFriendEmail}
-						onChange={(e) => setNewFriendEmail(e.target.value)}
-						placeholder="Email"
+						type="pseudo"
+						value={newFriendPseudo}
+						onChange={(e) => setNewFriendPseudo(e.target.value)}
+						placeholder="Pseudo"
 						className="border border-gray-300 rounded p-2 mr-2"
 					/>
 					<button

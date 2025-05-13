@@ -11,13 +11,13 @@ export async function setupFriendRoutes(fastify: CustomFastifyInstance) {
   // Envoyer une demande d'ami
   fastify.post('/api/friends/request', auth, async (req, reply) => {
     
-	const { email } = req.body as { email: string };
+	const { pseudo } = req.body as { pseudo: string };
 	const user = req.user as { id: number };
 
 	const fromUserId = user.id;
 
 	const targetUser = await fastify.prisma.user.findUnique({
-		where: { email },
+		where: { pseudo },
 	});
 
 	if (!targetUser) {
@@ -110,35 +110,40 @@ fastify.post('/api/friends/request/:id/accept', auth, async (req, reply) => {
 
 	const { id } = req.params as { id: string };
 	const userId = parseInt(id, 10);
-	const user = req.user as { id: number };
-	const meId = user.id;
+	const meId = (req.user as { id: number }).id;
 
-    // Supprime relation d’amitié si elle existe
-    await fastify.prisma.user.update({
-      where: { id: meId },
-      data: {
-        friends: { disconnect: { id: userId } },
-      },
-    });
+	try {
+		// Supprime relation d’amitié si elle existe
+		await fastify.prisma.user.update({
+		  where: { id: meId },
+		  data: {
+			friends: { disconnect: { id: userId } },
+		  },
+		});
+	
+		await fastify.prisma.user.update({
+		  where: { id: userId },
+		  data: {
+			friends: { disconnect: { id: meId } },
+		  },
+		});
+	
+		// Supprime toutes demandes entre les deux
+		await fastify.prisma.friendRequest.deleteMany({
+		  where: {
+			OR: [
+			  { fromUserId: meId, toUserId: userId },
+			  { fromUserId: userId, toUserId: meId },
+			],
+		  },
+		});
 
-    await fastify.prisma.user.update({
-      where: { id: userId },
-      data: {
-        friends: { disconnect: { id: meId } },
-      },
-    });
+		return reply.send({ message: 'Relation supprimée.' });
+	} catch (err) {
+		console.error('❌ Error deleting friend:', err);
+		return reply.status(500).send({ message: 'Erreur lors de la suppression de la relation.' });
+	}
 
-    // Supprime toutes demandes entre les deux
-    await fastify.prisma.friendRequest.deleteMany({
-      where: {
-        OR: [
-          { fromUserId: meId, toUserId: userId },
-          { fromUserId: userId, toUserId: meId },
-        ],
-      },
-    });
-
-    return reply.send({ message: 'Relation supprimée.' });
   });
 
   // Récupérer les amis et demandes
