@@ -36,7 +36,6 @@ const Pong: React.FC = () =>
 		{
 			game.updateGUIVisibility(pong, states.current);
 			game.updateGUIValues(pong, states);
-			pong.current.bindings.set("debugFrameRateValue", String(pong.current.engine?.getFps().toFixed(0)));
 			if
 			(
 				!pong.current.scene ||
@@ -49,6 +48,8 @@ const Pong: React.FC = () =>
 			switch (states.current)
 			{
 				default:
+					if (states.current > Object.keys(game.states).length / 2 - 1) states.current = 0;
+					if (states.current < 0) states.current = Object.keys(game.states).length / 2 - 1;
 					break;
 				case game.states.waiting_to_start:
 					game.setBallDirectionRandom(pong.current);
@@ -62,8 +63,6 @@ const Pong: React.FC = () =>
 					break;
 			}
 
-			// console.log("Current game state: ", states.current);
-			
 			pong.current.scene.render();
 		});
 

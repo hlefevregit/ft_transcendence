@@ -93,7 +93,7 @@ export type pongStruct =
 	debugGUI?: baby.StackPanel;
 	
 	// GUI's bindings
-	bindings: Map<string, any | null>;
+	bindings: Map<string, any>;
 
 	// Engine and scene
 	guiTexture?: baby.AdvancedDynamicTexture;
@@ -115,7 +115,7 @@ export function initPongStruct(): pongStruct
 		paddleHeight: 4,
 		paddleWidth: 0.25,
 
-		bindings: new Map<string, React.RefObject<any> | null>(),
+		bindings: new Map<string, React.RefObject<any>>(),
 	};
 }
 

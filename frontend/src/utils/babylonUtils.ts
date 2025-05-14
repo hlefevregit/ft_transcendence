@@ -142,9 +142,9 @@ export const	createStackPanel = (panelName: string): baby.StackPanel =>
 	return GUI;
 }
 
-export const	createDynamicText = (textName: string, dynamicVariable: any, bindings: React.RefObject<game.pongStruct>): baby.TextBlock =>
+export const	createDynamicText = (textName: string, valueGetter: () => any, bindings: React.RefObject<game.pongStruct>): baby.TextBlock =>
 {
-	const	text = new baby.TextBlock(textName, String(dynamicVariable));
+	const	text = new baby.TextBlock(textName, String(valueGetter()));
 	text.width = "50px";
 	text.height = "25px";
 	text.color = game.colorsScheme.light1;
@@ -152,7 +152,7 @@ export const	createDynamicText = (textName: string, dynamicVariable: any, bindin
 	text.fontSize = 24;
 
 	// Bind the text to the value in the bindings map
-	bindings.current.bindings.set(textName, dynamicVariable);
+	bindings.current.bindings.set(textName, valueGetter);
 	return text;
 }
 

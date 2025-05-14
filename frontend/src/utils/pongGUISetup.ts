@@ -39,14 +39,23 @@ export const	updateGUIVisibility = (pong: React.RefObject<game.pongStruct>, stat
 
 export const	updateGUIValues = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>): void =>
 {
-	for (const	[key, value] of pong.current.bindings.entries())
+	if (!pong.current.bindings)
 	{
-		if (pong.current.guiTexture?.getControlByName(key))
+        console.warn("Bindings map is not initialized !");
+        return;
+    }
+
+    for (const [key, valueOrGetter] of pong.current.bindings.entries())
+{
+        // Try to find the control by name
+        const control = pong.current.guiTexture?.getControlByName(key);
+        
+        if (control && control instanceof baby.TextBlock)
 		{
-			const	control = pong.current.guiTexture?.getControlByName(key);
-			if (control && control instanceof baby.TextBlock) control.text = String(value);
-		}
-	}
+
+			if (typeof valueOrGetter === 'function') control.text = String(valueOrGetter());
+        }
+    }
 }
 
 export const    instantiateMainMenuGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>): void =>
@@ -59,19 +68,16 @@ export const    instantiateMainMenuGUI = (pong: React.RefObject<game.pongStruct>
 	const	settingsButton = game.createButton("settingsButton", "Settings", () =>
 	{
 		states.current = game.states.settings;
-		pong.current.bindings.set("debugStatesValue", states.current);
 		game.forceRender(pong.current);
 	});
 	const	localPong = game.createButton("localPong", "Play locally", () =>
 	{
 		states.current = game.states.game_settings;
-		pong.current.bindings.set("debugStatesValue", states.current);
 		game.forceRender(pong.current);
 	});
 	const	remotePong = game.createButton("remotePong", "Play multiplayer", () =>
 	{
 		states.current = game.states.not_found;
-		pong.current.bindings.set("debugStatesValue", states.current);
 		game.forceRender(pong.current);
 	});
 
@@ -98,7 +104,6 @@ export const    instantiateSettingsGUI = (pong: React.RefObject<game.pongStruct>
 	const	backButton = game.createButton("settingsButton", "Back", () =>
 	{
 		states.current = game.states.main_menu;
-		pong.current.bindings.set("debugStatesValue", states.current);
 		game.forceRender(pong.current);
 	});
 	const	musicSlider = game.createSlider("musicSlider", 0, 20, 1, 20, (value: number) =>
@@ -139,7 +144,7 @@ export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct
 	const	backButton = game.createButton("settingsButton", "Back", () =>
 	{
 		states.current = game.states.main_menu;
-		pong.current.bindings.set("debugStatesValue", states.current);
+		// pong.current.bindings.set("debugStatesValue", states.current);
 		game.forceRender(pong.current);
 	});
 
@@ -155,24 +160,18 @@ export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct
 
 	// Create sliders and text
 	const	pongSettingsArenaWidthText = game.createText("pongSettingsArenaWidthText", "Arena width");
-	const	pongSettingsArenaWidthTextValue = game.createDynamicText("pongSettingsArenaWidthTextValue", pong.current.arenaWidth, pong);
+	const	pongSettingsArenaWidthTextValue = game.createDynamicText("pongSettingsArenaWidthTextValue", () => pong.current.arenaWidth, pong);
 	const	pongSettingsArenaWidth = game.createSlider("pongSettingsArenaWidth", 7, 20, 1, pong.current.arenaWidth, (value: number) =>
 	{
 		pong.current.arenaWidth = value;
-		pong.current.bindings.set("pongSettingsArenaWidthTextValue", value);
-		console.log("Arena width changed to: ", pong.current.arenaWidth);
-		// pongSettingsArenaWidthTextValue.text = String(value);
 		game.forceRender(pong.current);
 	});
 
 	const	pongSettingsArenaHeightText = game.createText("pongSettingsArenaHeightText", "Arena height");
-	const	pongSettingsArenaHeightTextValue = game.createDynamicText("pongSettingsArenaHeightTextValue", String(pong.current.arenaHeight), pong);
+	const	pongSettingsArenaHeightTextValue = game.createDynamicText("pongSettingsArenaHeightTextValue", () => pong.current.arenaHeight, pong);
 	const	pongSettingsArenaHeight = game.createSlider("pongSettingsArenaHeight", 7, 20, 1, pong.current.arenaHeight, (value: number) =>
 	{
 		pong.current.arenaHeight = value;
-		pong.current.bindings.set("pongSettingsArenaHeightTextValue", value);
-		console.log("Arena height changed to: ", pong.current.arenaHeight);
-		// pongSettingsArenaHeightTextValue.text = String(value);
 		game.forceRender(pong.current);
 	});
 
@@ -230,24 +229,21 @@ export const	instantiateDebugGUI = (pong: React.RefObject<game.pongStruct>, stat
 
 	const	debugFramerateText = game.createText("debugFrameRateText", "FPS");
 			debugFramerateText.fontSize = 12;
-	const	debugFramerateValue = game.createDynamicText("debugFrameRateValue", String(pong.current.engine?.getFps().toFixed(0)), pong);
-			// pong.current.bindings.set("debugFrameRateValue", String(pong.current.engine?.getFps()));
+	const	debugFramerateValue = game.createDynamicText("debugFrameRateValue", () => pong.current.engine?.getFps().toFixed(0), pong);
 
 	const	debugStatesText = game.createText("debugStatesText", "Current State");
 			debugStatesText.fontSize = 12;
-	const	debugStatesValue = game.createDynamicText("debugStatesValue", String(states.current), pong);
+	const	debugStatesValue = game.createDynamicText("debugStatesValue", () => states.current, pong);
 			debugStatesValue.fontSize = 12;
 
 	const	debugIncrementStateButton = game.createButton("debugIncrementStateButton", "+", () =>
 	{
-		states.current = (states.current + 1) % game.states.not_found;
-		pong.current.bindings.set("debugStatesValue", states.current);
+		states.current++;
 		game.forceRender(pong.current);
 	});
 	const	debugDecrementStateButton = game.createButton("debugDecrementStateButton", "-", () =>
 	{
-		states.current = Math.abs(states.current - 1) % game.states.not_found;
-		pong.current.bindings.set("debugStatesValue", states.current);
+		states.current--;
 		game.forceRender(pong.current);
 	});
 			debugIncrementStateButton.fontSize = 12;
