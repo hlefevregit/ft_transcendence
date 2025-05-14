@@ -5,41 +5,51 @@ import { useNavigate } from 'react-router-dom';
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
 
-export const	instantiateGUI = (pongGUI: React.RefObject<game.pongGUIRef>, pong: game.pongGameRef): void =>
+export const	instantiateGUI = (pong: React.RefObject<game.pongStruct>): void =>
 {
-	pongGUI.current.guiTexture = baby.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, pong.scene);
+	pong.current.guiTexture = baby.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, pong.current.scene);
 }
 
-export const	initializeAllGUIScreens = (pongGUI: React.RefObject<game.pongGUIRef>, pong: game.pongGameRef, states: React.RefObject<game.states>): void =>
+export const	initializeAllGUIScreens = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>): void =>
 {
 	// Initialize the GUI texture
 	console.log("initialized GUI texture...");
-	game.instantiateGUI(pongGUI, pong);
+	game.instantiateGUI(pong);
 	console.log("complete initializing GUI texture");
 	
 	// Initialize all the GUI screens
 	console.log("initialized GUI screens...");
-	game.instantiateMainMenuGUI(pongGUI.current, pong, states);
-	game.instantiateSettingsGUI(pongGUI.current, pong, states);
-	game.instentiatePongSettingsGUI(pongGUI.current, pong, states);
-	game.instantiateArenaGUI(pongGUI.current, pong, states);
+	game.instantiateMainMenuGUI(pong, states);
+	game.instantiateSettingsGUI(pong, states);
+	game.instentiatePongSettingsGUI(pong, states);
+	game.instantiateArenaGUI(pong, states);
+	game.instantiateDebugGUI(pong, states);
 	// etc.
 	console.log("complete initializing GUI screens");
 }
 
-
-export const	updateGUIVisibility = (pongGUI: game.pongGUIRef, states: game.states): void =>
+export const	updateGUIVisibility = (pong: React.RefObject<game.pongStruct>, states: game.states): void =>
 {
-	// console.log("updateGUIVisibility called with states: ", states);
-	// Update main menu visibility
-	if (pongGUI.mainMenuGUI) pongGUI.mainMenuGUI.isVisible = (states === game.states.main_menu);
-	if (pongGUI.settingsGUI) pongGUI.settingsGUI.isVisible = (states === game.states.settings);
-	if (pongGUI.pongSettingsGUI) pongGUI.pongSettingsGUI.isVisible = (states === game.states.game_settings);
-	if (pongGUI.arenaGUI) pongGUI.arenaGUI.isVisible = (states === game.states.in_game);
-	// etc. for other screens
+	const	setUIState = (ui: any, stateToCheck: game.states): void => { if (ui) ui.isEnabled = ui.isVisible = (states === stateToCheck);}
+	setUIState(pong.current.mainMenuGUI, game.states.main_menu);
+	setUIState(pong.current.settingsGUI, game.states.settings);
+	setUIState(pong.current.pongSettingsGUI, game.states.game_settings);
+	setUIState(pong.current.arenaGUI, game.states.in_game);
 }
 
-export const    instantiateMainMenuGUI = (pongGUI: game.pongGUIRef, pong: game.pongGameRef, states: React.RefObject<game.states>): void =>
+export const	updateGUIValues = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>): void =>
+{
+	for (const	[key, value] of pong.current.bindings.entries())
+	{
+		if (pong.current.guiTexture?.getControlByName(key))
+		{
+			const	control = pong.current.guiTexture?.getControlByName(key);
+			if (control && control instanceof baby.TextBlock) control.text = String(value);
+		}
+	}
+}
+
+export const    instantiateMainMenuGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>): void =>
 {
 	// Canvas that will be used for the GUI
 	const	mainMenuGUI = game.createStackPanel("mainMenuGUI");
@@ -49,17 +59,20 @@ export const    instantiateMainMenuGUI = (pongGUI: game.pongGUIRef, pong: game.p
 	const	settingsButton = game.createButton("settingsButton", "Settings", () =>
 	{
 		states.current = game.states.settings;
-		game.forceRender(pong);
+		pong.current.bindings.set("debugStatesValue", states.current);
+		game.forceRender(pong.current);
 	});
 	const	localPong = game.createButton("localPong", "Play locally", () =>
 	{
 		states.current = game.states.game_settings;
-		game.forceRender(pong);
+		pong.current.bindings.set("debugStatesValue", states.current);
+		game.forceRender(pong.current);
 	});
 	const	remotePong = game.createButton("remotePong", "Play multiplayer", () =>
 	{
 		states.current = game.states.not_found;
-		game.forceRender(pong);
+		pong.current.bindings.set("debugStatesValue", states.current);
+		game.forceRender(pong.current);
 	});
 
 
@@ -71,11 +84,11 @@ export const    instantiateMainMenuGUI = (pongGUI: game.pongGUIRef, pong: game.p
 	mainMenuGUI.addControl(remotePong);
 
 	// Add the screen to the GUI texture
-	pongGUI.mainMenuGUI = mainMenuGUI;
-	pongGUI.guiTexture?.addControl(mainMenuGUI);
+	pong.current.mainMenuGUI = mainMenuGUI;
+	pong.current.guiTexture?.addControl(mainMenuGUI);
 }
 
-export const    instantiateSettingsGUI = (pongGUI: game.pongGUIRef, pong: game.pongGameRef, states: React.RefObject<game.states>): void =>
+export const    instantiateSettingsGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>): void =>
 {
 	// Canvas that will be used for the GUI
 	const	settingsGUI = game.createStackPanel("settingsGUI");
@@ -85,19 +98,18 @@ export const    instantiateSettingsGUI = (pongGUI: game.pongGUIRef, pong: game.p
 	const	backButton = game.createButton("settingsButton", "Back", () =>
 	{
 		states.current = game.states.main_menu;
-		game.forceRender(pong);
+		pong.current.bindings.set("debugStatesValue", states.current);
+		game.forceRender(pong.current);
 	});
 	const	musicSlider = game.createSlider("musicSlider", 0, 20, 1, 20, (value: number) =>
 	{
 		console.log("Music volume changed to: ", value);
-		// state.current = game.states.settings;
-		game.forceRender(pong);
+		game.forceRender(pong.current);
 	});
 	const	soundSlider = game.createSlider("musicSlider", 0, 20, 1, 20, (value: number) =>
 	{
 		console.log("Music volume changed to: ", value);
-		// state.current = game.states.settings;
-		game.forceRender(pong);
+		game.forceRender(pong.current);
 	});
 	const	musicSliderText = game.createText("musicSliderText", "Music volume");
 	const	soundSliderText = game.createText("soundSliderText", "Sound volume");
@@ -112,12 +124,12 @@ export const    instantiateSettingsGUI = (pongGUI: game.pongGUIRef, pong: game.p
 	settingsGUI.addControl(soundSlider);
 
 	// Add the screen to the GUI texture
-	pongGUI.settingsGUI = settingsGUI;
-	pongGUI.guiTexture?.addControl(settingsGUI);
+	pong.current.settingsGUI = settingsGUI;
+	pong.current.guiTexture?.addControl(settingsGUI);
 	// updateGUIVisibility(pongGUI, states.current);
 }
 
-export const	instentiatePongSettingsGUI = (pongGUI: game.pongGUIRef, pong: game.pongGameRef, states: React.RefObject<game.states>): void =>
+export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>): void =>
 {
 	// Main panel for the entire settings screen
 	const	pongSettingsGUI = game.createStackPanel("pongSettingsGUI");
@@ -127,7 +139,8 @@ export const	instentiatePongSettingsGUI = (pongGUI: game.pongGUIRef, pong: game.
 	const	backButton = game.createButton("settingsButton", "Back", () =>
 	{
 		states.current = game.states.main_menu;
-		game.forceRender(pong);
+		pong.current.bindings.set("debugStatesValue", states.current);
+		game.forceRender(pong.current);
 	});
 
 	// Add these to the main panel
@@ -142,24 +155,25 @@ export const	instentiatePongSettingsGUI = (pongGUI: game.pongGUIRef, pong: game.
 
 	// Create sliders and text
 	const	pongSettingsArenaWidthText = game.createText("pongSettingsArenaWidthText", "Arena width");
-	const	pongSettingsArenaWidthTextValue = game.createValueText("pongSettingsArenaWidthTextValue", pong.arenaWidth.toString());
-	const	pongSettingsArenaWidth = game.createSlider("pongSettingsArenaWidth", 0, 20, 1, 20, (value: number) =>
+	const	pongSettingsArenaWidthTextValue = game.createDynamicText("pongSettingsArenaWidthTextValue", pong.current.arenaWidth, pong);
+	const	pongSettingsArenaWidth = game.createSlider("pongSettingsArenaWidth", 7, 20, 1, pong.current.arenaWidth, (value: number) =>
 	{
-		pong.arenaWidth = value;
-		console.log("Arena width changed to: ", value);
-		pongSettingsArenaWidthTextValue.text = value.toString();
-		game.forceRender(pong);
+		pong.current.arenaWidth = value;
+		pong.current.bindings.set("pongSettingsArenaWidthTextValue", value);
+		console.log("Arena width changed to: ", pong.current.arenaWidth);
+		// pongSettingsArenaWidthTextValue.text = String(value);
+		game.forceRender(pong.current);
 	});
 
 	const	pongSettingsArenaHeightText = game.createText("pongSettingsArenaHeightText", "Arena height");
-	const	pongSettingsArenaHeightTextValue = game.createValueText("pongSettingsArenaHeightTextValue", pong.arenaHeight.toString());
-	const	pongSettingsArenaHeight = game.createSlider("pongSettingsArenaHeight", 0, 20, 1, pong.arenaHeight, (value: number) =>
+	const	pongSettingsArenaHeightTextValue = game.createDynamicText("pongSettingsArenaHeightTextValue", String(pong.current.arenaHeight), pong);
+	const	pongSettingsArenaHeight = game.createSlider("pongSettingsArenaHeight", 7, 20, 1, pong.current.arenaHeight, (value: number) =>
 	{
-		pong.arenaHeight = value;
-		console.log("Arena height changed to: ", value);
-		pongSettingsArenaHeightTextValue.text = value.toString();
-		
-		game.forceRender(pong);
+		pong.current.arenaHeight = value;
+		pong.current.bindings.set("pongSettingsArenaHeightTextValue", value);
+		console.log("Arena height changed to: ", pong.current.arenaHeight);
+		// pongSettingsArenaHeightTextValue.text = String(value);
+		game.forceRender(pong.current);
 	});
 
 
@@ -175,15 +189,15 @@ export const	instentiatePongSettingsGUI = (pongGUI: game.pongGUIRef, pong: game.
 	pongSettingsGUI.addControl(settingsPanel);
 
 	// Save and add to GUI texture
-	pongGUI.pongSettingsGUI = pongSettingsGUI;
-	pongGUI.guiTexture?.addControl(pongSettingsGUI);
+	pong.current.pongSettingsGUI = pongSettingsGUI;
+	pong.current.guiTexture?.addControl(pongSettingsGUI);
 }
 
-export const    instantiateArenaGUI = (pongGUI: game.pongGUIRef, pong: game.pongGameRef, states: React.RefObject<game.states>): void =>
+export const    instantiateArenaGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>): void =>
 {
 	
 	// Ensure we have a valid scene and camera
-	const camera = pong.scene?.activeCamera;
+	const camera = pong.current.scene?.activeCamera;
 	if (!camera)
 	{
 		console.error("No active camera found in the scene!");
@@ -200,6 +214,71 @@ export const    instantiateArenaGUI = (pongGUI: game.pongGUIRef, pong: game.pong
 	// arenaGUI.addControl(textBlock);
 	// arenaGUI.addControl(button);
 
-	pongGUI.arenaGUI = arenaGUI;
-	updateGUIVisibility(pongGUI, states.current);
+	pong.current.arenaGUI = arenaGUI;
+	updateGUIVisibility(pong, states.current);
 };
+
+export const	instantiateDebugGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>): void =>
+{
+	const	debugGUI = game.createStackPanel("debugGUI");
+			debugGUI.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_LEFT;
+			debugGUI.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_TOP;
+			debugGUI.width = "200px";
+			debugGUI.height = "800px";
+	const	debugText = game.createTitle("debugText", "Debug Info");
+			debugText.fontSize = 24;
+
+	const	debugFramerateText = game.createText("debugFrameRateText", "FPS");
+			debugFramerateText.fontSize = 12;
+	const	debugFramerateValue = game.createDynamicText("debugFrameRateValue", String(pong.current.engine?.getFps().toFixed(0)), pong);
+			// pong.current.bindings.set("debugFrameRateValue", String(pong.current.engine?.getFps()));
+
+	const	debugStatesText = game.createText("debugStatesText", "Current State");
+			debugStatesText.fontSize = 12;
+	const	debugStatesValue = game.createDynamicText("debugStatesValue", String(states.current), pong);
+			debugStatesValue.fontSize = 12;
+
+	const	debugIncrementStateButton = game.createButton("debugIncrementStateButton", "+", () =>
+	{
+		states.current = (states.current + 1) % game.states.not_found;
+		pong.current.bindings.set("debugStatesValue", states.current);
+		game.forceRender(pong.current);
+	});
+	const	debugDecrementStateButton = game.createButton("debugDecrementStateButton", "-", () =>
+	{
+		states.current = Math.abs(states.current - 1) % game.states.not_found;
+		pong.current.bindings.set("debugStatesValue", states.current);
+		game.forceRender(pong.current);
+	});
+			debugIncrementStateButton.fontSize = 12;
+			debugDecrementStateButton.fontSize = 12;
+			debugIncrementStateButton.cornerRadius = 10;
+			debugDecrementStateButton.cornerRadius = 10;
+			debugIncrementStateButton.width = "50px";
+			debugDecrementStateButton.width = "50px";
+			debugIncrementStateButton.height = "50px";
+			debugDecrementStateButton.height = "50px";
+
+	const	debugContainer = game.createStackPanel("debugContainer");
+			debugContainer.isVertical = false;
+			debugContainer.spacing = 5;
+			debugContainer.width = "125px";
+			debugContainer.height = "60px";
+			debugContainer.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
+			debugContainer.background = game.colorsScheme.dark2;
+
+	// Add GUI components to the debug GUI
+	// The order of adding controls matters for the layout
+	debugGUI.addControl(debugText);
+	debugGUI.addControl(debugStatesText);
+	debugGUI.addControl(debugContainer);
+	debugGUI.addControl(debugFramerateText);
+	debugGUI.addControl(debugFramerateValue);
+	debugContainer.addControl(debugIncrementStateButton);
+	debugContainer.addControl(debugStatesValue);
+	debugContainer.addControl(debugDecrementStateButton);
+
+	// Add the screen to the GUI texture
+	pong.current.debugGUI = debugGUI;
+	pong.current.guiTexture?.addControl(debugGUI);
+}

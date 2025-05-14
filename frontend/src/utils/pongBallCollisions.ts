@@ -24,7 +24,7 @@ export const	doBallCollideWithCeiling = (ballPos: baby.Vector3, collideAxis: num
 }
 
 // Ball bouncing
-export const	makeBallBounce = (pong: game.pongGameRef): void =>
+export const	makeBallBounce = (pong: game.pongStruct): void =>
 {
 	if (!pong.ball) return;
 	if (!pong.paddle1 || !pong.paddle2) return;
@@ -45,7 +45,7 @@ export const	makeBallBounce = (pong: game.pongGameRef): void =>
 	// console.log("Ball speed: ", pong.ballSpeedModifier * pong.ballSpeed);
 }
 
-export const	collideWithPaddle = (pong: game.pongGameRef, paddlePos: baby.Vector3) : Boolean =>
+export const	collideWithPaddle = (pong: game.pongStruct, paddlePos: baby.Vector3) : Boolean =>
 {
 	if (!pong.ball) return (false);
 	
@@ -57,7 +57,7 @@ export const	collideWithPaddle = (pong: game.pongGameRef, paddlePos: baby.Vector
 	);
 }
 
-export const chooseBouncingAngle = (pong: game.pongGameRef, paddlePos: baby.Vector3): number =>
+export const chooseBouncingAngle = (pong: game.pongStruct, paddlePos: baby.Vector3): number =>
 {
 	if (!pong.ball) return 0;
 

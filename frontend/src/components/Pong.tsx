@@ -9,10 +9,9 @@ import * as game from '@/libs/pongLibs';
 
 const Pong: React.FC = () =>
 {
-	const	states = React.useRef<game.states>(game.states.main_menu);
 	const	canvasRef = React.useRef<HTMLCanvasElement | null>(null);
-	const	pong = React.useRef<game.pongGameRef>(game.initPongStruct());
-	const	pongGUI = React.useRef<game.pongGUIRef>(game.initpongArenaGUI());
+	const	pong = React.useRef<game.pongStruct>(game.initPongStruct());
+	const	states = React.useRef<game.states>(game.states.main_menu);
 
 	React.useEffect(() =>
 	{
@@ -25,7 +24,7 @@ const Pong: React.FC = () =>
 		// Initialize all the GUI
 		if (!pong.current.engine || !pong.current.scene) return;
 		console.log("Initializing GUI...");
-		game.initializeAllGUIScreens(pongGUI, pong.current, states);
+		game.initializeAllGUIScreens(pong, states);
 		console.log("GUI initialization complete");
 
 		// Keyboard input
@@ -35,7 +34,9 @@ const Pong: React.FC = () =>
 		if (!pong.current.engine || !pong.current.scene) return;
 		pong.current.engine.runRenderLoop(() =>
 		{
-			game.updateGUIVisibility(pongGUI.current, states.current);
+			game.updateGUIVisibility(pong, states.current);
+			game.updateGUIValues(pong, states);
+			pong.current.bindings.set("debugFrameRateValue", String(pong.current.engine?.getFps().toFixed(0)));
 			if
 			(
 				!pong.current.scene ||
@@ -61,7 +62,7 @@ const Pong: React.FC = () =>
 					break;
 			}
 
-			console.log("Current game state: ", states.current);
+			// console.log("Current game state: ", states.current);
 			
 			pong.current.scene.render();
 		});
@@ -87,3 +88,4 @@ const Pong: React.FC = () =>
 };
 
 export default Pong;
+

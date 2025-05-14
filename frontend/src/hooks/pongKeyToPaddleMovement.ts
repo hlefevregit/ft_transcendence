@@ -1,41 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { AdvancedDynamicTexture, Button, TextBlock, StackPanel } from "@babylonjs/gui/2D";
-import { KeyboardInfo,
-    Mesh,
-    MeshBlock,
-    Engine,
-    Scene,
-    Vector3,
-    HemisphericLight,
-    MeshBuilder,
-    FreeCamera,
-    KeyboardEventTypes
-} from '@babylonjs/core';
-import {
-	states,
-	pongGameRef,
-	pongGUIRef,
-	initpongArenaGUI,
-	initPongStruct,
-	setBallPosition,
-	resetBall,
-	setPaddleHeight,
-	resetPaddlesHeight,
-	setPaddlePosition,
-	resetPaddlesPosition,
-	setBallDirection,
-	setBallDirectionRight,
-	setBallDirectionLeft,
-	setBallDirectionRandom,
-	reflectBallCeiling,
-	reflectBallWall,
-	reflectBallPaddles,
-} from '@/utils/pongSetup';
+import * as baby from '@/libs/babylonLibs';
+import * as game from '@/libs/pongLibs';
 
 // Move paddle Up
-export const	movePaddleUp = (pong: pongGameRef, paddleZ: number): number =>
+export const	movePaddleUp = (pong: game.pongStruct, paddleZ: number): number =>
 {
 	if (!pong.paddle1 ) return(0);
 	return(
@@ -52,7 +22,7 @@ export const	movePaddleUp = (pong: pongGameRef, paddleZ: number): number =>
 }
 
 // Move paddle Down
-export const	movePaddleDown = (pong: pongGameRef, paddleZ: number): number =>
+export const	movePaddleDown = (pong: game.pongStruct, paddleZ: number): number =>
 {
 	if (!pong.paddle2 ) return(0);
 	return(
@@ -68,7 +38,7 @@ export const	movePaddleDown = (pong: pongGameRef, paddleZ: number): number =>
 	)
 }
 
-export	const	doPaddleMovement = (pong: pongGameRef): void =>
+export	const	doPaddleMovement = (pong: game.pongStruct): void =>
 {
 	if (!pong.paddle1 || !pong.paddle2) return;
 	if (pong.pressedKeys.has('arrowup'))
@@ -91,17 +61,17 @@ export	const	doPaddleMovement = (pong: pongGameRef): void =>
 	// console.log("Paddle2 position: ", pong.paddle2.position.z);
 }
 
-export const	manageLocalKeyboardInputs = (pong: pongGameRef): void =>
+export const	manageLocalKeyboardInputs = (pong: game.pongStruct): void =>
 {
 	// Keyboard input
 	pong.scene?.onKeyboardObservable.add((kbInfo) =>
 	{
 		const	key = kbInfo.event.key.toLowerCase();
-		if (kbInfo.type === KeyboardEventTypes.KEYDOWN)
+		if (kbInfo.type === baby.KeyboardEventTypes.KEYDOWN)
 		{
 			pong.pressedKeys.add(key);
 		}
-		else if (kbInfo.type === KeyboardEventTypes.KEYUP)
+		else if (kbInfo.type === baby.KeyboardEventTypes.KEYUP)
 		{
 			pong.pressedKeys.delete(key);
 		}

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
 
-export function fitCameraToArena(pong: game.pongGameRef): void
+export function fitCameraToArena(pong: game.pongStruct): void
 {
 	if (!pong.camera || !pong.engine) return;
 
@@ -59,13 +59,20 @@ export const	createButton = (buttonName: string, buttonText: string, functionToE
 	button.color = game.colorsScheme.light1;
 	button.background = game.colorsScheme.dark1
 	button.fontSize = 24;
-	// button.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
-	// button.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
 	button.thickness = 0;
 	button.cornerRadius = 20;
 	setPaddings(button, "10px");
 
-	button.onPointerUpObservable.add(functionToExecute);
+	// button.onPointerUpObservable.add(functionToExecute);
+	button.onPointerClickObservable.add(functionToExecute);
+	button.onPointerEnterObservable.add(() => {
+		button.color = game.colorsScheme.auroraAccent1;
+		button.background = game.colorsScheme.light3;
+	});
+	button.onPointerOutObservable.add(() => {
+		button.color = game.colorsScheme.light3;
+		button.background = game.colorsScheme.dark1;
+	});
 
 	return button;
 }
@@ -122,6 +129,10 @@ export const	createText = (textName: string, textText: string): baby.TextBlock =
 export const	createStackPanel = (panelName: string): baby.StackPanel =>
 {
 	const	GUI = new baby.StackPanel(panelName);
+	GUI.isVertical = true;
+	GUI.spacing = 10;
+	GUI.paddingTop = "10px";
+	GUI.paddingBottom = "10px";
 	GUI.width = "100%";
 	GUI.height = "100%";
 	GUI.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
@@ -131,17 +142,17 @@ export const	createStackPanel = (panelName: string): baby.StackPanel =>
 	return GUI;
 }
 
-export const	createValueText = (textName: string, textValue: string): baby.TextBlock =>
+export const	createDynamicText = (textName: string, dynamicVariable: any, bindings: React.RefObject<game.pongStruct>): baby.TextBlock =>
 {
-	const	text = new baby.TextBlock(textName, textValue);
+	const	text = new baby.TextBlock(textName, String(dynamicVariable));
 	text.width = "50px";
 	text.height = "25px";
 	text.color = game.colorsScheme.light1;
 	text.resizeToFit = true;
 	text.fontSize = 24;
-	text.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_LEFT;
-	text.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
 
+	// Bind the text to the value in the bindings map
+	bindings.current.bindings.set(textName, dynamicVariable);
 	return text;
 }
 
@@ -178,7 +189,7 @@ export const	createPanel = (folderName: string, width: string, height: string): 
 	return container;
 }
 
-export const	forceRender = (pong: game.pongGameRef):void => {
+export const	forceRender = (pong: game.pongStruct):void => {
   if (pong.scene) {
     pong.scene.render();
   }

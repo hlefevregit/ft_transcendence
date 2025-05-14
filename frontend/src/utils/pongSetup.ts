@@ -59,33 +59,7 @@ export enum states
 	in_transition,
 }
 
-export type pongGUIRef =
-{
-	// Screens GUI
-	mainMenuGUI?: baby.StackPanel;
-	settingsGUI?: baby.StackPanel;
-	arenaGUI?: baby.StackPanel;
-	pongSettingsGUI?: baby.StackPanel;
-	
-	// Engine and scene
-	guiTexture?: baby.AdvancedDynamicTexture;
-
-	// GUI objects
-	player1Score: number;
-	player2Score: number;
-}
-
-export const initpongArenaGUI = (): pongGUIRef =>
-{
-	return {
-		// GUI objects
-		player1Score: 0,
-		player2Score: 0
-	};
-}
-
-
-export type pongGameRef =
+export type pongStruct =
 {
 	// Engine and scene
 	engine?: baby.Engine;
@@ -110,9 +84,22 @@ export type pongGameRef =
 	paddleSpeed: number;
 	paddleHeight: number;
 	paddleWidth: number;
+
+	// Screens GUI
+	mainMenuGUI?: baby.StackPanel;
+	settingsGUI?: baby.StackPanel;
+	arenaGUI?: baby.StackPanel;
+	pongSettingsGUI?: baby.StackPanel;
+	debugGUI?: baby.StackPanel;
+	
+	// GUI's bindings
+	bindings: Map<string, any | null>;
+
+	// Engine and scene
+	guiTexture?: baby.AdvancedDynamicTexture;
 };
 
-export function initPongStruct(): pongGameRef 
+export function initPongStruct(): pongStruct 
 {
 	return {
 		// Variables
@@ -126,7 +113,9 @@ export function initPongStruct(): pongGameRef
 		maxBallSpeed: 0.5,
 		paddleSpeed: 0.25,
 		paddleHeight: 4,
-		paddleWidth: 0.25
+		paddleWidth: 0.25,
+
+		bindings: new Map<string, React.RefObject<any> | null>(),
 	};
 }
 
@@ -136,7 +125,7 @@ export const	setBallPosition = (ball: baby.Mesh, position: baby.Vector3): void =
 	ball.position = position;
 }
 
-export const	resetBall = (pong: pongGameRef): void =>
+export const	resetBall = (pong: pongStruct): void =>
 {
 	if (!pong.ball) return;
 	pong.ball.position = baby.Vector3.Zero();
@@ -150,7 +139,7 @@ export const	setPaddleHeight = (paddle: baby.Mesh, height: number): void =>
 	paddle.scaling.z = height;
 }
 
-export const	resetPaddlesHeight = (pong: pongGameRef): void =>
+export const	resetPaddlesHeight = (pong: pongStruct): void =>
 {
 	if (!pong.paddle1 || !pong.paddle2) return;
 	setPaddleHeight(pong.paddle1, pong.paddleHeight);
@@ -163,32 +152,32 @@ export const	setPaddlePosition = (paddle: baby.Mesh, position: baby.Vector3): vo
 	paddle.position = position;
 }
 
-export const	resetPaddlesPosition = (pong: pongGameRef): void =>
+export const	resetPaddlesPosition = (pong: pongStruct): void =>
 {
 	if (!pong.paddle1 || !pong.paddle2) return;
 	setPaddlePosition(pong.paddle1, new baby.Vector3(-(pong.arenaWidth - 1), 0, 0));
 	setPaddlePosition(pong.paddle2, new baby.Vector3((pong.arenaWidth - 1), 0, 0));
 }
 
-export const	setBallDirection = (pong: pongGameRef, direction: baby.Vector3): void =>
+export const	setBallDirection = (pong: pongStruct, direction: baby.Vector3): void =>
 {
 	if (!pong.ball) return;
 	pong.ballDirection = direction;
 }
 
-export const	setBallDirectionRight = (pong: pongGameRef): void =>
+export const	setBallDirectionRight = (pong: pongStruct): void =>
 {
 	if (!pong.ball) return;
 	setBallDirection(pong, new baby.Vector3(pong.ballSpeed, 0, 0));
 }
 
-export const	setBallDirectionLeft = (pong: pongGameRef): void =>
+export const	setBallDirectionLeft = (pong: pongStruct): void =>
 {
 	if (!pong.ball) return;
 	setBallDirection(pong, new baby.Vector3(-pong.ballSpeed, 0, 0));
 }
 
-export const	setBallDirectionRandom = (pong: pongGameRef): void =>
+export const	setBallDirectionRandom = (pong: pongStruct): void =>
 {
 	if (!pong.ball) return;
 	setBallDirection(pong, Math.random() > 0.5
@@ -196,7 +185,7 @@ export const	setBallDirectionRandom = (pong: pongGameRef): void =>
 		: new baby.Vector3(-pong.ballSpeed, 0, 0));
 }
 
-export const	reflectBallCeiling = (pong: pongGameRef): void =>
+export const	reflectBallCeiling = (pong: pongStruct): void =>
 {
 	if (!pong.ball) return;
 	pong.ballDirection.z *= -1;
@@ -204,7 +193,7 @@ export const	reflectBallCeiling = (pong: pongGameRef): void =>
 	return;
 }
 
-export const	reflectBallWall = (pong: pongGameRef): void =>
+export const	reflectBallWall = (pong: pongStruct): void =>
 {
 	if (!pong.ball) return;
 	pong.ballDirection.x *= -1;
@@ -212,7 +201,7 @@ export const	reflectBallWall = (pong: pongGameRef): void =>
 	return;
 }
 
-export const	reflectBallPaddles = (pong: pongGameRef): void =>
+export const	reflectBallPaddles = (pong: pongStruct): void =>
 {
 	if (!pong.ball || !pong.paddle1 || !pong.paddle2) return;
 	let paddlePos: baby.Vector3 = pong.paddle2.position;
@@ -225,12 +214,12 @@ export const	reflectBallPaddles = (pong: pongGameRef): void =>
 	}
 }
 
-export	const	setAreanWidth = (pong: pongGameRef, width: number): void =>
+export	const	setAreanWidth = (pong: pongStruct, width: number): void =>
 {
 	pong.arenaWidth = width;
 }
 
-export	const	setAreanHeight = (pong: pongGameRef, height: number): void =>
+export	const	setAreanHeight = (pong: pongStruct, height: number): void =>
 {
 	pong.arenaHeight = height;
 }

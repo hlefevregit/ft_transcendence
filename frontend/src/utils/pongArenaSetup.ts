@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
 
-export const	instantiateArena = (pong: game.pongGameRef, canvasRef: any): void =>
+export const	instantiateArena = (pong: game.pongStruct, canvasRef: any): void =>
 {
 	const	engineInstance = new baby.Engine(canvasRef, true);
 	const	sceneInstance = new baby.Scene(engineInstance);
