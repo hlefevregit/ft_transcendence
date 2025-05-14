@@ -188,16 +188,16 @@ export const	setBallDirectionRandom = (pong: pongStruct): void =>
 export const	reflectBallCeiling = (pong: pongStruct): void =>
 {
 	if (!pong.ball) return;
-	pong.ballDirection.z *= -1;
-	pong.ballSpeedModifier += pong.ballSpeedModifier * pong.ballSpeed >= pong.maxBallSpeed ? 0 : pong.ballSpeed;
-	return;
-}
-
-export const	reflectBallWall = (pong: pongStruct): void =>
-{
-	if (!pong.ball) return;
-	pong.ballDirection.x *= -1;
-	pong.ballSpeedModifier += pong.ballSpeedModifier * pong.ballSpeed >= pong.maxBallSpeed ? 0 : pong.ballSpeed;
+	if (pong.ballDirection.z < 0 && pong.ball.position.z <= -pong.arenaHeight)
+	{
+		pong.ballDirection.z *= -1;
+		pong.ballSpeedModifier += pong.ballSpeedModifier * pong.ballSpeed >= pong.maxBallSpeed ? 0 : pong.ballSpeed;
+	}
+	if (pong.ballDirection.z > 0 && pong.ball.position.z >= pong.arenaHeight)
+	{
+		pong.ballDirection.z *= -1;
+		pong.ballSpeedModifier += pong.ballSpeedModifier * pong.ballSpeed >= pong.maxBallSpeed ? 0 : pong.ballSpeed;
+	}
 	return;
 }
 
@@ -209,7 +209,8 @@ export const	reflectBallPaddles = (pong: pongStruct): void =>
 	if (game.collideWithPaddle(pong, paddlePos))
 	{
 		pong.ballDirection.z = (pong.ballDirection.z + game.chooseBouncingAngle(pong, paddlePos)) / 2;
-		reflectBallWall(pong);
+		pong.ballDirection.x *= -1;
+		pong.ballSpeedModifier += pong.ballSpeedModifier * pong.ballSpeed >= pong.maxBallSpeed ? 0 : pong.ballSpeed;
 		return;
 	}
 }

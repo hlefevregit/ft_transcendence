@@ -37,7 +37,8 @@ export const	makeBallBounce = (pong: game.pongStruct): void =>
 		game.setBallDirectionRandom(pong);
 	}
 	// BOUNCE OF CEILING
-	if (doBallCollideWithCeiling(pong.ball.position, pong.arenaHeight)) game.reflectBallCeiling(pong);
+	// if (doBallCollideWithCeiling(pong.ball.position, pong.arenaHeight)) game.reflectBallCeiling(pong);
+	game.reflectBallCeiling(pong);
 
 	// BOUNCE OF PADDLES
 	game.reflectBallPaddles(pong);
