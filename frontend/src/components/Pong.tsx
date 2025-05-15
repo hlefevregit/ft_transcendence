@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
+import { stat } from 'fs';
 
 
 
@@ -51,9 +52,18 @@ const Pong: React.FC = () =>
 					if (states.current > Object.keys(game.states).length / 2 - 1) states.current = 0;
 					if (states.current < 0) states.current = Object.keys(game.states).length / 2 - 1;
 					break;
-				case game.states.waiting_to_start:
-					game.setBallDirectionRandom(pong.current);
+
+				case game.states.countdown:
 					break;
+
+				case game.states.waiting_to_start:
+					game.resetPaddlesPosition(pong.current);
+					game.resetBall(pong.current);
+					game.setBallDirectionRandom(pong.current);
+					game.fitCameraToArena(pong.current);
+					states.current = game.states.in_game;
+					break;
+
 				case game.states.in_game:
 					game.doPaddleMovement(pong.current);
 					game.fitCameraToArena(pong.current);
@@ -64,6 +74,7 @@ const Pong: React.FC = () =>
 			}
 
 			pong.current.scene.render();
+			document.title = `Pong - ${Object.keys(game.states).find(key => game.states[key as keyof typeof game.states] === states.current)}`;
 		});
 
 		window.addEventListener('resize', () => 

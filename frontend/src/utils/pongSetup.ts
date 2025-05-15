@@ -53,10 +53,11 @@ export enum states
 	waiting_lobby,
 	waiting_to_start,
 	waiting_new_round,
+	countdown,
+	in_transition,
 	in_game,
 	game_finished,
 	not_found,
-	in_transition,
 }
 
 export type pongStruct =
@@ -86,11 +87,13 @@ export type pongStruct =
 	paddleWidth: number;
 
 	// Screens GUI
-	mainMenuGUI?: baby.StackPanel;
-	settingsGUI?: baby.StackPanel;
-	arenaGUI?: baby.StackPanel;
-	pongSettingsGUI?: baby.StackPanel;
-	debugGUI?: baby.StackPanel;
+	mainMenuGUI?: baby.Container;
+	settingsGUI?: baby.Container;
+	arenaGUI?: baby.Container;
+	pongSettingsGUI?: baby.Container;
+	debugGUI?: baby.Container;
+	testGUI?: baby.Container;
+	waitingRoundStartGUI?: baby.Container;
 	
 	// GUI's bindings
 	bindings: Map<string, any>;

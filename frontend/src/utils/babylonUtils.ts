@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
+import { on } from 'events';
 
 export function fitCameraToArena(pong: game.pongStruct): void
 {
@@ -51,8 +52,9 @@ export const	setPaddings = (button: baby.Button, paddingSize: string): void =>
 	button.paddingRight = paddingSize;
 }
 
-export const	createButton = (buttonName: string, buttonText: string, functionToExecute: () => void): baby.Button =>
+export const	createButton = (buttonName: string, buttonText: string, functionToExecute: () => void): baby.StackPanel =>
 {
+	const block = game.createDummyBlock();
 	const button = baby.Button.CreateSimpleButton(buttonName, buttonText);
 	button.width = "200px";
 	button.height = "100px";
@@ -74,11 +76,14 @@ export const	createButton = (buttonName: string, buttonText: string, functionToE
 		button.background = game.colorsScheme.dark1;
 	});
 
-	return button;
+	block.addControl(button);
+	return block;
 }
 
-export const	createSlider = (sliderName: string, minValue: number, maxValue: number, step: number, initialValue: number, functionToExecute: (value: number) => void): baby.Slider =>
+export const	createSlider = (sliderName: string, minValue: number, maxValue: number, step: number, initialValue: number, functionToExecute: (value: number) => void): baby.StackPanel =>
 {
+	const	block = game.createDummyBlock();
+
 	const	slider = new baby.Slider(sliderName);
 	slider.color = game.colorsScheme.light1;
 	slider.background = game.colorsScheme.dark1;
@@ -98,12 +103,13 @@ export const	createSlider = (sliderName: string, minValue: number, maxValue: num
 	slider.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
 	slider.onValueChangedObservable.add(functionToExecute);
 
-
-	return slider;
+	block.addControl(slider);
+	return block;
 }
 
-export const	createTitle = (titleName: string, titleText: string): baby.TextBlock =>
+export const	createTitle = (titleName: string, titleText: string): baby.StackPanel =>
 {
+	const	block = game.createDummyBlock();
 	const	title = new baby.TextBlock(titleName, titleText);
 	title.width = "50px";
 	title.height = "25px";
@@ -111,39 +117,25 @@ export const	createTitle = (titleName: string, titleText: string): baby.TextBloc
 	title.resizeToFit = true;
 	title.fontSize = 48;
 
-	return title;
+	block.addControl(title);
+	return block;
 }
 
-export const	createText = (textName: string, textText: string): baby.TextBlock =>
+export const	createText = (textName: string, textText: string): baby.StackPanel =>
 {
+	const	block = game.createDummyBlock();
 	const	text = new baby.TextBlock(textName, textText);
-	text.width = "50px";
-	text.height = "25px";
 	text.color = game.colorsScheme.light1;
 	text.resizeToFit = true;
 	text.fontSize = 24;
 
-	return text;
+	block.addControl(text);
+	return block;
 }
 
-export const	createStackPanel = (panelName: string): baby.StackPanel =>
+export const	createDynamicText = (textName: string, valueGetter: () => any, bindings: React.RefObject<game.pongStruct>): baby.StackPanel =>
 {
-	const	GUI = new baby.StackPanel(panelName);
-	GUI.isVertical = true;
-	GUI.spacing = 10;
-	GUI.paddingTop = "10px";
-	GUI.paddingBottom = "10px";
-	GUI.width = "100%";
-	GUI.height = "100%";
-	GUI.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
-	GUI.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
-	GUI.background = "transparent";
-
-	return GUI;
-}
-
-export const	createDynamicText = (textName: string, valueGetter: () => any, bindings: React.RefObject<game.pongStruct>): baby.TextBlock =>
-{
+	const	block = game.createDummyBlock();
 	const	text = new baby.TextBlock(textName, String(valueGetter()));
 	text.width = "50px";
 	text.height = "25px";
@@ -153,44 +145,191 @@ export const	createDynamicText = (textName: string, valueGetter: () => any, bind
 
 	// Bind the text to the value in the bindings map
 	bindings.current.bindings.set(textName, valueGetter);
-	return text;
+
+	block.addControl(text);
+	return block;
 }
 
-export const	createPanel = (folderName: string, width: string, height: string): baby.Container =>
+export const	createAdaptiveContainer = (folderName: string, width?: string, height?: string, BackgroundColor?: string, alignment?: string): baby.Container =>
 {
-	// Create a container to hold both the background and content
+	width = width ?? "100%";
+	height = height ?? "100%";
+	BackgroundColor = BackgroundColor ?? game.colorsScheme.dark2;
+
+	// Create a container with FIXED dimensions
 	const container = new baby.Container(folderName + "Container");
 	container.width = width;
 	container.height = height;
+	container.adaptWidthToChildren = true;
+    container.adaptHeightToChildren = true;
 	container.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
 	container.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
+	container.background = "transparent";
+	container.zIndex = 0;
 
-	// Create background rectangle and add it FIRST
+	// Create background with FIXED dimensions
 	const background = new baby.Rectangle(folderName + "Background");
 	background.width = "100%";
 	background.height = "100%";
-	background.background = game.colorsScheme.dark2; 
+	background.background = BackgroundColor;
 	background.thickness = 0;
 	background.cornerRadius = 20;
-
-	// Create content panel for items that should appear above background
-	const contentPanel = new baby.StackPanel(folderName + "Content");
-	contentPanel.width = "100%";
-	contentPanel.height = "100%";
-	contentPanel.background = "transparent";
-
-	// Add background FIRST, then the content panel
+	background.zIndex = 0;
+		
 	container.addControl(background);
-	container.addControl(contentPanel);
 
-	// Store content panel as a property for easy access
-	(container as any).contentPanel = contentPanel;
+	setAlignment(container, alignment);
 
 	return container;
 }
+
+export const	createHorizontalStackPanel = (panelName: string, paddings?: number, alignment?: string): baby.StackPanel =>
+{
+	paddings = paddings ?? 5;
+	const	GUI = new baby.StackPanel(panelName);
+	GUI.isVertical = false;
+	GUI.spacing = paddings;
+	GUI.paddingTop = paddings * 2 + "px";
+	GUI.paddingBottom = paddings * 2 + "px";
+	GUI.paddingLeft = paddings * 2 + "px";
+	GUI.paddingRight = paddings * 2 + "px";
+	// GUI.width = "parent";
+	// GUI.height = "parent";
+	GUI.adaptWidthToChildren = true;
+	GUI.adaptHeightToChildren = true;
+	GUI.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
+	GUI.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
+	GUI.background = "transparent";
+	GUI.zIndex = 1;
+
+	setAlignment(GUI, alignment);
+
+	return GUI;
+}
+
+export const	createVerticalStackPanel = (panelName: string, paddings?: number, alignment?: string): baby.StackPanel =>
+{
+	paddings = paddings ?? 5;
+	const	GUI = new baby.StackPanel(panelName);
+	GUI.isVertical = true;
+	GUI.spacing = paddings;
+	GUI.paddingTop = paddings * 2 + "px";
+	GUI.paddingBottom = paddings * 2 + "px";
+	GUI.paddingLeft = paddings * 2 + "px";
+	GUI.paddingRight = paddings * 2 + "px";
+	// GUI.width = "parent";
+	// GUI.height = "parent";
+	GUI.adaptWidthToChildren = true;
+	GUI.adaptHeightToChildren = true;
+	GUI.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
+	GUI.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
+	GUI.background = "transparent";
+	GUI.zIndex = 1;
+	
+	setAlignment(GUI, alignment);
+
+	return GUI;
+}
+
+export const	createDummyBlock = (): baby.StackPanel =>
+{
+	const	dummy = new baby.StackPanel("dummy-" + Math.random());
+
+	dummy.spacing = 0;
+	dummy.paddingTop = 0;
+	dummy.paddingBottom = 0;
+	dummy.paddingLeft = 0;
+	dummy.paddingRight = 0;
+	dummy.adaptWidthToChildren = true;
+	dummy.adaptHeightToChildren = true;
+	dummy.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
+	dummy.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
+	dummy.background = "transparent";
+	dummy.zIndex = 1;
+
+	return dummy;
+}
+
+// export const	addControlToDummy = (dummy: baby.StackPanel, control: baby.Control): baby.Container =>
+// {
+// 	if (!dummy || !control) return;
+
+// 	// Add the control to the dummy
+// 	dummy.addControl(control);
+
+// 	// // Set the dummy's width and height to fit the control
+// 	// dummy.width = control.width;
+// 	// dummy.height = control.height;
+
+// 	// // Set the dummy's position to be centered
+// 	// dummy.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
+// 	// dummy.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
+
+// 	return dummy;
+// }
+
+export const	createScreen = (screenName: string, alignment?: string): baby.Rectangle =>
+{
+	const	screen = new baby.Rectangle(screenName);
+	screen.width = "100%";
+	screen.height = "100%";
+	screen.background = "transparent";
+	screen.isPointerBlocker = false;
+	screen.thickness = 1;
+
+	setAlignment(screen, alignment);
+
+	return screen;
+}
+
+export const	setAlignment = (control: baby.Control, alignment?: string): void =>
+{
+	switch (alignment)
+{
+		default:
+			control.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
+			control.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
+			break;
+		case "top":
+			control.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_TOP;
+			control.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
+			break;
+		case "bottom":
+			control.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_BOTTOM;
+			control.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
+			break;
+		case "left":
+			control.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
+			control.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_LEFT;
+			break;
+		case "right":
+			control.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
+			control.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+			break;
+		case "top-left":
+			control.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_TOP;
+			control.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_LEFT;
+			break;
+		case "top-right":
+			control.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_TOP;
+			control.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+			break;
+		case "bottom-left":
+			control.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_BOTTOM;
+			control.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_LEFT;
+			break;
+		case "bottom-right":
+			control.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_BOTTOM;
+			control.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+			break;
+	}
+}
+
+
 
 export const	forceRender = (pong: game.pongStruct):void => {
   if (pong.scene) {
     pong.scene.render();
   }
 };
+
