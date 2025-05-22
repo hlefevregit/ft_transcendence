@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import museumBackground from '@/assets/4.jpg';
+// import museumBackground from '@/assets/4.jpg';
 import { useNavigate } from 'react-router-dom';
 import '@/styles/style.css';
 import { useCharacterMovementBoth } from '@/hooks/useCharMovementBoth';

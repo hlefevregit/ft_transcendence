@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import background from '@/assets/3.jpg';
+// import background from '@/assets/3.jpg';
 import '@/styles/style.css';
 import { useCharacterMovement } from '@/hooks/useCharacterMovement';
 import { useNavigate } from 'react-router-dom';
