@@ -4,6 +4,15 @@ import { fileURLToPath } from 'url';
 import react from '@vitejs/plugin-react';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+// import fs from 'fs';
+
+// const patchBabylonGUI = () => {
+//   const guiPath = path.resolve(__dirname, 'node_modules/@babylonjs/gui/2D');
+//   if (!fs.existsSync(guiPath)) {
+//     throw new Error('@babylonjs/gui/2D not found in node_modules');
+//   }
+// };
+// patchBabylonGUI();
 
 export default defineConfig({
   root: './',
@@ -12,6 +21,20 @@ export default defineConfig({
     outDir: 'dist',
     rollupOptions: {
       input: './index.html'
+    }
+  },
+  optimizeDeps: {
+    include: [
+      '@babylonjs/core',
+      '@babylonjs/gui/2D',
+      '@babylonjs/loaders/glTF/glTFFileLoader',
+    ]
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+      '@babylonjs/gui/2D': path.resolve(__dirname, 'node_modules/@babylonjs/gui/2D'),
+      '@babylonjs/glTF/glTFFileLoader': path.resolve(__dirname, 'node_modules/@babylonjs/glTF/glTFFileLoader')
     }
   },
   server: {
@@ -42,9 +65,4 @@ export default defineConfig({
       },
     }
   },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src')
-    }
-  }
 })

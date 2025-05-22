@@ -19,7 +19,5 @@ const App = () => {
     </BrowserRouter>
   );
 };
-
-// SALUT
  
 export default App;

@@ -1,5 +1,4 @@
 import { FastifyInstance } from 'fastify';
-import { dbPromise } from '../db/database';
 import bcrypt from 'bcrypt';
 import { OAuth2Client } from 'google-auth-library';
 import { GOOGLE_CLIENT_ID } from '../config/env';
