@@ -24,7 +24,7 @@ export const	doBallCollideWithCeiling = (ballPos: baby.Vector3, collideAxis: num
 }
 
 // Ball bouncing
-export const	makeBallBounce = (pong: game.pongStruct): void =>
+export const	makeBallBounce = (pong: game.pongStruct, states: React.RefObject<game.states>): void =>
 {
 	if (!pong.ball) return;
 	if (!pong.paddle1 || !pong.paddle2) return;
@@ -33,8 +33,21 @@ export const	makeBallBounce = (pong: game.pongStruct): void =>
 	if (doBallCollideWithWall(pong.ball.position, pong.arenaWidth))
 	{
 		game.resetPaddlesPosition(pong);
-		game.resetBall(pong);
-		game.setBallDirectionRandom(pong);
+		
+		if (pong.ball.position.x < 0)
+		{
+			game.resetBall(pong);
+			game.setBallDirectionLeft(pong);
+			pong.player1Score += 1;
+		}
+		else
+		{
+			game.resetBall(pong);
+			game.setBallDirectionRight(pong);
+			pong.player2Score += 1;
+		}
+
+		states.current = game.states.in_game;
 	}
 	// BOUNCE OF CEILING
 	// if (doBallCollideWithCeiling(pong.ball.position, pong.arenaHeight)) game.reflectBallCeiling(pong);
@@ -72,3 +85,4 @@ export const	distance2D = (a: baby.Vector3, b: baby.Vector3): number =>
 {
 	return Math.sqrt((b.x - a.x) ** 2 + (b.z - a.z) ** 2);
 }
+
