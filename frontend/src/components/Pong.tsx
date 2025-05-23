@@ -4,11 +4,22 @@ import { useNavigate } from 'react-router-dom';
 
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
-import { stat } from 'fs';
+import { FreeCamera } from 'babylonjs';
 
+// Function to debounce the resize event
+// This will limit the number of times the resize function is called
+// to once every `ms` milliseconds
+function	debounce(fn: Function, ms: number)
+{
+	let	timer: NodeJS.Timeout;
+	return (...args: any[]) =>
+	{
+		clearTimeout(timer);
+		timer = setTimeout(() => { fn(...args); }, ms);
+	};
+}
 
-
-const Pong: React.FC = () =>
+const	Pong: React.FC = () =>
 {
 	const	canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 	const	pong = React.useRef<game.pongStruct>(game.initPongStruct());
@@ -21,6 +32,7 @@ const Pong: React.FC = () =>
 
 		// Initialize the game
 		game.instantiateArena(pong.current, canvasRef.current);
+		
 
 		// Initialize all the GUI
 		if (!pong.current.engine || !pong.current.scene) return;
@@ -54,34 +66,58 @@ const Pong: React.FC = () =>
 					break;
 
 				case game.states.countdown:
+					pong.current.countdown -= pong.current.engine.getDeltaTime() / 1000;
+					if (pong.current.countdown <= 0)
+					{
+						pong.current.countdown = 4;
+						states.current = game.states.in_game;
+					}
 					break;
-
+					
 				case game.states.waiting_to_start:
+					pong.current.player1Score = 0;
+					pong.current.player2Score = 0;
 					game.resetPaddlesPosition(pong.current);
 					game.resetBall(pong.current);
 					game.setBallDirectionRandom(pong.current);
 					game.fitCameraToArena(pong.current);
-					states.current = game.states.in_game;
+					game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.arenaCam, 1, pong);
+					states.current = game.states.countdown;
 					break;
 
 				case game.states.in_game:
+					const	maxScore = Math.max(pong.current.player1Score, pong.current.player2Score);
+					console.log("Max score: ", maxScore);
+					if (maxScore >= pong.current.requiredPointsToWin)
+						states.current = game.states.game_finished;
 					game.doPaddleMovement(pong.current);
 					game.fitCameraToArena(pong.current);
 					pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
 					pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;
-					game.makeBallBounce(pong.current);
+					game.makeBallBounce(pong.current, states);
 					break;
+
+				case game.states.game_finished:
+					// game.resetPaddlesPosition(pong.current);
+					// game.resetBall(pong.current);
+					// game.setBallDirectionRandom(pong.current);
+					// game.fitCameraToArena(pong.current);
+					// game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong);
+					// states.current = game.states.main_menu;
 			}
 
 			pong.current.scene.render();
 			document.title = `Pong - ${Object.keys(game.states).find(key => game.states[key as keyof typeof game.states] === states.current)}`;
 		});
 
-		window.addEventListener('resize', () => 
+		// Debounced resize handler
+		const	handleResize = debounce(() =>
 		{
 			if (!pong.current.engine) return;
 			pong.current.engine.resize();
-		})
+		}, 50); // 50ms debounce to skip crashes
+
+		window.addEventListener('resize', handleResize);
 		
 		return () =>
 		{
