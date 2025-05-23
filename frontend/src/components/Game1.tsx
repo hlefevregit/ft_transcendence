@@ -4,7 +4,7 @@ import * as BABYLON from "@babylonjs/core";
 import "@babylonjs/loaders";
 import { text } from "stream/consumers";
 
-export default function CityScene() {
+export default function Game1() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const navigate = useNavigate();
 
@@ -33,8 +33,8 @@ export default function CityScene() {
     // Background
 
     const backgroundMaterial = new BABYLON.StandardMaterial("bgMat", scene);
-    const texture = new BABYLON.Texture("/assets/2.jpg", scene, false, false, BABYLON.Texture.TRILINEAR_SAMPLINGMODE, null, (message, exception) => {
-      console.error("Erreur chargement texture :", message, exception);
+    const texture = new BABYLON.Texture("/assets/4.jpg", scene, false, false, BABYLON.Texture.TRILINEAR_SAMPLINGMODE, null, (message, exception) => {
+    console.error("Erreur chargement texture :", message, exception);
     });
     texture.uScale = 1;
     texture.vScale = -1;
@@ -64,10 +64,11 @@ export default function CityScene() {
     const backwardSprite = new BABYLON.Sprite("backward", spriteManager.backward);
 
     [idleSprite, walkSprite, backwardSprite].forEach(sprite => {
-      sprite.position.y = -200;
-      sprite.size = 128;
+      sprite.position.y = -120;
+      sprite.size = 256;
       sprite.isVisible = false;
       sprite.position.z = 15;
+      sprite.position.x = -150;
     });
 
     idleSprite.invertU = true;
@@ -84,7 +85,27 @@ export default function CityScene() {
       if (kb.type === BABYLON.KeyboardEventTypes.KEYDOWN) {
         if (kb.event.key === "ArrowRight") movingRight = true;
         if (kb.event.key === "ArrowLeft") movingLeft = true;
+
+        const tableauPosition = new BABYLON.Vector3(0, -100, 0);
+        const distance = BABYLON.Vector3.Distance(activeSprite.position, tableauPosition);
+        const interactionDistance = 50;
+
+        if (kb.event.key === "Enter") {
+          if (distance < interactionDistance) {
+            // 🔍 Zoom sur le tableau
+            BABYLON.Animation.CreateAndStartAnimation("zoomTop", camera, "orthoTop", 30, 60, 300, 10);
+            BABYLON.Animation.CreateAndStartAnimation("zoomBottom", camera, "orthoBottom", 30, 60, -300, -10);
+            BABYLON.Animation.CreateAndStartAnimation("zoomLeft", camera, "orthoLeft", 30, 60, 400, -50);
+            BABYLON.Animation.CreateAndStartAnimation("zoomRight", camera, "orthoRight", 30, 60, -400, 50);
+  
+            // ⏳ Transition vers la scène suivante
+            setTimeout(() => {
+              navigate("/pong");
+            }, 1500);
+          }
+        }
       }
+
       if (kb.type === BABYLON.KeyboardEventTypes.KEYUP) {
         if (kb.event.key === "ArrowRight") movingRight = false;
         if (kb.event.key === "ArrowLeft") movingLeft = false;
@@ -124,9 +145,14 @@ export default function CityScene() {
       }
 
 
-      if (activeSprite.position.x > 390) {
-        navigate("/login");
+      if (activeSprite.position.x > 250) {
+        navigate("/settings");
       }
+      if (activeSprite.position.x < -250) {
+        navigate("/");
+      }
+    
+      
     });
 
     // === RENDER ===
