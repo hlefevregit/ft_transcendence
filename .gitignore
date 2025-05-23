@@ -1,4 +1,10 @@
 **/node_modules
 **/package-lock.json
 .env
-backend/logs/*.log
+.vscode
+.DS_Store
+backend/logs/*
+elk/elasticsearch/data/*
+logs/*
+monitoring/grafana/data/*
+monitoring/prometheus/data/*

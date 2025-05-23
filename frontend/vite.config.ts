@@ -27,12 +27,14 @@ export default defineConfig({
     include: [
       '@babylonjs/core',
       '@babylonjs/gui/2D',
+      '@babylonjs/loaders/glTF/glTFFileLoader',
     ]
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
-      '@babylonjs/gui/2D': path.resolve(__dirname, 'node_modules/@babylonjs/gui/2D')
+      '@babylonjs/gui/2D': path.resolve(__dirname, 'node_modules/@babylonjs/gui/2D'),
+      '@babylonjs/glTF/glTFFileLoader': path.resolve(__dirname, 'node_modules/@babylonjs/glTF/glTFFileLoader')
     }
   },
   server: {

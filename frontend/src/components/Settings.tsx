@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import background from '@/assets/3.jpg';
 import '@/styles/style.css';
-import { useCharacterMovement } from '@/hooks/useCharacterMovement';
 import { useNavigate } from 'react-router-dom';
+import * as BABYLON from "@babylonjs/core";
+import "@babylonjs/loaders";
 
 
 interface UserProfile {
@@ -29,7 +30,7 @@ interface FriendRequest {
 const Settings: React.FC = () => {
 	
 	const navigate = useNavigate();
-	
+	const canvasRef = useRef<HTMLCanvasElement>(null);
 	
 	const [user, setUser] = useState<UserProfile | null>(null);
 	const [pseudo, setPseudo] = useState('');
@@ -81,19 +82,23 @@ const Settings: React.FC = () => {
 		navigate('/login');
 	};
 
-	useCharacterMovement();
-
-
+	
+	
 	const [friends, setFriends] = useState<Friend[]>([]);
 	const [sentRequests, setSentRequests] = useState<FriendRequest[]>([]);
 	const [receivedRequests, setReceivedRequests] = useState<FriendRequest[]>([]);
-	const [newFriendEmail, setNewFriendEmail] = useState('');
-
+	const [newFriendPseudo, setNewFriendPseudo] = useState('');
+	
 	const token = localStorage.getItem('authToken');
 	if (!token) {
-		return;
+		return (
+			<div className="relative w-screen h-screen">
+			<canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full z-0" />
+			<div className="text-white z-10 relative text-center mt-10">Chargement...</div>
+			</div>
+		);
 	}
-
+	
 	const headers = {
 		Authorization: `Bearer ${token}`,
 		'Content-Type': 'application/json',
@@ -106,28 +111,28 @@ const Settings: React.FC = () => {
 		console.log('👥 Friends response:', data);
 		setFriends(data.friends);
 	};
-
+	
 	const fetchSentRequests = async () => {
-
+		
 		const [receivedRes, sentRes] = await Promise.all([
 			fetch('/api/friends/requests/received', { headers }),
 			fetch('/api/friends/requests/sent', { headers }),
 		]);
-
+		
 		const received = await receivedRes.json();
 		const sent = await sentRes.json();
 		setReceivedRequests(received);
 		setSentRequests(sent);
 	};
-
+	
 	useEffect(() => {
-
+		
 		fetchFriends();
 		fetchSentRequests();
 	}, []);
-
-
-
+	
+	
+	
 	useEffect(() => {
 		const token = localStorage.getItem('authToken');
 		if (!token) {
@@ -167,38 +172,164 @@ const Settings: React.FC = () => {
 	
 	
 	useEffect(() => {
-		const characterContainer = document.getElementById('character-container');
-		const museumZone = document.getElementById('museum-zone');
+		let engine: BABYLON.Engine | null = null;
+		let scene: BABYLON.Scene | null = null;
+		let animationFrameId: number;
+
 		
-		let hasEnteredMuseumZone = false;
-		
-		const checkCollision = () => {
-			if (!characterContainer || !museumZone) return;
+		const tryInit = () => {
+			const canvas = canvasRef.current;
 			
-			const charRect = characterContainer.getBoundingClientRect();
-			const zoneRect = museumZone.getBoundingClientRect();
-			
-			if (
-				charRect.right > zoneRect.left &&
-				charRect.left < zoneRect.right &&
-				charRect.bottom > zoneRect.top &&
-				charRect.top < zoneRect.bottom
-			) {
-				if (!hasEnteredMuseumZone) {
-					hasEnteredMuseumZone = true;
-					navigate('/museum');
-				}
-			} else {
-				hasEnteredMuseumZone = false;
+			if (!canvas) {
+				// 🕐 Réessaie au frame suivant si le canvas n'est pas prêt
+				animationFrameId = requestAnimationFrame(tryInit);
+				return;
 			}
+			
+			canvas.focus();
+			console.log("✅ Canvas détecté", canvas);
+
+			engine = new BABYLON.Engine(canvas, true);
+			scene = new BABYLON.Scene(engine);
+
+			const camera = new BABYLON.FreeCamera("camera", new BABYLON.Vector3(0, 0, 20), scene);
+			camera.mode = BABYLON.Camera.ORTHOGRAPHIC_CAMERA;
+			camera.orthoTop = +300;
+			camera.orthoBottom = -300;
+			camera.orthoLeft = +400;
+			camera.orthoRight = -400;
+			camera.setTarget(BABYLON.Vector3.Zero());
+
+			const backgroundMaterial = new BABYLON.StandardMaterial("bgMat", scene);
+			const texture = new BABYLON.Texture("/assets/3.jpg", scene, false, false, BABYLON.Texture.TRILINEAR_SAMPLINGMODE, null, (msg, err) => {
+				console.error("Erreur chargement texture:", msg, err);
+			});
+			texture.uScale = 1;
+			texture.vScale = -1;
+			backgroundMaterial.diffuseTexture = texture;
+			backgroundMaterial.backFaceCulling = false;
+			backgroundMaterial.emissiveColor = new BABYLON.Color3(1, 1, 1);
+
+			const backgroundPlane = BABYLON.MeshBuilder.CreatePlane("bg", { width: 800, height: 600 }, scene);
+			backgroundPlane.material = backgroundMaterial;
+			backgroundPlane.position.z = 10;
+
+			const spriteManager = {
+				idle: new BABYLON.SpriteManager("idle", "/assets/spriteshesh/City_men_1/Idle.png", 1, { width: 128, height: 128 }, scene),
+				walk: new BABYLON.SpriteManager("walk", "/assets/spriteshesh/City_men_1/Walk.png", 1, { width: 128, height: 128 }, scene),
+				backward: new BABYLON.SpriteManager("backward", "/assets/spriteshesh/City_men_1/Backward.png", 1, { width: 128, height: 128 }, scene),
+			};
+
+			const idleSprite = new BABYLON.Sprite("idle", spriteManager.idle);
+			const walkSprite = new BABYLON.Sprite("walk", spriteManager.walk);
+			const backwardSprite = new BABYLON.Sprite("backward", spriteManager.backward);
+
+			[idleSprite, walkSprite, backwardSprite].forEach(sprite => {
+				sprite.position.y = -100;
+				sprite.size = 256;
+				sprite.isVisible = false;
+				sprite.position.z = 15;
+				sprite.position.x = -200;
+			});
+
+			idleSprite.invertU = true;
+			idleSprite.isVisible = true;
+			let activeSprite = idleSprite;
+
+			let movingRight = false;
+			let movingLeft = false;
+
+			scene.onKeyboardObservable.add(kb => {
+				if (kb.type === BABYLON.KeyboardEventTypes.KEYDOWN) {
+					if (kb.event.key === "ArrowRight") movingRight = true;
+					if (kb.event.key === "ArrowLeft") movingLeft = true;
+				}
+				if (kb.type === BABYLON.KeyboardEventTypes.KEYUP) {
+					if (kb.event.key === "ArrowRight") movingRight = false;
+					if (kb.event.key === "ArrowLeft") movingLeft = false;
+				}
+			});
+
+			scene.onBeforeRenderObservable.add(() => {
+				let nextSprite = idleSprite;
+
+				if (movingRight) {
+					backwardSprite.position.x += 4;
+					nextSprite = backwardSprite;
+				} else if (movingLeft) {
+					walkSprite.position.x -= 4;
+					nextSprite = walkSprite;
+				}
+
+				[idleSprite, walkSprite, backwardSprite].forEach(sprite => {
+					sprite.position.x = activeSprite.position.x;
+				});
+
+				if (nextSprite !== activeSprite) {
+					activeSprite.isVisible = false;
+					nextSprite.isVisible = true;
+					activeSprite = nextSprite;
+				}
+
+				if (nextSprite === walkSprite) {
+					walkSprite.cellIndex = Math.floor((Date.now() / 100) % 10);
+				} else if (nextSprite === backwardSprite) {
+					backwardSprite.cellIndex = 9 - Math.floor((Date.now() / 100) % 10);
+				} else {
+					idleSprite.cellIndex = Math.floor((Date.now() / 100) % 6);
+				}
+
+				if (activeSprite.position.x < -390) {
+					navigate("/game1");
+				}
+			});
+
+			engine.runRenderLoop(() => {
+				scene?.render();
+			});
+
+			window.addEventListener("resize", () => engine?.resize());
 		};
-		
-		document.addEventListener('keydown', checkCollision);
-		
+
+		animationFrameId = requestAnimationFrame(tryInit);
+
 		return () => {
-			document.removeEventListener('keydown', checkCollision);
+			cancelAnimationFrame(animationFrameId);
+			engine?.dispose();
+			scene?.dispose();
 		};
 	}, [navigate]);
+
+
+
+	// useEffect(() => {
+	// 	requestAnimationFrame(() => {
+	// 		const canvas = canvasRef.current;
+	// 		if (!canvas) {
+	// 			console.error("❌ Canvas introuvable !");
+	// 			return;
+	// 		}
+	// 		console.log("✅ Canvas OK :", canvas);
+
+	// 		const engine = new BABYLON.Engine(canvas, true);
+	// 		const scene = new BABYLON.Scene(engine);
+
+	// 		// test visuel
+	// 		const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+	// 		camera.setTarget(BABYLON.Vector3.Zero());
+	// 		camera.attachControl(canvas, true);
+
+	// 		const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+	// 		const sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 2 }, scene);
+
+	// 		engine.runRenderLoop(() => {
+	// 			// console.log("Rendering...");
+	// 			scene.render();
+	// 		});
+
+	// 		window.addEventListener("resize", () => engine.resize());
+	// 	});
+	// }, []);
 
 	if (!user) return <div>Loading...</div>;
 	console.log("✅ Settings rendered !");
@@ -211,7 +342,7 @@ const Settings: React.FC = () => {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${token}`,
 		  },
-		  body: JSON.stringify({ email: newFriendEmail }),
+		  body: JSON.stringify({ pseudo: newFriendPseudo }),
 		});
 	  
 		await fetchSentRequests();
@@ -255,26 +386,9 @@ const Settings: React.FC = () => {
 
 
 	return (
+		
 		<div className="settings-scene relative w-screen h-screen overflow-hidden">
-			{/* Background */}
-			<img
-			src={background}
-			alt="Background"
-			id="background"
-			className="absolute w-full h-full object-cover z-0"
-			/>
-		
-			{/* Personnage */}
-			<div id="character-container" className="absolute bottom-20 left-40 z-10">
-				<div id="character" className="sprite-character sprite-idle"></div>
-			</div>
-		
-			{/* Zone vers Museum */}
-			<div
-			id="museum-zone"
-			className="absolute bottom-0 left-0 w-32 h-full bg-transparent border border-white z-10"
-			></div>
-		
+			<canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full z-0" id="babylon-canvas" />
 			<div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white/90 p-8 rounded-lg shadow-lg w-[80%] max-w-5xl flex gap-8 z-20">
 				{/* Colonne gauche : paramètres */}
 				<div className="w-1/2 space-y-4">
@@ -345,8 +459,32 @@ const Settings: React.FC = () => {
 					<h2 className="text-xl font-semibold">👥 Friends</h2>
 					<ul className="space-y-2">
 					{friends.map((f) => (
-						<li key={f.id} className="flex items-center justify-between bg-white/90 p-2 rounded">
-						<span>{f.pseudo}</span>
+						<li
+						key={f.id}
+						className="flex items-center justify-between bg-white/90 p-2 rounded"
+						>
+						<div className="flex items-center gap-2">
+							{/* ✅ Pastille */}
+							<span
+							className={`inline-block w-3 h-3 rounded-full ${
+								f.status === 'active' ? 'bg-green-500' : 'bg-gray-400'
+							}`}
+							title={f.status === 'active' ? 'Online' : 'Offline'}
+							></span>
+
+							{/* ✅ Avatar si dispo */}
+							{f.avatarUrl && (
+							<img
+								src={f.avatarUrl}
+								alt="avatar"
+								className="w-6 h-6 rounded-full object-cover"
+							/>
+							)}
+
+							<span>{f.pseudo}</span>
+						</div>
+
+						{/* ✅ Supprimer */}
 						<button
 							className="text-sm bg-red-500 text-white px-2 py-1 rounded"
 							onClick={() => removeFriend(f.id)}
@@ -382,10 +520,10 @@ const Settings: React.FC = () => {
 					<div className="mt-4">
 					<h2 className="text-xl font-semibold mb-2">➕ Send Friend Request</h2>
 					<input
-						type="email"
-						value={newFriendEmail}
-						onChange={(e) => setNewFriendEmail(e.target.value)}
-						placeholder="Email"
+						type="pseudo"
+						value={newFriendPseudo}
+						onChange={(e) => setNewFriendPseudo(e.target.value)}
+						placeholder="Pseudo"
 						className="border border-gray-300 rounded p-2 mr-2"
 					/>
 					<button

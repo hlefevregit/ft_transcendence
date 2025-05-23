@@ -1,5 +1,4 @@
 import { FastifyInstance } from 'fastify';
-import { dbPromise } from '../db/database';
 import bcrypt from 'bcrypt';
 import { OAuth2Client } from 'google-auth-library';
 import { GOOGLE_CLIENT_ID } from '../config/env';
@@ -65,8 +64,6 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
 			id: user.id,
 			email: user.email,
 			pseudo: user.pseudo,
-			avatarUrl: user.avatarUrl,
-			status: user.status
 		});
 		reply.send({ success: true, token });
 	});
