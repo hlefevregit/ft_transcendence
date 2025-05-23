@@ -16,7 +16,7 @@ const LoginForm: React.FC = () => {
       const res = await handleEmailLogin(email, password);
       if (res.success) {
         localStorage.setItem('authToken', res.token);
-        navigate('/museum');
+        navigate('/game1');
       } else {
         setError(res.message || 'Invalid credentials');
       }
@@ -30,7 +30,7 @@ const LoginForm: React.FC = () => {
       const res = await googleLogin(idToken);
       if (res.success) {
         localStorage.setItem('authToken', res.token);
-        navigate('/museum');
+        navigate('/game1');
       } else {
         setError(res.message || 'Google login failed');
       }
