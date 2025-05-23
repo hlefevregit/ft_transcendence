@@ -4,11 +4,10 @@ import { useNavigate } from 'react-router-dom';
 
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
-import { on } from 'events';
 
 export function fitCameraToArena(pong: game.pongStruct): void
 {
-	if (!pong.camera || !pong.engine) return;
+	if (!pong.arenaCam || !pong.engine) return;
 
 	// Get canvas size and compute aspect ratio
 	const canvasAspect = pong.engine.getRenderWidth() / pong.engine.getRenderHeight();
@@ -32,16 +31,16 @@ export function fitCameraToArena(pong: game.pongStruct): void
 	}
 
 	// Camera FOV is vertical (by default it's PI/4)
-	const fov = pong.camera.fov; // radians
+	const fov = pong.arenaCam.fov; // radians
 
 	// Calculate required camera height to fit `neededViewSize` vertically
 	const requiredY = (neededViewSize / 2) / Math.tan(fov / 2);
 
 	// Set the camera height
-	pong.camera.position.y = requiredY * 2.11111111;
+	pong.arenaCam.position.y = requiredY * 2.11111111;
 
 	// Always look at the center
-	pong.camera.setTarget(baby.Vector3.Zero());
+	pong.arenaCam.setTarget(baby.Vector3.Zero());
 }
 
 export const	setPaddings = (button: baby.Button, paddingSize: string): void =>
@@ -250,24 +249,6 @@ export const	createDummyBlock = (): baby.StackPanel =>
 	return dummy;
 }
 
-// export const	addControlToDummy = (dummy: baby.StackPanel, control: baby.Control): baby.Container =>
-// {
-// 	if (!dummy || !control) return;
-
-// 	// Add the control to the dummy
-// 	dummy.addControl(control);
-
-// 	// // Set the dummy's width and height to fit the control
-// 	// dummy.width = control.width;
-// 	// dummy.height = control.height;
-
-// 	// // Set the dummy's position to be centered
-// 	// dummy.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
-// 	// dummy.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
-
-// 	return dummy;
-// }
-
 export const	createScreen = (screenName: string, alignment?: string): baby.Rectangle =>
 {
 	const	screen = new baby.Rectangle(screenName);
@@ -285,7 +266,7 @@ export const	createScreen = (screenName: string, alignment?: string): baby.Recta
 export const	setAlignment = (control: baby.Control, alignment?: string): void =>
 {
 	switch (alignment)
-{
+	{
 		default:
 			control.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
 			control.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
@@ -327,9 +308,120 @@ export const	setAlignment = (control: baby.Control, alignment?: string): void =>
 
 
 
-export const	forceRender = (pong: game.pongStruct):void => {
-  if (pong.scene) {
-    pong.scene.render();
-  }
+export const	forceRender = (pong: game.pongStruct):void => { if (pong.scene) pong.scene.render(); };
+
+/**
+ * Converts a quaternion to Euler angles for Babylon.js FreeCamera
+ * @param {number} x - Quaternion x component
+ * @param {number} y - Quaternion y component
+ * @param {number} z - Quaternion z component
+ * @param {number} w - Quaternion w component
+ * @returns {baby.Vector3} Euler angles in radians (x: pitch, y: yaw, z: roll)
+ */
+export const	quaternionToEulerAngles = (x: number, y: number, z: number, w: number): baby.Vector3 =>
+{
+    const quaternion = new baby.Quaternion(x, y, z, w);
+    return quaternion.toEulerAngles();
+}
+
+export const	changeCamera = (newCamera: baby.Camera | undefined, pong: React.RefObject<game.pongStruct>): void =>
+{
+	if (!pong.current.scene || newCamera === undefined) return;
+	pong.current.scene.activeCamera = newCamera;
+	console.log("Camera changed to: ", newCamera.name);
+	return;
+}
+
+export const	lerpVector3 = (start: baby.Vector3, end: baby.Vector3, midPoint: number): baby.Vector3 =>
+{
+	midPoint = Math.max(0, Math.min(1, midPoint));	// Clamp
+
+	return new baby.Vector3(
+		(start.x, end.x, midPoint),
+	)
+}
+
+export const	sleep = (ms: number): Promise<void> =>
+{
+	return new Promise(resolve => setTimeout(resolve, ms));
 };
 
+/**
+ * Linearly interpolates between two numbers
+ * @param {number} start - Starting value
+ * @param {number} end - Target value
+ * @param {number} alpha - Interpolation factor (0-1)
+ * @returns {number} Interpolated value
+ */
+export const lerp = (start: number, end: number, alpha: number): number => {
+    // Clamp alpha to 0-1 range
+    alpha = Math.max(0, Math.min(1, alpha));
+    
+    // Linear interpolation formula: start + (end - start) * alpha
+    return start + (end - start) * alpha;
+}
+
+/**
+ * Applies a smooth step interpolation between two Vector3 values
+ * @param {baby.Vector3} start - Starting vector
+ * @param {baby.Vector3} end - Target vector 
+ * @param {number} alpha - Interpolation factor (0-1)
+ * @returns {baby.Vector3} Smoothly interpolated vector
+ */
+export const	smoothStepVector3 = (start: baby.Vector3, end: baby.Vector3, alpha: number): baby.Vector3 =>
+{
+	// Clamp alpha to 0-1 range
+	alpha = Math.max(0, Math.min(1, alpha));
+	
+	// Apply smoothStep function: 3x^2 - 2x^3
+	alpha = alpha * alpha * (3 - 2 * alpha);
+	
+	// Use Babylon's built-in lerp with our smoothed alpha
+	return baby.Vector3.Lerp(start, end, alpha);
+}
+
+export const	smoothStep = (start: number, end: number, alpha: number): number =>
+{
+	// Clamp alpha to 0-1 range
+	alpha = Math.max(0, Math.min(1, alpha));
+	
+	// Apply smoothStep function: 3x^2 - 2x^3
+	alpha = alpha * alpha * (3 - 2 * alpha);
+	
+	// Use Babylon's built-in lerp with our smoothed alpha
+	return game.lerp(start, end, alpha);
+}
+
+let		time: number = 0;
+export const	transitionToCamera = async (cameraA: baby.FreeCamera | undefined, cameraB: baby.FreeCamera | undefined, duration: number, pong: React.RefObject<game.pongStruct>): Promise<void> =>
+{
+	if (cameraA === undefined || cameraB === undefined || !pong.current) return;
+	duration *= 1000;	// Convert to milliseconds
+
+	// Set transitionCam to A
+	pong.current.transitionCam?.position.copyFrom(cameraA.position);
+	pong.current.transitionCam?.rotation.copyFrom(cameraA.rotation);
+
+	// Set transitionCam as the current active camera
+	if (pong.current.scene?.activeCamera?.name !== pong.current.transitionCam?.name)
+		changeCamera(pong.current.transitionCam, pong);
+	forceRender(pong.current);
+	
+	// Animation loop
+	while (time <= duration)
+	{
+		const	lerpedPosition = smoothStepVector3(cameraA.position.clone(), cameraB.position.clone(), time / duration);
+		const	lerpedRotation = smoothStepVector3(cameraA.rotation.clone(), cameraB.rotation.clone(), time / duration);
+		const	lerpedFOV = smoothStep(cameraA.fov, cameraB.fov, time / duration);
+		pong.current.transitionCam?.position.set(lerpedPosition.x, lerpedPosition.y, lerpedPosition.z);
+		pong.current.transitionCam?.rotation.set(lerpedRotation.x, lerpedRotation.y, lerpedRotation.z);
+		const	deltaTime = pong.current.engine?.getDeltaTime() ?? 0;
+		time += deltaTime;
+		await sleep(deltaTime);
+	}
+
+	// Change back to the new camera
+	changeCamera(cameraB, pong);
+
+	return;
+}

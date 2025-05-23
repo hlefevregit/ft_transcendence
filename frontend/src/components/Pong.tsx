@@ -25,6 +25,7 @@ const	Pong: React.FC = () =>
 	const	pong = React.useRef<game.pongStruct>(game.initPongStruct());
 	const	states = React.useRef<game.states>(game.states.main_menu);
 
+
 	React.useEffect(() =>
 	{
 		if (!canvasRef.current) return;
@@ -134,4 +135,3 @@ const	Pong: React.FC = () =>
 };
 
 export default Pong;
-
