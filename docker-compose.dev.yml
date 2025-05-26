@@ -20,6 +20,15 @@ services:
     networks:
       - ft_network
 
+  twofa:
+    build:
+      context: ${BACKEND_PATH}/src/2FA-service
+      dockerfile: Dockerfile.dev
+    ports:
+      - "4001:4001"
+    networks:
+      - ft_network
+
   frontend:
     build:
       context: ./frontend
