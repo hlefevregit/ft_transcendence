@@ -9,7 +9,7 @@ export const	instantiateGUI = (pong: React.RefObject<game.pongStruct>): void =>
 	pong.current.guiTexture = baby.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, pong.current.scene);
 }
 
-export const	initializeAllGUIScreens = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, lang: React.RefObject<game.lang>): void =>
+export const	initializeAllGUIScreens = (pong: React.RefObject<game.pongStruct>, gameModes: React.RefObject<game.gameModes>, states: React.RefObject<game.states>, lang: React.RefObject<game.lang>): void =>
 {
 	// Initialize the GUI texture
 	console.log("initialized GUI texture...");
@@ -18,13 +18,13 @@ export const	initializeAllGUIScreens = (pong: React.RefObject<game.pongStruct>, 
 	
 	// Initialize all the GUI screens
 	console.log("initialized GUI screens...");
-	game.instantiateMainMenuGUI(pong, states, lang);
+	game.instantiateMainMenuGUI(pong, states, gameModes, lang);
 	game.instantiateSettingsGUI(pong, states, lang);
-	game.instentiatePongSettingsGUI(pong, states, lang);
+	game.instentiatePongSettingsGUI(pong, states, gameModes, lang);
 	game.instantiateArenaGUI(pong, states, lang);
 	game.instantiateCountdownGUI(pong, states, lang);
 	game.instantiateFinishedGameGUI(pong, states, lang);
-	game.instantiateDebugGUI(pong, states, lang);
+	game.instantiateDebugGUI(pong, states, gameModes, lang);
 	// etc.
 	console.log("complete initializing GUI screens");
 }
@@ -67,7 +67,7 @@ export const	updateGUIValues = (pong: React.RefObject<game.pongStruct>, states: 
     }
 }
 
-export const    instantiateMainMenuGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, lang: React.RefObject<game.lang>): void =>
+export const    instantiateMainMenuGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>, lang: React.RefObject<game.lang>): void =>
 {
 	// Canvas that will be used for the GUI
 	const	mainMenuGUI = game.createScreen("mainMenuGUI");
@@ -83,14 +83,17 @@ export const    instantiateMainMenuGUI = (pong: React.RefObject<game.pongStruct>
 	const	localPong = game.createDynamicButton("localPong", () => game.getLabel("playLocally", lang.current), pong, () =>
 	{
 		states.current = game.states.game_settings;
+		gameModes.current = game.gameModes.local;
 	});
 	const	AIPong = game.createDynamicButton("AIPong", () => game.getLabel("playAgainstAI", lang.current), pong, () =>
 	{
 		states.current = game.states.game_settings;
+		gameModes.current = game.gameModes.ai;
 	});
 	const	remotePong = game.createDynamicButton("remotePong", () => game.getLabel("playOnline", lang.current), pong, () =>
 	{
 		states.current = game.states.not_found;
+		gameModes.current = game.gameModes.online;
 	});
 
 
@@ -195,7 +198,7 @@ export const    instantiateSettingsGUI = (pong: React.RefObject<game.pongStruct>
 	pong.current.guiTexture?.addControl(settingsGUI);
 }
 
-export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, lang: React.RefObject<game.lang>): void =>
+export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>, lang: React.RefObject<game.lang>): void =>
 {
 	// Main panel for the entire settings screen
 	const	pongSettingsGUI = game.createScreen("pongSettingsGUI");
@@ -216,6 +219,7 @@ export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct
 	const	pongSettingsBackButton = game.createDynamicButton("pongSettingsBackButton", () => game.getLabel("back", lang.current), pong, () =>
 	{
 		states.current = game.states.main_menu;
+		gameModes.current = game.gameModes.none;
 	});
 	const	pongSettingsPlayButton = game.createDynamicButton("pongSettingsPlayButton", () => game.getLabel("play", lang.current), pong, () =>
 	{
@@ -334,7 +338,7 @@ export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct
 	pong.current.guiTexture?.addControl(pongSettingsGUI);
 }
 
-export const	instantiateDebugGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, lang: React.RefObject<game.lang>): void =>
+export const	instantiateDebugGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>, lang: React.RefObject<game.lang>): void =>
 {
 	const	debugGUI = game.createScreen("debugGUI", "top-left");
 			debugGUI.width = "250px";
@@ -375,10 +379,22 @@ export const	instantiateDebugGUI = (pong: React.RefObject<game.pongStruct>, stat
 
 	const	debugButtonPanel = game.createHorizontalStackPanel("debugButtonPanel", 2.5);
 
-	const	debugActiveCamText = game.createText("debugActiveCamText", "Active camera");
+	const	debugActiveCamText = game.createText("debugActiveCamText", "Active camera:");
 			(debugActiveCamText.children[0] as baby.TextBlock).fontSize = 12;
 	const	debugActiveCamTextValue = game.createDynamicText("debugActiveCamTextValue", () => pong.current.scene?.activeCamera?.name, pong);
 			(debugActiveCamTextValue.children[0] as baby.TextBlock).fontSize = 12;
+
+	// active languages
+	const	debugActiveLanguageText = game.createText("debugActiveLanguageText", "Active language:");
+			(debugActiveLanguageText.children[0] as baby.TextBlock).fontSize = 12;
+	const	debugActiveLanguageTextValue = game.createDynamicText("debugActiveLanguageTextValue", () => lang.current, pong);
+			(debugActiveLanguageTextValue.children[0] as baby.TextBlock).fontSize = 12;
+
+	// active game mode
+	const	debugActiveGameModeText = game.createText("debugActiveGameModeText", "Active game mode:");
+			(debugActiveGameModeText.children[0] as baby.TextBlock).fontSize = 12;
+	const	debugActiveGameModeTextValue = game.createDynamicText("debugActiveGameModeTextValue", () => gameModes.current, pong);
+			(debugActiveGameModeTextValue.children[0] as baby.TextBlock).fontSize = 12;
 
 	// Add GUI components to the debug GUI
 	// The order of adding controls matters for the layout
@@ -404,6 +420,12 @@ export const	instantiateDebugGUI = (pong: React.RefObject<game.pongStruct>, stat
 
 	debugVerticalStackPanel.addControl(debugActiveCamText);
 	debugVerticalStackPanel.addControl(debugActiveCamTextValue);
+
+	debugVerticalStackPanel.addControl(debugActiveLanguageText);
+	debugVerticalStackPanel.addControl(debugActiveLanguageTextValue);
+
+	debugVerticalStackPanel.addControl(debugActiveGameModeText);
+	debugVerticalStackPanel.addControl(debugActiveGameModeTextValue);
 	
 	// Add the screen to the GUI texture
 	pong.current.debugGUI = debugGUI;

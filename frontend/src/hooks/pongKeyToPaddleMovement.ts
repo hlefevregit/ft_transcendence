@@ -38,16 +38,19 @@ export const	movePaddleDown = (pong: game.pongStruct, paddleZ: number): number =
 	)
 }
 
-export	const	doPaddleMovement = (pong: game.pongStruct): void =>
+export	const	doPaddleMovement = (pong: game.pongStruct, gamemode: game.gameModes): void =>
 {
 	if (!pong.paddle1 || !pong.paddle2) return;
-	if (pong.pressedKeys.has('arrowup'))
+	if (gamemode === game.gameModes.local)
 	{
-		pong.paddle1.position.z = movePaddleUp(pong, pong.paddle1.position.z);
-	}
-	if (pong.pressedKeys.has('arrowdown'))
-	{
-		pong.paddle1.position.z = movePaddleDown(pong, pong.paddle1.position.z);
+		if (pong.pressedKeys.has('arrowup'))
+		{
+			pong.paddle1.position.z = movePaddleUp(pong, pong.paddle1.position.z);
+		}
+		if (pong.pressedKeys.has('arrowdown'))
+		{
+			pong.paddle1.position.z = movePaddleDown(pong, pong.paddle1.position.z);
+		}
 	}
 	if (pong.pressedKeys.has('w'))
 	{
@@ -61,19 +64,22 @@ export	const	doPaddleMovement = (pong: game.pongStruct): void =>
 	// console.log("Paddle2 position: ", pong.paddle2.position.z);
 }
 
-export const	manageLocalKeyboardInputs = (pong: game.pongStruct): void =>
+export const	manageLocalKeyboardInputs = (pong: game.pongStruct, gamemode: game.gameModes): void =>
 {
 	// Keyboard input
-	pong.scene?.onKeyboardObservable.add((kbInfo) =>
+	if (gamemode === game.gameModes.local)
 	{
-		const	key = kbInfo.event.key.toLowerCase();
-		if (kbInfo.type === baby.KeyboardEventTypes.KEYDOWN)
+		pong.scene?.onKeyboardObservable.add((kbInfo) =>
 		{
-			pong.pressedKeys.add(key);
-		}
-		else if (kbInfo.type === baby.KeyboardEventTypes.KEYUP)
-		{
-			pong.pressedKeys.delete(key);
-		}
-	});
+			const	key = kbInfo.event.key.toLowerCase();
+			if (kbInfo.type === baby.KeyboardEventTypes.KEYDOWN)
+			{
+				pong.pressedKeys.add(key);
+			}
+			else if (kbInfo.type === baby.KeyboardEventTypes.KEYUP)
+			{
+				pong.pressedKeys.delete(key);
+			}
+		});
+	}
 }

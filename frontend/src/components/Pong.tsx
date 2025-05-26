@@ -24,7 +24,7 @@ const	Pong: React.FC = () =>
 	const	canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 	const	pong = React.useRef<game.pongStruct>(game.initPongStruct());
 	const	states = React.useRef<game.states>(game.states.main_menu);
-	const	gameModes = React.useRef<game.gameModes>(game.gameModes.local);
+	const	gameModes = React.useRef<game.gameModes>(game.gameModes.none);
 	const	lang = React.useRef<game.lang>(game.lang.english);
 
 
@@ -40,11 +40,11 @@ const	Pong: React.FC = () =>
 		// Initialize all the GUI
 		if (!pong.current.engine || !pong.current.scene) return;
 		console.log("Initializing GUI...");
-		game.initializeAllGUIScreens(pong, states, lang);
+		game.initializeAllGUIScreens(pong, gameModes, states, lang);
 		console.log("GUI initialization complete");
 
 		// Keyboard input
-		game.manageLocalKeyboardInputs(pong.current);
+		game.manageLocalKeyboardInputs(pong.current, gameModes.current);
 
 		// Game loop
 		if (!pong.current.engine || !pong.current.scene) return;
@@ -64,8 +64,8 @@ const	Pong: React.FC = () =>
 			switch (states.current)
 			{
 				default:
-					if (states.current > Object.keys(game.states).length / 2 - 1) states.current = 0;
-					if (states.current < 0) states.current = Object.keys(game.states).length / 2 - 1;
+					if (states.current > (Object.keys(game.states).length / 2) - 1) states.current = 0;
+					if (states.current < 0) states.current = (Object.keys(game.states).length / 2) - 1;
 					break;
 
 				case game.states.countdown:
@@ -93,20 +93,12 @@ const	Pong: React.FC = () =>
 					console.log("Max score: ", maxScore);
 					if (maxScore >= pong.current.requiredPointsToWin)
 						states.current = game.states.game_finished;
-					game.doPaddleMovement(pong.current);
+					game.doPaddleMovement(pong.current, gameModes.current);
 					game.fitCameraToArena(pong.current);
 					pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
 					pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;
 					game.makeBallBounce(pong.current, states);
 					break;
-
-				case game.states.game_finished:
-					// game.resetPaddlesPosition(pong.current);
-					// game.resetBall(pong.current);
-					// game.setBallDirectionRandom(pong.current);
-					// game.fitCameraToArena(pong.current);
-					// game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong);
-					// states.current = game.states.main_menu;
 			}
 
 			pong.current.scene.render();
