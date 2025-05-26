@@ -47,6 +47,7 @@ export enum	colorsScheme
 
 export enum	gameModes
 {
+	none,
 	local,
 	ai,
 	online,
