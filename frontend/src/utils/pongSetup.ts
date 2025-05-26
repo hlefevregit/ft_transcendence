@@ -162,6 +162,7 @@ export const	label =
 	// Actions
 	back: ["Back", "Retour", "Indietro"],
 	play: ["Play", "Jouer", "Giaoca"],
+	replay: ["Replay", "Rejouer", "Rigioca"],
 	join: ["Join", "Rejoindre", "Unisciti"],
 	host: ["Host", "Héberger", "Hosta"],
 
@@ -174,6 +175,7 @@ export const	label =
 	playOnline: ["Play Online", "Jouer en ligne", "Gioca online"],
 	settings:["Settings", "Paramètres", "Impostazioni"],
 	gameSettings: ["Game Settings", "Paramètres", "Impostazioni"],
+	returnToMuseumButton: ["Return to Museum", "Retour au musée", "Torna al museo"],
 
 	// Settings
 	settingsMusic: ["Music", "Musique", "Musica"],
@@ -200,6 +202,8 @@ export const	label =
 	arenaRequiredPoints: ["Required points to win:", "Points requis pour gagner:", "Punti richiesti per vincere:"],
 
 	// Finished Game
+	resultPlayer1: ["Player 1", "Joueur 1", "Giocatore 1"],
+	resultPlayer2: ["Player 2", "Joueur 2", "Giocatore 2"],
 	finishedGameTitle: ["Game Finished", "Partie terminée", "Gioco terminato"],
 	winner: ["Winner:", "Gagnant:", "Vincitore:"],
 	looser: ["Loser:", "Perdant:", "Perdente:"],
