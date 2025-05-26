@@ -12,6 +12,7 @@ interface UserProfile {
 	pseudo: string;
 	avatarUrl?: string;
 	status: string;
+	twoFAEnabled: boolean;
 }
 
 interface Friend {
@@ -20,7 +21,7 @@ interface Friend {
 	avatarUrl?: string;
 	status?: string;
 }
-  
+
 interface FriendRequest {
 	id: number;
 	from: Friend;
@@ -31,6 +32,10 @@ const Settings: React.FC = () => {
 	
 	const navigate = useNavigate();
 	const canvasRef = useRef<HTMLCanvasElement>(null);
+	
+	const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+	const [totp, setTotp] = useState('');
+	
 	
 	const [user, setUser] = useState<UserProfile | null>(null);
 	const [pseudo, setPseudo] = useState('');
@@ -141,31 +146,33 @@ const Settings: React.FC = () => {
 		console.log('Token:', token);
 	}, [navigate]);
 	
+	const fetchUser = async () => {
+		try {
+			const token = localStorage.getItem('authToken');
+			if (!token) throw new Error('No token');
+			
+			const res = await fetch('/api/me', {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+				credentials: 'include',
+			});
+			
+			if (!res.ok) throw new Error('Fetch failed');
+			const data = await res.json();
+			if (!data || !data.id) throw new Error("Invalid user data");
+			
+			setUser(data);
+			setPseudo(data.pseudo);
+			setAvatarUrl(data.avatarUrl || '');
+			setStatus(data.status);
+		} catch (err) {
+			setError('Failed to load profile');
+		}
+		// console.log('User data fetched:', user);
+	};
+
 	useEffect(() => {
-		const fetchUser = async () => {
-			try {
-				const token = localStorage.getItem('authToken');
-				if (!token) throw new Error('No token');
-				
-				const res = await fetch('/api/me', {
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-					credentials: 'include',
-				});
-				if (!res.ok) throw new Error('Fetch failed');
-				const data = await res.json();
-				if (!data || !data.id) throw new Error("Invalid user data");
-				
-				setUser(data);
-				setPseudo(data.pseudo);
-				setAvatarUrl(data.avatarUrl || '');
-				setStatus(data.status);
-			} catch (err) {
-				setError('Failed to load profile');
-			}
-			// console.log('User data fetched:', user);
-		};
 		fetchUser();
 	}, []);
 	
@@ -301,38 +308,7 @@ const Settings: React.FC = () => {
 	}, [navigate]);
 
 
-
-	// useEffect(() => {
-	// 	requestAnimationFrame(() => {
-	// 		const canvas = canvasRef.current;
-	// 		if (!canvas) {
-	// 			console.error("❌ Canvas introuvable !");
-	// 			return;
-	// 		}
-	// 		console.log("✅ Canvas OK :", canvas);
-
-	// 		const engine = new BABYLON.Engine(canvas, true);
-	// 		const scene = new BABYLON.Scene(engine);
-
-	// 		// test visuel
-	// 		const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
-	// 		camera.setTarget(BABYLON.Vector3.Zero());
-	// 		camera.attachControl(canvas, true);
-
-	// 		const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-	// 		const sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 2 }, scene);
-
-	// 		engine.runRenderLoop(() => {
-	// 			// console.log("Rendering...");
-	// 			scene.render();
-	// 		});
-
-	// 		window.addEventListener("resize", () => engine.resize());
-	// 	});
-	// }, []);
-
 	if (!user) return <div>Loading...</div>;
-	console.log("✅ Settings rendered !");
 
 	const sendRequest = async () => {
 		const token = localStorage.getItem('authToken');
@@ -384,6 +360,78 @@ const Settings: React.FC = () => {
 		await fetchFriends();
 	  };
 
+	const handleEnable2FA = async () => {
+		const token = localStorage.getItem("authToken");
+		try {
+			const res = await fetch("https://localhost:3000/api/2fa/enable", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify({ userId: user?.id }), // ou pas nécessaire si extrait du JWT
+			});
+
+			const data = await res.json();
+			if (res.ok) {
+			setQrCodeUrl(data.qrCode);
+			console.log("🔐 QR Code URL:", data.qrCode); // ou affiche-le avec <img src={data.qrCode} />
+			} else {
+			alert(data.error || "Échec de l'activation 2FA");
+			}
+		} catch (err) {
+			console.error("Erreur activation 2FA:", err);
+		}
+	};
+
+
+	const verify2FA = async () => {
+		const token = localStorage.getItem('authToken');
+		if (!token) return;
+
+		const res = await fetch('/api/2fa/verify', {
+			method: 'POST',
+			headers: {
+			'Authorization': `Bearer ${token}`,
+			'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ token: totp }),
+		});
+
+		if (res.ok) {
+			alert("2FA activée !");
+			setQrCodeUrl(null); // ⛔️ Retire le QR code de l’affichage
+			await fetchUser(); // ⏩ Recharge les données utilisateur
+		} else {
+			alert("Code invalide");
+		}
+	};
+
+
+	const handleDisable2FA = async () => {
+		const confirmDisable = window.confirm("Es-tu sûr de vouloir désactiver la 2FA ?");
+		if (!confirmDisable) return;
+
+		try {
+			const res = await fetch('/api/2fa/disable', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			if (!res.ok) throw new Error();
+
+			alert("✅ 2FA désactivée !");
+			setQrCodeUrl(null); // ⛔️ Retire le QR code de l’affichage
+			await fetchUser(); // ⏩ Recharge les données utilisateur
+		} catch (err) {
+			alert("❌ Échec de la désactivation de la 2FA.");
+		}
+	};
+
+
+
 
 	return (
 		
@@ -416,6 +464,49 @@ const Settings: React.FC = () => {
 					</div>
 
 					<div>
+					<div className="mt-6">
+						<h2 className="text-xl font-semibold mb-2">🔐 Two-Factor Authentication (2FA)</h2>
+						<button
+							onClick={handleEnable2FA}
+							className="w-full bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+						>
+							Activer la 2FA
+						</button>
+						{qrCodeUrl && !user?.twoFAEnabled && (
+						<div className="mt-4 text-center">
+							<p className="text-sm mb-2">Scanne ce QR code avec ton app d’authentification :</p>
+							<img src={qrCodeUrl} alt="QR Code 2FA" className="mx-auto w-48 h-48" />
+							<label className="block text-sm font-medium">Code 2FA</label>
+							<input
+								type="text"
+								value={totp}
+								onChange={(e) => setTotp(e.target.value)}
+								placeholder="123456"
+								className="w-full border border-gray-300 rounded p-2 mt-1"
+								/>
+							<button
+								onClick={verify2FA}
+								className="w-full mt-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+								>
+								Vérifier Code
+							</button>
+						</div>
+						)}
+
+					</div>
+					{user?.twoFAEnabled && (
+					<div className="mt-6 text-center">
+						<p className="text-sm">2FA is enabled for your account.</p>						
+					</div>
+					)}
+					{user?.twoFAEnabled && (
+					<button
+						onClick={handleDisable2FA}
+						className="w-full bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 mt-2"
+					>
+						Désactiver la 2FA
+					</button>
+					)}
 					<label className="block text-sm font-medium">Status</label>
 					<select
 						value={status}
@@ -445,6 +536,8 @@ const Settings: React.FC = () => {
 						/>
 					</div>
 					)}
+
+		
 
 					<button
 					onClick={handleLogout}

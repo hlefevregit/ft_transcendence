@@ -10,11 +10,17 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
     console.log("Payload:", req.user);
     const userId = (req.user as any).id;
 
-    console.log('✅ User routes registered');
     const user = await fastify.prisma.user.findUnique({
       where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        pseudo: true,
+        avatarUrl: true,
+        status: true,
+        twoFAEnabled: true,
+      },
     });
-
     console.log('id = ', userId);
     console.log('✅ User found:', user);
     if (!user) {

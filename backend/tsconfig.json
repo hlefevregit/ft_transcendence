@@ -20,6 +20,7 @@
 			// "@session": ["./src/session"],
 		  },
 		"typeRoots": ["./types", "./../node_modules/@types"],
+		"types": ["@types/node", "@fastify/jwt"],
 	},
 	"include": ["src/**/*", "src/types", "src", "prisma"],
 	"exclude": [
