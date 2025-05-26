@@ -42,6 +42,7 @@ const Settings: React.FC = () => {
 	const [avatarUrl, setAvatarUrl] = useState('');
 	const [status, setStatus] = useState('offline');
 	const [error, setError] = useState('');
+	const [twoFAEnabled, setTwoFAEnabled] = useState(false);
 	
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -166,6 +167,8 @@ const Settings: React.FC = () => {
 			setPseudo(data.pseudo);
 			setAvatarUrl(data.avatarUrl || '');
 			setStatus(data.status);
+			setTwoFAEnabled(data.twoFAEnabled);
+			console.log('2FA Enabled:', data.twoFAEnabled);
 		} catch (err) {
 			setError('Failed to load profile');
 		}
@@ -419,14 +422,15 @@ const Settings: React.FC = () => {
 					'Content-Type': 'application/json',
 					Authorization: `Bearer ${token}`,
 				},
+				body: JSON.stringify({ userId: user?.id }), // ou pas nécessaire si extrait du JWT
 			});
 			if (!res.ok) throw new Error();
 
 			alert("✅ 2FA désactivée !");
-			setQrCodeUrl(null); // ⛔️ Retire le QR code de l’affichage
 			await fetchUser(); // ⏩ Recharge les données utilisateur
 		} catch (err) {
 			alert("❌ Échec de la désactivation de la 2FA.");
+			await fetchUser(); // ⏩ Recharge les données utilisateur pour refléter l'état actuel
 		}
 	};
 
@@ -465,6 +469,8 @@ const Settings: React.FC = () => {
 
 					<div>
 					<div className="mt-6">
+						{!user?.twoFAEnabled && (
+						<div className="text-red-500 text-sm mb-2">
 						<h2 className="text-xl font-semibold mb-2">🔐 Two-Factor Authentication (2FA)</h2>
 						<button
 							onClick={handleEnable2FA}
@@ -472,6 +478,8 @@ const Settings: React.FC = () => {
 						>
 							Activer la 2FA
 						</button>
+						</div>
+						)}
 						{qrCodeUrl && !user?.twoFAEnabled && (
 						<div className="mt-4 text-center">
 							<p className="text-sm mb-2">Scanne ce QR code avec ton app d’authentification :</p>
@@ -494,12 +502,12 @@ const Settings: React.FC = () => {
 						)}
 
 					</div>
-					{user?.twoFAEnabled && (
+					{twoFAEnabled && (
 					<div className="mt-6 text-center">
 						<p className="text-sm">2FA is enabled for your account.</p>						
 					</div>
 					)}
-					{user?.twoFAEnabled && (
+					{twoFAEnabled && (
 					<button
 						onClick={handleDisable2FA}
 						className="w-full bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 mt-2"
@@ -536,8 +544,6 @@ const Settings: React.FC = () => {
 						/>
 					</div>
 					)}
-
-		
 
 					<button
 					onClick={handleLogout}
