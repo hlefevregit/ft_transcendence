@@ -85,6 +85,17 @@ export const    instantiateMainMenuGUI = (pong: React.RefObject<game.pongStruct>
 	{
 		navigate("/game1");
 	});
+			(returnToMuseumButton.children[0] as baby.Button).onPointerEnterObservable.add(() => 
+	{
+			(returnToMuseumButton.children[0] as baby.Button).color = game.colorsScheme.dark1;
+			(returnToMuseumButton.children[0] as baby.Button).background = game.colorsScheme.auroraAccent1;
+	});
+			(returnToMuseumButton.children[0] as baby.Button).onPointerOutObservable.add(() => 
+	{
+			(returnToMuseumButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent1;
+			(returnToMuseumButton.children[0] as baby.Button).background = game.colorsScheme.dark1;
+	});
+			(returnToMuseumButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent1;
 	const	localPong = game.createDynamicButton("localPong", () => game.getLabel("playLocally", lang.current), pong, () =>
 	{
 		gameModes.current = game.gameModes.local;
