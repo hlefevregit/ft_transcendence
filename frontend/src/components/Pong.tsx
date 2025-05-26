@@ -44,7 +44,7 @@ const	Pong: React.FC = () =>
 		console.log("GUI initialization complete");
 
 		// Keyboard input
-		game.manageLocalKeyboardInputs(pong.current, gameModes.current);
+		game.manageLocalKeyboardInputs(pong.current);
 
 		// Game loop
 		if (!pong.current.engine || !pong.current.scene) return;
@@ -93,7 +93,7 @@ const	Pong: React.FC = () =>
 					console.log("Max score: ", maxScore);
 					if (maxScore >= pong.current.requiredPointsToWin)
 						states.current = game.states.game_finished;
-					game.doPaddleMovement(pong.current, gameModes.current);
+					game.doPaddleMovement(pong, gameModes);
 					game.fitCameraToArena(pong.current);
 					pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
 					pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;

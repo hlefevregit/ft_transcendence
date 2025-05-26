@@ -23,7 +23,7 @@ export const	initializeAllGUIScreens = (pong: React.RefObject<game.pongStruct>, 
 	game.instentiatePongSettingsGUI(pong, states, gameModes, lang);
 	game.instantiateArenaGUI(pong, states, lang);
 	game.instantiateCountdownGUI(pong, states, lang);
-	game.instantiateFinishedGameGUI(pong, states, lang);
+	game.instantiateFinishedGameGUI(pong, states, gameModes, lang);
 	game.instantiateDebugGUI(pong, states, gameModes, lang);
 	// etc.
 	console.log("complete initializing GUI screens");
@@ -499,7 +499,7 @@ export const	instantiateArenaGUI = (pong: React.RefObject<game.pongStruct>, stat
 	pong.current.guiTexture?.addControl(arenaGUI);
 }
 
-export const	instantiateFinishedGameGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, lang: React.RefObject<game.lang>): void =>
+export const	instantiateFinishedGameGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states> , gameModes: React.RefObject<game.gameModes>, lang: React.RefObject<game.lang>): void =>
 {
 	// Canvas that will be used for the GUI
 	const	finishedGameGUI = game.createScreen("finishedGameGUI", "center");
@@ -525,6 +525,7 @@ export const	instantiateFinishedGameGUI = (pong: React.RefObject<game.pongStruct
 	const	backButton = game.createDynamicButton("backButton", () => game.getLabel("back", lang.current), pong, () =>
 	{
 		states.current = game.states.main_menu;
+		gameModes.current = game.gameModes.none;
 	});
 
 	// Add GUI components to the main menu
