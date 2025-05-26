@@ -26,6 +26,7 @@ const	Pong: React.FC = () =>
 	const	states = React.useRef<game.states>(game.states.main_menu);
 	const	gameModes = React.useRef<game.gameModes>(game.gameModes.none);
 	const	lang = React.useRef<game.lang>(game.lang.english);
+	const	navigate = useNavigate();
 
 
 	React.useEffect(() =>
@@ -40,7 +41,7 @@ const	Pong: React.FC = () =>
 		// Initialize all the GUI
 		if (!pong.current.engine || !pong.current.scene) return;
 		console.log("Initializing GUI...");
-		game.initializeAllGUIScreens(pong, gameModes, states, lang);
+		game.initializeAllGUIScreens(pong, gameModes, states, lang, navigate);
 		console.log("GUI initialization complete");
 
 		// Keyboard input
@@ -84,8 +85,8 @@ const	Pong: React.FC = () =>
 					game.resetBall(pong.current);
 					game.setBallDirectionRandom(pong.current);
 					game.fitCameraToArena(pong.current);
-					game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.arenaCam, 1, pong);
 					states.current = game.states.countdown;
+					game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.arenaCam, 1, pong, states);
 					break;
 
 				case game.states.in_game:
@@ -119,7 +120,7 @@ const	Pong: React.FC = () =>
 			if (!pong.current.engine) return;
 			pong.current.engine.dispose();
 		};
-	}, []);
+	}, [navigate]);
 
 	return (
 		<div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0 }}>
