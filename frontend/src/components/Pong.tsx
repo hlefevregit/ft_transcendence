@@ -24,6 +24,8 @@ const	Pong: React.FC = () =>
 	const	canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 	const	pong = React.useRef<game.pongStruct>(game.initPongStruct());
 	const	states = React.useRef<game.states>(game.states.main_menu);
+	const	gameModes = React.useRef<game.gameModes>(game.gameModes.local);
+	const	lang = React.useRef<game.lang>(game.lang.english);
 
 
 	React.useEffect(() =>
@@ -38,7 +40,7 @@ const	Pong: React.FC = () =>
 		// Initialize all the GUI
 		if (!pong.current.engine || !pong.current.scene) return;
 		console.log("Initializing GUI...");
-		game.initializeAllGUIScreens(pong, states);
+		game.initializeAllGUIScreens(pong, states, lang);
 		console.log("GUI initialization complete");
 
 		// Keyboard input
@@ -49,7 +51,7 @@ const	Pong: React.FC = () =>
 		pong.current.engine.runRenderLoop(() =>
 		{
 			game.updateGUIVisibility(pong, states.current);
-			game.updateGUIValues(pong, states);
+			game.updateGUIValues(pong, states, lang);
 			if
 			(
 				!pong.current.scene ||
