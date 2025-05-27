@@ -466,6 +466,7 @@ const Settings: React.FC = () => {
 						className="w-full border border-gray-300 rounded p-2 mt-1 bg-white"
 					/>
 					</div>
+					
 
 					<div>
 					<div className="mt-6">
