@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
 import { stat } from 'fs';
+import { Bindings } from 'fastify/types/logger';
 
 export function fitCameraToArena(pong: game.pongStruct): void
 {
@@ -196,43 +197,6 @@ export const	createDynamicText = (textName: string, valueGetter: () => any, bind
 	block.addControl(text);
 	return block;
 }
-
-// export const	createHoldButton = (buttonName: string, buttonText: string, functionToExecute: () => void, holdTime: number): baby.StackPanel =>
-// {
-// 	const	block = game.createDummyBlock();
-// 	const	button = baby.Button.CreateSimpleButton(buttonName, buttonText);
-
-// 	button.width = "200px";
-// 	button.height = "100px";
-// 	button.color = game.colorsScheme.light1;
-// 	button.background = game.colorsScheme.dark1;
-// 	button.fontSize = 24;
-// 	button.thickness = 0;
-// 	button.cornerRadius = 20;
-// 	setPaddings(button, "10px");
-// 	button.onPointerClickObservable.add(functionToExecute);
-// 	button.onPointerDownObservable.add(() =>
-// 	{
-// 		button.color = game.colorsScheme.auroraAccent1;
-// 		button.background = game.colorsScheme.light3;
-// 		button.isEnabled = false; // Disable button to prevent multiple clicks
-// 	});
-// 	button.onPointerEnterObservable.add(() =>
-// 	{
-// 		button.color = game.colorsScheme.auroraAccent1;
-// 		button.background = game.colorsScheme.light3;
-// 	});
-// 	button.onPointerOutObservable.add(() =>
-// 	{
-// 		if (button.isEnabled)
-// 		{
-// 			button.color = game.colorsScheme.light3;
-// 			button.background = game.colorsScheme.dark1;
-// 		}
-// 	});
-// 	block.addControl(button);
-// 	return block;
-// }
 
 export const	createAdaptiveContainer = (folderName: string, width?: string, height?: string, BackgroundColor?: string, alignment?: string): baby.Container =>
 {
@@ -517,4 +481,23 @@ export const	transitionToCamera = async (cameraA: baby.FreeCamera | undefined, c
 	states.current = lastState; // Restore previous state
 	console.log("Transition complete");
 	return;
+}
+
+export const	createRoomPanel = (pong: React.RefObject<game.pongStruct>, lang: React.RefObject<game.lang>, roomName: string, join: any): baby.StackPanel =>
+{
+	// Create a horizontal stack panel for the room
+	const	roomPanel = game.createHorizontalStackPanel("roomPanel" + Math.random.toString, 0);
+
+	// Create a text block for the room name
+	const	roomPanelNameText = game.createText("roomPanelNameText", roomName);
+			(roomPanelNameText.children[0] as baby.TextBlock).fontSize = 48;
+
+	const	roomPanelJoinButton = game.createDynamicButton("roomPanelJoinButton", () => game.getLabel("join", lang.current), pong, () =>
+	{
+		join(pong.current, roomName);
+	});
+
+	roomPanel.addControl(roomPanelNameText);
+	roomPanel.addControl(roomPanelJoinButton);
+	return roomPanel;
 }

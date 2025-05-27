@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
-import { FreeCamera } from 'babylonjs';
 
 // Function to debounce the resize event
 // This will limit the number of times the resize function is called

@@ -57,10 +57,11 @@ export enum states
 {
 	main_menu,
 	settings,
+	host_or_join,
 	game_settings,
-	waiting_lobby,
+	hosting_waiting_players,
+	room_list,
 	waiting_to_start,
-	waiting_new_round,
 	countdown,
 	in_transition,
 	in_game,
@@ -118,11 +119,15 @@ export type pongStruct =
 	debugGUI?: baby.Container;
 	testGUI?: baby.Container;
 	waitingRoundStartGUI?: baby.Container;
+	waitingScreenGUI?: baby.Container;
 	countdownGUI?: baby.Container;
 	finishedGameGUI?: baby.Container;
+	hostOrJoinGUI?: baby.Container;
+	roomListGUI?: baby.Container;
 	
 	// GUI's bindings
 	bindings: Map<string, any>;
+	rooms: Map<string, any>;
 
 	// Engine and scene
 	guiTexture?: baby.AdvancedDynamicTexture;
@@ -154,33 +159,35 @@ export function initPongStruct(): pongStruct
 		// player2Name: "",
 
 		bindings: new Map<string, React.RefObject<any>>(),
+		rooms: new Map<string, React.RefObject<any>>(),
 	};
 }
 
 export const	label =
 {
 	// Actions
-	back: ["Back", "Retour", "Indietro"],
-	play: ["Play", "Jouer", "Giaoca"],
-	replay: ["Replay", "Rejouer", "Rigioca"],
-	join: ["Join", "Rejoindre", "Unisciti"],
-	host: ["Host", "Héberger", "Hosta"],
+	back: ["Back ↩", "Retour ↩", "Indietro ↩"],
+	play: ["Play ▸", "Jouer ▸", "Giaoca ▸"],
+	replay: ["Replay ↻", "Rejouer ↻", "Rigioca ↻"],
+	join: ["Join ⬇", "Rejoindre ⬇", "Unisciti ⬇"],
+	host: ["Host 🏠︎", "Héberger 🏠︎", "Hosta 🏠︎"],
+	refresh: ["Refresh ⟳", "Rafraîchir ⟳", "Aggiorna ⟳"],
+	cancel: ["Cancel ×", "Annuler ×", "Annulla ×"],
 
 
 	// Main menu
 	mainMenuTitle: ["Pong Game", "Jeu Pong", "Gioco Pong"],
 	mainMenu: ["Main Menu", "Menu Principal", "Menu Principale"],
-	playLocally: ["Play Locally", "Jouer en local", "Gioca in locale"],
-	playAgainstAI: ["Play against AI", "Jouer contre l'IA", "Gioca contro l'IA"],
-	playOnline: ["Play Online", "Jouer en ligne", "Gioca online"],
-	settings:["Settings", "Paramètres", "Impostazioni"],
-	gameSettings: ["Game Settings", "Paramètres", "Impostazioni"],
-	returnToMuseumButton: ["Return to Museum", "Retour au musée", "Torna al museo"],
+	playLocally: ["Play Locally ⌨", "Jouer en local ⌨", "Gioca in locale ⌨"],
+	playAgainstAI: ["Play against\nAI ☹", "Jouer contre\nl'IA ☹", "Gioca contro\nl'IA ☹"],
+	playOnline: ["Play Online 🖧", "Jouer en ligne 🖧", "Gioca online 🖧"],
+	settings:["Settings ⚙", "Paramètres ⚙", "Impostazioni ⚙"],
+	gameSettings: ["Game Settings ⚙", "Paramètres ⚙", "Impostazioni ⚙"],
+	returnToMuseumButton: ["Return to Museum 🏛︎", "Retour au musée 🏛︎", "Torna al museo 🏛︎"],
 
 	// Settings
-	settingsMusic: ["Music", "Musique", "Musica"],
-	settingsSound: ["Sound", "Son", "Suono"],
-	settingsLanguage: ["Language", "Langue", "Lingua"],
+	settingsMusic: ["Music ♫", "Musique ♫", "Musica ♫"],
+	settingsSound: ["Sound 🗣", "Son 🗣", "Suono 🗣"],
 
 	// Pong Settings
 	pongSettingsTitle: ["Pong Settings", "Paramètres du Pong", "Impostazioni Pong"],
@@ -208,6 +215,18 @@ export const	label =
 	winner: ["Winner:", "Gagnant:", "Vincitore:"],
 	looser: ["Loser:", "Perdant:", "Perdente:"],
 	scored: ["| Scored:", "| A marqué:", "| Ha segnato:"],
+
+	// Host or Join
+	hostText: ["Host", "Héberger", "Hosta"],
+	joinText: ["Join", "Rejoindre", "Unisciti"],
+
+	// Room List
+	roomListTitle: ["Room List", "Liste des salles", "Elenco delle stanze"],
+	roomListEmpty: ["No rooms available", "Aucune salle disponible", "Nessuna stanza disponibile"],
+	roomListJoin: ["Join Room", "Rejoindre la salle", "Unisciti alla stanza"],
+
+	// Waiting Screen
+	waitingForPlayers: ["Waiting for players...", "En attente de joueurs...", "In attesa di giocatori..."],
 	
 } as const;
 
