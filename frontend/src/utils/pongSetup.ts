@@ -57,10 +57,11 @@ export enum states
 {
 	main_menu,
 	settings,
+	host_or_join,
 	game_settings,
-	waiting_lobby,
+	hosting_waiting_players,
+	list_rooms,
 	waiting_to_start,
-	waiting_new_round,
 	countdown,
 	in_transition,
 	in_game,
@@ -120,6 +121,7 @@ export type pongStruct =
 	waitingRoundStartGUI?: baby.Container;
 	countdownGUI?: baby.Container;
 	finishedGameGUI?: baby.Container;
+	hostOrJoinGUI?: baby.Container;
 	
 	// GUI's bindings
 	bindings: Map<string, any>;
@@ -208,6 +210,10 @@ export const	label =
 	winner: ["Winner:", "Gagnant:", "Vincitore:"],
 	looser: ["Loser:", "Perdant:", "Perdente:"],
 	scored: ["| Scored:", "| A marqué:", "| Ha segnato:"],
+
+	// Host or Join
+	hostText: ["Host", "Héberger", "Hosta"],
+	joinText: ["Join", "Rejoindre", "Unisciti"],
 	
 } as const;
 

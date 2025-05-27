@@ -25,6 +25,7 @@ export const	initializeAllGUIScreens = (pong: React.RefObject<game.pongStruct>, 
 	game.instantiateArenaGUI(pong, states, lang);
 	game.instantiateCountdownGUI(pong, states, lang);
 	game.instantiateFinishedGameGUI(pong, states, gameModes, lang);
+	game.instantiateHostOrJoinGUI(pong, states, gameModes, lang);
 	game.instantiateDebugGUI(pong, states, gameModes, lang);
 	// etc.
 	console.log("complete initializing GUI screens");
@@ -39,6 +40,7 @@ export const	updateGUIVisibility = (pong: React.RefObject<game.pongStruct>, stat
 	setUIState(pong.current.arenaGUI, game.states.in_game);
 	setUIState(pong.current.countdownGUI, game.states.countdown);
 	setUIState(pong.current.finishedGameGUI, game.states.game_finished);
+	setUIState(pong.current.hostOrJoinGUI, game.states.host_or_join);
 }
 
 export const	updateGUIValues = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, lang: React.RefObject<game.lang>): void =>
@@ -114,8 +116,8 @@ export const    instantiateMainMenuGUI = (pong: React.RefObject<game.pongStruct>
 	{
 		gameModes.current = game.gameModes.online;
 		if (!pong.current.scene) return;
-		states.current = game.states.not_found;
-		game.transitionToCamera(pong.current.scene.activeCamera as baby.FreeCamera, pong.current.pongSettingsCam, 1, pong, states);
+		states.current = game.states.host_or_join;
+		// game.transitionToCamera(pong.current.scene.activeCamera as baby.FreeCamera, pong.current.pongSettingsCam, 1, pong, states);
 	});
 
 
@@ -247,7 +249,15 @@ export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct
 	});
 	const	pongSettingsPlayButton = game.createDynamicButton("pongSettingsPlayButton", () => game.getLabel("play", lang.current), pong, () =>
 	{
-		states.current = game.states.waiting_to_start;
+		switch (gameModes.current)
+		{
+			case game.gameModes.online:
+				states.current = game.states.hosting_waiting_players;
+				break;
+			default:
+				states.current = game.states.waiting_to_start;
+				break;
+		}
 	});
 	(pongSettingsPlayButton.children[0] as baby.Button).onPointerEnterObservable.add(() => {
 			(pongSettingsPlayButton.children[0] as baby.Button).color = game.colorsScheme.dark1;
@@ -597,4 +607,40 @@ export const	instantiateFinishedGameGUI = (pong: React.RefObject<game.pongStruct
 	// Add the screen to the GUI texture
 	pong.current.finishedGameGUI = finishedGameGUI;
 	pong.current.guiTexture?.addControl(finishedGameGUI);
+}
+
+export const	instantiateHostOrJoinGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>, lang: React.RefObject<game.lang>): void =>
+{
+	// Canvas that will be used for the GUI
+	const	hostOrJoinGUI = game.createScreen("hostOrJoinGUI", "center");
+
+	// All GUI components needed
+	const	hostOrJoinContainer = game.createAdaptiveContainer("hostOrJoinContainer", "300px", "300px");
+	const	hostOrJoinVerticalStackPanel = game.createVerticalStackPanel("hostOrJoinVerticalStackPanel");
+
+	const	hostButton = game.createDynamicButton("hostButton", () => game.getLabel("host", lang.current), pong, () =>
+	{
+		states.current = game.states.game_settings;
+	});
+	const	joinButton = game.createDynamicButton("joinButton", () => game.getLabel("join", lang.current), pong, () =>
+	{
+		states.current = game.states.list_rooms;
+	});
+	const	backButton = game.createDynamicButton("backButton", () => game.getLabel("back", lang.current), pong, () =>
+	{
+		states.current = game.states.main_menu;
+		gameModes.current = game.gameModes.none;
+	});
+
+	// Add GUI components to the main menu
+	// The order of adding controls matters for the layout
+	hostOrJoinVerticalStackPanel.addControl(hostButton);
+	hostOrJoinVerticalStackPanel.addControl(joinButton);
+	hostOrJoinVerticalStackPanel.addControl(backButton);
+	hostOrJoinContainer.addControl(hostOrJoinVerticalStackPanel);
+	hostOrJoinGUI.addControl(hostOrJoinContainer);
+
+	// Add the screen to the GUI texture
+	pong.current.hostOrJoinGUI = hostOrJoinGUI;
+	pong.current.guiTexture?.addControl(hostOrJoinGUI);
 }

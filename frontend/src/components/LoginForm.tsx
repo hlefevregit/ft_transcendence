@@ -28,6 +28,9 @@ const LoginForm: React.FC = () => {
         console.log("✅ 2FA SUCCESS");
         localStorage.setItem('authToken', response.token);
         localStorage.removeItem('pendingUserId');
+        const user = response.user;
+        localStorage.setItem('userId', user.id);
+        localStorage.setItem('pseudo', user.pseudo || ''); // stocke le nom d'utilisateur
         navigate('/game1');
       } else {
         console.error("❌ 2FA failed:", response.message);
@@ -53,6 +56,9 @@ const LoginForm: React.FC = () => {
           setError('2FA enabled, please enter your code.');
           return;
         }
+        const user = res.user;
+        localStorage.setItem('userId', user.id);
+        localStorage.setItem('pseudo', user.pseudo || ''); // stocke le nom d'utilisateur
         navigate('/game1'); // si 2FA non activé
 
       } else {
@@ -68,6 +74,9 @@ const LoginForm: React.FC = () => {
       const res = await googleLogin(idToken);
       if (res.success) {
         localStorage.setItem('authToken', res.token);
+        const user = res.user;
+        localStorage.setItem('pseudo', user.pseudo || ''); // stocke le nom d'utilisateur
+        localStorage.setItem('userId', user.id); // ou un string unique
         navigate('/game1');
       } else {
         setError(res.message || 'Google login failed');
