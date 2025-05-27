@@ -39,6 +39,10 @@ export const	instantiateArena = async (pong: game.pongStruct, canvasRef: any): P
 	arenaCamera.rotation = new baby.Vector3(Math.PI / 2, 0, Math.PI);
 	pong.arenaCam = arenaCamera;
 	
+	const	pongSettingsCamera = new baby.FreeCamera("settingsCam", new baby.Vector3(-10, 1.5, -12), sceneInstance);
+	pongSettingsCamera.rotation = new baby.Vector3(0, Math.PI , 0);
+	pong.pongSettingsCam = pongSettingsCamera;
+
 	const	transitionCamera = new baby.FreeCamera("transitionCam", baby.Vector3.Zero(), sceneInstance);
 	pong.transitionCam = transitionCamera;
 

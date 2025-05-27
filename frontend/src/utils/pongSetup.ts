@@ -45,6 +45,14 @@ export enum	colorsScheme
 
 }
 
+export enum	gameModes
+{
+	none,
+	local,
+	ai,
+	online,
+}
+
 export enum states 
 {
 	main_menu,
@@ -147,6 +155,88 @@ export function initPongStruct(): pongStruct
 
 		bindings: new Map<string, React.RefObject<any>>(),
 	};
+}
+
+export const	label =
+{
+	// Actions
+	back: ["Back", "Retour", "Indietro"],
+	play: ["Play", "Jouer", "Giaoca"],
+	replay: ["Replay", "Rejouer", "Rigioca"],
+	join: ["Join", "Rejoindre", "Unisciti"],
+	host: ["Host", "Héberger", "Hosta"],
+
+
+	// Main menu
+	mainMenuTitle: ["Pong Game", "Jeu Pong", "Gioco Pong"],
+	mainMenu: ["Main Menu", "Menu Principal", "Menu Principale"],
+	playLocally: ["Play Locally", "Jouer en local", "Gioca in locale"],
+	playAgainstAI: ["Play against AI", "Jouer contre l'IA", "Gioca contro l'IA"],
+	playOnline: ["Play Online", "Jouer en ligne", "Gioca online"],
+	settings:["Settings", "Paramètres", "Impostazioni"],
+	gameSettings: ["Game Settings", "Paramètres", "Impostazioni"],
+	returnToMuseumButton: ["Return to Museum", "Retour au musée", "Torna al museo"],
+
+	// Settings
+	settingsMusic: ["Music", "Musique", "Musica"],
+	settingsSound: ["Sound", "Son", "Suono"],
+	settingsLanguage: ["Language", "Langue", "Lingua"],
+
+	// Pong Settings
+	pongSettingsTitle: ["Pong Settings", "Paramètres du Pong", "Impostazioni Pong"],
+	pointsRequiredToWin: ["Points required to win:", "Points requis pour gagner:", "Punti richiesti per vincere:"],
+	arenaHeight: ["Arena height:", "Hauteur de l'arène:", "Altezza dell'arena:"],
+	arenaWidth: ["Arena width:", "Largeur de l'arène:", "Larghezza dell'arena:"],
+	paddleHeight: ["Paddle height:", "Hauteur de la raquette:", "Altezza della racchetta:"],
+	paddleSpeed: ["Paddle speed:", "Vitesse de la raquette:", "Velocità della racchetta:"],
+	ballSpeed: ["Ball speed:", "Vitesse de la balle:", "Velocità della palla:"],
+	maxBallSpeed: ["Max ball speed:", "Vitesse maximale de la balle:", "Velocità massima della palla:"],
+
+	// Coutdown
+	startingIn: ["Starting in", "Début dans", "Inizio tra"],
+
+	// Arena
+	arenaScoreTitle: ["Score", "Score", "Punteggio"],
+	arenaPlayer1: ["Player 1:", "Joueur 1:", "Giocatore 1:"],
+	arenaPlayer2: ["Player 2:", "Joueur 2:", "Giocatore 2:"],
+	arenaRequiredPoints: ["Required points to win:", "Points requis pour gagner:", "Punti richiesti per vincere:"],
+
+	// Finished Game
+	resultPlayer1: ["Player 1", "Joueur 1", "Giocatore 1"],
+	resultPlayer2: ["Player 2", "Joueur 2", "Giocatore 2"],
+	finishedGameTitle: ["Game Finished", "Partie terminée", "Gioco terminato"],
+	winner: ["Winner:", "Gagnant:", "Vincitore:"],
+	looser: ["Loser:", "Perdant:", "Perdente:"],
+	scored: ["| Scored:", "| A marqué:", "| Ha segnato:"],
+	
+} as const;
+
+export type	labelKey = keyof typeof label;
+
+export enum	lang
+{
+	english,
+	french,
+	italian,
+	brail,
+};
+
+export const	getLabel = (key: labelKey, currentLanguage: lang): string =>
+{
+	if (!label[key]) return "label not found";
+	switch (currentLanguage)
+	{
+		case lang.english:
+			return label[key][0];
+		case lang.french:
+			return label[key][1];
+		case lang.italian:
+			return label[key][2];
+		case lang.brail:
+			return "brail not implemented";
+		default:
+			return "language not found";
+	}
 }
 
 export const	setBallPosition = (ball: baby.Mesh, position: baby.Vector3): void =>
