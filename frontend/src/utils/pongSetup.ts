@@ -58,6 +58,7 @@ export enum states
 	main_menu,
 	settings,
 	host_or_join,
+	host_or_join,
 	game_settings,
 	hosting_waiting_players,
 	room_list,

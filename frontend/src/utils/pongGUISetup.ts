@@ -140,6 +140,8 @@ export const    instantiateMainMenuGUI = (pong: React.RefObject<game.pongStruct>
 		if (!pong.current.scene) return;
 		states.current = game.states.host_or_join;
 		// game.transitionToCamera(pong.current.scene.activeCamera as baby.FreeCamera, pong.current.pongSettingsCam, 1, pong, states);
+		states.current = game.states.host_or_join;
+		// game.transitionToCamera(pong.current.scene.activeCamera as baby.FreeCamera, pong.current.pongSettingsCam, 1, pong, states);
 	});
 
 
@@ -280,6 +282,15 @@ export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct
 	});
 	const	pongSettingsPlayButton = game.createDynamicButton("pongSettingsPlayButton", () => game.getLabel("play", lang.current), pong, () =>
 	{
+		switch (gameModes.current)
+		{
+			case game.gameModes.online:
+				states.current = game.states.hosting_waiting_players;
+				break;
+			default:
+				states.current = game.states.waiting_to_start;
+				break;
+		}
 		switch (gameModes.current)
 		{
 			case game.gameModes.online:

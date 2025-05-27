@@ -17,6 +17,7 @@ const App = () => {
         <Route path="/game1" element={<Game1 />} />
         <Route path="/settings" element={<Settings/>} />
         <Route path="/pong" element={<Pong />} />
+        <Route path="*" element={<div>Page not found</div>} />
       </Routes>
     </BrowserRouter>
   );
