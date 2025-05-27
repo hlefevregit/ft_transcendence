@@ -20,6 +20,9 @@ model User {
   password  String?
   createdAt DateTime @default(now())
 
+  twoFAEnabled Boolean @default(false)
+  twoFASecret String?  // Stocke le secret TOTP de l'utilisateur
+
   // Friends (relation many-to-many implicite)
   friends  User[] @relation("UserFriends")
   friendOf User[] @relation("UserFriends")
