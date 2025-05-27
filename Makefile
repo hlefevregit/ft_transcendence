@@ -39,7 +39,7 @@ restart-dev:
 logs-dev:
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) logs -f
 
-re-dev: 
+re-dev:
 	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) down --volumes --remove-orphans --rmi all
 	docker volume prune -f
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up --build -d
@@ -84,11 +84,11 @@ rebuild-prod:
 #########################################################
 
 clean:
-	docker stop $$(docker ps -aq) || true
-	docker rm $$(docker ps -aq) || true
-	docker rmi -f $$(docker images -aq) || true
-	docker volume rm $$(docker volume ls -q) || true
-	docker network prune -f || true
+	@if [ -n "$$(docker ps -aq)" ]; then docker stop $$(docker ps -aq); fi
+	@if [ -n "$$(docker ps -aq)" ]; then docker rm $$(docker ps -aq); fi
+	@if [ -n "$$(docker images -aq)" ]; then docker rmi -f $$(docker images -aq); fi
+	@if [ -n "$$(docker volume ls -q)" ]; then docker volume rm $$(docker volume ls -q); fi
+	@docker network prune -f
 
 prune:
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down -v --remove-orphans
