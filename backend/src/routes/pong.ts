@@ -1,20 +1,41 @@
-import { FastifyInstance } from 'fastify';
-import { dbPromise } from '../db/database';
-import bcrypt from 'bcrypt';
-import fastifyWebsocket from '@fastify/websocket';
-import { GOOGLE_CLIENT_ID } from '../config/env';
+import axios from 'axios';
 
-export const setupAuthRoutes = (fastify: FastifyInstance) => {
-	fastify.get('/api/pong', { websocket: true }, (connection: fastifyWebsocket.SocketStream, req) => {
-		// Handle connection
-		console.log('Client connected');
-		connection.socket.send('ping');
-		connection.socket.on('message', (message) => {
-			// Handle incoming messages
-			console.log('Received:', message.toString());
+export async function setupPongRoutes(fastify) {
+	fastify.post('/api/pong/host', {
+		preHandler: [fastify.authenticate],
+		handler: async (req, res) => {
+			try {
+				const user = req.user as { id: number };
+				const response = await axios.post('http://pong:4000/host', {
+					userId: user.id,
+					roomName: `${user.id}'s room`
+				});
 
-			// Respond back to the client
-			connection.socket.send('pong');
-		});
+				return res.send(response.data);
+			} catch (err) {
+				req.log.error(err);
+				return res.status(500).send({ error: 'Erreur création de partie' });
+			}
+		},
 	});
-};
+
+	fastify.post('/api/pong/join', {
+		preHandler: [fastify.authenticate],
+		handler: async (req, res) => {
+			try {
+				const user = req.user as { id: number };
+				const { gameId } = req.body;
+
+				const response = await axios.post('http://pong:4000/join', {
+					userId: user.id,
+					gameId,
+				});
+
+				return res.send(response.data);
+			} catch (err) {
+				req.log.error(err);
+				return res.status(500).send({ error: 'Erreur pour rejoindre la partie' });
+			}
+		},
+	});
+}

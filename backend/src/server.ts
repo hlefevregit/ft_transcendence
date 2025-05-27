@@ -15,6 +15,11 @@ import prismaPlugin from './plugins/prisma'; // Prisma DB
 import { setupUserRoutes } from './routes/user';
 import { setupFriendRoutes } from './routes/friends';
 import metricsPlugin from 'fastify-metrics';
+import { setup2FARoutes } from './routes/2fa';
+import { setupPongRoutes } from './routes/pong';
+
+
+
 
 setupGlobalErrorHandling();
 
@@ -41,13 +46,15 @@ const start = async () => {
     setupWebsocket(fastify);
     setupStaticFiles(fastify);
     fastify.register(prismaPlugin);
-    await fastify.register(setupUserRoutes as any); // ici OK
+    await fastify.register(setupUserRoutes as any);
     
     // Routes
     setupAuthRoutes(fastify);
     setupRegisterRoute(fastify);
     setupPingRoute(fastify);
-    await fastify.register(setupFriendRoutes as any); // ici OK
+    await fastify.register(setupFriendRoutes as any);
+    await fastify.register(setup2FARoutes as any);
+    await fastify.register(setupPongRoutes as any); // Assurez-vous que cette fonction est définie dans votre code
     
     await fastify.ready(); // ✅ après tous les .register()
     console.log(fastify.printRoutes());
