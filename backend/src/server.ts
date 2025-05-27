@@ -16,6 +16,7 @@ import { setupUserRoutes } from './routes/user';
 import { setupFriendRoutes } from './routes/friends';
 import metricsPlugin from 'fastify-metrics';
 import { setup2FARoutes } from './routes/2fa';
+import { setupPongRoutes } from './routes/pong';
 
 
 
@@ -53,6 +54,7 @@ const start = async () => {
     setupPingRoute(fastify);
     await fastify.register(setupFriendRoutes as any);
     await fastify.register(setup2FARoutes as any);
+    await fastify.register(setupPongRoutes as any); // Assurez-vous que cette fonction est définie dans votre code
     
     await fastify.ready(); // ✅ après tous les .register()
     console.log(fastify.printRoutes());

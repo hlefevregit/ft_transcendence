@@ -9,3 +9,5 @@ export * from '@/hooks/pongKeyToPaddleMovement';
 export * from '@/utils/babylonUtils';
 
 export * from '@/utils/pongArenaSetup';
+
+export * from '@/utils/pong/GUIOnline';

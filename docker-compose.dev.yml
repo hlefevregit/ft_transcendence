@@ -20,6 +20,15 @@ services:
     networks:
       - ft_network
 
+  pong:
+    build:
+      context: ${BACKEND_PATH}/src/pong-service
+      dockerfile: Dockerfile.dev
+    ports:
+      - "4000:4000"
+    networks:
+      - ft_network
+
   twofa:
     build:
       context: ${BACKEND_PATH}/src/2FA-service
@@ -28,6 +37,7 @@ services:
       - "4001:4001"
     networks:
       - ft_network
+    
 
   frontend:
     build:
