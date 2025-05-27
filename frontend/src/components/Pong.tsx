@@ -167,15 +167,15 @@ const	Pong: React.FC = () =>
 						break;
 					}
 
-					case game.states.list_rooms: {
+					case game.states.room_list: {
 						if (
 							socketRef.current &&
 							socketRef.current.readyState === WebSocket.OPEN &&
-							lastHandledState.current !== game.states.list_rooms
+							lastHandledState.current !== game.states.room_list
 						) {
 							console.log("Requesting list of rooms");
-							socketRef.current.send(JSON.stringify({ type: 'list_rooms' }));
-							lastHandledState.current = game.states.list_rooms;
+							socketRef.current.send(JSON.stringify({ type: 'room_list' }));
+							lastHandledState.current = game.states.room_list;
 						}
 						break;
 					}
