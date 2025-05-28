@@ -124,6 +124,8 @@ export type pongStruct =
 	finishedGameGUI?: baby.Container;
 	hostOrJoinGUI?: baby.Container;
 	roomListGUI?: baby.Container;
+	roomListVerticalStackPanel?: baby.StackPanel;
+
 	
 	// GUI's bindings
 	bindings: Map<string, any>;

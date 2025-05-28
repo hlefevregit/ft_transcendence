@@ -65,41 +65,45 @@ const	Pong: React.FC = () =>
 
 		ws.onmessage = (event) => {
 			console.log("📩 Message reçu :", event.data);
-			const data = JSON.parse(event.data);
+
+			let data;
+			try {
+				data = JSON.parse(event.data);
+			} catch (err) {
+				console.error("❌ Erreur parsing JSON :", err);
+				return;
+			}
+
 			switch (data.type) {
+
 				case 'game_hosted': {
 					console.log('🎮 Game hosted with ID:', data.gameId);
 
 					const roomId = data.gameId;
 					pong.current.lastHostedRoomId = roomId;
-					console.log("🧠 userNameRef.current =", userNameRef.current);
 
 					const roomName = `${userNameRef.current || 'Anonymous'}'s room`;
+					console.log("🧠 userNameRef.current =", userNameRef.current);
 
-					// Crée l’entrée GUI de la room avec bouton "Join"
 					const roomPanel = game.createRoomPanel(pong, lang, roomName, () => {
-						console.log("🧩 Creating GUI for ", roomId);
-						if (socketRef.current) {
-							socketRef.current.send(JSON.stringify({
-								type: 'join_game',
-								gameId: roomId,
-								roomName: roomName,
-							}));
-						}
+						console.log("🧩 Creating GUI for", roomId);
+						socketRef.current?.send(JSON.stringify({
+							type: 'join_game',
+							gameId: roomId,
+							roomName: roomName,
+						}));
 					});
 					console.log("📦 roomPanel créé :", roomPanel?.name ?? 'undefined');
 
-
-					// Ajoute la room au Map
 					pong.current.rooms.set(roomId, () => roomPanel);
 					console.log("🗂 Room ajoutée au Map avec ID:", roomId);
-
 					break;
 				}
+
 				case 'room_list': {
 					console.log("📜 Liste des rooms reçue:", data.rooms);
 
-					// Vide les anciennes rooms
+					// Réinitialise les rooms
 					pong.current.rooms.clear();
 
 					for (const room of data.rooms) {
@@ -112,42 +116,49 @@ const	Pong: React.FC = () =>
 						});
 						pong.current.rooms.set(room.gameId, () => roomPanel);
 					}
+
+					// MAJ de l’affichage GUI
 					const updatedList = game.refreshRoomsEntries(pong, states, gameModes, lang);
-					const verticalStack = pong.current.roomListGUI?.getChildByName("roomListVerticalStackPanel") as baby.StackPanel;
+					const verticalStack = pong.current.roomListVerticalStackPanel;
 					if (verticalStack) {
 						const old = verticalStack.getChildByName("roomsVerticalPanel");
 						if (old) verticalStack.removeControl(old);
 						verticalStack.addControl(updatedList);
+					} else {
+						console.warn("⚠️ roomListVerticalStackPanel introuvable");
 					}
+
 					break;
 				}
 
 				case 'room_left': {
-					console.log("🚪 Room left:", data.gameId);
 					const roomId = data.gameId;
-					if (pong.current.rooms.has(roomId)) {
-						const roomPanel = pong.current.rooms.get(roomId)?.();
-						if (roomPanel) {
-							roomPanel.dispose();
-							pong.current.rooms.delete(roomId);
-							console.log("🗑️ Room removed from Map:", roomId);
-						} else {
-							console.warn("⚠️ Room panel not found for ID:", roomId);
-						}
+					console.log("🚪 Room left:", roomId);
+
+					const roomPanel = pong.current.rooms.get(roomId)?.();
+					if (roomPanel) {
+						roomPanel.dispose();
+						pong.current.rooms.delete(roomId);
+						console.log("🗑️ Room removed from Map:", roomId);
 					} else {
-						console.warn("⚠️ No room found with ID:", roomId);
+						console.warn("⚠️ Room panel not found for ID:", roomId);
 					}
 					break;
 				}
 
-				case 'joined_game':
+				case 'joined_game': {
 					console.log('👥 Rejoint game:', data.gameId);
 					break;
-				case 'error':
+				}
+
+				case 'error': {
 					console.error('❗ Erreur serveur:', data.message);
 					break;
-				default:
-					console.log('ℹ️ Autre message reçu:', data);
+				}
+
+				default: {
+					console.log('ℹ️ Message inconnu reçu:', data);
+				}
 			}
 		};
 
