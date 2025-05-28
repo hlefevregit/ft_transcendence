@@ -490,7 +490,7 @@ export const createRoomPanel = (
 	pong: React.RefObject<game.pongStruct>,
 	lang: React.RefObject<game.lang>,
 	roomName: string,
-	join: any,
+	join: () => void,
 ): baby.StackPanel => {
 	const safeRoomName = roomName || "Unnamed Room";
 	const panelName = `roomPanel_${safeRoomName.replace(/\s+/g, '_')}_${Math.random().toString(36).substring(2)}`;
@@ -503,7 +503,7 @@ export const createRoomPanel = (
 		"roomPanelJoinButton",
 		() => game.getLabel("join", lang.current),
 		pong,
-		() => void {},
+		join,
 	);
 
 	roomPanel.addControl(roomPanelNameText);

@@ -79,6 +79,7 @@ const	Pong: React.FC = () =>
 				case 'game_hosted': {
 					console.log('🎮 Game hosted with ID:', data.gameId);
 
+					pong.current.isHost = true ;
 					const roomId = data.gameId;
 					pong.current.lastHostedRoomId = roomId;
 
@@ -109,6 +110,7 @@ const	Pong: React.FC = () =>
 					for (const room of data.rooms) {
 						const roomPanel = game.createRoomPanel(pong, lang, room.roomName, () => {
 							console.log("🔗 Joining room:", room.gameId);
+							pong.current.isHost = false;
 							socketRef.current?.send(JSON.stringify({
 								type: 'join_game',
 								gameId: room.gameId,
@@ -148,8 +150,48 @@ const	Pong: React.FC = () =>
 
 				case 'joined_game': {
 					console.log('👥 Rejoint game:', data.gameId);
+
 					break;
 				}
+
+				case 'start_game': {
+					console.log("🚀 Start game triggered for:", data.gameId);
+					states.current = game.states.waiting_to_start;
+					break;
+				}
+
+				case 'state_update': {
+					console.log("🎮 Game update received:", data);
+
+					if (gameModes.current === game.gameModes.online) {
+						// 🎯 HOST: applique la position de l'adversaire (player 2)
+						if (pong.current.isHost && typeof data.paddle2Z === 'number') {
+							pong.current.paddle2TargetZ = data.paddle2Z;
+						}
+
+						if (!pong.current.isHost && typeof data.paddle1Z === 'number') {
+							pong.current.paddle1TargetZ = data.paddle1Z;
+						}
+
+						// 🟢 Seul le host reçoit et met à jour la balle
+						if (!pong.current.isHost && data.ballPosition && pong.current.ball) {
+							pong.current.ball.position.x = data.ballPosition.x;
+							pong.current.ball.position.y = data.ballPosition.y;
+							pong.current.ball.position.z = data.ballPosition.z;
+						}
+
+						if (!pong.current.isHost && data.ballDirection) {
+							pong.current.ballDirection = data.ballDirection;
+						}
+
+						if (!pong.current.isHost && typeof data.ballSpeedModifier === 'number') {
+							pong.current.ballSpeedModifier = data.ballSpeedModifier;
+						}
+					}
+
+					break;
+				}
+
 
 				case 'error': {
 					console.error('❗ Erreur serveur:', data.message);
@@ -236,6 +278,10 @@ const	Pong: React.FC = () =>
 			if (
 				lastHandledState.current === game.states.hosting_waiting_players &&
 				states.current !== game.states.hosting_waiting_players
+				&& states.current !== game.states.in_game 
+				&& states.current !== game.states.game_finished
+				&& states.current !== game.states.countdown
+				&& states.current !== game.states.waiting_to_start
 			) {
 				const roomId = pong.current.lastHostedRoomId;
 				if (roomId && socketRef.current?.readyState === WebSocket.OPEN) {
@@ -290,8 +336,27 @@ const	Pong: React.FC = () =>
 							lastHandledState.current !== game.states.waiting_to_start
 						) {
 							console.log("Waiting for players to join...");
-							socketRef.current.send(JSON.stringify({ type: 'waiting_to_start' }));
+							// socketRef.current.send(JSON.stringify({ type: 'waiting_to_start' }));
 							lastHandledState.current = game.states.waiting_to_start;
+							pong.current.player1Score = 0;
+							pong.current.player2Score = 0;
+							game.resetPaddlesPosition(pong.current);
+							game.resetBall(pong.current);
+							game.setBallDirectionRandom(pong.current);
+							game.fitCameraToArena(pong.current);
+							states.current = game.states.countdown;
+							game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.arenaCam, 1, pong, states);
+						}
+						break;
+					}
+
+					case game.states.countdown: {
+
+						pong.current.countdown -= pong.current.engine.getDeltaTime() / 1000;
+						if (pong.current.countdown <= 0)
+						{
+							pong.current.countdown = 4;
+							states.current = game.states.in_game;
 						}
 						break;
 					}
@@ -314,29 +379,87 @@ const	Pong: React.FC = () =>
 					}
 
 					case game.states.in_game: {
-						if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-							const paddle1Y = pong.current.paddle1?.position.y;
-							const paddle2Y = pong.current.paddle2?.position.y;
-							const ballPosition = pong.current.ball?.position;
-							const ballDirection = pong.current.ballDirection;
-							const ballSpeedModifier = pong.current.ballSpeedModifier;
+						const now = Date.now();
+						const timeSinceLastUpdate = now - (pong.current.lastUpdateSetAt || 0);
 
-							socketRef.current.send(JSON.stringify({
-								type: 'game_update',
-								paddle1Y,
-								paddle2Y,
-								ballPosition,
-								ballDirection,
-								ballSpeedModifier,
-							}));
+						if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+							game.fitCameraToArena(pong.current);
+
+							// 1. Input du joueur local
+							game.doPaddleMovement(pong, gameModes);
+
+							// 2. Score check
+							const maxScore = Math.max(pong.current.player1Score, pong.current.player2Score);
+							if (maxScore >= pong.current.requiredPointsToWin)
+								states.current = game.states.game_finished;
+
+							// 3. Interpolation position de l’adversaire
+							const smoothFactor = 0.9;
+							if (pong.current.isHost && typeof pong.current.paddle2TargetZ === 'number' && pong.current.paddle2) {
+								const cur = pong.current.paddle2.position.z;
+								const tgt = pong.current.paddle2TargetZ;
+								pong.current.paddle2.position.z += (tgt - cur) * smoothFactor;
+							}
+							if (!pong.current.isHost && typeof pong.current.paddle1TargetZ === 'number' && pong.current.paddle1) {
+								const cur = pong.current.paddle1.position.z;
+								const tgt = pong.current.paddle1TargetZ;
+								pong.current.paddle1.position.z += (tgt - cur) * smoothFactor;
+							}
+
+							// 4. Préparation de l’envoi WebSocket (si mouvement)
+							const isHost = pong.current.isHost;
+							const myPaddle = isHost ? pong.current.paddle1 : pong.current.paddle2;
+							const myPaddleZ = myPaddle?.position.z ?? 0;
+							const lastZ = pong.current.lastSentPaddleZ ?? null;
+
+							console.log("Current Z:", myPaddleZ, "Last sent Z:", lastZ);
+
+
+							const paddleMoved = lastZ === null || Math.abs(myPaddleZ - lastZ) > 0.01;
+
+							if (paddleMoved) {
+								const payload: any = {
+									type: 'game_update',
+								};
+								console.log("Paddle moved, preparing payload...");
+								if (isHost) {
+									payload.paddle1Z = myPaddleZ;
+
+									if (pong.current.ball) {
+										payload.ballPosition = {
+											x: pong.current.ball.position.x,
+											y: pong.current.ball.position.y,
+											z: pong.current.ball.position.z,
+										};
+										payload.ballDirection = {
+											x: pong.current.ballDirection.x,
+											y: pong.current.ballDirection.y,
+											z: pong.current.ballDirection.z,
+										};
+										payload.ballSpeedModifier = pong.current.ballSpeedModifier;
+									}
+								} else {
+									payload.paddle2Z = myPaddleZ;
+								}
+								console.log("📤 Envoi game_update:", payload);
+								socketRef.current.send(JSON.stringify(payload));
+								pong.current.lastSentPaddleZ = myPaddleZ;
+								pong.current.lastUpdateSetAt = now;
+							}
 						}
+
 						break;
 					}
+
 
 					default: {
 						if (
 							lastHandledState.current === game.states.hosting_waiting_players &&
 							(states.current as game.states) !== game.states.hosting_waiting_players
+							&& (states.current as game.states) !== game.states.in_game 
+							&& (states.current as game.states) !== game.states.game_finished
+							&& (states.current as game.states) !== game.states.countdown
+							&& (states.current as game.states) !== game.states.waiting_to_start
 						) {
 							console.log("Sending current state:", states.current);
 							console.log("Last handled state:", lastHandledState.current);

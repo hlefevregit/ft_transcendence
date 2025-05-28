@@ -15,7 +15,7 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 		ws.on('message', (message) => {
 			try {
 				const data = JSON.parse(message.toString());
-				console.log('📩 Message reçu:', data);
+				// console.log('📩 Message reçu:', data);
 
 				switch (data.type) {
 					case 'host_game': {
@@ -30,6 +30,16 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 						const session = games.get(data.gameId);
 						if (session && !session.player2) {
 							session.setPlayer2(ws);
+
+							const player2 = session.player2 as WebSocket | null;
+							const message = {
+								type: 'start_game', gameId: session.id,};
+							
+							session.player1.send(JSON.stringify(message));
+							if (player2 && player2.readyState === WebSocket.OPEN)
+								player2.send(JSON.stringify(message));
+
+
 							ws.send(JSON.stringify({ type: 'joined_game', gameId: session.id }));
 						} else {
 							ws.send(JSON.stringify({ type: 'error', message: 'Invalid or full game' }));
