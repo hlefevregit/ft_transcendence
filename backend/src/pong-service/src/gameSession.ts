@@ -4,10 +4,12 @@ export class GameSession {
 	id: string;
 	player1: WebSocket;
 	player2: WebSocket | null = null;
+	roomName: string;
 
-	constructor(id: string, socket: WebSocket) {
+	constructor(id: string, socket: WebSocket, roomName: string) {
 		this.id = id;
 		this.player1 = socket;
+		this.roomName = roomName;
 	}
 
 	setPlayer2(socket: WebSocket) {

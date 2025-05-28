@@ -6,7 +6,8 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-RUN npm run build
 
-CMD ["node", "dist/index.js"]
+RUN chmod +x ./config/start.sh
+
+CMD ["/bin/sh", "./config/start.sh"]
 
