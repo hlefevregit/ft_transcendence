@@ -11,7 +11,7 @@ services:
     volumes:
       - vault_data:/vault/data
       - ./vault/config:/vault/config:ro
-      - ./backend/certs:/vault/config/certs:ro
+      - ./backend/certs:/vault/certs:ro
     networks:
       - ft_network
 
