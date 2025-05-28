@@ -748,15 +748,19 @@ export const	instantiateRoomListGUI = (pong: React.RefObject<game.pongStruct>, s
 	() => game.getLabel("refresh", lang.current),
 	pong,
 	() => {
-			if (socketRef.current?.readyState === WebSocket.OPEN) {
-				console.log("🔄 Demande de mise à jour de la liste des rooms");
-				socketRef.current.send(JSON.stringify({ type: 'room_list' }));
+			const ws = socketRef.current;
+			if (ws && ws.readyState === WebSocket.OPEN) {
+			console.log("🔄 Demande de mise à jour de la liste des rooms");
+			ws.send(JSON.stringify({ type: "room_list" }));
 
-				const verticalStack = pong.current.roomListGUI?.getChildByName("roomListVerticalStackPanel") as baby.StackPanel;
-				if (verticalStack) {
-					const old = verticalStack.getChildByName("roomsVerticalPanel");
-					if (old) verticalStack.removeControl(old);
-				}
+			// Nettoie l'ancien affichage
+			const verticalStack = pong.current.roomListGUI?.getChildByName("roomListVerticalStackPanel") as baby.StackPanel;
+			if (verticalStack) {
+				const old = verticalStack.getChildByName("roomsVerticalPanel");
+				if (old) verticalStack.removeControl(old);
+			}
+			} else {
+			console.warn("❌ socketRef n'est pas prêt");
 			}
 		}
 	);
@@ -775,6 +779,8 @@ export const	instantiateRoomListGUI = (pong: React.RefObject<game.pongStruct>, s
 	// Add the screen to the GUI texture
 	pong.current.roomListGUI = roomListGUI;
 	pong.current.guiTexture?.addControl(roomListGUI);
+	pong.current.roomListVerticalStackPanel = roomListVerticalStackPanel;
+
 }
 
 export const	instantiateWaitingScreenGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>, lang: React.RefObject<game.lang>): void =>
