@@ -51,6 +51,7 @@ export enum	gameModes
 	local,
 	ai,
 	online,
+	tournament,
 }
 
 export enum states 
@@ -59,6 +60,7 @@ export enum states
 	settings,
 	host_or_join,
 	game_settings,
+	tournament_settings,
 	hosting_waiting_players,
 	room_list,
 	waiting_to_start,
@@ -67,6 +69,27 @@ export enum states
 	in_game,
 	game_finished,
 	not_found,
+}
+
+export type testStruct =
+{
+	number: number;
+	string: string;
+	boolean: boolean;
+	array: Array<string>;
+	useRef: React.RefObject<any>;
+	object:
+	{
+		key1: string;
+		key2: number;
+		key3: boolean;
+	};
+	vector3:
+	{
+		x: number;
+		y: number;
+		z: number;
+	};
 }
 
 export type pongStruct =
@@ -111,6 +134,10 @@ export type pongStruct =
 	// player1Name: string;
 	// player2Name: string;
 
+	tournamentPlayerCount: number;
+	tournamentPlayerNames: string[];
+	tournamentPlayerScores: number[];
+
 	// Screens GUI
 	mainMenuGUI?: baby.Container;
 	settingsGUI?: baby.Container;
@@ -124,14 +151,18 @@ export type pongStruct =
 	finishedGameGUI?: baby.Container;
 	hostOrJoinGUI?: baby.Container;
 	roomListGUI?: baby.Container;
-	roomListVerticalStackPanel?: baby.StackPanel;
-
+	roomListVerticalStackPanel?: baby.Container;
+	tournamentSettingsGUI?: baby.Container;
 	
 	// GUI's bindings
 	bindings: Map<string, any>;
 	rooms: Map<string, any>;
 	lastRoomJoined?: string;
 	lastHostedRoomId?: string;
+
+	// Other components bindings
+	pongSettingsPlayButton?: baby.StackPanel;
+	pongSettingsContinueButton?: baby.StackPanel;
 
 	// Engine and scene
 	guiTexture?: baby.AdvancedDynamicTexture;
@@ -162,6 +193,10 @@ export function initPongStruct(): pongStruct
 		// player1Name: "",
 		// player2Name: "",
 
+		tournamentPlayerCount: 3,
+		tournamentPlayerNames: [],
+		tournamentPlayerScores: [],
+
 		bindings: new Map<string, React.RefObject<any>>(),
 		rooms: new Map<string, React.RefObject<any>>(),
 	};
@@ -177,6 +212,7 @@ export const	label =
 	host: ["Host 🏠︎", "Héberger 🏠︎", "Hosta 🏠︎"],
 	refresh: ["Refresh ⟳", "Rafraîchir ⟳", "Aggiorna ⟳"],
 	cancel: ["Cancel ×", "Annuler ×", "Annulla ×"],
+	continue: ["Continue ▸", "Continuer ▸", "Continua ▸"],
 
 
 	// Main menu
@@ -185,6 +221,7 @@ export const	label =
 	playLocally: ["Play Locally ⌨", "Jouer en local ⌨", "Gioca in locale ⌨"],
 	playAgainstAI: ["Play against\nAI ☹", "Jouer contre\nl'IA ☹", "Gioca contro\nl'IA ☹"],
 	playOnline: ["Play Online 🖧", "Jouer en ligne 🖧", "Gioca online 🖧"],
+	playTournament: ["Play Tournament 🎖", "Jouer au tournoi 🎖", "Gioca al torneo 🎖"],
 	settings:["Settings ⚙", "Paramètres ⚙", "Impostazioni ⚙"],
 	gameSettings: ["Game Settings ⚙", "Paramètres ⚙", "Impostazioni ⚙"],
 	returnToMuseumButton: ["Return to Museum 🏛︎", "Retour au musée 🏛︎", "Torna al museo 🏛︎"],
@@ -231,6 +268,10 @@ export const	label =
 
 	// Waiting Screen
 	waitingForPlayers: ["Waiting for players...", "En attente de joueurs...", "In attesa di giocatori..."],
+
+	// Tournament Settings
+	tournamentSettingsTitle: ["Tournament Settings", "Paramètres du tournoi", "Impostazioni del torneo"],
+	tournamentSettingsPlayerCount: ["Player count:", "Nombre de joueurs:", "Numero di giocatori:"],
 	
 } as const;
 
