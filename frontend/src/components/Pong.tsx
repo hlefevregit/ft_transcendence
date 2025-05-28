@@ -25,12 +25,14 @@ const	Pong: React.FC = () =>
 	const	states = React.useRef<game.states>(game.states.main_menu);
 	const	gameModes = React.useRef<game.gameModes>(game.gameModes.none);
 	const	lang = React.useRef<game.lang>(game.lang.english);
-	const	userNameRef = React.useRef<string | null>(null);
 	const	navigate = useNavigate();
+
+	const userNameRef = React.useRef<string | null>(null);
+
 
 	// const	[userName, getUserName] = React.useState<string | null>(null);
 	const	socketRef = React.useRef<WebSocket | null>(null);
-	const	lastHandledState = React.useRef<game.states>(states.current);
+	const	lastHandledState = React.useRef<game.states>(game.states.main_menu);
 
 
 	React.useEffect(() =>
@@ -38,7 +40,7 @@ const	Pong: React.FC = () =>
 		if (!canvasRef.current) return;
 		canvasRef.current.focus();
 
-		// Initialize the game assets and map
+		// Initialize the game
 		game.instantiateArena(pong.current, canvasRef.current);
 		
 
@@ -51,9 +53,13 @@ const	Pong: React.FC = () =>
 		const ws = new WebSocket('ws://localhost:4000/ws'); // adapte l'URL à ton cas
 		socketRef.current = ws;
 		
-		ws.onopen = () => { console.log("✅ WebSocket connecté"); };
+		ws.onopen = () => {
+			console.log("✅ WebSocket connecté");
+		};
 		
-		ws.onerror = (err) => { console.error("❌ WebSocket erreur :", err); };
+		ws.onerror = (err) => {
+			console.error("❌ WebSocket erreur :", err);
+		};
 		
 		game.initializeAllGUIScreens(pong, gameModes, states, lang, socketRef, navigate);
 
@@ -61,8 +67,9 @@ const	Pong: React.FC = () =>
 			console.log("📩 Message reçu :", event.data);
 
 			let data;
-			try { data = JSON.parse(event.data); }
-			catch (err) {
+			try {
+				data = JSON.parse(event.data);
+			} catch (err) {
 				console.error("❌ Erreur parsing JSON :", err);
 				return;
 			}
