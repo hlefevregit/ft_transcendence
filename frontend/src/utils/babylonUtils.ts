@@ -81,7 +81,10 @@ export const	createButton = (buttonName: string, buttonText: string, functionToE
 	return block;
 }
 
-export const	createDynamicButton = (buttonName: string, valueGetter: () => any, bindings: React.RefObject<game.pongStruct>, functionToExecute: () => void): baby.StackPanel =>
+export const	createDynamicButton = (buttonName: string,
+	valueGetter: () => any,
+	bindings: React.RefObject<game.pongStruct>,
+	functionToExecute: () => void): baby.StackPanel =>
 {
 	const block = game.createDummyBlock();
 	const button = baby.Button.CreateSimpleButton(buttonName, String(valueGetter()));
@@ -483,21 +486,30 @@ export const	transitionToCamera = async (cameraA: baby.FreeCamera | undefined, c
 	return;
 }
 
-export const	createRoomPanel = (pong: React.RefObject<game.pongStruct>, lang: React.RefObject<game.lang>, roomName: string, join: any): baby.StackPanel =>
-{
-	// Create a horizontal stack panel for the room
-	const	roomPanel = game.createHorizontalStackPanel("roomPanel" + Math.random.toString, 0);
+export const createRoomPanel = (
+	pong: React.RefObject<game.pongStruct>,
+	lang: React.RefObject<game.lang>,
+	roomName: string,
+	join: any,
+): baby.StackPanel => {
+	const safeRoomName = roomName || "Unnamed Room";
+	const panelName = `roomPanel_${safeRoomName.replace(/\s+/g, '_')}_${Math.random().toString(36).substring(2)}`;
+	const roomPanel = game.createHorizontalStackPanel(panelName, 0);
 
-	// Create a text block for the room name
-	const	roomPanelNameText = game.createText("roomPanelNameText", roomName);
-			(roomPanelNameText.children[0] as baby.TextBlock).fontSize = 48;
+	const roomPanelNameText = game.createText("roomPanelNameText", safeRoomName);
+	(roomPanelNameText.children[0] as baby.TextBlock).fontSize = 48;
 
-	const	roomPanelJoinButton = game.createDynamicButton("roomPanelJoinButton", () => game.getLabel("join", lang.current), pong, () =>
-	{
-		join(pong.current, roomName);
-	});
+	const roomPanelJoinButton = game.createDynamicButton(
+		"roomPanelJoinButton",
+		() => game.getLabel("join", lang.current),
+		pong,
+		() => void {},
+	);
 
 	roomPanel.addControl(roomPanelNameText);
 	roomPanel.addControl(roomPanelJoinButton);
+
+	console.log("✅ Panel créé pour room:", safeRoomName, "| name =", roomPanel.name);
+
 	return roomPanel;
-}
+};

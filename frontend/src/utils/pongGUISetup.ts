@@ -10,7 +10,7 @@ export const	instantiateGUI = (pong: React.RefObject<game.pongStruct>): void =>
 	pong.current.guiTexture = baby.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, pong.current.scene);
 }
 
-export const	initializeAllGUIScreens = (pong: React.RefObject<game.pongStruct>, gameModes: React.RefObject<game.gameModes>, states: React.RefObject<game.states>, lang: React.RefObject<game.lang>, navigate: (path: string) => void): void =>
+export const	initializeAllGUIScreens = (pong: React.RefObject<game.pongStruct>, gameModes: React.RefObject<game.gameModes>, states: React.RefObject<game.states>, lang: React.RefObject<game.lang>, socketRef: React.RefObject<WebSocket | null>, navigate: (path: string) => void): void =>
 {
 	// Initialize the GUI texture
 	console.log("initialized GUI texture...");
@@ -26,7 +26,7 @@ export const	initializeAllGUIScreens = (pong: React.RefObject<game.pongStruct>, 
 	game.instantiateCountdownGUI(pong, states, lang);
 	game.instantiateFinishedGameGUI(pong, states, gameModes, lang);
 	game.instantiateHostOrJoinGUI(pong, states, gameModes, lang);
-	game.instantiateRoomListGUI(pong, states, gameModes, lang);
+	game.instantiateRoomListGUI(pong, states, gameModes, lang, socketRef);
 	game.instantiateWaitingScreenGUI(pong, states, gameModes, lang);
 	game.instantiateDebugGUI(pong, states, gameModes, lang);
 	// etc.
@@ -82,11 +82,15 @@ export const	refreshRoomsEntries = (pong: React.RefObject<game.pongStruct>, stat
 		console.warn("Rooms map is not initialized !");
 		return (game.createDynamicText("roomsText", () => game.getLabel("roomListEmpty", lang.current), pong));
 	}
+	console.log("🔁 Refreshing room list, rooms =", Array.from(pong.current.rooms.keys()));
 
+
+
+	
 	const	roomsVerticalPanel = game.createVerticalStackPanel("roomsVerticalPanel", 0);
-	for (const [key, valueOrGetter] of pong.current.rooms.entries())
-	{
-		const	room = valueOrGetter();
+	for (const [key, valueOrGetter] of pong.current.rooms.entries()) {
+		console.log("🧱 Rendering room:", key);
+		const room = valueOrGetter();
 		roomsVerticalPanel.addControl(room);
 	}
 	return roomsVerticalPanel;
@@ -723,7 +727,7 @@ export const	instantiateHostOrJoinGUI = (pong: React.RefObject<game.pongStruct>,
 	pong.current.guiTexture?.addControl(hostOrJoinGUI);
 }
 
-export const	instantiateRoomListGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>, lang: React.RefObject<game.lang>): void =>
+export const	instantiateRoomListGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>, lang: React.RefObject<game.lang>, socketRef: React.RefObject<WebSocket | null>): void =>
 {
 	// Canvas that will be used for the GUI
 	const	roomListGUI = game.createScreen("roomListGUI", "center");
@@ -739,13 +743,23 @@ export const	instantiateRoomListGUI = (pong: React.RefObject<game.pongStruct>, s
 		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
 	});
 	let		roomListDynamicRoomList = game.refreshRoomsEntries(pong, states, gameModes, lang);
-	const	roomListRefreshButton = game.createDynamicButton("roomListRefreshButton", () => game.getLabel("refresh", lang.current), pong, () =>
-	{
-		roomListVerticalStackPanel.removeControl(roomListDynamicRoomList);
-		roomListDynamicRoomList = game.refreshRoomsEntries(pong, states, gameModes, lang);
-		roomListVerticalStackPanel.addControl(roomListDynamicRoomList);
-	});
-		
+	const roomListRefreshButton = game.createDynamicButton(
+	"roomListRefreshButton",
+	() => game.getLabel("refresh", lang.current),
+	pong,
+	() => {
+			if (socketRef.current?.readyState === WebSocket.OPEN) {
+				console.log("🔄 Demande de mise à jour de la liste des rooms");
+				socketRef.current.send(JSON.stringify({ type: 'room_list' }));
+
+				const verticalStack = pong.current.roomListGUI?.getChildByName("roomListVerticalStackPanel") as baby.StackPanel;
+				if (verticalStack) {
+					const old = verticalStack.getChildByName("roomsVerticalPanel");
+					if (old) verticalStack.removeControl(old);
+				}
+			}
+		}
+	);
 
 	// Add GUI components to the main menu
 	// The order of adding controls matters for the layout

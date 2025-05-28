@@ -47,28 +47,99 @@ const	Pong: React.FC = () =>
 		// Initialize all the GUI
 		if (!pong.current.engine || !pong.current.scene) return;
 		console.log("Initializing GUI...");
-		game.initializeAllGUIScreens(pong, gameModes, states, lang, navigate);
 		console.log("GUI initialization complete");
-
-
+		
+		
 		const ws = new WebSocket('ws://localhost:4000/ws'); // adapte l'URL à ton cas
 		socketRef.current = ws;
-
+		
 		ws.onopen = () => {
 			console.log("✅ WebSocket connecté");
 		};
-
+		
 		ws.onerror = (err) => {
 			console.error("❌ WebSocket erreur :", err);
 		};
+		
+		game.initializeAllGUIScreens(pong, gameModes, states, lang, socketRef, navigate);
 
 		ws.onmessage = (event) => {
 			console.log("📩 Message reçu :", event.data);
 			const data = JSON.parse(event.data);
 			switch (data.type) {
-				case 'game_hosted':
+				case 'game_hosted': {
 					console.log('🎮 Game hosted with ID:', data.gameId);
+
+					const roomId = data.gameId;
+					pong.current.lastHostedRoomId = roomId;
+					console.log("🧠 userNameRef.current =", userNameRef.current);
+
+					const roomName = `${userNameRef.current || 'Anonymous'}'s room`;
+
+					// Crée l’entrée GUI de la room avec bouton "Join"
+					const roomPanel = game.createRoomPanel(pong, lang, roomName, () => {
+						console.log("🧩 Creating GUI for ", roomId);
+						if (socketRef.current) {
+							socketRef.current.send(JSON.stringify({
+								type: 'join_game',
+								gameId: roomId,
+								roomName: roomName,
+							}));
+						}
+					});
+					console.log("📦 roomPanel créé :", roomPanel?.name ?? 'undefined');
+
+
+					// Ajoute la room au Map
+					pong.current.rooms.set(roomId, () => roomPanel);
+					console.log("🗂 Room ajoutée au Map avec ID:", roomId);
+
 					break;
+				}
+				case 'room_list': {
+					console.log("📜 Liste des rooms reçue:", data.rooms);
+
+					// Vide les anciennes rooms
+					pong.current.rooms.clear();
+
+					for (const room of data.rooms) {
+						const roomPanel = game.createRoomPanel(pong, lang, room.roomName, () => {
+							console.log("🔗 Joining room:", room.gameId);
+							socketRef.current?.send(JSON.stringify({
+								type: 'join_game',
+								gameId: room.gameId,
+							}));
+						});
+						pong.current.rooms.set(room.gameId, () => roomPanel);
+					}
+					const updatedList = game.refreshRoomsEntries(pong, states, gameModes, lang);
+					const verticalStack = pong.current.roomListGUI?.getChildByName("roomListVerticalStackPanel") as baby.StackPanel;
+					if (verticalStack) {
+						const old = verticalStack.getChildByName("roomsVerticalPanel");
+						if (old) verticalStack.removeControl(old);
+						verticalStack.addControl(updatedList);
+					}
+					break;
+				}
+
+				case 'room_left': {
+					console.log("🚪 Room left:", data.gameId);
+					const roomId = data.gameId;
+					if (pong.current.rooms.has(roomId)) {
+						const roomPanel = pong.current.rooms.get(roomId)?.();
+						if (roomPanel) {
+							roomPanel.dispose();
+							pong.current.rooms.delete(roomId);
+							console.log("🗑️ Room removed from Map:", roomId);
+						} else {
+							console.warn("⚠️ Room panel not found for ID:", roomId);
+						}
+					} else {
+						console.warn("⚠️ No room found with ID:", roomId);
+					}
+					break;
+				}
+
 				case 'joined_game':
 					console.log('👥 Rejoint game:', data.gameId);
 					break;
@@ -79,6 +150,8 @@ const	Pong: React.FC = () =>
 					console.log('ℹ️ Autre message reçu:', data);
 			}
 		};
+
+		
 
 		// Game loop
 		if (!pong.current.engine || !pong.current.scene) return;
@@ -93,6 +166,7 @@ const	Pong: React.FC = () =>
 						socketRef.current.readyState === WebSocket.OPEN &&
 						lastHandledState.current !== states.current
 					) {
+						console.log("Last handled state:", lastHandledState.current);
 						console.log("Sending current state:", states.current);
 						lastHandledState.current = states.current;
 					}
@@ -147,6 +221,23 @@ const	Pong: React.FC = () =>
 				!pong.current.ball
 			) return;
 
+
+			if (
+				lastHandledState.current === game.states.hosting_waiting_players &&
+				states.current !== game.states.hosting_waiting_players
+			) {
+				const roomId = pong.current.lastHostedRoomId;
+				if (roomId && socketRef.current?.readyState === WebSocket.OPEN) {
+					console.log("👋 Host a quitté la salle d'attente, envoi de leave_room pour", roomId);
+					socketRef.current.send(JSON.stringify({
+						type: 'leave_room',
+						gameId: roomId,
+					}));
+					console.log("🗑️ Suppression de la room:", roomId);
+					pong.current.lastHostedRoomId = 'none';
+					pong.current.rooms.delete(roomId);
+				}
+			}
 			if (gameModes.current === game.gameModes.online)
 			{
 				switch (states.current) {
@@ -179,6 +270,7 @@ const	Pong: React.FC = () =>
 						}
 						break;
 					}
+
 
 					case game.states.waiting_to_start: {
 						if (
@@ -232,16 +324,20 @@ const	Pong: React.FC = () =>
 
 					default: {
 						if (
-							socketRef.current &&
-							socketRef.current.readyState === WebSocket.OPEN &&
-							lastHandledState.current !== states.current
+							lastHandledState.current === game.states.hosting_waiting_players &&
+							(states.current as game.states) !== game.states.hosting_waiting_players
 						) {
 							console.log("Sending current state:", states.current);
-							socketRef.current.send(JSON.stringify({
-								type: 'state_update',
-								state: states.current,
-							}));
+							console.log("Last handled state:", lastHandledState.current);
+
+							// if (socketRef.current) {
+							// 	socketRef.current.send(JSON.stringify({
+							// 		type: 'state_update',
+							// 		state: states.current,
+							// 	}));
+							// }
 							lastHandledState.current = states.current;
+							
 						}
 						break;
 					}
@@ -292,7 +388,7 @@ const	Pong: React.FC = () =>
 				
 				}
 			}
-
+			
 			pong.current.scene.render();
 			document.title = `Pong - ${Object.keys(game.states).find(key => game.states[key as keyof typeof game.states] === states.current)}`;
 		});

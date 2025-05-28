@@ -128,6 +128,8 @@ export type pongStruct =
 	// GUI's bindings
 	bindings: Map<string, any>;
 	rooms: Map<string, any>;
+	lastRoomJoined?: string;
+	lastHostedRoomId?: string;
 
 	// Engine and scene
 	guiTexture?: baby.AdvancedDynamicTexture;
