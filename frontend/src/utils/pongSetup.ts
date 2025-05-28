@@ -71,27 +71,6 @@ export enum states
 	not_found,
 }
 
-export type testStruct =
-{
-	number: number;
-	string: string;
-	boolean: boolean;
-	array: Array<string>;
-	useRef: React.RefObject<any>;
-	object:
-	{
-		key1: string;
-		key2: number;
-		key3: boolean;
-	};
-	vector3:
-	{
-		x: number;
-		y: number;
-		z: number;
-	};
-}
-
 export type pongStruct =
 {
 	// Engine and scene
@@ -100,7 +79,6 @@ export type pongStruct =
 	skybox?: baby.Mesh;
 
 	// Cameras
-	camera?: baby.FreeCamera;	// deprecated
 	transitionCam?: baby.FreeCamera;
 	mainMenuCam?: baby.FreeCamera;
 	arenaCam?: baby.FreeCamera;
@@ -213,6 +191,8 @@ export function initPongStruct(): pongStruct
 
 export const	label =
 {
+	NEW: ["New", "Nouveau", "Nuovo"],
+
 	// Actions
 	back: ["Back ↩", "Retour ↩", "Indietro ↩"],
 	play: ["Play ▸", "Jouer ▸", "Giaoca ▸"],
@@ -306,9 +286,9 @@ export const	getLabel = (key: labelKey, currentLanguage: lang): string =>
 		case lang.italian:
 			return label[key][2];
 		case lang.brail:
-			return "brail not implemented";
+			return "⢮ brail not implemented ⢮";
 		default:
-			return "language not found";
+			return "❌ language not found ❌";
 	}
 }
 

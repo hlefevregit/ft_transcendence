@@ -120,7 +120,7 @@ const	Pong: React.FC = () =>
 					}
 
 					// MAJ de l’affichage GUI
-					const updatedList = game.refreshRoomsEntries(pong, states, gameModes, lang);
+					const updatedList = game.refreshRoomsEntries(pong, states, gameModes);
 					const verticalStack = pong.current.roomListVerticalStackPanel;
 					if (verticalStack) {
 						const old = verticalStack.getChildByName("roomsVerticalPanel");
@@ -261,8 +261,25 @@ const	Pong: React.FC = () =>
 			console.warn("⚠️ Aucun userId dans le localStorage.");
 		}
 
+		// const	dummy = game.findComponentByName(pong, "localPong", baby.Button);
+		// if (dummy)
+		// {
+		// 	console.log("FOUND");
+		// 	dummy.text = "BANANE DEBUG";
+		// 	dummy.color = "#FF0000"; // Bright red
+		// 	dummy.fontSize = 60; // Larger font
+		// 	dummy.onPointerClickObservable.clear();
+		// 	dummy.onPointerClickObservable.add(() =>
+		// 	{
+		// 		console.log("Dummy button clicked!");
+		// 	});
+		// }
 		pong.current.engine.runRenderLoop(() =>
 		{
+			// dummy.text = Math.random().toString(36).substring(2, 7).toUpperCase();
+			// const	dummyTitle: baby.TextBlock = game.findComponentByName(pong, "mainMenuDummyTitle");
+			// if (dummyTitle instanceof baby.TextBlock) {console.log("found"); dummyTitle.text =  "banane"; dummyTitle.markAsDirty(); if (pong.current.guiTexture) { pong.current.guiTexture.markAsDirty(); }}
+			// if (pongTitle) {console.log("found"); pongTitle.text =  Math.random().toString(36).substring(2, 7).toUpperCase();}
 			game.updateGUIVisibilityStates(pong, states.current);
 			game.updateGUIVisibilityGameModes(pong, gameModes.current);
 			game.updateGUIValues(pong, states, lang);
