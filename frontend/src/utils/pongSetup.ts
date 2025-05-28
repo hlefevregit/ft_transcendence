@@ -151,7 +151,6 @@ export type pongStruct =
 	finishedGameGUI?: baby.Container;
 	hostOrJoinGUI?: baby.Container;
 	roomListGUI?: baby.Container;
-	roomListVerticalStackPanel?: baby.Container;
 	tournamentSettingsGUI?: baby.Container;
 	roomListVerticalStackPanel?: baby.StackPanel;
 
