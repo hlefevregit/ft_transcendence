@@ -1,5 +1,20 @@
-
 services:
+  vault:
+    image: hashicorp/vault:latest
+    ports:
+      - "8200:8200"
+    restart: unless-stopped
+    cap_add:
+      - IPC_LOCK
+    environment:
+      VAULT_ADDR: "127.0.0.1:8200"
+    volumes:
+      - vault_data:/vault/data
+      - ./vault/config:/vault/config:ro
+      - ./backend/certs:/vault/config/certs:ro
+    networks:
+      - ft_network
+
   backend:
     build:
       context: ${BACKEND_PATH}
@@ -192,6 +207,12 @@ services:
 
 
 volumes:
+  vault_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${VAULT_PATH}/data
+      o: bind
   backend_data:
     driver: local
     driver_opts:
