@@ -126,12 +126,20 @@ export type pongStruct =
 	roomListGUI?: baby.Container;
 	roomListVerticalStackPanel?: baby.StackPanel;
 
+	isHost?: boolean;
+	lastUpdateSetAt?: number;	// Used to avoid sending too many updates to the server
 	
 	// GUI's bindings
 	bindings: Map<string, any>;
 	rooms: Map<string, any>;
 	lastRoomJoined?: string;
 	lastHostedRoomId?: string;
+
+	paddle2TargetZ?: number;
+	paddle1TargetZ?: number;
+	lastSentPaddleZ?: number | null;
+
+
 
 	// Engine and scene
 	guiTexture?: baby.AdvancedDynamicTexture;
