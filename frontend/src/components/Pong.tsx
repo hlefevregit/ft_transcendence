@@ -425,7 +425,9 @@ const	Pong: React.FC = () =>
 								console.log("Paddle moved, preparing payload...");
 								if (isHost) {
 									payload.paddle1Z = myPaddleZ;
-
+									pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
+									pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;
+									game.makeBallBounce(pong.current, states);
 									if (pong.current.ball) {
 										payload.ballPosition = {
 											x: pong.current.ball.position.x,
