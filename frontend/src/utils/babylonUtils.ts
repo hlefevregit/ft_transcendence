@@ -482,88 +482,93 @@ export const createRoomPanel = (
 
 
 
-export const createDynamicText = (
-    textName: string,
-    labelKey?: game.labelKey
-): baby.StackPanel => {
-    const block = game.createDummyBlock();
-    
-    // Use the provided labelKey if available, otherwise use textName
-    const keyToUse = labelKey || textName as game.labelKey;
-    
-    // Create the text with initial value
-    const text = new baby.TextBlock(textName, "caca");
-    text.color = game.colorsScheme.light1;
-    text.resizeToFit = true;
-    text.fontSize = 24;
-    
-    // Store the label key in metadata for language updates
-    text.metadata = { labelKey: keyToUse };
-    
-    block.addControl(text);
-    return block;
+export const	createDynamicText = (
+	textName: string,
+	labelKey?: game.labelKey
+): baby.StackPanel =>
+{
+	const block = game.createDummyBlock();
+	
+	// Use the provided labelKey if available, otherwise use textName
+	const keyToUse = labelKey || textName as game.labelKey;
+	
+	// Create the text with initial value
+	const text = new baby.TextBlock(textName, "caca");
+	text.color = game.colorsScheme.light1;
+	text.resizeToFit = true;
+	text.fontSize = 24;
+	
+	// Store the label key in metadata for language updates
+	text.metadata = { labelKey: keyToUse };
+	
+	block.addControl(text);
+	return block;
 }
 
-export const createDynamicTitle = (
-    titleName: string,
-    labelKey?: game.labelKey
-): baby.StackPanel => {
-    const block = game.createDummyBlock();
-    
-    // Use the provided labelKey if available, otherwise use titleName
-    const keyToUse = labelKey || titleName as game.labelKey;
-    
-    // Create the title with initial value
-    // const title = new baby.TextBlock(titleName, game.getLabel(keyToUse, langRef.current));
-    const title = new baby.TextBlock(titleName, "caca");
-    title.width = "50px";
-    title.height = "25px";
-    title.color = game.colorsScheme.light1;
-    title.resizeToFit = true;
-    title.fontSize = 48;
-    
-    // Store the label key in metadata for language updates
-    title.metadata = { labelKey: keyToUse };
-    
-    block.addControl(title);
-    return block;
+export const	createDynamicTitle = (
+	titleName: string,
+	labelKey?: game.labelKey
+): baby.StackPanel =>
+{
+	const block = game.createDummyBlock();
+	
+	// Use the provided labelKey if available, otherwise use titleName
+	const keyToUse = labelKey || titleName as game.labelKey;
+	
+	// Create the title with initial value
+	// const title = new baby.TextBlock(titleName, game.getLabel(keyToUse, langRef.current));
+	const title = new baby.TextBlock(titleName, "caca");
+	title.width = "50px";
+	title.height = "25px";
+	title.color = game.colorsScheme.light1;
+	title.resizeToFit = true;
+	title.fontSize = 48;
+	
+	// Store the label key in metadata for language updates
+	title.metadata = { labelKey: keyToUse };
+	
+	block.addControl(title);
+	return block;
 }
 
-export const createDynamicButton = (
-    buttonName: string,
-    functionToExecute: () => void,
-    labelKey?: game.labelKey
-): baby.StackPanel => {
-    const block = game.createDummyBlock();
-    
-    // Use the provided labelKey if available, otherwise use buttonName
-    const keyToUse = labelKey || buttonName as game.labelKey;
-    
-    // Create the button with initial text value
-    const button = baby.Button.CreateSimpleButton(buttonName, "caca");
-    button.width = "200px";
-    button.height = "100px";
-    button.color = game.colorsScheme.light1;
-    button.background = game.colorsScheme.dark1;
-    button.fontSize = 24;
-    button.thickness = 0;
-    button.cornerRadius = 20;
-    setPaddings(button, "10px");
-    
-    // Store the label key in button's metadata for language updates
-    button.metadata = { labelKey: keyToUse };
-    
-    // Add button functionality
-    button.onPointerClickObservable.add(functionToExecute);
-    button.onPointerEnterObservable.add(() => {
-        button.color = game.colorsScheme.auroraAccent1;
-        button.background = game.colorsScheme.light3;
-    });
-    button.onPointerOutObservable.add(() => {
-        button.color = game.colorsScheme.light3;
-        button.background = game.colorsScheme.dark1;
-    });
-    
-    block.addControl(button);
-    return block;
+export const	createDynamicButton = (
+	buttonName: string,
+	functionToExecute: () => void,
+	labelKey?: game.labelKey
+): baby.StackPanel =>
+{
+	const block = game.createDummyBlock();
+	
+	// Use the provided labelKey if available, otherwise use buttonName
+	const keyToUse = labelKey || buttonName as game.labelKey;
+	
+	// Create the button with initial text value
+	const button = baby.Button.CreateSimpleButton(buttonName, "caca");
+	button.width = "200px";
+	button.height = "100px";
+	button.color = game.colorsScheme.light1;
+	button.background = game.colorsScheme.dark1;
+	button.fontSize = 24;
+	button.thickness = 0;
+	button.cornerRadius = 20;
+	setPaddings(button, "10px");
+	
+	// Store the label key in button's metadata for language updates
+	button.metadata = { labelKey: keyToUse };
+	
+	// Add button functionality
+	button.onPointerClickObservable.add(functionToExecute);
+	button.onPointerEnterObservable.add(() =>
+	{
+		button.color = game.colorsScheme.auroraAccent1;
+		button.background = game.colorsScheme.light3;
+	});
+	button.onPointerOutObservable.add(() =>
+	{
+		button.color = game.colorsScheme.light3;
+		button.background = game.colorsScheme.dark1;
+	});
+	
+	block.addControl(button);
+	return block;
 }
