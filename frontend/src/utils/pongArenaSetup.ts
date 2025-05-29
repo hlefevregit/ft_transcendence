@@ -5,8 +5,9 @@ import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
 
 import mapUrl from '@/assets/transcendence_map.gltf?url';
+import mainMenuMusic from '@/assets/vaporwave.mp3?url';
 
-export const	instantiateArena = async (pong: game.pongStruct, canvasRef: any): Promise<void> =>
+export const	setupBabylon = async (pong: game.pongStruct, canvasRef: any): Promise<void> =>
 {
 	const	engineInstance = new baby.Engine(canvasRef, true);
 	const	sceneInstance = new baby.Scene(engineInstance);
@@ -57,6 +58,38 @@ export const	instantiateArena = async (pong: game.pongStruct, canvasRef: any): P
 		else console.warn("Failed to load map");
 	}
 	catch (error) { console.error("Error while loading map:", error); }
+
+	async function initializeAudioEngine(): Promise<void>
+	{
+		console.log("Initializing audio engine...");
+		try
+		{
+			const	audioEngine: baby.AudioEngineV2 = await baby.CreateAudioEngineAsync();
+			await audioEngine.unlockAsync();
+			if (audioEngine && typeof audioEngine.unlockAsync === 'function') await audioEngine.unlockAsync();
+			pong.audioEngine = audioEngine as any;
+		}
+		catch (error)
+		{
+			console.error("Error initializing audio engine:", error);
+			pong.audioEngine = undefined;
+		}
+	}
+	initializeAudioEngine();
+	const	currentMusic = new baby.Sound("mainMenuMusic", mainMenuMusic, pong.scene, function(this: baby.Sound)
+	{
+		console.log("READY");
+		pong.mainMenuMusic = this;
+		console.log("playing main menu music");
+	},
+	{
+		loop:true,
+		volume: pong.musicVolume,
+		spatialSound: false,
+		autoplay: true,
+	});
+	pong.mainMenuMusic = currentMusic;
+
 }
 
 // Updated to use module-level import function instead of SceneLoader
