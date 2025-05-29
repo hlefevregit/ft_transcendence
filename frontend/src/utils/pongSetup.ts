@@ -152,6 +152,15 @@ export type pongStruct =
 
 	// Engine and scene
 	guiTexture?: baby.AdvancedDynamicTexture;
+
+	// Music and sound
+	audioEngine?: baby.AudioEngine;
+	musicVolume: number;
+	soundVolume: number;
+
+	mainMenuMusic?: baby.Sound;
+	playingMusic?: baby.Sound;
+	waitingMusic?: baby.Sound;
 };
 
 export function initPongStruct(): pongStruct 
@@ -184,6 +193,9 @@ export function initPongStruct(): pongStruct
 		tournamentPlayerScores: [],
 
 		rooms: new Map<string, React.RefObject<any>>(),
+
+		musicVolume: 1,
+		soundVolume: 1,
 	};
 }
 
@@ -212,8 +224,8 @@ export const	label =
 	returnToMuseumButton: ["Return to Museum 🏛︎", "Retour au musée 🏛︎", "Torna al museo 🏛︎"],
 
 	// Settings
-	settingsMusic: ["Music ♫", "Musique ♫", "Musica ♫"],
-	settingsSound: ["Sound 🗣", "Son 🗣", "Suono 🗣"],
+	settingsMusic: ["♫ Music:", "♫ Musique:", "♫ Musica:"],
+	settingsSound: ["🗣 Sound:", "🗣 Son:", "🗣 Suono:"],
 
 	// Pong Settings
 	pongSettingsTitle: ["Pong Settings", "Paramètres du Pong", "Impostazioni Pong"],
