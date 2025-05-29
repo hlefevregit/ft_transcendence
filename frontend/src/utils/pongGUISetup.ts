@@ -75,7 +75,7 @@ export const	updateGUIValues = (
 {
 	if (!pong.current.guiTexture)
 	{
-		console.warn("Bindings map is not initialized !");
+		console.warn("guiTexture is not initialized !");
 		return;
 	}
 	
@@ -250,7 +250,6 @@ export const    instantiateSettingsGUI = (pong: React.RefObject<game.pongStruct>
 		lang.current = game.lang.english;
 		game.updateGUIValues(pong, states, lang);
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").text = lang.current;
-		game.findComponentByName(pong, "debugActiveLanguageTextValue").markAsDirty();
 	});
 			(englishButton.children[0] as baby.Button).fontSize = 36;
 			(englishButton.children[0] as baby.Button).width = "100px";
@@ -261,7 +260,6 @@ export const    instantiateSettingsGUI = (pong: React.RefObject<game.pongStruct>
 		lang.current = game.lang.french;
 		game.updateGUIValues(pong, states, lang);
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").text = lang.current;
-		game.findComponentByName(pong, "debugActiveLanguageTextValue").markAsDirty();
 	});
 			(frenchButton.children[0] as baby.Button).width = "100px";
 			(frenchButton.children[0] as baby.Button).height = "100px";

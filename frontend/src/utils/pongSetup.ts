@@ -186,8 +186,6 @@ export function initPongStruct(): pongStruct
 
 export const	label =
 {
-	NEW: ["New", "Nouveau", "Nuovo"],
-
 	// Actions
 	back: ["Back ↩", "Retour ↩", "Indietro ↩"],
 	play: ["Play ▸", "Jouer ▸", "Giaoca ▸"],
