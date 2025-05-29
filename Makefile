@@ -50,8 +50,13 @@ rebuild-dev:
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down -v --remove-orphans
 	docker system prune -af
 	docker volume prune -f
+	make reset_vault
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) build --no-cache
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up -d
+
+reset_vault:
+	sudo rm -rf ./vault/data ./vault/secrets
+	mkdir -p ./vault/data ./vault/secrets
 
 #########################################################
 ### ------------------ ENV PROD --------------------- ###
