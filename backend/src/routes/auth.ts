@@ -83,5 +83,6 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
 		});
 	});
 
+	
 
 };

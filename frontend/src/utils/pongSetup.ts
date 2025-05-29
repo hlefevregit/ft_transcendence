@@ -139,6 +139,9 @@ export type pongStruct =
 	lastRoomJoined?: string;
 	lastHostedRoomId?: string;
 
+	lastGameWinner?: string;
+	lastGameReason?: string;
+
 	paddle2TargetZ?: number;
 	paddle1TargetZ?: number;
 	lastSentPaddleZ?: number | null;

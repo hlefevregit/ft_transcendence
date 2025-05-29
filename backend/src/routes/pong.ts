@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { FastifyInstance } from 'fastify';
 export async function setupPongRoutes(fastify) {
 	fastify.post('/api/pong/host', {
 		preHandler: [fastify.authenticate],
@@ -38,4 +38,5 @@ export async function setupPongRoutes(fastify) {
 			}
 		},
 	});
+	
 }
