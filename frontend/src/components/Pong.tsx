@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
-
+import BackgroundMusic from '@/components/BG';
 // Function to debounce the resize event
 // This will limit the number of times the resize function is called
 // to once every `ms` milliseconds
@@ -27,7 +27,8 @@ const	Pong: React.FC = () =>
 	const	lang = React.useRef<game.lang>(game.lang.english);
 	const	navigate = useNavigate();
 
-	const userNameRef = React.useRef<string | null>(null);
+	const	userNameRef = React.useRef<string | null>(null);
+	const	audioRef = React.useRef<HTMLAudioElement | null>(null);
 
 
 	// const	[userName, getUserName] = React.useState<string | null>(null);
@@ -37,11 +38,25 @@ const	Pong: React.FC = () =>
 
 	React.useEffect(() =>
 	{
+		const audio = new Audio("/assets/vaporwave.mp3");
+		audio.loop = true;
+		audio.volume = 1; // Ajuste le volume
+		audioRef.current = audio;
+		console.log("🎵 Musique de fond chargée");
+
+		const playAudio = () =>
+		{
+			console.log("🎵 Tentative de lecture de la musique de fond");
+			audio.play().catch((e) => { console.warn("🎵 Autoplay bloqué : interaction utilisateur requise."); });
+		};
+
+		document.addEventListener("click", playAudio, { once: true });
+
 		if (!canvasRef.current) return;
 		canvasRef.current.focus();
 
 		// Initialize the game
-		game.instantiateArena(pong.current, canvasRef.current);
+		game.setupBabylon(pong.current, canvasRef.current);
 		
 
 		// Initialize all the GUI
@@ -263,6 +278,8 @@ const	Pong: React.FC = () =>
 
 		pong.current.engine.runRenderLoop(() =>
 		{
+			console.log("mainMenuMusic is ready:", pong.current.mainMenuMusic?.isReady());
+			if (pong.current.mainMenuMusic && pong.current.mainMenuMusic.isReady() && !pong.current.mainMenuMusic.isPlaying) {pong.current.mainMenuMusic.play();}
 			// const	dummyTitle: baby.TextBlock = game.findComponentByName(pong, "mainMenuDummyTitle");
 			// if (dummyTitle instanceof baby.TextBlock) {console.log("found"); dummyTitle.text =  "banane"; dummyTitle.markAsDirty(); if (pong.current.guiTexture) { pong.current.guiTexture.markAsDirty(); }}
 			// if (pongTitle) {console.log("found"); pongTitle.text =  Math.random().toString(36).substring(2, 7).toUpperCase();}
@@ -553,6 +570,7 @@ const	Pong: React.FC = () =>
 	return (
 		<div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0 }}>
 			<canvas ref={canvasRef} style={{ width: '100%', height: '100%' }} />
+			<BackgroundMusic/>
 		</div>
 	);
 };

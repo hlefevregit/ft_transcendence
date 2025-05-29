@@ -143,11 +143,10 @@ export const    instantiateMainMenuGUI = (pong: React.RefObject<game.pongStruct>
 	// All GUI components needed
 	const	mainMenuContainer = game.createAdaptiveContainer("mainMenuContainer", "300px", "300px");
 	const	mainMenuVerticalStackPanel = game.createVerticalStackPanel("mainMenuVerticalStackPanel");
-	const	mainMenuHorizontalStackPanel = game.createHorizontalStackPanel("mainMenuHorizontalStackPanel");
+	const	mainMenuHorizontalStackPanel = game.createHorizontalStackPanel("mainMenuHorizontalStackPanel", 0);
 	const	mainMenuVerticalStackPanel1 = game.createVerticalStackPanel("mainMenuVerticalStackPanel1", 0);
 	const	mainMenuVerticalStackPanel2 = game.createVerticalStackPanel("mainMenuVerticalStackPanel2", 0);
 	const	mainMenuDynamicTitle = game.createDynamicTitle("mainMenuDynamicTitle", "mainMenuTitle");
-	const	mainMenuDummyTitle = game.createTitle("mainMenuDummyTitle", "Dummy Title");
 	const	mainMenuSettingsButton = game.createDynamicButton("mainMenuSettingsButton", () =>
 	{
 		states.current = game.states.settings;
@@ -208,7 +207,6 @@ export const    instantiateMainMenuGUI = (pong: React.RefObject<game.pongStruct>
 	mainMenuHorizontalStackPanel.addControl(mainMenuVerticalStackPanel1);
 	mainMenuHorizontalStackPanel.addControl(mainMenuVerticalStackPanel2);
 	mainMenuContainer.addControl(mainMenuVerticalStackPanel);
-	mainMenuVerticalStackPanel.addControl(mainMenuDummyTitle);
 	mainMenuVerticalStackPanel.addControl(mainMenuDynamicTitle);
 	mainMenuVerticalStackPanel.addControl(mainMenuHorizontalStackPanel);
 	mainMenuGUI.addControl(mainMenuContainer);
@@ -226,23 +224,30 @@ export const    instantiateSettingsGUI = (pong: React.RefObject<game.pongStruct>
 	const	settingsPanel = game.createVerticalStackPanel("settingsPanel");
 	const	settingsLanguagePanel1 = game.createHorizontalStackPanel("settingsLanguagePanel1", 0);
 	const	settingsLanguagePanel2 = game.createHorizontalStackPanel("settingsLanguagePanel2", 0);
+	const	settingsVolumePanel1 = game.createHorizontalStackPanel("settingsVolumePanel1", 0);
+	const	settingsVolumePanel2 = game.createHorizontalStackPanel("settingsVolumePanel2", 0);
 
 	// All GUI components needed
 	const	settingsMenuTitle = game.createDynamicTitle("settingsMenuTitle", "settings");
 	const	backButton = game.createDynamicButton("settingsButton", () =>
 	{
 		states.current = game.states.main_menu;
+		pong.current.mainMenuMusic?.play();
 	}, "back");
-	const	musicSlider = game.createSlider("musicSlider", 0, 20, 1, 20, (value: number) =>
+	const	musicSlider = game.createSlider("musicSlider", 0, 100, 2, pong.current.musicVolume * 100, (value: number) =>
 	{
-		console.log("Music volume changed to: ", value);
+		pong.current.musicVolume = value / 100;
+		game.findComponentByName(pong, "musicSliderTextValue").text = pong.current.musicVolume.toFixed(2);
 	});
-	const	soundSlider = game.createSlider("musicSlider", 0, 20, 1, 20, (value: number) =>
+	const	soundSlider = game.createSlider("soundSlider", 0, 100, 2, pong.current.soundVolume * 100, (value: number) =>
 	{
-		console.log("Music volume changed to: ", value);
+		pong.current.soundVolume = value / 100;
+		game.findComponentByName(pong, "soundSliderTextValue").text = pong.current.soundVolume.toFixed(2);
 	});
 	const	musicSliderText = game.createDynamicText("musicSliderText", "settingsMusic");
 	const	soundSliderText = game.createDynamicText("soundSliderText", "settingsSound");
+	const	musicSliderTextValue = game.createText("musicSliderTextValue", pong.current.musicVolume.toFixed(2));
+	const	soundSliderTextValue = game.createText("soundSliderTextValue", pong.current.soundVolume.toFixed(2));
 
 	// Language selection buttons
 	const	englishButton = game.createButton("englishButton", "🇺🇸", () =>
@@ -291,16 +296,18 @@ export const    instantiateSettingsGUI = (pong: React.RefObject<game.pongStruct>
 	// The order of adding controls matters for the layout
 	settingsGUI.addControl(settingsContainer);
 	settingsContainer.addControl(settingsPanel);
-	
 	settingsPanel.addControl(settingsMenuTitle);
-	settingsPanel.addControl(backButton);
-
+	
 	// Music and Sound sliders
-	settingsPanel.addControl(musicSliderText);
+	settingsVolumePanel1.addControl(musicSliderText);
+	settingsVolumePanel1.addControl(musicSliderTextValue);
+	settingsPanel.addControl(settingsVolumePanel1);
 	settingsPanel.addControl(musicSlider);
-	settingsPanel.addControl(soundSliderText);
+	settingsVolumePanel2.addControl(soundSliderText);
+	settingsVolumePanel2.addControl(soundSliderTextValue);
+	settingsPanel.addControl(settingsVolumePanel2);
 	settingsPanel.addControl(soundSlider);
-
+	
 	// language selection panels
 	settingsPanel.addControl(settingsLanguagePanel1);
 	settingsPanel.addControl(settingsLanguagePanel2);
@@ -308,7 +315,9 @@ export const    instantiateSettingsGUI = (pong: React.RefObject<game.pongStruct>
 	settingsLanguagePanel1.addControl(frenchButton);
 	settingsLanguagePanel2.addControl(italianButton);
 	settingsLanguagePanel2.addControl(brailButton);
-
+	
+	// Back button
+	settingsPanel.addControl(backButton);
 	// Add the screen to the GUI texture
 	pong.current.settingsGUI = settingsGUI;
 	pong.current.guiTexture?.addControl(settingsGUI);
@@ -807,6 +816,11 @@ export const	instantiateFinishedGameGUI = (pong: React.RefObject<game.pongStruct
 			(replayButton.children[0] as baby.Button).background = game.colorsScheme.dark1;
 	});
 			(replayButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
+			(replayButton.children[0] as baby.Button).onDirtyObservable.add(() =>
+			{
+				game.findComponentByName(pong, "replayButton").isEnabled = game.gameModes.online !== gameModes.current;
+				game.findComponentByName(pong, "replayButton").isVisible = game.gameModes.online !== gameModes.current;
+			});
 
 	// Add GUI components to the main menu
 	// The order of adding controls matters for the layout
@@ -1015,3 +1029,4 @@ export const	instantiateTournamentSettingsGUI = (pong: React.RefObject<game.pong
 	pong.current.tournamentSettingsGUI = tournamentSettingsGUI;
 	pong.current.guiTexture?.addControl(tournamentSettingsGUI);
 }
+
