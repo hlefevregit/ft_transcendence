@@ -1,11 +1,8 @@
 // imports
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
-import { stat } from 'fs';
-import { Bindings } from 'fastify/types/logger';
 
 export function fitCameraToArena(pong: game.pongStruct): void
 {
@@ -81,40 +78,6 @@ export const	createButton = (buttonName: string, buttonText: string, functionToE
 	return block;
 }
 
-// export const	createDynamicButton = (buttonName: string,
-// 	valueGetter: () => any,
-// 	bindings: React.RefObject<game.pongStruct>,
-// 	functionToExecute: () => void): baby.StackPanel =>
-// {
-// 	const block = game.createDummyBlock();
-// 	const button = baby.Button.CreateSimpleButton(buttonName, String(valueGetter()));
-// 	button.width = "200px";
-// 	button.height = "100px";
-// 	button.color = game.colorsScheme.light1;
-// 	button.background = game.colorsScheme.dark1
-// 	button.fontSize = 24;
-// 	button.thickness = 0;
-// 	button.cornerRadius = 20;
-// 	setPaddings(button, "10px");
-
-// 	// button.onPointerUpObservable.add(functionToExecute);
-// 	button.onPointerClickObservable.add(functionToExecute);
-// 	button.onPointerEnterObservable.add(() => {
-// 		button.color = game.colorsScheme.auroraAccent1;
-// 		button.background = game.colorsScheme.light3;
-// 	});
-// 	button.onPointerOutObservable.add(() => {
-// 		button.color = game.colorsScheme.light3;
-// 		button.background = game.colorsScheme.dark1;
-// 	});
-	
-// 	block.addControl(button);
-
-// 	// Bind the text to the value in the bindings map
-// 	bindings.current.bindings.set(buttonName, valueGetter);
-// 	return block;
-// }
-
 export const	createSlider = (sliderName: string, minValue: number, maxValue: number, step: number, initialValue: number, functionToExecute: (value: number) => void): baby.StackPanel =>
 {
 	const	block = game.createDummyBlock();
@@ -155,24 +118,6 @@ export const	createTitle = (titleName: string, titleText: string): baby.StackPan
 	block.addControl(title);
 	return block;
 }
-
-// export const	createDynamicTitle = (titleName: string, valueGetter: () => any, bindings: React.RefObject<game.pongStruct>): baby.StackPanel =>
-// {
-// 	const	block = game.createDummyBlock();
-// 	const	title = new baby.TextBlock(titleName, String(valueGetter()));
-// 	title.width = "50px";
-// 	title.height = "25px";
-// 	title.color = game.colorsScheme.light1;
-// 	title.resizeToFit = true;
-// 	title.fontSize = 48;
-
-// 	block.addControl(title);
-
-// 	// Bind the text to the value in the bindings map
-// 	bindings.current.bindings.set(titleName, valueGetter);
-// 	return block;
-// }
-
 
 export const	createText = (textName: string, textText: string): baby.StackPanel =>
 {

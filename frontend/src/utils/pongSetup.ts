@@ -1,6 +1,5 @@
 // imports
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
@@ -136,7 +135,6 @@ export type pongStruct =
 	lastUpdateSetAt?: number;	// Used to avoid sending too many updates to the server
 	
 	// GUI's bindings
-	bindings: Map<string, any>;
 	rooms: Map<string, any>;
 	lastRoomJoined?: string;
 	lastHostedRoomId?: string;
@@ -144,8 +142,6 @@ export type pongStruct =
 	paddle2TargetZ?: number;
 	paddle1TargetZ?: number;
 	lastSentPaddleZ?: number | null;
-
-
 
 	// Other components bindings
 	pongSettingsPlayButton?: baby.StackPanel;
@@ -184,7 +180,6 @@ export function initPongStruct(): pongStruct
 		tournamentPlayerNames: [],
 		tournamentPlayerScores: [],
 
-		bindings: new Map<string, React.RefObject<any>>(),
 		rooms: new Map<string, React.RefObject<any>>(),
 	};
 }
