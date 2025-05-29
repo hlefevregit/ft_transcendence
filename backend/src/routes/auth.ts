@@ -25,6 +25,7 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
 				pseudo: existingUser.pseudo,
 				avatarUrl: existingUser.avatarUrl,
 				status: existingUser.status,
+				twoFAEnabled: existingUser.twoFAEnabled
 			}) });
 		}
 		
@@ -44,7 +45,8 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
 			email: newUser.email,
 			pseudo: newUser.pseudo,
 			avatarUrl: newUser.avatarUrl,
-			status: newUser.status
+			status: newUser.status,
+			twoFAEnabled: newUser.twoFAEnabled
 		});
 		reply.send({
 			success: true,
@@ -54,7 +56,8 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
 				email: newUser.email,
 				pseudo: newUser.pseudo,
 				avatarUrl: newUser.avatarUrl,
-				status: newUser.status
+				status: newUser.status,
+				twoFAEnabled: newUser.twoFAEnabled
 			}
 		});
 	});
@@ -90,7 +93,8 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
 				email: user.email,
 				pseudo: user.pseudo,
 				avatarUrl: user.avatarUrl,
-				status: user.status
+				status: user.status,
+				twoFAEnabled: user.twoFAEnabled
 			}
 		});
 	});
