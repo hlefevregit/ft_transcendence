@@ -5,7 +5,6 @@ services:
     cap_add:
       - IPC_LOCK
     environment:
-      VAULT_DEV_ROOT_TOKEN_ID: "${VAULT_DEV_ROOT_TOKEN_ID}"
       VAULT_ADDR: "https://vault:8200"
       VAULT_API_ADDR: "https://vault:8200"
     volumes:
@@ -50,12 +49,12 @@ services:
 
   backend:
     build:
-      context: ${BACKEND_PATH}
+      context: ${PWD}/backend
       dockerfile: Dockerfile.dev
     ports:
       - "3000:3000"
     volumes:
-      - backend_data:${BACKEND_PATH}
+      - backend_data:${PWD}/backend
       - ./backend/certs:/app/certs:ro
       - sqlite_data:/app/prisma/sqlite
     environment:
@@ -64,7 +63,7 @@ services:
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - JWT_SECRET=${JWT_SECRET}
     command: sh -c "npx prisma migrate deploy && npm run dev"
-    working_dir: ${BACKEND_PATH}
+    working_dir: ${PWD}/backend
     networks:
       - ft_network
 
@@ -166,9 +165,10 @@ services:
   #     - T_PORT_INTERN_LOGGING=9200
   #     - T_ENDPOINT_LOGGING=kibana
   #     - T_SERVER_NAME=localhost
-  #     - T_ELASTIC_SYSPASS_1=changeme # ⚠️ mets le bon mot de passe ici
-  #     - T_ENCRYPTION_PASSKEY_3=${KIBANA_ENCRYPTION_KEY}
   #     - T_KIBANA_MAXSOCKS=100
+  #     # REMOVETHIS
+  #     - T_ELASTIC_SYSPASS_1=${KIBANA_PASSWORD}
+  #     - T_ENCRYPTION_PASSKEY_3=${KIBANA_ENCRYPTION_KEY}
   #     - T_KIBANA_TOKEN=${KIBANA_TOKEN}
   #   depends_on:
   #     - elasticsearch
@@ -244,31 +244,31 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ${VAULT_PATH}/data
+      device: ${PWD}/vault/data
       o: bind
   backend_data:
     driver: local
     driver_opts:
       type: none
-      device: ${BACKEND_PATH}
+      device: ${PWD}/backend
       o: bind
   frontend_data:
     driver: local
     driver_opts:
       type: none
-      device: ${FRONTEND_PATH}
+      device: ${PWD}/frontend
       o: bind
   sqlite_data:
     driver: local
     driver_opts:
       type: none
-      device: ${BACKEND_PATH}/prisma/sqlite
+      device: ${PWD}/backend/prisma/sqlite
       o: bind
   es_data:
     driver: local
     driver_opts:
       type: none
-      device: ${ES_DATA_PATH}
+      device: ${PWD}/elk/elasticsearch/data
       o: bind
   # volumes:
   #   elastic_data:
@@ -278,14 +278,14 @@ volumes:
   #   driver: local
   #   driver_opts:
   #     type: none
-  #     device: ${PROMETHEUS_DATA_PATH}
+  #     device: ${PWD}/monitoring/prometheus/data
   #     o: bind
 
   # grafana_data:
   #   driver: local
   #   driver_opts:
   #     type: none
-  #     device: ${GRAFANA_DATA_PATH}
+  #     device: ${PWD}/monitoring/grafana/data
   #     o: bind
 
 networks:
