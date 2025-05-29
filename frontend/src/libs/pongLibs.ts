@@ -11,3 +11,5 @@ export * from '@/utils/babylonUtils';
 export * from '@/utils/pongArenaSetup';
 
 export * from '@/utils/pong/GUIOnline';
+
+export * from '@/components/BG';
