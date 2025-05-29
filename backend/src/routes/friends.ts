@@ -1,5 +1,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 
+
+
 interface CustomFastifyInstance extends FastifyInstance {
   authenticate: (req: FastifyRequest, rep: FastifyReply) => Promise<void>;
 }
@@ -220,5 +222,36 @@ fastify.post('/api/friends/request/:id/accept', auth, async (req, reply) => {
 	  },
 	}));
   });
+  
+  interface GameResult {
+	player1Id: string;
+	player2Id: string;
+	player1Score: number;
+	player2Score: number;
+	winnerId: string;
+	reason: string; // e.g., 'normal', 'forfeit'
+	}
 
+	fastify.post('/api/games', async (req: FastifyRequest<{ Body: GameResult }>, res: FastifyReply) => {
+	const { player1Id, player2Id, player1Score, player2Score, winnerId, reason } = req.body;
+
+		try {
+			const result = await fastify.prisma.gameResult.create({
+				data: {
+					player1Id,
+					player2Id,
+					player1Score,
+					player2Score,
+					winnerId,
+					reason,
+				},
+			});
+
+			res.status(201).send(result);
+		} catch (err) {
+			console.error("❌ Error saving game result:", err);
+			res.status(500).send({ error: 'Failed to save game result' });
+		}
+	});
 }
+

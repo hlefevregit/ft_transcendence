@@ -6,6 +6,12 @@ export class GameSession {
 	player2: WebSocket | null = null;
 	roomName: string;
 
+	// Données utilisateur pour report API
+	player1Id: string = 'player1';
+	player2Id: string = 'player2';
+	score1: number = 0;
+	score2: number = 0;
+
 	lastState = {
 		paddle1Z: 0,
 		paddle2Z: 0,
@@ -26,32 +32,24 @@ export class GameSession {
 	}
 
 	handleGameUpdate(data: any) {
-		const state: any = {
-			type: 'state_update',
-		};
+		const state: any = { type: 'state_update' };
 
-		// Copie proprement les bonnes clés
 		if (typeof data.paddle1Z === 'number') state.paddle1Z = data.paddle1Z;
 		if (typeof data.paddle2Z === 'number') state.paddle2Z = data.paddle2Z;
-
 		if (data.ballPosition) state.ballPosition = data.ballPosition;
 		if (data.ballDirection) state.ballDirection = data.ballDirection;
 		if (typeof data.ballSpeedModifier === 'number') state.ballSpeedModifier = data.ballSpeedModifier;
 
-		// Met à jour l'état du jeu
-		this.lastState.paddle1Z = state.paddle1Z || this.lastState.paddle1Z;
-		this.lastState.paddle2Z = state.paddle2Z || this.lastState.paddle2Z;
-		this.lastState.ballPosition = state.ballPosition || this.lastState.ballPosition;
-		this.lastState.ballDirection = state.ballDirection || this.lastState.ballDirection;
-		this.lastState.ballSpeedModifier = state.ballSpeedModifier || this.lastState.ballSpeedModifier;
-		// Broadcast l'état mis à jour
-		state.lastState = this.lastState; // Ajoute l'état actuel pour que les joueurs puissent le voir
+		this.lastState = {
+			...this.lastState,
+			...state,
+		};
+
+		state.lastState = this.lastState;
 		this.broadcast(state);
 	}
 
-
 	broadcast(payload: any) {
-		console.log(`Broadcasting to game ${this.id}:`, payload);
 		this.player1.send(JSON.stringify(payload));
 		this.player2?.send(JSON.stringify(payload));
 	}
@@ -59,5 +57,29 @@ export class GameSession {
 	hasSocket(socket: WebSocket): boolean {
 		return this.player1 === socket || this.player2 === socket;
 	}
-	
+
+	async reportGameToApi(gameResult: {
+		player1Id: string;
+		player2Id: string;
+		player1Score: number;
+		player2Score: number;
+		winnerId: string;
+		reason: string;
+	}) {
+		try {
+			const res = await fetch('http://backend:3000/api/games', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(gameResult),
+			});
+
+			if (!res.ok) {
+				console.error("❌ Failed to store game result:", await res.text());
+			} else {
+				console.log("✅ Game result sent to API");
+			}
+		} catch (err) {
+			console.error("❌ Error contacting API service:", err);
+		}
+	}
 }

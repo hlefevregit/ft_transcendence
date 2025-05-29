@@ -43,3 +43,15 @@ model FriendRequest {
   status    String   @default("pending") // "pending", "accepted", "declined"
   createdAt DateTime @default(now())
 }
+
+
+model GameResult {
+  id             String   @id @default(uuid())
+  createdAt      DateTime @default(now())
+  player1Id      String
+  player2Id      String
+  player1Score   Int
+  player2Score   Int
+  winnerId       String
+  reason         String   // ex: "normal", "forfeit", "disconnect"
+}

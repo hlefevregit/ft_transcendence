@@ -12,7 +12,7 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 	wss.on('connection', (ws: WebSocket) => {
 		console.log('🆕 New WebSocket client connected');
 
-		ws.on('message', (message) => {
+		ws.on('message', async (message) => {
 			try {
 				const data = JSON.parse(message.toString());
 				// console.log('📩 Message reçu:', data);
@@ -85,6 +85,49 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 						}
 						break;
 					}
+					case 'game_finished': {
+						const session = [...games.values()].find(s => s.hasSocket(ws));
+						if (session) {
+							const winner = data.winner || (session.player1 === ws ? 'player1' : 'player2');
+							session.broadcast({
+								type: 'game_finished',
+								reason: data.reason || 'normal',
+								winner: winner,
+							});
+							games.delete(session?.id || '');
+							console.log(`🏁 Partie terminée pour ${session.id}, gagnant: ${winner}`);
+						}
+						break;
+					}
+					case 'game_result': {
+						const session = [...games.values()].find(s => s.hasSocket(ws));
+
+						if (session) {
+							const winner = data.winner || (session.player1 === ws ? 'player1' : 'player2');
+
+							session.broadcast({
+								type: 'game_finished',
+								reason: data.reason || 'normal',
+								winner: winner,
+							});
+
+							console.log(`🏁 Partie terminée pour ${session.id}, gagnant: ${winner}`);
+
+							// ✅ Appeler une fonction async "fire and forget"
+							await session.reportGameToApi({
+								player1Id: data.player1Id,
+								player2Id: data.player2Id,
+								player1Score: data.player1Score,
+								player2Score: data.player2Score,
+								winnerId: data.winnerId,
+								reason: data.reason || 'normal',
+							});
+						}
+						break;
+					}
+
+
+	
 					default:
 						ws.send(JSON.stringify({ type: 'error', message: 'Unknown message type' }));
 						break;
@@ -95,25 +138,36 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 			}
 		});
 		ws.on('close', () => {
+
 			console.log("🔌 Client déconnecté");
 
-			// Trouver la session où ce socket est le host
-			const sessionToDelete = [...games.values()].find(
-				session => session.player1 === ws
+			// Trouver la session à laquelle ce client appartient
+			const session = [...games.values()].find(
+				s => s.player1 === ws || s.player2 === ws
 			);
 
-			if (sessionToDelete) {
-				console.log(`🗑️ Suppression de la room: ${sessionToDelete.id}`);
-				games.delete(sessionToDelete.id);
+			if (!session) return;
 
-				// Optionnel : prévenir les autres (par exemple le player2)
-				if (sessionToDelete.player2 && sessionToDelete.player2.readyState === WebSocket.OPEN) {
-					sessionToDelete.player2.send(JSON.stringify({
-						type: 'room_closed',
-						message: 'Host has left the game'
-					}));
-				}
+			const gameId = session.id;
+			const isHost = session.player1 === ws;
+
+			// Déterminer le gagnant par forfait
+			const winnerSocket = isHost ? session.player2 : session.player1;
+			const winner = isHost ? 'player2' : 'player1';
+
+			console.log(`❌ ${isHost ? 'Host' : 'Player 2'} disconnected — Forfeit win for ${winner}`);
+
+			// Envoyer message de fin de partie au gagnant
+			if (winnerSocket && winnerSocket.readyState === WebSocket.OPEN) {
+				winnerSocket.send(JSON.stringify({
+					type: 'game_finished',
+					reason: 'forfeit',
+					winner: winner
+				}));
 			}
+
+			// Nettoyer la session
+			// games.delete(gameId);
 		});
 
 	});

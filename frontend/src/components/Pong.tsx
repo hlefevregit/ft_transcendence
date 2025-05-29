@@ -33,7 +33,9 @@ const	Pong: React.FC = () =>
 	// const	[userName, getUserName] = React.useState<string | null>(null);
 	const	socketRef = React.useRef<WebSocket | null>(null);
 	const	lastHandledState = React.useRef<game.states>(game.states.main_menu);
-
+	const [gameState, setGameState] = React.useState<'idle' | 'playing' | 'finished'>('idle');
+	const [winner, setWinner] = React.useState<string | null>(null);
+	const [reason, setReason] = React.useState<string | null>(null);
 
 	React.useEffect(() =>
 	{
@@ -161,7 +163,7 @@ const	Pong: React.FC = () =>
 				}
 
 				case 'state_update': {
-					console.log("🎮 Game update received:", data);
+					// console.log("🎮 Game update received:", data);
 
 					if (gameModes.current === game.gameModes.online) {
 						// 🎯 HOST: applique la position de l'adversaire (player 2)
@@ -192,7 +194,29 @@ const	Pong: React.FC = () =>
 					break;
 				}
 
+				case 'game_finished': {
+					console.log("🏁 Game finished:", data.reason || "normal");
 
+					// ✅ Mets à jour l'état interne de ton jeu
+					states.current = game.states.game_finished;
+
+					// ✅ Stocke les infos du gagnant et de la raison
+					pong.current.lastGameWinner = data.winner;
+					pong.current.lastGameReason = data.reason || 'normal';
+
+					// ✅ Envoie les infos pour la DB (si pas déjà envoyé)
+					if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+						socketRef.current.send(JSON.stringify({
+							type: 'game_result',
+							player1Score: pong.current.player1Score,
+							player2Score: pong.current.player2Score,
+							winner: pong.current.player1Score > pong.current.player2Score ? 'player1' : 'player2',
+							reason: data.reason || 'normal'
+						}));
+					}
+
+					break;
+				}
 				case 'error': {
 					console.error('❗ Erreur serveur:', data.message);
 					break;
@@ -395,7 +419,17 @@ const	Pong: React.FC = () =>
 							// 2. Score check
 							const maxScore = Math.max(pong.current.player1Score, pong.current.player2Score);
 							if (maxScore >= pong.current.requiredPointsToWin)
+							{
 								states.current = game.states.game_finished;
+								// console.log("🏁 Game finished, max score reached:", maxScore);
+								// socketRef.current.send(JSON.stringify({
+								// 	type: 'game_finished',
+								// 	player1Score: pong.current.player1Score,
+								// 	player2Score: pong.current.player2Score,
+								// 	reason: 'normal',
+								// }));
+								// return;
+							}
 
 							// 3. Interpolation position de l’adversaire
 							const smoothFactor = 0.9;
@@ -416,7 +450,7 @@ const	Pong: React.FC = () =>
 							const myPaddleZ = myPaddle?.position.z ?? 0;
 							const lastZ = pong.current.lastSentPaddleZ ?? null;
 
-							console.log("Current Z:", myPaddleZ, "Last sent Z:", lastZ);
+							// console.log("Current Z:", myPaddleZ, "Last sent Z:", lastZ);
 
 
 							const paddleMoved = lastZ === null || Math.abs(myPaddleZ - lastZ) > 0.01;
@@ -425,31 +459,39 @@ const	Pong: React.FC = () =>
 								const payload: any = {
 									type: 'game_update',
 								};
-								console.log("Paddle moved, preparing payload...");
+								// console.log("Paddle moved, preparing payload...");
 								if (isHost) {
 									payload.paddle1Z = myPaddleZ;
-									pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
-									pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;
-									game.makeBallBounce(pong.current, states);
-									if (pong.current.ball) {
-										payload.ballPosition = {
-											x: pong.current.ball.position.x,
-											y: pong.current.ball.position.y,
-											z: pong.current.ball.position.z,
-										};
-										payload.ballDirection = {
-											x: pong.current.ballDirection.x,
-											y: pong.current.ballDirection.y,
-											z: pong.current.ballDirection.z,
-										};
-										payload.ballSpeedModifier = pong.current.ballSpeedModifier;
-									}
 								} else {
 									payload.paddle2Z = myPaddleZ;
 								}
-								console.log("📤 Envoi game_update:", payload);
+								// console.log("📤 Envoi game_update:", payload);
 								socketRef.current.send(JSON.stringify(payload));
 								pong.current.lastSentPaddleZ = myPaddleZ;
+								pong.current.lastUpdateSetAt = now;
+							}
+							if (isHost) {
+								const payload: any = {
+									type: 'game_update',
+								}
+								pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
+								pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;
+								game.makeBallBounce(pong.current, states);
+								if (pong.current.ball) {
+									payload.ballPosition = {
+										x: pong.current.ball.position.x,
+										y: pong.current.ball.position.y,
+										z: pong.current.ball.position.z,
+									};
+									payload.ballDirection = {
+										x: pong.current.ballDirection.x,
+										y: pong.current.ballDirection.y,
+										z: pong.current.ballDirection.z,
+									};
+									payload.ballSpeedModifier = pong.current.ballSpeedModifier;
+								}
+								// console.log("📤 Envoi game_update Ball:", payload);
+								socketRef.current.send(JSON.stringify(payload));
 								pong.current.lastUpdateSetAt = now;
 							}
 						}
