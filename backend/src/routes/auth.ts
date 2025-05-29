@@ -46,7 +46,17 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
 			avatarUrl: newUser.avatarUrl,
 			status: newUser.status
 		});
-		reply.send({ success: true, token });
+		reply.send({
+			success: true,
+			token,
+			user: {
+				id: newUser.id,
+				email: newUser.email,
+				pseudo: newUser.pseudo,
+				avatarUrl: newUser.avatarUrl,
+				status: newUser.status
+			}
+		});
 	});
 
 	fastify.post('/api/auth/sign_in', async (request, reply) => {
@@ -78,7 +88,9 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
 			user: {
 				id: user.id,
 				email: user.email,
-				twoFAEnabled: user.twoFAEnabled,
+				pseudo: user.pseudo,
+				avatarUrl: user.avatarUrl,
+				status: user.status
 			}
 		});
 	});
