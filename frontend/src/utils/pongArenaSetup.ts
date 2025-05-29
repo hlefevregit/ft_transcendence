@@ -1,6 +1,5 @@
 // imports
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';

@@ -26,7 +26,7 @@ export const	initializeAllGUIScreens = (pong: React.RefObject<game.pongStruct>, 
 	game.instantiateCountdownGUI(pong);
 	game.instantiateFinishedGameGUI(pong, states, gameModes);
 	game.instantiateHostOrJoinGUI(pong, states, gameModes);
-	game.instantiateRoomListGUI(pong, states, gameModes, lang, socketRef);
+	game.instantiateRoomListGUI(pong, states, gameModes, socketRef);
 	game.instantiateWaitingScreenGUI(pong, states);
 	game.instantiateTournamentSettingsGUI(pong, states, gameModes);
 	game.instantiateDebugGUI(pong, states, gameModes, lang);
@@ -73,7 +73,7 @@ export const	updateGUIValues = (
 	states: React.RefObject<game.states>,
 	lang: React.RefObject<game.lang>): void =>
 {
-	if (!pong.current.bindings || !pong.current.guiTexture)
+	if (!pong.current.guiTexture)
 	{
 		console.warn("Bindings map is not initialized !");
 		return;
@@ -875,7 +875,7 @@ export const	instantiateHostOrJoinGUI = (pong: React.RefObject<game.pongStruct>,
 	pong.current.guiTexture?.addControl(hostOrJoinGUI);
 }
 
-export const	instantiateRoomListGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>, lang: React.RefObject<game.lang>, socketRef: React.RefObject<WebSocket | null>): void =>
+export const	instantiateRoomListGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>, socketRef: React.RefObject<WebSocket | null>): void =>
 {
 	// Canvas that will be used for the GUI
 	const	roomListGUI = game.createScreen("roomListGUI", "center");
