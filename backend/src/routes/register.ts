@@ -27,6 +27,7 @@ export const setupRegisterRoute = (fastify: FastifyInstance) => {
           password: await bcrypt.hash(password, 10), // Hash the password
           avatarUrl: 'https://i1.sndcdn.com/artworks-RK9z0md6Fh0mkDYz-KAfiQg-t500x500.jpg', // Default avatar URL
           status: 'Hello, I am using this app!', // Default status
+          twoFAEnabled: false, // Default to false, can be updated later
       },
   });
 

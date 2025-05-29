@@ -29,8 +29,9 @@ const LoginForm: React.FC = () => {
         localStorage.setItem('authToken', response.token);
         localStorage.removeItem('pendingUserId');
         const user = response.user;
-        localStorage.setItem('userId', user.id);
-        localStorage.setItem('pseudo', user.pseudo || ''); // stocke le nom d'utilisateur
+        console.log("✅ User data:", user);
+        // localStorage.setItem('userId', user.id);
+        // localStorage.setItem('pseudo', user.pseudo || ''); // stocke le nom d'utilisateur
         navigate('/game1');
       } else {
         console.error("❌ 2FA failed:", response.message);
