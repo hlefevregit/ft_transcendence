@@ -73,7 +73,6 @@ if [ "${VAULT_FILLED}" != "true" ]; then
   echo "✅ All secrets stored."
 
   export VAULT_FILLED="true"
-  rm -rf /vault/secrets/.env
 fi
 
 echo "🏁 Vault initialized and unsealed."
