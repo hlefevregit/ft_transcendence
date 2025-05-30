@@ -81,6 +81,7 @@ export type pongStruct =
 	transitionCam?: baby.FreeCamera;
 	mainMenuCam?: baby.FreeCamera;
 	arenaCam?: baby.FreeCamera;
+	notFoundCam?: baby.FlyCamera;
 	pongSettingsCam?: baby.FreeCamera;
 	map?: baby.AbstractMesh;
 	
@@ -88,6 +89,11 @@ export type pongStruct =
 	paddle1?: baby.Mesh;
 	paddle2?: baby.Mesh;
 	ball?: baby.Mesh;
+
+	ceiling?: baby.Mesh;
+	floor?: baby.Mesh;
+	wallLeft?: baby.Mesh;
+	wallRight?: baby.Mesh;
 	
 	// Variables
 	pressedKeys: Set<string>;

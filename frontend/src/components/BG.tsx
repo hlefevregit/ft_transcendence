@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
 
-const BackgroundMusic = () =>
+export const BackgroundMusic = () =>
 {
 	const audioRef = useRef<HTMLAudioElement | null>(null);
 

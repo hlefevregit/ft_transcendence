@@ -300,13 +300,16 @@ const	Pong: React.FC = () =>
 			console.warn("⚠️ Aucun userId dans le localStorage.");
 		}
 
+		pong.current.scene.debugLayer.show
+		({
+			embedMode: true,
+			handleResize: true,
+			overlay: true,
+
+		});
+
 		pong.current.engine.runRenderLoop(() =>
 		{
-			console.log("mainMenuMusic is ready:", pong.current.mainMenuMusic?.isReady());
-			if (pong.current.mainMenuMusic && pong.current.mainMenuMusic.isReady() && !pong.current.mainMenuMusic.isPlaying) {pong.current.mainMenuMusic.play();}
-			// const	dummyTitle: baby.TextBlock = game.findComponentByName(pong, "mainMenuDummyTitle");
-			// if (dummyTitle instanceof baby.TextBlock) {console.log("found"); dummyTitle.text =  "banane"; dummyTitle.markAsDirty(); if (pong.current.guiTexture) { pong.current.guiTexture.markAsDirty(); }}
-			// if (pongTitle) {console.log("found"); pongTitle.text =  Math.random().toString(36).substring(2, 7).toUpperCase();}
 			game.updateGUIVisibilityStates(pong, states.current);
 			game.updateGUIVisibilityGameModes(pong, gameModes.current);
 			game.updateGUIValues(pong, states, lang);
@@ -551,7 +554,12 @@ const	Pong: React.FC = () =>
 						if (states.current > (Object.keys(game.states).length / 2) - 1) states.current = 0;
 						if (states.current < 0) states.current = (Object.keys(game.states).length / 2) - 1;
 						break;
-	
+
+					case game.states.not_found:
+						if (pong.current.scene.activeCamera !== pong.current.notFoundCam)
+							{ game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.notFoundCam, 1, pong, states); }
+						break;
+
 					case game.states.countdown:
 						pong.current.countdown -= pong.current.engine.getDeltaTime() / 1000;
 						if (pong.current.countdown <= 0)
@@ -574,7 +582,7 @@ const	Pong: React.FC = () =>
 	
 					case game.states.in_game:
 						const	maxScore = Math.max(pong.current.player1Score, pong.current.player2Score);
-						console.log("Max score: ", maxScore);
+						// console.log("Max score: ", maxScore);
 						if (maxScore >= pong.current.requiredPointsToWin)
 							states.current = game.states.game_finished;
 						game.doPaddleMovement(pong, gameModes);

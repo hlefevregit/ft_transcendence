@@ -2,6 +2,8 @@ export * from "@babylonjs/gui/2D";
 
 export * from '@babylonjs/core';
 
+export * from '@babylonjs/inspector';
+
 import '@babylonjs/loaders';
 import { GLTFFileLoader } from '@babylonjs/loaders/glTF/glTFFileLoader';
 

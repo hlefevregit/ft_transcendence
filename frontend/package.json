@@ -11,6 +11,7 @@
   "dependencies": {
     "@babylonjs/core": "^8.7.0",
     "@babylonjs/gui": "^8.7.0",
+    "@babylonjs/inspector": "^8.10.0",
     "@babylonjs/loaders": "^8.8.5",
     "autoprefixer": "^10.4.21",
     "axios": "^1.9.0",

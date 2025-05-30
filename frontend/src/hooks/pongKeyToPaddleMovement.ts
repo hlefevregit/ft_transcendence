@@ -38,22 +38,103 @@ export const	movePaddleDown = (pong: React.RefObject<game.pongStruct>, paddleZ: 
 	)
 }
 
+let	timer = 1000;	// 1000 ms (1 second)
+let	previousBallDirection = baby.Vector3.Zero();
+let	previousBallPosition = baby.Vector3.Zero();
 export const	AIMovePaddle = (pong: React.RefObject<game.pongStruct>): void =>
 {
-	if (!pong.current.paddle1 || !pong.current.paddle2 || !pong.current.ball) return;
+	if (   !pong.current.engine
+		|| !pong.current.paddle1
+		|| !pong.current.paddle2
+		|| !pong.current.ball) return;
 
-	if (pong.current.ballDirection.x < 0)	// Ball is going to the AI paddle
+
+	// NEW AI LOGIC
+	timer -= pong.current.engine.getDeltaTime();
+	if (timer < 0)
 	{
-		if (pong.current.ball.position.z + pong.current.paddleHeight / 2 < pong.current.paddle1.position.z) pong.current.paddle1.position.z = movePaddleUp(pong, pong.current.paddle1.position.z);
-		if (pong.current.ball.position.z - pong.current.paddleHeight / 2 > pong.current.paddle1.position.z) pong.current.paddle1.position.z = movePaddleDown(pong, pong.current.paddle1.position.z);
+		// Get the need informations each seconds
+		previousBallDirection = pong.current.ballDirection.clone();
+		previousBallPosition = pong.current.ball.position.clone();
+		timer = 1000; // Reset timer
 	}
-	else	// Ball is going to the player paddle
+	if (previousBallDirection.x > 0)	// Ball is going to the player paddle
 	{
-		console.log("ball moving away from AI paddle");
 		// Re-center the AI paddle in the arena
 		if (pong.current.paddle1.position.z > 0.2) pong.current.paddle1.position.z = movePaddleUp(pong, pong.current.paddle1.position.z);
 		else if (pong.current.paddle1.position.z < -0.2) pong.current.paddle1.position.z = movePaddleDown(pong, pong.current.paddle1.position.z);
 	}
+	else	// Ball is going to the AI paddle
+	{
+		// Move the AI paddle to the predicted position of the ball
+		if (pong.current.paddle1.position.z > predictBallImpactZ(pong) + 0.2) pong.current.paddle1.position.z = movePaddleUp(pong, pong.current.paddle1.position.z);
+		else if (pong.current.paddle1.position.z < predictBallImpactZ(pong) - 0.2) pong.current.paddle1.position.z = movePaddleDown(pong, pong.current.paddle1.position.z);
+	}
+
+	// OLD AI logic
+	// if (pong.current.ballDirection.x < 0)	// Ball is going to the AI paddle
+	// {
+	// 	if (pong.current.ball.position.z + pong.current.paddleHeight / 2 < pong.current.paddle1.position.z) pong.current.paddle1.position.z = movePaddleUp(pong, pong.current.paddle1.position.z);
+	// 	if (pong.current.ball.position.z - pong.current.paddleHeight / 2 > pong.current.paddle1.position.z) pong.current.paddle1.position.z = movePaddleDown(pong, pong.current.paddle1.position.z);
+	// }
+	// else	// Ball is going to the player paddle
+	// {
+	// 	console.log("ball moving away from AI paddle");
+	// 	// Re-center the AI paddle in the arena
+	// 	if (pong.current.paddle1.position.z > 0.2) pong.current.paddle1.position.z = movePaddleUp(pong, pong.current.paddle1.position.z);
+	// 	else if (pong.current.paddle1.position.z < -0.2) pong.current.paddle1.position.z = movePaddleDown(pong, pong.current.paddle1.position.z);
+	// }
+}
+
+export const	predictBallImpactZ = (pong: React.RefObject<game.pongStruct>): number =>
+{
+	if (!pong.current.ball) return(0);
+
+	// Always use current ball data
+	const	ballPos = pong.current.ball.position.clone();
+	const	ballDir = pong.current.ballDirection.clone();
+
+	// Calculate time to reach paddle plane (either left or right wall)
+	const	targetX = ballDir.x > 0 
+		? pong.current.arenaWidth    // Right wall
+		: -pong.current.arenaWidth;  // Left wall
+
+	// Distance to travel along X axis
+	const	distanceX = Math.abs(targetX - ballPos.x);
+
+	// Time to reach the paddle plane (in game units)
+	const	timeToReach = distanceX / (Math.abs(ballDir.x) * pong.current.ballSpeed);
+
+	// Calculate the Z position without bounces
+	let		predictedZ = ballPos.z + (ballDir.z * pong.current.ballSpeed * timeToReach);
+
+	// Account for bounces off top and bottom
+	const	topBound = pong.current.arenaHeight;
+	const	bottomBound = -pong.current.arenaHeight;
+	const	height = pong.current.arenaHeight * 2;
+	
+	// If the prediction is out of bounds, we need to calculate the bounces
+	if (predictedZ > topBound || predictedZ < bottomBound)
+	{
+		// Map the predicted position to a continuous zigzag pattern
+		// First, normalize to [0, 2*height] range and take modulo
+		let	normalized = Math.abs((predictedZ - bottomBound) % (2 * height));
+		
+		// Then map back to the arena bounds with the zigzag pattern
+		// We're in the "descending" part of the zigzag
+		if (normalized > height) predictedZ = topBound - (normalized - height);
+		// We're in the "ascending" part of the zigzag
+		else predictedZ = bottomBound + normalized;
+	}
+	
+	// For debugging
+	console.log("HEIGHT: ", height);
+	// console.log("Predicted Z: ", predictedZ.toFixed(2));
+	// console.log("Ball Z:      ", pong.current.ball.position.z.toFixed(2));
+	// console.log("Ball position: ", ballPos.toString());
+	// console.log("Ball direction: ", ballDir.toString());
+	
+	return predictedZ;
 }
 
 export	const	doPaddleMovement = (pong: React.RefObject<game.pongStruct>, gamemode: React.RefObject<game.gameModes>): void =>
@@ -91,6 +172,14 @@ export	const	doPaddleMovement = (pong: React.RefObject<game.pongStruct>, gamemod
 			}
 		}
 		break;
+
+	}
+	if(pong.current.scene)
+	if (pong.current.pressedKeys.has('i'))
+	{
+		console.log("Toggling debug layer");
+		if (pong.current.scene.debugLayer.isVisible() === true) pong.current.scene.debugLayer.hide();
+		else pong.current.scene.debugLayer.show(); 
 	}
 
 	// console.log("Pressed keys: ", pong.current.pressedKeys);

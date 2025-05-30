@@ -5,7 +5,6 @@ import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
 
 import mapUrl from '@/assets/transcendence_map.gltf?url';
-import mainMenuMusic from '@/assets/vaporwave.mp3?url';
 
 export const	setupBabylon = async (pong: game.pongStruct, canvasRef: any): Promise<void> =>
 {
@@ -21,6 +20,7 @@ export const	setupBabylon = async (pong: game.pongStruct, canvasRef: any): Promi
 
 	//                                                            width: width,           height: depth, depth: height
 	const	paddle1Mesh = baby.MeshBuilder.CreateBox("paddle1", { width: pong.paddleWidth, height: 0.75, depth: 1 }, sceneInstance);
+	
 	const	paddle2Mesh = baby.MeshBuilder.CreateBox("paddle2", { width: pong.paddleWidth, height: 0.75, depth: 1 }, sceneInstance);
 	paddle1Mesh.scaling.z = pong.paddleHeight;
 	paddle2Mesh.scaling.z = pong.paddleHeight;
@@ -36,16 +36,24 @@ export const	setupBabylon = async (pong: game.pongStruct, canvasRef: any): Promi
 	pong.scene.activeCamera = cameraInstance;
 
 	const	arenaCamera = new baby.FreeCamera("arenaCam", new baby.Vector3(0, 30, 0), sceneInstance);
-	arenaCamera.rotation = new baby.Vector3(Math.PI / 2, 0, Math.PI);
+	arenaCamera.rotation = new baby.Vector3(0, 0, Math.PI);
 	pong.arenaCam = arenaCamera;
 	
 	const	pongSettingsCamera = new baby.FreeCamera("settingsCam", new baby.Vector3(-10, 1.5, -12), sceneInstance);
 	pongSettingsCamera.rotation = new baby.Vector3(0, Math.PI , 0);
 	pong.pongSettingsCam = pongSettingsCamera;
 
+	const	notFoundCamera = new baby.FlyCamera("notFoundCam", new baby.Vector3(0, 1, 0), sceneInstance);
+	notFoundCamera.position = new baby.Vector3(0, 10, 0);
+	notFoundCamera.attachControl(canvasRef);
+	notFoundCamera.keysUp = [87, 38];		// W, Up arrow
+	notFoundCamera.keysDown = [83, 40];		// S, Down arrow
+	notFoundCamera.keysLeft = [65, 37];		// A, Left arrow
+	notFoundCamera.keysRight = [68, 39];	// D, Right arrow
+	pong.notFoundCam = notFoundCamera;
+
 	const	transitionCamera = new baby.FreeCamera("transitionCam", baby.Vector3.Zero(), sceneInstance);
 	pong.transitionCam = transitionCamera;
-
 	
 	const	ballMesh = baby.MeshBuilder.CreateSphere("ball", { diameter: pong.ballDiameter }, sceneInstance);
 	ballMesh.position = new baby.Vector3(0, 0, 0);
@@ -59,37 +67,34 @@ export const	setupBabylon = async (pong: game.pongStruct, canvasRef: any): Promi
 	}
 	catch (error) { console.error("Error while loading map:", error); }
 
-	async function initializeAudioEngine(): Promise<void>
-	{
-		console.log("Initializing audio engine...");
-		try
-		{
-			const	audioEngine: baby.AudioEngineV2 = await baby.CreateAudioEngineAsync();
-			await audioEngine.unlockAsync();
-			if (audioEngine && typeof audioEngine.unlockAsync === 'function') await audioEngine.unlockAsync();
-			pong.audioEngine = audioEngine as any;
-		}
-		catch (error)
-		{
-			console.error("Error initializing audio engine:", error);
-			pong.audioEngine = undefined;
-		}
-	}
-	initializeAudioEngine();
-	const	currentMusic = new baby.Sound("mainMenuMusic", mainMenuMusic, pong.scene, function(this: baby.Sound)
-	{
-		console.log("READY");
-		pong.mainMenuMusic = this;
-		console.log("playing main menu music");
-	},
-	{
-		loop:true,
-		volume: pong.musicVolume,
-		spatialSound: false,
-		autoplay: true,
-	});
-	pong.mainMenuMusic = currentMusic;
+	// if (pong.map)
+	// {
+	// 	pong.map.isVisible = false;
+	// 	pong.map.setEnabled(false);
+	// }
 
+	const	ceiling = baby.MeshBuilder.CreateBox("ceiling", { width: 1, height: 0.1, depth: 1 }, sceneInstance);
+			ceiling.position.y = 0;
+			pong.ceiling = ceiling;
+	const	floor = baby.MeshBuilder.CreateBox("floor", { width: 1, height: 0.1, depth: 1 }, sceneInstance);
+			floor.position.y = 0;
+			pong.floor = floor;
+	const	wallLeft = baby.MeshBuilder.CreateBox("wallLeft", { width: 1, height: 0.1, depth: 1 }, sceneInstance);
+			wallLeft.position.y = 0;
+			pong.wallLeft = wallLeft;
+	const	wallRight = baby.MeshBuilder.CreateBox("wallRight", { width: 1, height: 0.1, depth: 1 }, sceneInstance);
+			wallRight.position.y = 0;
+			pong.wallRight = wallRight;
+
+	pong.ceiling.scaling.x = pong.arenaWidth * 2 + 3;
+	pong.ceiling.position.z = -pong.arenaWidth - 1;
+	pong.floor.scaling.x = pong.arenaWidth * 2 + 3;
+	pong.floor.position.z = pong.arenaWidth + 1;
+
+	pong.wallLeft.scaling.z = pong.arenaHeight * 2 + 3;
+	pong.wallLeft.position.x = pong.arenaHeight + 1;
+	pong.wallRight.scaling.z = pong.arenaHeight * 2 + 3;
+	pong.wallRight.position.x = -pong.arenaHeight - 1;
 }
 
 // Updated to use module-level import function instead of SceneLoader

@@ -112,7 +112,7 @@ export const	updateGUIValues = (
 	}
 	
 	// Mark the GUI texture as dirty to ensure updates are rendered
-	pong.current.guiTexture.markAsDirty();
+	// pong.current.guiTexture.markAsDirty();
 }
 
 export const	refreshRoomsEntries = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>): baby.StackPanel =>
@@ -347,16 +347,16 @@ export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct
 		{
 			case game.gameModes.online:
 				states.current = game.states.host_or_join;
-				game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
+				// game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
 				break;
 			case game.gameModes.tournament:
 				states.current = game.states.host_or_join;
-				game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
+				// game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
 				break;
 			default:
 				states.current = game.states.main_menu;
 				gameModes.current = game.gameModes.none;
-				game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
+				// game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
 				break;
 		}
 	}, "back");
@@ -430,6 +430,7 @@ export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct
 	const	pongSettingsArenaWidth = game.createSlider("pongSettingsArenaWidth", 7, 20, 1, pong.current.arenaWidth, (value: number) =>
 	{
 		pong.current.arenaWidth = value;
+		game.resizeArenaShell(pong);
 		game.findComponentByName(pong, "pongSettingsArenaWidthTextValue").text = value.toString();
 	});
 
@@ -442,6 +443,7 @@ export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct
 	const	pongSettingsArenaHeight = game.createSlider("pongSettingsArenaHeight", 7, 20, 1, pong.current.arenaHeight, (value: number) =>
 	{
 		pong.current.arenaHeight = value;
+		game.resizeArenaShell(pong);
 		game.findComponentByName(pong, "pongSettingsArenaHeightTextValue").text = value.toString();
 	});
 
@@ -457,6 +459,8 @@ export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct
 		pong.current.paddleHeight = value;
 		pong.current.paddle1.scaling.z = value;
 		pong.current.paddle2.scaling.z = value;
+
+
 		game.findComponentByName(pong, "pongSettingsPaddleHeightsTextValue").text = value.toString();
 	});
 
