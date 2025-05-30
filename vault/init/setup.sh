@@ -75,6 +75,4 @@ if [ "${VAULT_FILLED}" != "true" ]; then
   export VAULT_FILLED="true"
 fi
 
-> /vault/secrets/.env
-
 echo "🏁 Vault initialized and unsealed."
