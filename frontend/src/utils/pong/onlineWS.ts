@@ -156,7 +156,7 @@ export const useWebSocketOnline = (pong: React.RefObject<game.pongStruct>,
 
             case 'game_finished': {
                 console.log("🏁 Game finished:", data.reason || "normal");
-
+                console.log("🏆 Winner:", (pong.current.player1Score > pong.current.player2Score ? data.player1Id : data.player2Id));
                 // ✅ Mets à jour l'état interne de ton jeu
                 states.current = game.states.game_finished;
 
@@ -174,11 +174,12 @@ export const useWebSocketOnline = (pong: React.RefObject<game.pongStruct>,
                                 Authorization: `Bearer ${localStorage.getItem('authToken')}`, // adapte si tu n'utilises pas JWT
                             },
                             body: JSON.stringify({
+                                gameId: data.gameId || pong.current.lastHostedRoomId,
                                 player1Id: data.player1Id,
                                 player2Id: data.player2Id,
                                 player1Score: pong.current.player1Score,
                                 player2Score: pong.current.player2Score,
-                                winnerId: data.winnerId,
+                                winnerId: data.winner || (pong.current.player1Score > pong.current.player2Score ? data.player1Id : data.player2Id),
                                 reason: data.reason || 'normal',
                             }),
                         });
