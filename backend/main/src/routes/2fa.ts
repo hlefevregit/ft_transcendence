@@ -6,13 +6,15 @@ export async function setup2FARoutes(fastify) {
     fastify.post('/api/2fa/enable', {
         preHandler: [fastify.authenticate],
         handler: async (req, res) => {
+        
+            console.log("🔍 user dans req:", req.user);
             try {
                 const user = req.user as { id: number };
                 const response = await axios.post('http://twofa:4001/enable', { userId: user.id });
                 return response.data;
             } catch (err) {
                 req.log.error(err);
-                return res.status(500).send({ error: 'Error enabling 2FA' });
+                return res.status(500).send({ error: 'Erreur activation 2FA' });
             }
         },
 
