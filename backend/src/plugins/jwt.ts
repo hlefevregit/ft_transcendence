@@ -9,10 +9,10 @@ export const setupJwt = (fastify: FastifyInstance) => {
 
   // Décore l'instance Fastify avec une méthode `authenticate` utilisable comme middleware
   fastify.decorate('authenticate', async function (request, reply) {
-    console.log("🔐 Authorization header:", request.headers.authorization); // 👀
+    // console.log("🔐 Authorization header:", request.headers.authorization); // 👀
     try {
       await request.jwtVerify();
-      console.log("✅ User decoded:", request.user); // 👀
+      // console.log("✅ User decoded:", request.user); // 👀
     } catch (err) {
       console.error("❌ JWT error:", err);
       reply.code(401).send({ error: 'Unauthorized' });
