@@ -67,9 +67,10 @@ const	Pong: React.FC = () =>
 		console.log("GUI initialization complete");
 		
 		
-		const ws = new WebSocket('ws://localhost:4000/ws'); // adapte l'URL à ton cas
+		const token = localStorage.getItem('authToken');
+		const ws = new WebSocket(`ws://localhost:4000/ws?token=${token || ''}`);
 		socketRef.current = ws;
-		
+
 		ws.onopen = () => {
 			console.log("✅ WebSocket connecté");
 		};
@@ -81,7 +82,7 @@ const	Pong: React.FC = () =>
 		game.initializeAllGUIScreens(pong, gameModes, states, lang, socketRef, navigate);
 
 		ws.onmessage = (event) => {
-			console.log("📩 Message reçu :", event.data);
+			// console.log("📩 Message reçu :", event.data);
 
 			let data;
 			try {
@@ -221,15 +222,30 @@ const	Pong: React.FC = () =>
 
 					// ✅ Envoie les infos pour la DB (si pas déjà envoyé)
 					if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-						socketRef.current.send(JSON.stringify({
-							type: 'game_result',
-							player1Score: pong.current.player1Score,
-							player2Score: pong.current.player2Score,
-							winner: pong.current.player1Score > pong.current.player2Score ? 'player1' : 'player2',
-							reason: data.reason || 'normal'
-						}));
+						if (pong.current.isHost || data.reason !== 'normal') {
+							const res = fetch(`https://localhost:3000/api/games`, {
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json',
+									Authorization: `Bearer ${localStorage.getItem('authToken')}`, // adapte si tu n'utilises pas JWT
+								},
+								body: JSON.stringify({
+									player1Id: data.player1Id,
+									player2Id: data.player2Id,
+									player1Score: pong.current.player1Score,
+									player2Score: pong.current.player2Score,
+									winnerId: data.winnerId,
+									reason: data.reason || 'normal',
+								}),
+							});
+							if (!res) {
+								console.error("❌ Erreur lors de l'envoi des données du jeu :", res);
+							}
+							else {
+								console.log("✅ Données du jeu envoyées avec succès");
+							}
+						}
 					}
-
 					break;
 				}
 				case 'error': {
@@ -302,10 +318,10 @@ const	Pong: React.FC = () =>
 
 		pong.current.engine.runRenderLoop(() =>
 		{
-			console.log("mainMenuMusic is ready:", pong.current.mainMenuMusic?.isReady());
+			// console.log("mainMenuMusic is ready:", pong.current.mainMenuMusic?.isReady());
 			if (pong.current.mainMenuMusic && pong.current.mainMenuMusic.isReady() && !pong.current.mainMenuMusic.isPlaying) {pong.current.mainMenuMusic.play();}
 			// const	dummyTitle: baby.TextBlock = game.findComponentByName(pong, "mainMenuDummyTitle");
-			// if (dummyTitle instanceof baby.TextBlock) {console.log("found"); dummyTitle.text =  "banane"; dummyTitle.markAsDirty(); if (pong.current.guiTexture) { pong.current.guiTexture.markAsDirty(); }}
+			// if (dummyTitle instanceof baby.TextBlock) {Eg("found"); dummyTitle.text =  "banane"; dummyTitle.markAsDirty(); if (pong.current.guiTexture) { pong.current.guiTexture.markAsDirty(); }}
 			// if (pongTitle) {console.log("found"); pongTitle.text =  Math.random().toString(36).substring(2, 7).toUpperCase();}
 			game.updateGUIVisibilityStates(pong, states.current);
 			game.updateGUIVisibilityGameModes(pong, gameModes.current);
@@ -412,12 +428,15 @@ const	Pong: React.FC = () =>
 							socketRef.current.readyState === WebSocket.OPEN &&
 							lastHandledState.current !== game.states.game_finished
 						) {
-							console.log("Game finished, sending scores");
-							socketRef.current.send(JSON.stringify({
-								type: 'game_finished',
-								player1Score: pong.current.player1Score,
-								player2Score: pong.current.player2Score,
-							}));
+							if (pong.current.isHost) {
+
+								console.log("Game finished, sending scores");
+								socketRef.current.send(JSON.stringify({
+									type: 'game_finished',
+									player1Score: pong.current.player1Score,
+									player2Score: pong.current.player2Score,
+								}));
+							} 
 							lastHandledState.current = game.states.game_finished;
 						}
 						break;

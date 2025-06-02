@@ -1,5 +1,6 @@
 import WebSocket from 'ws';
 
+
 export class GameSession {
 	id: string;
 	player1: WebSocket;
@@ -20,15 +21,23 @@ export class GameSession {
 		ballSpeedModifier: 1,
 	};
 
+	reported: boolean = false;
+
 	constructor(id: string, socket: WebSocket, roomName: string) {
 		this.id = id;
 		this.player1 = socket;
 		this.roomName = roomName;
 	}
 
-	setPlayer2(socket: WebSocket) {
+	setPlayer2(socket: WebSocket, player2Id: string) {
 		this.player2 = socket;
+		this.player2Id = player2Id;
 		this.broadcast({ type: 'game_start' });
+	}
+
+	setPlayer1(socket: WebSocket, player1Id: string) {
+		this.player1 = socket;
+		this.player1Id = player1Id;	
 	}
 
 	handleGameUpdate(data: any) {
@@ -58,28 +67,4 @@ export class GameSession {
 		return this.player1 === socket || this.player2 === socket;
 	}
 
-	async reportGameToApi(gameResult: {
-		player1Id: string;
-		player2Id: string;
-		player1Score: number;
-		player2Score: number;
-		winnerId: string;
-		reason: string;
-	}) {
-		try {
-			const res = await fetch('http://backend:3000/api/games', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(gameResult),
-			});
-
-			if (!res.ok) {
-				console.error("❌ Failed to store game result:", await res.text());
-			} else {
-				console.log("✅ Game result sent to API");
-			}
-		} catch (err) {
-			console.error("❌ Error contacting API service:", err);
-		}
-	}
 }
