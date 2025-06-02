@@ -19,12 +19,12 @@
 			// "@controllers/*": ["./src/controllers/*"],
 			// "@session": ["./src/session"],
 		  },
-		"typeRoots": ["./types", "./../node_modules/@types"],
+		"typeRoots": ["./types", "../node_modules/@types"],
 		"types": ["@types/node", "@fastify/jwt"],
 	},
 	"include": ["src/**/*", "src/types", "src", "prisma"],
 	"exclude": [
-		"node_modules",
+		"../node_modules",
 		"dist"
 	]
 }

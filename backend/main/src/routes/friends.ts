@@ -212,7 +212,6 @@ fastify.post('/api/friends/request/:id/accept', auth, async (req, reply) => {
 	  where: { fromUserId: userId },
 	  include: { toUser: true },
 	});
-  
 	return requests.map((r) => ({
 	  id: r.id,
 	  to: {
@@ -224,12 +223,13 @@ fastify.post('/api/friends/request/:id/accept', auth, async (req, reply) => {
   });
   fastify.post('/api/games', async (req, res) => {
 		try {
-			const { player1Id, player2Id, player1Score, player2Score, winnerId, reason } = req.body as any;
+			const { player1Id, player2Id, player1Score, player2Score, winnerId, reason, gameId } = req.body as any;
 
 			console.log("📥 API received game result:", req.body);
 
 			const result = await fastify.prisma.gameResult.create({
 			data: {
+				id: gameId || undefined, // Si gameId est fourni, l'utiliser, sinon laisser Prisma en générer un 
 				player1Id: player1Id,
 				player2Id: player2Id,
 				player1Score: player1Score,
@@ -253,5 +253,6 @@ fastify.post('/api/friends/request/:id/accept', auth, async (req, reply) => {
 			});
 		}
   	});
+
 }
 
