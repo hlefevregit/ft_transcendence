@@ -3,9 +3,11 @@ FROM node:18
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
+RUN npm install && apt-get update && apt-get install sqlite3 -y
 
 COPY . .
+
+# COPY ../../../../prisma/ ./prisma
 
 RUN chmod +x ./config/start.sh
 
