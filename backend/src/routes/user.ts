@@ -7,7 +7,7 @@ interface CustomFastifyInstance extends FastifyInstance {
 export async function setupUserRoutes(fastify: CustomFastifyInstance) {
   // ✅ GET user from JWT token
   fastify.get('/api/me', { preValidation: [fastify.authenticate] }, async (req, reply) => {
-    console.log("Payload:", req.user);
+    // console.log("Payload:", req.user);
     const userId = (req.user as any).id;
 
     const user = await fastify.prisma.user.findUnique({
@@ -21,13 +21,13 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
         twoFAEnabled: true,
       },
     });
-    console.log('id = ', userId);
-    console.log('✅ User found:', user);
+    // console.log('id = ', userId);
+    // console.log('✅ User found:', user);
     if (!user) {
       return reply.status(404).send({ message: 'User not found' });
     }
 
-    console.log('✅ User found');
+    // console.log('✅ User found');
     return reply.send(user);
   });
 
