@@ -67,8 +67,21 @@ const	Pong: React.FC = () =>
 		
 
 		const token = localStorage.getItem('authToken');
-    	const ws = new WebSocket(`ws://localhost:4000/ws?token=${token || ''}`);
-    
+		const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+		const wsUrl = `${wsProtocol}//${window.location.host}/ws?token=${token || ''}`;
+
+		console.log("🌐 Connecting WebSocket to:", wsUrl);
+		const ws = new WebSocket(wsUrl);
+
+		// Add event listeners for better debugging
+		ws.addEventListener('open', () => {
+			console.log("✅ WebSocket connected successfully");
+		});
+		
+		ws.addEventListener('error', (event) => {
+			console.error("❌ WebSocket connection error:", event);
+		});
+
 
 		useWebSocketOnline(pong, socketRef, gameModes, states, lang, userNameRef, ws);
 	
@@ -107,7 +120,7 @@ const	Pong: React.FC = () =>
 
 		const getUsernameFromBackend = async (userId: string): Promise<string | null> => {
 			try {
-				const res = await fetch(`https://localhost:3000/api/me`, {
+				const res = await fetch(`/api/me`, {
 					headers: {
 						Authorization: `Bearer ${localStorage.getItem('authToken')}`, // adapte si tu n'utilises pas JWT
 					},

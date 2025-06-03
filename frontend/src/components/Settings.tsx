@@ -366,7 +366,7 @@ const Settings: React.FC = () => {
 	const handleEnable2FA = async () => {
 		const token = localStorage.getItem("authToken");
 		try {
-			const res = await fetch("https://localhost:3000/api/2fa/enable", {
+			const res = await fetch("/api/2fa/enable", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
