@@ -102,7 +102,15 @@ services:
       - "4001:4001"
     networks:
       - ft_network
-
+    
+  # tournament:
+  #   build:
+  #     context: ./backend/tournament
+  #     dockerfile: Dockerfile.dev
+  #   ports:
+  #     - "4002:4002"
+  #   networks:
+  #     - ft_network
 
   frontend:
     build:
@@ -126,8 +134,8 @@ services:
       context: ./frontend
       dockerfile: Dockerfile.nginx.dev
     ports:
-      - "8080:8080"
-      - "8082:8082"  # pour nginx_status
+      - "0.0.0.0:8080:8080"  # Changed from "8080:8080" to bind to all interfaces
+      - "0.0.0.0:8082:8082"  # Changed from "8082:8082" to bind to all interfaces
     volumes:
       #- ./nginx.dev.conf:/etc/nginx/nginx.conf
       - ./backend/main/certs:/etc/nginx/certs:ro
