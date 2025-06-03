@@ -6,7 +6,7 @@
 #    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/05/13 15:34:40 by hulefevr         ###   ########.fr        #
+#    Updated: 2025/05/28 12:14:03 by hulefevr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ PROD_COMPOSE = docker-compose.yml
 
 .PHONY: build up down restart logs prune clean rebuild \
         build-dev up-dev down-dev restart-dev logs-dev rebuild-dev \
-        build-prod up-prod down-prod restart-prod logs-prod rebuild-prod
+        build-prod up-prod down-prod restart-prod logs-prod rebuild-prod \
+		clean prune logs reset-db rebuild log
 
 #########################################################
 ### ------------------ ENV DEV ---------------------- ###
@@ -110,3 +111,20 @@ reset-db:
 	@echo "🔄 Réinitialisation de la base avec Prisma..."
 	cd backend && npx prisma migrate reset --force
 	@echo "✅ Base de données réinitialisée."
+
+rebuild:
+	@if [ -z "$(name)" ]; then \
+		echo "❌ Error: please provide a container name (e.g. 'make rebuild name=backend')"; \
+		exit 1; \
+	fi
+	@echo "🔨 Rebuilding container: $(name)"
+	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) build --no-cache $(name)
+	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up -d $(name)
+
+log:
+	@if [ -z "$(name)" ]; then \
+		echo "❌ Error: please provide a container name (e.g. 'make log name=backend')"; \
+		exit 1; \
+	fi
+	@echo "📜 Displaying logs for container: $(name)"
+	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) logs -f $(name)

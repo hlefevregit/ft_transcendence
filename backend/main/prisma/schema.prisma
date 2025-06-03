@@ -1,0 +1,57 @@
+// 1. Définition du client
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 2. Définition de la base de données SQLite
+datasource db {
+  provider = "sqlite"
+  url      = "file:./prisma/sqlite/dev.db"
+}
+
+// 3. Modèles
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  pseudo    String   @unique
+  avatarUrl String?
+  status    String?
+  password  String?
+  createdAt DateTime @default(now())
+
+  twoFAEnabled Boolean @default(false)
+  twoFASecret String?  // Stocke le secret TOTP de l'utilisateur
+
+  // Friends (relation many-to-many implicite)
+  friends  User[] @relation("UserFriends")
+  friendOf User[] @relation("UserFriends")
+
+  // Friend requests
+  sentRequests     FriendRequest[] @relation("SentRequests")
+  receivedRequests FriendRequest[] @relation("ReceivedRequests")
+}
+
+model FriendRequest {
+  id         Int  @id @default(autoincrement())
+  fromUser   User @relation("SentRequests", fields: [fromUserId], references: [id])
+  fromUserId Int
+
+  toUser   User @relation("ReceivedRequests", fields: [toUserId], references: [id])
+  toUserId Int
+
+  status    String   @default("pending") // "pending", "accepted", "declined"
+  createdAt DateTime @default(now())
+}
+
+
+model GameResult {
+  id           String   @id @default(uuid())
+  player1Id    String
+  player2Id    String
+  winnerId     String
+  reason       String
+  player1Score Int
+  player2Score Int
+  createdAt    DateTime @default(now())
+}
