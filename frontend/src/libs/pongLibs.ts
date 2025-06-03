@@ -13,3 +13,5 @@ export * from '@/utils/pongArenaSetup';
 export * from '@/utils/pong/GUIOnline';
 
 export * from '@/components/BG';
+
+export * from '@/utils/pong/onlineWS';

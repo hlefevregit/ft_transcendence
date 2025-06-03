@@ -5,6 +5,7 @@ import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
 
 import mapUrl from '@/assets/transcendence_map.gltf?url';
+// import mainMenuMusic from '@/assets/vaporwave.mp3?url';
 
 export const	setupBabylon = async (pong: game.pongStruct, canvasRef: any): Promise<void> =>
 {

@@ -46,12 +46,12 @@ model FriendRequest {
 
 
 model GameResult {
-  id             String   @id @default(uuid())
-  createdAt      DateTime @default(now())
-  player1Id      String
-  player2Id      String
-  player1Score   Int
-  player2Score   Int
-  winnerId       String
-  reason         String   // ex: "normal", "forfeit", "disconnect"
+  id           String   @id @default(uuid())
+  player1Id    String
+  player2Id    String
+  winnerId     String
+  reason       String
+  player1Score Int
+  player2Score Int
+  createdAt    DateTime @default(now())
 }

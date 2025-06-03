@@ -212,7 +212,6 @@ fastify.post('/api/friends/request/:id/accept', auth, async (req, reply) => {
 	  where: { fromUserId: userId },
 	  include: { toUser: true },
 	});
-  
 	return requests.map((r) => ({
 	  id: r.id,
 	  to: {
@@ -222,36 +221,38 @@ fastify.post('/api/friends/request/:id/accept', auth, async (req, reply) => {
 	  },
 	}));
   });
-  
-  interface GameResult {
-	player1Id: string;
-	player2Id: string;
-	player1Score: number;
-	player2Score: number;
-	winnerId: string;
-	reason: string; // e.g., 'normal', 'forfeit'
-	}
-
-	fastify.post('/api/games', async (req: FastifyRequest<{ Body: GameResult }>, res: FastifyReply) => {
-	const { player1Id, player2Id, player1Score, player2Score, winnerId, reason } = req.body;
-
+  fastify.post('/api/games', async (req, res) => {
 		try {
+			const { player1Id, player2Id, player1Score, player2Score, winnerId, reason, gameId } = req.body as any;
+
+			console.log("📥 API received game result:", req.body);
+
 			const result = await fastify.prisma.gameResult.create({
-				data: {
-					player1Id,
-					player2Id,
-					player1Score,
-					player2Score,
-					winnerId,
-					reason,
-				},
+			data: {
+				id: gameId || undefined, // Si gameId est fourni, l'utiliser, sinon laisser Prisma en générer un 
+				player1Id: player1Id,
+				player2Id: player2Id,
+				player1Score: player1Score,
+				player2Score: player2Score,
+				winnerId: winnerId,
+				reason: reason || 'normal',
+				
+			},
 			});
 
-			res.status(201).send(result);
-		} catch (err) {
-			console.error("❌ Error saving game result:", err);
-			res.status(500).send({ error: 'Failed to save game result' });
+			console.log("✅ Game saved:", result);
+			return res.status(201).send(result);
+
+		} catch (err: any) {
+			console.error("❌ Error in /api/games:", err);
+
+			// Sécurité : renvoie toujours une réponse
+			return res.status(500).send({
+			error: 'Internal server error',
+			detail: err?.message || 'Unknown error',
+			});
 		}
-	});
+  	});
+
 }
 

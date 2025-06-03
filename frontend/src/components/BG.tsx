@@ -1,30 +1,61 @@
- 
-import { useEffect, useRef } from "react";
-import * as baby from '@/libs/babylonLibs';
-import * as game from '@/libs/pongLibs';
+import { useEffect, useRef, useState } from "react";
 
-export const BackgroundMusic = () =>
-{
-	const audioRef = useRef<HTMLAudioElement | null>(null);
+const BackgroundMusic = () => {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-	useEffect(() =>
-	{
-		const audio = new Audio("/assets/vaporwave.mp3");
-		audio.loop = true;
-		audio.volume = 1; // Ajuste le volume
-		audioRef.current = audio;
-		console.log("🎵 Musique de fond chargée");
+  useEffect(() => {
+    if (!audioRef.current) {
+      const audio = new Audio("/audio/vaporwave.mp3");
+      audio.loop = true;
+      audio.volume = 0.1;
+      audio.muted = true;
 
-		const playAudio = () =>
-		{
-			console.log("🎵 Tentative de lecture de la musique de fond");
-			audio.play().catch((e) => { console.warn("🎵 Autoplay bloqué : interaction utilisateur requise."); });
-		};
+      audioRef.current = audio;
 
-		document.addEventListener("click", playAudio, { once: true });
-	}, []);
+      audio.play()
+        .then(() => {
+          console.log("🎵 Musique auto-démarrée");
+          setTimeout(() => {
+            audio.muted = false;
+            setIsPlaying(true);
+          }, 1000);
+        })
+        .catch((err) => {
+          console.warn("🔇 Autoplay bloqué", err);
+        });
+    }
 
-	return null;
+    const handleClick = () => {
+      const audio = audioRef.current;
+      if (!audio) return;
+
+      try {
+        if (audio.paused) {
+          audio.play().then(() => {
+            setIsPlaying(true);
+            console.log("▶️ Lecture");
+          }).catch((err) => {
+            console.error("⚠️ Erreur lors de la lecture", err);
+          });
+        } else {
+          audio.pause();
+          setIsPlaying(false);
+          console.log("⏸️ Pause");
+        }
+      } catch (err) {
+        console.error("🚫 Erreur audio", err);
+      }
+    };
+
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick);
+      audioRef.current?.pause();
+    };
+  }, []);
+
+  return null;
 };
 
 export default BackgroundMusic;
