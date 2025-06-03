@@ -67,11 +67,38 @@ const	Pong: React.FC = () =>
 		
 
 		const token = localStorage.getItem('authToken');
-    	const ws = new WebSocket(`ws://localhost:4000/ws?token=${token || ''}`);
-    
+		const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+		const wsUrl = `${wsProtocol}//${window.location.host}/ws?token=${token || ''}`;
 
+		console.log("🌐 Connecting WebSocket to:", wsUrl);
+		const ws = new WebSocket(wsUrl);
+
+		// Add event listeners for better debugging
+		ws.addEventListener('open', () => {
+			console.log("✅ WebSocket connected successfully");
+		});
+		
+		ws.addEventListener('error', (event) => {
+			console.error("❌ WebSocket connection error:", event);
+		});
+
+
+		// Register WebSocket handlers for both online and tournament modes
 		useWebSocketOnline(pong, socketRef, gameModes, states, lang, userNameRef, ws);
-	
+		
+		// Add tournament WebSocket integration
+		import('@/utils/pong/tournament').then(tournamentModule => {
+			tournamentModule.useTournamentWebSocket(
+				pong, 
+				socketRef, 
+				gameModes, 
+				states, 
+				lang, 
+				userNameRef, 
+				ws
+			);
+		});
+    
 		
 		game.initializeAllGUIScreens(pong, gameModes, states, lang, socketRef, navigate);
 
@@ -100,7 +127,7 @@ const	Pong: React.FC = () =>
 
 		const getUsernameFromBackend = async (userId: string): Promise<string | null> => {
 			try {
-				const res = await fetch(`https://localhost:3000/api/me`, {
+				const res = await fetch(`/api/me`, {
 					headers: {
 						Authorization: `Bearer ${localStorage.getItem('authToken')}`, // adapte si tu n'utilises pas JWT
 					},
@@ -176,7 +203,20 @@ const	Pong: React.FC = () =>
 			{
 				useOnlineLoop(pong, socketRef, gameModes, states, userNameRef, lastHandledState);
 			}
-
+			else if (gameModes.current === game.gameModes.tournament)
+			{
+				// Handle tournament gameplay loop
+				import('@/utils/pong/tournament').then(tournamentModule => {
+					tournamentModule.handleTournamentLoop(
+						pong,
+						socketRef,
+						gameModes,
+						states,
+						userNameRef,
+						lastHandledState
+					);
+				});
+			}
 			else 
 			{
 				switch (states.current)

@@ -68,6 +68,19 @@ export enum states
 	in_game,
 	game_finished,
 	not_found,
+	// Adding tournament-specific states
+	waiting_tournament_to_start,
+	tournament_bracket_preview,
+ launch_games,
+	tournament_round_1_game_1,
+	tournament_round_1_game_2,
+	in_game1,
+	in_game2,
+	game1_finished,
+	game2_finished,
+	waiting_to_start_final,
+	tournament_final,
+	tournament_final_game_finished,
 }
 
 export type pongStruct =
@@ -111,17 +124,53 @@ export type pongStruct =
 	countdown: number;
 	roundTime: number;
 	requiredPointsToWin: number;
-
+	
 	player1Score: number;
 	player2Score: number;
-	// player1Name: string;
-	// player2Name: string;
-
+	
+	// Tournament-specific properties
 	tournamentPlayerCount: number;
 	tournamentPlayerNames: string[];
 	tournamentPlayerScores: number[];
+	
+	// Tournament game management
+	tournamentId?: string;
+	tournamentRound?: number;
+	tournamentGame?: number;
+	tournamentPlayer1Id?: string;
+	tournamentPlayer2Id?: string;
+	tournamentPlayer3Id?: string;
+	tournamentPlayer4Id?: string;
+	tournamentPlayer1Score?: number;
+	tournamentPlayer2Score?: number;
+	tournamentPlayer3Score?: number;
+	tournamentPlayer4Score?: number;
+	tournamentFinalist1?: string;
+	tournamentFinalist2?: string;
+	tournamenFinalScore1?: number;
+	tournamenFinalScore2?: number;
+	game1Finished?: boolean;
+	game2Finished?: boolean;
+	isHost?: boolean;
+	isHost2?: boolean;
+	
+	// Room management
+	rooms: Map<string, any>;
+	party: Map<string, any>;
+	lastRoomJoined?: string;
+	lastHostedRoomId?: string;
+	
+	lastGameWinner?: string;
+	lastGameReason?: string;
 
-	// Screens GUI
+	paddle2TargetZ?: number;
+	paddle1TargetZ?: number;
+	lastSentPaddleZ?: number | null;
+	
+	lastUpdateSetAt?: number;	// Used to avoid sending too many updates to the server
+
+	// GUI's bindings
+
 	mainMenuGUI?: baby.Container;
 	settingsGUI?: baby.Container;
 	arenaGUI?: baby.Container;
@@ -136,21 +185,6 @@ export type pongStruct =
 	roomListGUI?: baby.Container;
 	tournamentSettingsGUI?: baby.Container;
 	roomListVerticalStackPanel?: baby.StackPanel;
-
-	isHost?: boolean;
-	lastUpdateSetAt?: number;	// Used to avoid sending too many updates to the server
-	
-	// GUI's bindings
-	rooms: Map<string, any>;
-	lastRoomJoined?: string;
-	lastHostedRoomId?: string;
-
-	lastGameWinner?: string;
-	lastGameReason?: string;
-
-	paddle2TargetZ?: number;
-	paddle1TargetZ?: number;
-	lastSentPaddleZ?: number | null;
 
 	// Other components bindings
 	pongSettingsPlayButton?: baby.StackPanel;
@@ -191,14 +225,17 @@ export function initPongStruct(): pongStruct
 
 		player1Score: 0,
 		player2Score: 0,
-		// player1Name: "",
-		// player2Name: "",
 
 		tournamentPlayerCount: 3,
 		tournamentPlayerNames: [],
 		tournamentPlayerScores: [],
+		
+		// Tournament game management initialized
+		game1Finished: false,
+		game2Finished: false,
 
-		rooms: new Map<string, React.RefObject<any>>(),
+		rooms: new Map<string, any>(),
+		party: new Map<string, any>(),
 
 		musicVolume: 1,
 		soundVolume: 1,

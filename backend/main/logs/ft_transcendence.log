@@ -7659,3 +7659,942 @@
 2025-06-03 09:36:50: {"level":30,"time":1748943410811,"pid":138,"hostname":"aa8fad761146","reqId":"req-70","res":{"statusCode":200},"responseTime":1.1531759998761117,"msg":"request completed"}
 2025-06-03 09:36:50: {"level":30,"time":1748943410839,"pid":138,"hostname":"aa8fad761146","reqId":"req-71","req":{"method":"GET","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":58802},"msg":"incoming request"}
 2025-06-03 09:36:50: {"level":30,"time":1748943410840,"pid":138,"hostname":"aa8fad761146","reqId":"req-71","res":{"statusCode":200},"responseTime":0.9314739997498691,"msg":"request completed"}
+2025-06-03 15:35:03: {"level":40,"time":1748964903839,"pid":97,"hostname":"3e8979f03634","msg":"⚠️ Dossier \"public\" introuvable à /home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/public"}
+2025-06-03 15:35:03: └── (empty root node)
+2025-06-03 15:35:03:     ├── /
+2025-06-03 15:35:03:     │   ├── ws (GET, HEAD)
+2025-06-03 15:35:03:     │   ├── metrics (GET)
+2025-06-03 15:35:03:     │   └── api/
+2025-06-03 15:35:03:     │       ├── 2fa/
+2025-06-03 15:35:03:     │       │   ├── enable (POST)
+2025-06-03 15:35:03:     │       │   ├── verify (POST)
+2025-06-03 15:35:03:     │       │   └── disable (POST)
+2025-06-03 15:35:03:     │       ├── me (GET, HEAD)
+2025-06-03 15:35:03:     │       ├── user/me (PUT)
+2025-06-03 15:35:03:     │       ├── auth/
+2025-06-03 15:35:03:     │       │   ├── google (POST)
+2025-06-03 15:35:03:     │       │   └── sign_in (POST)
+2025-06-03 15:35:03:     │       ├── register (POST)
+2025-06-03 15:35:03:     │       ├── p
+2025-06-03 15:35:03:     │       │   ├── ing (GET, HEAD)
+2025-06-03 15:35:03:     │       │   └── ong/
+2025-06-03 15:35:03:     │       │       ├── host (POST)
+2025-06-03 15:35:03:     │       │       └── join (POST)
+2025-06-03 15:35:03:     │       ├── friends (GET, HEAD)
+2025-06-03 15:35:03:     │       │   └── /
+2025-06-03 15:35:03:     │       │       ├── request (POST)
+2025-06-03 15:35:03:     │       │       │   ├── /
+2025-06-03 15:35:03:     │       │       │   │   └── :id
+2025-06-03 15:35:03:     │       │       │   │       └── /accept (POST)
+2025-06-03 15:35:03:     │       │       │   └── s/
+2025-06-03 15:35:03:     │       │       │       ├── received (GET, HEAD)
+2025-06-03 15:35:03:     │       │       │       └── sent (GET, HEAD)
+2025-06-03 15:35:03:     │       │       └── :id (DELETE)
+2025-06-03 15:35:03:     │       └── games (POST)
+2025-06-03 15:35:03:     └── * (OPTIONS)
+2025-06-03 15:35:03: 
+2025-06-03 15:35:03: └── (empty root node)
+2025-06-03 15:35:03:     ├── /
+2025-06-03 15:35:03:     │   ├── ws (GET, HEAD)
+2025-06-03 15:35:03:     │   ├── metrics (GET)
+2025-06-03 15:35:03:     │   └── api/
+2025-06-03 15:35:03:     │       ├── 2fa/
+2025-06-03 15:35:03:     │       │   ├── enable (POST)
+2025-06-03 15:35:03:     │       │   ├── verify (POST)
+2025-06-03 15:35:03:     │       │   └── disable (POST)
+2025-06-03 15:35:03:     │       ├── me (GET, HEAD)
+2025-06-03 15:35:03:     │       ├── user/me (PUT)
+2025-06-03 15:35:03:     │       ├── auth/
+2025-06-03 15:35:03:     │       │   ├── google (POST)
+2025-06-03 15:35:03:     │       │   └── sign_in (POST)
+2025-06-03 15:35:03:     │       ├── register (POST)
+2025-06-03 15:35:03:     │       ├── p
+2025-06-03 15:35:03:     │       │   ├── ing (GET, HEAD)
+2025-06-03 15:35:03:     │       │   └── ong/
+2025-06-03 15:35:03:     │       │       ├── host (POST)
+2025-06-03 15:35:03:     │       │       └── join (POST)
+2025-06-03 15:35:03:     │       ├── friends (GET, HEAD)
+2025-06-03 15:35:03:     │       │   └── /
+2025-06-03 15:35:03:     │       │       ├── request (POST)
+2025-06-03 15:35:03:     │       │       │   ├── /
+2025-06-03 15:35:03:     │       │       │   │   └── :id
+2025-06-03 15:35:03:     │       │       │   │       └── /accept (POST)
+2025-06-03 15:35:03:     │       │       │   └── s/
+2025-06-03 15:35:03:     │       │       │       ├── received (GET, HEAD)
+2025-06-03 15:35:03:     │       │       │       └── sent (GET, HEAD)
+2025-06-03 15:35:03:     │       │       └── :id (DELETE)
+2025-06-03 15:35:03:     │       └── games (POST)
+2025-06-03 15:35:03:     └── * (OPTIONS)
+2025-06-03 15:35:03: 
+2025-06-03 15:35:03: {"level":30,"time":1748964903855,"pid":97,"hostname":"3e8979f03634","msg":"Server listening at https://127.0.0.1:3000"}
+2025-06-03 15:35:03: {"level":30,"time":1748964903855,"pid":97,"hostname":"3e8979f03634","msg":"Server listening at https://172.18.0.3:3000"}
+2025-06-03 15:35:03: {"level":30,"time":1748964903855,"pid":97,"hostname":"3e8979f03634","msg":"✅ Server running at https://localhost:3000"}
+2025-06-03 15:35:04: {"level":30,"time":1748964904794,"pid":97,"hostname":"3e8979f03634","reqId":"req-1","req":{"method":"OPTIONS","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":51828},"msg":"incoming request"}
+2025-06-03 15:35:04: {"level":30,"time":1748964904798,"pid":97,"hostname":"3e8979f03634","reqId":"req-1","res":{"statusCode":204},"responseTime":3.161276999861002,"msg":"request completed"}
+2025-06-03 15:35:04: {"level":30,"time":1748964904803,"pid":97,"hostname":"3e8979f03634","reqId":"req-2","req":{"method":"OPTIONS","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":51828},"msg":"incoming request"}
+2025-06-03 15:35:04: {"level":30,"time":1748964904803,"pid":97,"hostname":"3e8979f03634","reqId":"req-2","res":{"statusCode":204},"responseTime":0.5043589994311333,"msg":"request completed"}
+2025-06-03 15:35:04: {"level":30,"time":1748964904807,"pid":97,"hostname":"3e8979f03634","reqId":"req-3","req":{"method":"GET","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":51828},"msg":"incoming request"}
+2025-06-03 15:35:04: {"level":30,"time":1748964904815,"pid":97,"hostname":"3e8979f03634","reqId":"req-3","res":{"statusCode":200},"responseTime":7.781836997717619,"msg":"request completed"}
+2025-06-03 15:35:04: {"level":30,"time":1748964904816,"pid":97,"hostname":"3e8979f03634","reqId":"req-4","req":{"method":"GET","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":51868},"msg":"incoming request"}
+2025-06-03 15:35:04: {"level":30,"time":1748964904820,"pid":97,"hostname":"3e8979f03634","reqId":"req-5","req":{"method":"OPTIONS","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":51878},"msg":"incoming request"}
+2025-06-03 15:35:04: {"level":30,"time":1748964904820,"pid":97,"hostname":"3e8979f03634","reqId":"req-4","res":{"statusCode":200},"responseTime":4.065565001219511,"msg":"request completed"}
+2025-06-03 15:35:04: {"level":30,"time":1748964904820,"pid":97,"hostname":"3e8979f03634","reqId":"req-5","res":{"statusCode":204},"responseTime":0.502555999904871,"msg":"request completed"}
+2025-06-03 15:35:04: {"level":30,"time":1748964904823,"pid":97,"hostname":"3e8979f03634","reqId":"req-6","req":{"method":"OPTIONS","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":51878},"msg":"incoming request"}
+2025-06-03 15:35:04: {"level":30,"time":1748964904823,"pid":97,"hostname":"3e8979f03634","reqId":"req-6","res":{"statusCode":204},"responseTime":0.7428489997982979,"msg":"request completed"}
+2025-06-03 15:35:04: {"level":30,"time":1748964904825,"pid":97,"hostname":"3e8979f03634","reqId":"req-7","req":{"method":"GET","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":51878},"msg":"incoming request"}
+2025-06-03 15:35:04: {"level":30,"time":1748964904826,"pid":97,"hostname":"3e8979f03634","reqId":"req-7","res":{"statusCode":200},"responseTime":1.221705000847578,"msg":"request completed"}
+2025-06-03 15:35:04: {"level":30,"time":1748964904827,"pid":97,"hostname":"3e8979f03634","reqId":"req-8","req":{"method":"GET","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":51878},"msg":"incoming request"}
+2025-06-03 15:35:04: {"level":30,"time":1748964904829,"pid":97,"hostname":"3e8979f03634","reqId":"req-8","res":{"statusCode":200},"responseTime":1.0119950026273727,"msg":"request completed"}
+2025-06-03 15:36:44: {"level":40,"time":1748965004377,"pid":52,"hostname":"8111eca215e5","msg":"⚠️ Dossier \"public\" introuvable à /home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/public"}
+2025-06-03 15:36:44: └── (empty root node)
+2025-06-03 15:36:44:     ├── /
+2025-06-03 15:36:44:     │   ├── ws (GET, HEAD)
+2025-06-03 15:36:44:     │   ├── metrics (GET)
+2025-06-03 15:36:44:     │   └── api/
+2025-06-03 15:36:44:     │       ├── 2fa/
+2025-06-03 15:36:44:     │       │   ├── enable (POST)
+2025-06-03 15:36:44:     │       │   ├── verify (POST)
+2025-06-03 15:36:44:     │       │   └── disable (POST)
+2025-06-03 15:36:44:     │       ├── me (GET, HEAD)
+2025-06-03 15:36:44:     │       ├── user/me (PUT)
+2025-06-03 15:36:44:     │       ├── auth/
+2025-06-03 15:36:44:     │       │   ├── google (POST)
+2025-06-03 15:36:44:     │       │   └── sign_in (POST)
+2025-06-03 15:36:44:     │       ├── register (POST)
+2025-06-03 15:36:44:     │       ├── p
+2025-06-03 15:36:44:     │       │   ├── ing (GET, HEAD)
+2025-06-03 15:36:44:     │       │   └── ong/
+2025-06-03 15:36:44:     │       │       ├── host (POST)
+2025-06-03 15:36:44:     │       │       └── join (POST)
+2025-06-03 15:36:44:     │       ├── friends (GET, HEAD)
+2025-06-03 15:36:44:     │       │   └── /
+2025-06-03 15:36:44:     │       │       ├── request (POST)
+2025-06-03 15:36:44:     │       │       │   ├── /
+2025-06-03 15:36:44:     │       │       │   │   └── :id
+2025-06-03 15:36:44:     │       │       │   │       └── /accept (POST)
+2025-06-03 15:36:44:     │       │       │   └── s/
+2025-06-03 15:36:44:     │       │       │       ├── received (GET, HEAD)
+2025-06-03 15:36:44:     │       │       │       └── sent (GET, HEAD)
+2025-06-03 15:36:44:     │       │       └── :id (DELETE)
+2025-06-03 15:36:44:     │       └── games (POST)
+2025-06-03 15:36:44:     └── * (OPTIONS)
+2025-06-03 15:36:44: 
+2025-06-03 15:36:44: └── (empty root node)
+2025-06-03 15:36:44:     ├── /
+2025-06-03 15:36:44:     │   ├── ws (GET, HEAD)
+2025-06-03 15:36:44:     │   ├── metrics (GET)
+2025-06-03 15:36:44:     │   └── api/
+2025-06-03 15:36:44:     │       ├── 2fa/
+2025-06-03 15:36:44:     │       │   ├── enable (POST)
+2025-06-03 15:36:44:     │       │   ├── verify (POST)
+2025-06-03 15:36:44:     │       │   └── disable (POST)
+2025-06-03 15:36:44:     │       ├── me (GET, HEAD)
+2025-06-03 15:36:44:     │       ├── user/me (PUT)
+2025-06-03 15:36:44:     │       ├── auth/
+2025-06-03 15:36:44:     │       │   ├── google (POST)
+2025-06-03 15:36:44:     │       │   └── sign_in (POST)
+2025-06-03 15:36:44:     │       ├── register (POST)
+2025-06-03 15:36:44:     │       ├── p
+2025-06-03 15:36:44:     │       │   ├── ing (GET, HEAD)
+2025-06-03 15:36:44:     │       │   └── ong/
+2025-06-03 15:36:44:     │       │       ├── host (POST)
+2025-06-03 15:36:44:     │       │       └── join (POST)
+2025-06-03 15:36:44:     │       ├── friends (GET, HEAD)
+2025-06-03 15:36:44:     │       │   └── /
+2025-06-03 15:36:44:     │       │       ├── request (POST)
+2025-06-03 15:36:44:     │       │       │   ├── /
+2025-06-03 15:36:44:     │       │       │   │   └── :id
+2025-06-03 15:36:44:     │       │       │   │       └── /accept (POST)
+2025-06-03 15:36:44:     │       │       │   └── s/
+2025-06-03 15:36:44:     │       │       │       ├── received (GET, HEAD)
+2025-06-03 15:36:44:     │       │       │       └── sent (GET, HEAD)
+2025-06-03 15:36:44:     │       │       └── :id (DELETE)
+2025-06-03 15:36:44:     │       └── games (POST)
+2025-06-03 15:36:44:     └── * (OPTIONS)
+2025-06-03 15:36:44: 
+2025-06-03 15:36:44: {"level":30,"time":1748965004399,"pid":52,"hostname":"8111eca215e5","msg":"Server listening at https://127.0.0.1:3000"}
+2025-06-03 15:36:44: {"level":30,"time":1748965004399,"pid":52,"hostname":"8111eca215e5","msg":"Server listening at https://172.18.0.4:3000"}
+2025-06-03 15:36:44: {"level":30,"time":1748965004399,"pid":52,"hostname":"8111eca215e5","msg":"✅ Server running at https://localhost:3000"}
+2025-06-03 15:37:34: {"level":30,"time":1748965054036,"pid":52,"hostname":"8111eca215e5","reqId":"req-1","req":{"method":"OPTIONS","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":46070},"msg":"incoming request"}
+2025-06-03 15:37:34: {"level":30,"time":1748965054040,"pid":52,"hostname":"8111eca215e5","reqId":"req-1","res":{"statusCode":204},"responseTime":3.4512340016663074,"msg":"request completed"}
+2025-06-03 15:37:34: {"level":30,"time":1748965054041,"pid":52,"hostname":"8111eca215e5","reqId":"req-2","req":{"method":"OPTIONS","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":46070},"msg":"incoming request"}
+2025-06-03 15:37:34: {"level":30,"time":1748965054042,"pid":52,"hostname":"8111eca215e5","reqId":"req-2","res":{"statusCode":204},"responseTime":0.9263699986040592,"msg":"request completed"}
+2025-06-03 15:37:34: {"level":30,"time":1748965054044,"pid":52,"hostname":"8111eca215e5","reqId":"req-3","req":{"method":"GET","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":46070},"msg":"incoming request"}
+2025-06-03 15:37:34: {"level":30,"time":1748965054050,"pid":52,"hostname":"8111eca215e5","reqId":"req-3","res":{"statusCode":200},"responseTime":5.429503999650478,"msg":"request completed"}
+2025-06-03 15:37:34: {"level":30,"time":1748965054055,"pid":52,"hostname":"8111eca215e5","reqId":"req-4","req":{"method":"GET","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":46070},"msg":"incoming request"}
+2025-06-03 15:37:34: {"level":30,"time":1748965054057,"pid":52,"hostname":"8111eca215e5","reqId":"req-4","res":{"statusCode":200},"responseTime":1.0607430003583431,"msg":"request completed"}
+2025-06-03 15:38:37: {"level":30,"time":1748965117611,"pid":52,"hostname":"8111eca215e5","reqId":"req-5","req":{"method":"OPTIONS","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":46070},"msg":"incoming request"}
+2025-06-03 15:38:37: {"level":30,"time":1748965117611,"pid":52,"hostname":"8111eca215e5","reqId":"req-5","res":{"statusCode":204},"responseTime":0.4067150019109249,"msg":"request completed"}
+2025-06-03 15:38:37: {"level":30,"time":1748965117621,"pid":52,"hostname":"8111eca215e5","reqId":"req-6","req":{"method":"GET","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":46070},"msg":"incoming request"}
+2025-06-03 15:38:37: {"level":30,"time":1748965117622,"pid":52,"hostname":"8111eca215e5","reqId":"req-7","req":{"method":"OPTIONS","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":58864},"msg":"incoming request"}
+2025-06-03 15:38:37: {"level":30,"time":1748965117623,"pid":52,"hostname":"8111eca215e5","reqId":"req-7","res":{"statusCode":204},"responseTime":0.6684859991073608,"msg":"request completed"}
+2025-06-03 15:38:37: {"level":30,"time":1748965117623,"pid":52,"hostname":"8111eca215e5","reqId":"req-6","res":{"statusCode":200},"responseTime":2.268722999840975,"msg":"request completed"}
+2025-06-03 15:38:37: {"level":30,"time":1748965117629,"pid":52,"hostname":"8111eca215e5","reqId":"req-8","req":{"method":"GET","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":58864},"msg":"incoming request"}
+2025-06-03 15:38:37: {"level":30,"time":1748965117630,"pid":52,"hostname":"8111eca215e5","reqId":"req-9","req":{"method":"GET","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":46070},"msg":"incoming request"}
+2025-06-03 15:38:37: {"level":30,"time":1748965117631,"pid":52,"hostname":"8111eca215e5","reqId":"req-8","res":{"statusCode":200},"responseTime":2.5820330008864403,"msg":"request completed"}
+2025-06-03 15:38:37: {"level":30,"time":1748965117631,"pid":52,"hostname":"8111eca215e5","reqId":"req-9","res":{"statusCode":200},"responseTime":1.7435429990291595,"msg":"request completed"}
+2025-06-03 15:38:39: {"level":30,"time":1748965119971,"pid":52,"hostname":"8111eca215e5","reqId":"req-a","req":{"method":"GET","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":58864},"msg":"incoming request"}
+2025-06-03 15:38:39: {"level":30,"time":1748965119971,"pid":52,"hostname":"8111eca215e5","reqId":"req-b","req":{"method":"GET","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":46070},"msg":"incoming request"}
+2025-06-03 15:38:39: {"level":30,"time":1748965119973,"pid":52,"hostname":"8111eca215e5","reqId":"req-a","res":{"statusCode":200},"responseTime":1.9651779979467392,"msg":"request completed"}
+2025-06-03 15:38:39: {"level":30,"time":1748965119973,"pid":52,"hostname":"8111eca215e5","reqId":"req-b","res":{"statusCode":200},"responseTime":1.5976149998605251,"msg":"request completed"}
+2025-06-03 15:38:39: {"level":30,"time":1748965119977,"pid":52,"hostname":"8111eca215e5","reqId":"req-c","req":{"method":"GET","url":"/api/me","host":"localhost:3000","remoteAddress":"172.18.0.1","remotePort":46070},"msg":"incoming request"}
+2025-06-03 15:38:39: {"level":30,"time":1748965119979,"pid":52,"hostname":"8111eca215e5","reqId":"req-c","res":{"statusCode":200},"responseTime":1.137159999459982,"msg":"request completed"}
+2025-06-03 15:39:07: {"level":30,"time":1748965147440,"pid":52,"hostname":"8111eca215e5","reqId":"req-d","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":35636},"msg":"incoming request"}
+2025-06-03 15:39:07: {"level":30,"time":1748965147445,"pid":52,"hostname":"8111eca215e5","reqId":"req-d","res":{"statusCode":200},"responseTime":4.459104001522064,"msg":"request completed"}
+2025-06-03 15:39:07: {"level":30,"time":1748965147446,"pid":52,"hostname":"8111eca215e5","reqId":"req-e","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":35640},"msg":"incoming request"}
+2025-06-03 15:39:07: {"level":30,"time":1748965147447,"pid":52,"hostname":"8111eca215e5","reqId":"req-e","res":{"statusCode":200},"responseTime":1.1466830000281334,"msg":"request completed"}
+2025-06-03 15:39:07: {"level":30,"time":1748965147449,"pid":52,"hostname":"8111eca215e5","reqId":"req-f","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":35646},"msg":"incoming request"}
+2025-06-03 15:39:07: {"level":30,"time":1748965147451,"pid":52,"hostname":"8111eca215e5","reqId":"req-f","res":{"statusCode":200},"responseTime":1.3293789997696877,"msg":"request completed"}
+2025-06-03 15:39:41: {"level":30,"time":1748965181218,"pid":52,"hostname":"8111eca215e5","reqId":"req-g","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":36938},"msg":"incoming request"}
+2025-06-03 15:39:41: {"level":30,"time":1748965181220,"pid":52,"hostname":"8111eca215e5","reqId":"req-g","res":{"statusCode":200},"responseTime":1.0691770017147064,"msg":"request completed"}
+2025-06-03 15:39:41: {"level":30,"time":1748965181234,"pid":52,"hostname":"8111eca215e5","reqId":"req-h","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":36952},"msg":"incoming request"}
+2025-06-03 15:39:41: {"level":30,"time":1748965181235,"pid":52,"hostname":"8111eca215e5","reqId":"req-h","res":{"statusCode":200},"responseTime":1.3293870016932487,"msg":"request completed"}
+2025-06-03 15:39:59: {"level":30,"time":1748965199420,"pid":52,"hostname":"8111eca215e5","reqId":"req-i","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":52228},"msg":"incoming request"}
+2025-06-03 15:39:59: {"level":30,"time":1748965199422,"pid":52,"hostname":"8111eca215e5","reqId":"req-i","res":{"statusCode":200},"responseTime":1.1738980002701283,"msg":"request completed"}
+2025-06-03 15:39:59: {"level":30,"time":1748965199425,"pid":52,"hostname":"8111eca215e5","reqId":"req-j","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":52242},"msg":"incoming request"}
+2025-06-03 15:39:59: {"level":30,"time":1748965199427,"pid":52,"hostname":"8111eca215e5","reqId":"req-j","res":{"statusCode":200},"responseTime":1.194072999060154,"msg":"request completed"}
+2025-06-03 15:40:00: {"level":30,"time":1748965200008,"pid":52,"hostname":"8111eca215e5","reqId":"req-k","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":52250},"msg":"incoming request"}
+2025-06-03 15:40:00: {"level":30,"time":1748965200011,"pid":52,"hostname":"8111eca215e5","reqId":"req-k","res":{"statusCode":200},"responseTime":2.090847000479698,"msg":"request completed"}
+2025-06-03 15:40:00: {"level":30,"time":1748965200022,"pid":52,"hostname":"8111eca215e5","reqId":"req-l","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":52264},"msg":"incoming request"}
+2025-06-03 15:40:00: {"level":30,"time":1748965200024,"pid":52,"hostname":"8111eca215e5","reqId":"req-l","res":{"statusCode":200},"responseTime":1.6838860027492046,"msg":"request completed"}
+2025-06-03 15:40:00: {"level":30,"time":1748965200228,"pid":52,"hostname":"8111eca215e5","reqId":"req-m","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":52270},"msg":"incoming request"}
+2025-06-03 15:40:00: {"level":30,"time":1748965200229,"pid":52,"hostname":"8111eca215e5","reqId":"req-m","res":{"statusCode":200},"responseTime":1.441219002008438,"msg":"request completed"}
+2025-06-03 15:40:00: {"level":30,"time":1748965200238,"pid":52,"hostname":"8111eca215e5","reqId":"req-n","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":52272},"msg":"incoming request"}
+2025-06-03 15:40:00: {"level":30,"time":1748965200239,"pid":52,"hostname":"8111eca215e5","reqId":"req-n","res":{"statusCode":200},"responseTime":1.2043979987502098,"msg":"request completed"}
+2025-06-03 15:41:22: {"level":40,"time":1748965282382,"pid":52,"hostname":"4b749e1aa1a0","msg":"⚠️ Dossier \"public\" introuvable à /home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/public"}
+2025-06-03 15:41:22: └── (empty root node)
+2025-06-03 15:41:22:     ├── /
+2025-06-03 15:41:22:     │   ├── ws (GET, HEAD)
+2025-06-03 15:41:22:     │   ├── metrics (GET)
+2025-06-03 15:41:22:     │   └── api/
+2025-06-03 15:41:22:     │       ├── 2fa/
+2025-06-03 15:41:22:     │       │   ├── enable (POST)
+2025-06-03 15:41:22:     │       │   ├── verify (POST)
+2025-06-03 15:41:22:     │       │   └── disable (POST)
+2025-06-03 15:41:22:     │       ├── me (GET, HEAD)
+2025-06-03 15:41:22:     │       ├── user/me (PUT)
+2025-06-03 15:41:22:     │       ├── auth/
+2025-06-03 15:41:22:     │       │   ├── google (POST)
+2025-06-03 15:41:22:     │       │   └── sign_in (POST)
+2025-06-03 15:41:22:     │       ├── register (POST)
+2025-06-03 15:41:22:     │       ├── p
+2025-06-03 15:41:22:     │       │   ├── ing (GET, HEAD)
+2025-06-03 15:41:22:     │       │   └── ong/
+2025-06-03 15:41:22:     │       │       ├── host (POST)
+2025-06-03 15:41:22:     │       │       └── join (POST)
+2025-06-03 15:41:22:     │       ├── friends (GET, HEAD)
+2025-06-03 15:41:22:     │       │   └── /
+2025-06-03 15:41:22:     │       │       ├── request (POST)
+2025-06-03 15:41:22:     │       │       │   ├── /
+2025-06-03 15:41:22:     │       │       │   │   └── :id
+2025-06-03 15:41:22:     │       │       │   │       └── /accept (POST)
+2025-06-03 15:41:22:     │       │       │   └── s/
+2025-06-03 15:41:22:     │       │       │       ├── received (GET, HEAD)
+2025-06-03 15:41:22:     │       │       │       └── sent (GET, HEAD)
+2025-06-03 15:41:22:     │       │       └── :id (DELETE)
+2025-06-03 15:41:22:     │       └── games (POST)
+2025-06-03 15:41:22:     └── * (OPTIONS)
+2025-06-03 15:41:22: 
+2025-06-03 15:41:22: └── (empty root node)
+2025-06-03 15:41:22:     ├── /
+2025-06-03 15:41:22:     │   ├── ws (GET, HEAD)
+2025-06-03 15:41:22:     │   ├── metrics (GET)
+2025-06-03 15:41:22:     │   └── api/
+2025-06-03 15:41:22:     │       ├── 2fa/
+2025-06-03 15:41:22:     │       │   ├── enable (POST)
+2025-06-03 15:41:22:     │       │   ├── verify (POST)
+2025-06-03 15:41:22:     │       │   └── disable (POST)
+2025-06-03 15:41:22:     │       ├── me (GET, HEAD)
+2025-06-03 15:41:22:     │       ├── user/me (PUT)
+2025-06-03 15:41:22:     │       ├── auth/
+2025-06-03 15:41:22:     │       │   ├── google (POST)
+2025-06-03 15:41:22:     │       │   └── sign_in (POST)
+2025-06-03 15:41:22:     │       ├── register (POST)
+2025-06-03 15:41:22:     │       ├── p
+2025-06-03 15:41:22:     │       │   ├── ing (GET, HEAD)
+2025-06-03 15:41:22:     │       │   └── ong/
+2025-06-03 15:41:22:     │       │       ├── host (POST)
+2025-06-03 15:41:22:     │       │       └── join (POST)
+2025-06-03 15:41:22:     │       ├── friends (GET, HEAD)
+2025-06-03 15:41:22:     │       │   └── /
+2025-06-03 15:41:22:     │       │       ├── request (POST)
+2025-06-03 15:41:22:     │       │       │   ├── /
+2025-06-03 15:41:22:     │       │       │   │   └── :id
+2025-06-03 15:41:22:     │       │       │   │       └── /accept (POST)
+2025-06-03 15:41:22:     │       │       │   └── s/
+2025-06-03 15:41:22:     │       │       │       ├── received (GET, HEAD)
+2025-06-03 15:41:22:     │       │       │       └── sent (GET, HEAD)
+2025-06-03 15:41:22:     │       │       └── :id (DELETE)
+2025-06-03 15:41:22:     │       └── games (POST)
+2025-06-03 15:41:22:     └── * (OPTIONS)
+2025-06-03 15:41:22: 
+2025-06-03 15:41:22: {"level":30,"time":1748965282406,"pid":52,"hostname":"4b749e1aa1a0","msg":"Server listening at https://127.0.0.1:3000"}
+2025-06-03 15:41:22: {"level":30,"time":1748965282406,"pid":52,"hostname":"4b749e1aa1a0","msg":"Server listening at https://172.18.0.3:3000"}
+2025-06-03 15:41:22: {"level":30,"time":1748965282406,"pid":52,"hostname":"4b749e1aa1a0","msg":"✅ Server running at https://localhost:3000"}
+2025-06-03 15:41:27: {"level":30,"time":1748965287771,"pid":52,"hostname":"4b749e1aa1a0","reqId":"req-1","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":34760},"msg":"incoming request"}
+2025-06-03 15:41:27: {"level":30,"time":1748965287780,"pid":52,"hostname":"4b749e1aa1a0","reqId":"req-1","res":{"statusCode":200},"responseTime":8.4850590005517,"msg":"request completed"}
+2025-06-03 15:41:27: {"level":30,"time":1748965287782,"pid":52,"hostname":"4b749e1aa1a0","reqId":"req-2","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":34764},"msg":"incoming request"}
+2025-06-03 15:41:27: {"level":30,"time":1748965287784,"pid":52,"hostname":"4b749e1aa1a0","reqId":"req-2","res":{"statusCode":200},"responseTime":1.382608000189066,"msg":"request completed"}
+2025-06-03 15:42:09: {"level":30,"time":1748965329125,"pid":52,"hostname":"4b749e1aa1a0","reqId":"req-3","req":{"method":"POST","url":"/api/auth/sign_in","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":48902},"msg":"incoming request"}
+2025-06-03 15:42:09: {"level":30,"time":1748965329131,"pid":52,"hostname":"4b749e1aa1a0","reqId":"req-3","res":{"statusCode":401},"responseTime":5.802047997713089,"msg":"request completed"}
+2025-06-03 15:42:17: {"level":30,"time":1748965337711,"pid":52,"hostname":"4b749e1aa1a0","reqId":"req-4","req":{"method":"POST","url":"/api/register","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":38874},"msg":"incoming request"}
+2025-06-03 15:42:17: ✅ User registered: {
+2025-06-03 15:42:17:   id: 4,
+2025-06-03 15:42:17:   email: 'q',
+2025-06-03 15:42:17:   pseudo: 'q',
+2025-06-03 15:42:17:   avatarUrl: 'https://i1.sndcdn.com/artworks-RK9z0md6Fh0mkDYz-KAfiQg-t500x500.jpg',
+2025-06-03 15:42:17:   status: 'Hello, I am using this app!',
+2025-06-03 15:42:17:   password: '$2b$10$FRy1iecXox/lg8wsXlUsvuUKQz6/fIpluMYkR2PkHZmva.TySFDe2',
+2025-06-03 15:42:17:   createdAt: 2025-06-03T15:42:17.769Z,
+2025-06-03 15:42:17:   twoFAEnabled: false,
+2025-06-03 15:42:17:   twoFASecret: null
+2025-06-03 15:42:17: }
+2025-06-03 15:42:17: {"level":30,"time":1748965337782,"pid":52,"hostname":"4b749e1aa1a0","reqId":"req-4","res":{"statusCode":200},"responseTime":70.23433200269938,"msg":"request completed"}
+2025-06-03 15:42:19: {"level":40,"time":1748965339278,"pid":97,"hostname":"4b749e1aa1a0","msg":"⚠️ Dossier \"public\" introuvable à /home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/public"}
+2025-06-03 15:42:19: └── (empty root node)
+2025-06-03 15:42:19:     ├── /
+2025-06-03 15:42:19:     │   ├── ws (GET, HEAD)
+2025-06-03 15:42:19:     │   ├── metrics (GET)
+2025-06-03 15:42:19:     │   └── api/
+2025-06-03 15:42:19:     │       ├── 2fa/
+2025-06-03 15:42:19:     │       │   ├── enable (POST)
+2025-06-03 15:42:19:     │       │   ├── verify (POST)
+2025-06-03 15:42:19:     │       │   └── disable (POST)
+2025-06-03 15:42:19:     │       ├── me (GET, HEAD)
+2025-06-03 15:42:19:     │       ├── user/me (PUT)
+2025-06-03 15:42:19:     │       ├── auth/
+2025-06-03 15:42:19:     │       │   ├── google (POST)
+2025-06-03 15:42:19:     │       │   └── sign_in (POST)
+2025-06-03 15:42:19:     │       ├── register (POST)
+2025-06-03 15:42:19:     │       ├── p
+2025-06-03 15:42:19:     │       │   ├── ing (GET, HEAD)
+2025-06-03 15:42:19:     │       │   └── ong/
+2025-06-03 15:42:19:     │       │       ├── host (POST)
+2025-06-03 15:42:19:     │       │       └── join (POST)
+2025-06-03 15:42:19:     │       ├── friends (GET, HEAD)
+2025-06-03 15:42:19:     │       │   └── /
+2025-06-03 15:42:19:     │       │       ├── request (POST)
+2025-06-03 15:42:19:     │       │       │   ├── /
+2025-06-03 15:42:19:     │       │       │   │   └── :id
+2025-06-03 15:42:19:     │       │       │   │       └── /accept (POST)
+2025-06-03 15:42:19:     │       │       │   └── s/
+2025-06-03 15:42:19:     │       │       │       ├── received (GET, HEAD)
+2025-06-03 15:42:19:     │       │       │       └── sent (GET, HEAD)
+2025-06-03 15:42:19:     │       │       └── :id (DELETE)
+2025-06-03 15:42:19:     │       └── games (POST)
+2025-06-03 15:42:19:     └── * (OPTIONS)
+2025-06-03 15:42:19: 
+2025-06-03 15:42:19: └── (empty root node)
+2025-06-03 15:42:19:     ├── /
+2025-06-03 15:42:19:     │   ├── ws (GET, HEAD)
+2025-06-03 15:42:19:     │   ├── metrics (GET)
+2025-06-03 15:42:19:     │   └── api/
+2025-06-03 15:42:19:     │       ├── 2fa/
+2025-06-03 15:42:19:     │       │   ├── enable (POST)
+2025-06-03 15:42:19:     │       │   ├── verify (POST)
+2025-06-03 15:42:19:     │       │   └── disable (POST)
+2025-06-03 15:42:19:     │       ├── me (GET, HEAD)
+2025-06-03 15:42:19:     │       ├── user/me (PUT)
+2025-06-03 15:42:19:     │       ├── auth/
+2025-06-03 15:42:19:     │       │   ├── google (POST)
+2025-06-03 15:42:19:     │       │   └── sign_in (POST)
+2025-06-03 15:42:19:     │       ├── register (POST)
+2025-06-03 15:42:19:     │       ├── p
+2025-06-03 15:42:19:     │       │   ├── ing (GET, HEAD)
+2025-06-03 15:42:19:     │       │   └── ong/
+2025-06-03 15:42:19:     │       │       ├── host (POST)
+2025-06-03 15:42:19:     │       │       └── join (POST)
+2025-06-03 15:42:19:     │       ├── friends (GET, HEAD)
+2025-06-03 15:42:19:     │       │   └── /
+2025-06-03 15:42:19:     │       │       ├── request (POST)
+2025-06-03 15:42:19:     │       │       │   ├── /
+2025-06-03 15:42:19:     │       │       │   │   └── :id
+2025-06-03 15:42:19:     │       │       │   │       └── /accept (POST)
+2025-06-03 15:42:19:     │       │       │   └── s/
+2025-06-03 15:42:19:     │       │       │       ├── received (GET, HEAD)
+2025-06-03 15:42:19:     │       │       │       └── sent (GET, HEAD)
+2025-06-03 15:42:19:     │       │       └── :id (DELETE)
+2025-06-03 15:42:19:     │       └── games (POST)
+2025-06-03 15:42:19:     └── * (OPTIONS)
+2025-06-03 15:42:19: 
+2025-06-03 15:42:19: {"level":30,"time":1748965339295,"pid":97,"hostname":"4b749e1aa1a0","msg":"Server listening at https://127.0.0.1:3000"}
+2025-06-03 15:42:19: {"level":30,"time":1748965339295,"pid":97,"hostname":"4b749e1aa1a0","msg":"Server listening at https://172.18.0.3:3000"}
+2025-06-03 15:42:19: {"level":30,"time":1748965339295,"pid":97,"hostname":"4b749e1aa1a0","msg":"✅ Server running at https://localhost:3000"}
+2025-06-03 15:42:20: {"level":30,"time":1748965340142,"pid":97,"hostname":"4b749e1aa1a0","reqId":"req-1","req":{"method":"POST","url":"/api/auth/sign_in","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":38878},"msg":"incoming request"}
+2025-06-03 15:42:20: {"level":30,"time":1748965340198,"pid":97,"hostname":"4b749e1aa1a0","reqId":"req-1","res":{"statusCode":200},"responseTime":55.77765499800444,"msg":"request completed"}
+2025-06-03 15:42:25: {"level":30,"time":1748965345139,"pid":97,"hostname":"4b749e1aa1a0","reqId":"req-2","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":48448},"msg":"incoming request"}
+2025-06-03 15:42:25: {"level":30,"time":1748965345145,"pid":97,"hostname":"4b749e1aa1a0","reqId":"req-2","res":{"statusCode":200},"responseTime":5.524605996906757,"msg":"request completed"}
+2025-06-03 15:42:25: {"level":30,"time":1748965345178,"pid":97,"hostname":"4b749e1aa1a0","reqId":"req-3","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":48458},"msg":"incoming request"}
+2025-06-03 15:42:25: {"level":30,"time":1748965345181,"pid":97,"hostname":"4b749e1aa1a0","reqId":"req-3","res":{"statusCode":200},"responseTime":2.456461999565363,"msg":"request completed"}
+2025-06-03 15:43:41: {"level":30,"time":1748965421161,"pid":97,"hostname":"4b749e1aa1a0","reqId":"req-4","req":{"method":"POST","url":"/api/games","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":56866},"msg":"incoming request"}
+2025-06-03 15:43:41: 📥 API received game result: {
+2025-06-03 15:43:41:   gameId: '8779f857-1524-4633-9d26-7c73107ce2b7',
+2025-06-03 15:43:41:   player1Id: 'l',
+2025-06-03 15:43:41:   player2Id: 'q',
+2025-06-03 15:43:41:   player1Score: 3,
+2025-06-03 15:43:41:   player2Score: 1,
+2025-06-03 15:43:41:   winnerId: 'l',
+2025-06-03 15:43:41:   reason: 'normal'
+2025-06-03 15:43:41: }
+2025-06-03 15:43:41: ✅ Game saved: {
+2025-06-03 15:43:41:   id: '8779f857-1524-4633-9d26-7c73107ce2b7',
+2025-06-03 15:43:41:   player1Id: 'l',
+2025-06-03 15:43:41:   player2Id: 'q',
+2025-06-03 15:43:41:   winnerId: 'l',
+2025-06-03 15:43:41:   reason: 'normal',
+2025-06-03 15:43:41:   player1Score: 3,
+2025-06-03 15:43:41:   player2Score: 1,
+2025-06-03 15:43:41:   createdAt: 2025-06-03T15:43:41.163Z
+2025-06-03 15:43:41: }
+2025-06-03 15:43:41: {"level":30,"time":1748965421174,"pid":97,"hostname":"4b749e1aa1a0","reqId":"req-4","res":{"statusCode":201},"responseTime":12.556929998099804,"msg":"request completed"}
+2025-06-03 15:43:42: {"level":40,"time":1748965422679,"pid":138,"hostname":"4b749e1aa1a0","msg":"⚠️ Dossier \"public\" introuvable à /home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/public"}
+2025-06-03 15:43:42: └── (empty root node)
+2025-06-03 15:43:42:     ├── /
+2025-06-03 15:43:42:     │   ├── ws (GET, HEAD)
+2025-06-03 15:43:42:     │   ├── metrics (GET)
+2025-06-03 15:43:42:     │   └── api/
+2025-06-03 15:43:42:     │       ├── 2fa/
+2025-06-03 15:43:42:     │       │   ├── enable (POST)
+2025-06-03 15:43:42:     │       │   ├── verify (POST)
+2025-06-03 15:43:42:     │       │   └── disable (POST)
+2025-06-03 15:43:42:     │       ├── me (GET, HEAD)
+2025-06-03 15:43:42:     │       ├── user/me (PUT)
+2025-06-03 15:43:42:     │       ├── auth/
+2025-06-03 15:43:42:     │       │   ├── google (POST)
+2025-06-03 15:43:42:     │       │   └── sign_in (POST)
+2025-06-03 15:43:42:     │       ├── register (POST)
+2025-06-03 15:43:42:     │       ├── p
+2025-06-03 15:43:42:     │       │   ├── ing (GET, HEAD)
+2025-06-03 15:43:42:     │       │   └── ong/
+2025-06-03 15:43:42:     │       │       ├── host (POST)
+2025-06-03 15:43:42:     │       │       └── join (POST)
+2025-06-03 15:43:42:     │       ├── friends (GET, HEAD)
+2025-06-03 15:43:42:     │       │   └── /
+2025-06-03 15:43:42:     │       │       ├── request (POST)
+2025-06-03 15:43:42:     │       │       │   ├── /
+2025-06-03 15:43:42:     │       │       │   │   └── :id
+2025-06-03 15:43:42:     │       │       │   │       └── /accept (POST)
+2025-06-03 15:43:42:     │       │       │   └── s/
+2025-06-03 15:43:42:     │       │       │       ├── received (GET, HEAD)
+2025-06-03 15:43:42:     │       │       │       └── sent (GET, HEAD)
+2025-06-03 15:43:42:     │       │       └── :id (DELETE)
+2025-06-03 15:43:42:     │       └── games (POST)
+2025-06-03 15:43:42:     └── * (OPTIONS)
+2025-06-03 15:43:42: 
+2025-06-03 15:43:42: └── (empty root node)
+2025-06-03 15:43:42:     ├── /
+2025-06-03 15:43:42:     │   ├── ws (GET, HEAD)
+2025-06-03 15:43:42:     │   ├── metrics (GET)
+2025-06-03 15:43:42:     │   └── api/
+2025-06-03 15:43:42:     │       ├── 2fa/
+2025-06-03 15:43:42:     │       │   ├── enable (POST)
+2025-06-03 15:43:42:     │       │   ├── verify (POST)
+2025-06-03 15:43:42:     │       │   └── disable (POST)
+2025-06-03 15:43:42:     │       ├── me (GET, HEAD)
+2025-06-03 15:43:42:     │       ├── user/me (PUT)
+2025-06-03 15:43:42:     │       ├── auth/
+2025-06-03 15:43:42:     │       │   ├── google (POST)
+2025-06-03 15:43:42:     │       │   └── sign_in (POST)
+2025-06-03 15:43:42:     │       ├── register (POST)
+2025-06-03 15:43:42:     │       ├── p
+2025-06-03 15:43:42:     │       │   ├── ing (GET, HEAD)
+2025-06-03 15:43:42:     │       │   └── ong/
+2025-06-03 15:43:42:     │       │       ├── host (POST)
+2025-06-03 15:43:42:     │       │       └── join (POST)
+2025-06-03 15:43:42:     │       ├── friends (GET, HEAD)
+2025-06-03 15:43:42:     │       │   └── /
+2025-06-03 15:43:42:     │       │       ├── request (POST)
+2025-06-03 15:43:42:     │       │       │   ├── /
+2025-06-03 15:43:42:     │       │       │   │   └── :id
+2025-06-03 15:43:42:     │       │       │   │       └── /accept (POST)
+2025-06-03 15:43:42:     │       │       │   └── s/
+2025-06-03 15:43:42:     │       │       │       ├── received (GET, HEAD)
+2025-06-03 15:43:42:     │       │       │       └── sent (GET, HEAD)
+2025-06-03 15:43:42:     │       │       └── :id (DELETE)
+2025-06-03 15:43:42:     │       └── games (POST)
+2025-06-03 15:43:42:     └── * (OPTIONS)
+2025-06-03 15:43:42: 
+2025-06-03 15:43:42: {"level":30,"time":1748965422696,"pid":138,"hostname":"4b749e1aa1a0","msg":"Server listening at https://127.0.0.1:3000"}
+2025-06-03 15:43:42: {"level":30,"time":1748965422696,"pid":138,"hostname":"4b749e1aa1a0","msg":"Server listening at https://172.18.0.3:3000"}
+2025-06-03 15:43:42: {"level":30,"time":1748965422696,"pid":138,"hostname":"4b749e1aa1a0","msg":"✅ Server running at https://localhost:3000"}
+2025-06-03 15:44:24: {"level":30,"time":1748965464603,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":35600},"msg":"incoming request"}
+2025-06-03 15:44:24: {"level":30,"time":1748965464614,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1","res":{"statusCode":200},"responseTime":9.905212998390198,"msg":"request completed"}
+2025-06-03 15:44:24: {"level":30,"time":1748965464616,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-2","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":35602},"msg":"incoming request"}
+2025-06-03 15:44:24: {"level":30,"time":1748965464617,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-3","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":35616},"msg":"incoming request"}
+2025-06-03 15:44:24: {"level":30,"time":1748965464619,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-2","res":{"statusCode":200},"responseTime":2.0594549998641014,"msg":"request completed"}
+2025-06-03 15:44:24: {"level":30,"time":1748965464619,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-3","res":{"statusCode":200},"responseTime":1.3883189968764782,"msg":"request completed"}
+2025-06-03 15:45:05: {"level":30,"time":1748965505025,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-4","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":55130},"msg":"incoming request"}
+2025-06-03 15:45:05: {"level":30,"time":1748965505027,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-4","res":{"statusCode":200},"responseTime":1.6253340020775795,"msg":"request completed"}
+2025-06-03 15:45:05: {"level":30,"time":1748965505029,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-5","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":55142},"msg":"incoming request"}
+2025-06-03 15:45:05: {"level":30,"time":1748965505036,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-5","res":{"statusCode":200},"responseTime":6.61081600189209,"msg":"request completed"}
+2025-06-03 15:45:05: {"level":30,"time":1748965505039,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-6","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":55152},"msg":"incoming request"}
+2025-06-03 15:45:05: {"level":30,"time":1748965505041,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-6","res":{"statusCode":200},"responseTime":1.7119089998304844,"msg":"request completed"}
+2025-06-03 15:45:09: {"level":30,"time":1748965509118,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-7","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":55156},"msg":"incoming request"}
+2025-06-03 15:45:09: {"level":30,"time":1748965509119,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-8","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":55172},"msg":"incoming request"}
+2025-06-03 15:45:09: {"level":30,"time":1748965509120,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-9","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":55176},"msg":"incoming request"}
+2025-06-03 15:45:09: {"level":30,"time":1748965509121,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-7","res":{"statusCode":200},"responseTime":2.2628780007362366,"msg":"request completed"}
+2025-06-03 15:45:09: {"level":30,"time":1748965509121,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-8","res":{"statusCode":200},"responseTime":1.5929870009422302,"msg":"request completed"}
+2025-06-03 15:45:09: {"level":30,"time":1748965509121,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-9","res":{"statusCode":200},"responseTime":1.1447249986231327,"msg":"request completed"}
+2025-06-03 15:47:48: {"level":30,"time":1748965668272,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-a","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":54590},"msg":"incoming request"}
+2025-06-03 15:47:48: {"level":30,"time":1748965668274,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-a","res":{"statusCode":200},"responseTime":1.9604240022599697,"msg":"request completed"}
+2025-06-03 15:47:48: {"level":30,"time":1748965668306,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-b","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":54592},"msg":"incoming request"}
+2025-06-03 15:47:48: {"level":30,"time":1748965668317,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-b","res":{"statusCode":200},"responseTime":10.781067997217178,"msg":"request completed"}
+2025-06-03 15:47:48: {"level":30,"time":1748965668318,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-c","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":54604},"msg":"incoming request"}
+2025-06-03 15:47:48: {"level":30,"time":1748965668319,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-c","res":{"statusCode":200},"responseTime":1.4556000009179115,"msg":"request completed"}
+2025-06-03 15:47:52: {"level":30,"time":1748965672751,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-d","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":54608},"msg":"incoming request"}
+2025-06-03 15:47:52: {"level":30,"time":1748965672761,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-d","res":{"statusCode":200},"responseTime":10.274927999824286,"msg":"request completed"}
+2025-06-03 15:47:52: {"level":30,"time":1748965672762,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-e","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":54612},"msg":"incoming request"}
+2025-06-03 15:47:52: {"level":30,"time":1748965672763,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-f","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":54624},"msg":"incoming request"}
+2025-06-03 15:47:52: {"level":30,"time":1748965672764,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-e","res":{"statusCode":200},"responseTime":2.0817389972507954,"msg":"request completed"}
+2025-06-03 15:47:52: {"level":30,"time":1748965672764,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-f","res":{"statusCode":200},"responseTime":1.5080789998173714,"msg":"request completed"}
+2025-06-03 15:48:05: {"level":30,"time":1748965685642,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-g","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":47422},"msg":"incoming request"}
+2025-06-03 15:48:05: {"level":30,"time":1748965685647,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-g","res":{"statusCode":200},"responseTime":4.934402000159025,"msg":"request completed"}
+2025-06-03 15:48:05: {"level":30,"time":1748965685650,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-h","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":47436},"msg":"incoming request"}
+2025-06-03 15:48:05: {"level":30,"time":1748965685652,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-h","res":{"statusCode":200},"responseTime":1.6946690008044243,"msg":"request completed"}
+2025-06-03 15:48:05: {"level":30,"time":1748965685662,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-i","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":47446},"msg":"incoming request"}
+2025-06-03 15:48:05: {"level":30,"time":1748965685663,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-i","res":{"statusCode":200},"responseTime":1.189930997788906,"msg":"request completed"}
+2025-06-03 15:48:19: {"level":30,"time":1748965699173,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-j","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":56866},"msg":"incoming request"}
+2025-06-03 15:48:19: {"level":30,"time":1748965699174,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-k","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":56860},"msg":"incoming request"}
+2025-06-03 15:48:19: {"level":30,"time":1748965699176,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-l","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":56878},"msg":"incoming request"}
+2025-06-03 15:48:19: {"level":30,"time":1748965699176,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-j","res":{"statusCode":200},"responseTime":3.174303997308016,"msg":"request completed"}
+2025-06-03 15:48:19: {"level":30,"time":1748965699177,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-k","res":{"statusCode":200},"responseTime":2.3709199987351894,"msg":"request completed"}
+2025-06-03 15:48:19: {"level":30,"time":1748965699178,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-l","res":{"statusCode":200},"responseTime":1.7364339977502823,"msg":"request completed"}
+2025-06-03 15:48:21: {"level":30,"time":1748965701530,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-m","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":56880},"msg":"incoming request"}
+2025-06-03 15:48:21: {"level":30,"time":1748965701531,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-m","res":{"statusCode":200},"responseTime":1.2116470001637936,"msg":"request completed"}
+2025-06-03 15:48:21: {"level":30,"time":1748965701554,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-n","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":56890},"msg":"incoming request"}
+2025-06-03 15:48:21: {"level":30,"time":1748965701556,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-o","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":56898},"msg":"incoming request"}
+2025-06-03 15:48:21: {"level":30,"time":1748965701557,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-n","res":{"statusCode":200},"responseTime":2.36574300006032,"msg":"request completed"}
+2025-06-03 15:48:21: {"level":30,"time":1748965701557,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-o","res":{"statusCode":200},"responseTime":1.1223560012876987,"msg":"request completed"}
+2025-06-03 15:48:22: {"level":30,"time":1748965702559,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-p","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":56914},"msg":"incoming request"}
+2025-06-03 15:48:22: {"level":30,"time":1748965702559,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-q","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":56928},"msg":"incoming request"}
+2025-06-03 15:48:22: {"level":30,"time":1748965702560,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-r","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":56930},"msg":"incoming request"}
+2025-06-03 15:48:22: {"level":30,"time":1748965702561,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-p","res":{"statusCode":200},"responseTime":2.1706819981336594,"msg":"request completed"}
+2025-06-03 15:48:22: {"level":30,"time":1748965702561,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-q","res":{"statusCode":200},"responseTime":1.5207449980080128,"msg":"request completed"}
+2025-06-03 15:48:22: {"level":30,"time":1748965702562,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-r","res":{"statusCode":200},"responseTime":1.1398510001599789,"msg":"request completed"}
+2025-06-03 15:48:23: {"level":30,"time":1748965703179,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-s","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":56936},"msg":"incoming request"}
+2025-06-03 15:48:23: {"level":30,"time":1748965703179,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-t","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":56942},"msg":"incoming request"}
+2025-06-03 15:48:23: {"level":30,"time":1748965703180,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-s","res":{"statusCode":200},"responseTime":1.7260449975728989,"msg":"request completed"}
+2025-06-03 15:48:23: {"level":30,"time":1748965703181,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-t","res":{"statusCode":200},"responseTime":1.0106539987027645,"msg":"request completed"}
+2025-06-03 15:48:23: {"level":30,"time":1748965703181,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-u","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":56950},"msg":"incoming request"}
+2025-06-03 15:48:23: {"level":30,"time":1748965703182,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-u","res":{"statusCode":200},"responseTime":0.619353000074625,"msg":"request completed"}
+2025-06-03 15:48:23: {"level":30,"time":1748965703860,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-v","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":50156},"msg":"incoming request"}
+2025-06-03 15:48:23: {"level":30,"time":1748965703861,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-v","res":{"statusCode":200},"responseTime":0.7917210012674332,"msg":"request completed"}
+2025-06-03 15:48:23: {"level":30,"time":1748965703875,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-w","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":50172},"msg":"incoming request"}
+2025-06-03 15:48:23: {"level":30,"time":1748965703876,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-x","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":50186},"msg":"incoming request"}
+2025-06-03 15:48:23: {"level":30,"time":1748965703877,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-w","res":{"statusCode":200},"responseTime":1.8972639963030815,"msg":"request completed"}
+2025-06-03 15:48:23: {"level":30,"time":1748965703877,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-x","res":{"statusCode":200},"responseTime":1.0833799988031387,"msg":"request completed"}
+2025-06-03 15:48:24: {"level":30,"time":1748965704552,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-y","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":50208},"msg":"incoming request"}
+2025-06-03 15:48:24: {"level":30,"time":1748965704553,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-z","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":50194},"msg":"incoming request"}
+2025-06-03 15:48:24: {"level":30,"time":1748965704554,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-10","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":50210},"msg":"incoming request"}
+2025-06-03 15:48:24: {"level":30,"time":1748965704555,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-y","res":{"statusCode":200},"responseTime":2.867857001721859,"msg":"request completed"}
+2025-06-03 15:48:24: {"level":30,"time":1748965704555,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-z","res":{"statusCode":200},"responseTime":2.2243850007653236,"msg":"request completed"}
+2025-06-03 15:48:24: {"level":30,"time":1748965704555,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-10","res":{"statusCode":200},"responseTime":1.7286239974200726,"msg":"request completed"}
+2025-06-03 15:48:29: {"level":30,"time":1748965709845,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-11","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":50222},"msg":"incoming request"}
+2025-06-03 15:48:29: {"level":30,"time":1748965709846,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-11","res":{"statusCode":200},"responseTime":1.2497970014810562,"msg":"request completed"}
+2025-06-03 15:48:29: {"level":30,"time":1748965709861,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-12","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":50232},"msg":"incoming request"}
+2025-06-03 15:48:29: {"level":30,"time":1748965709865,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-12","res":{"statusCode":200},"responseTime":4.416191000491381,"msg":"request completed"}
+2025-06-03 15:48:29: {"level":30,"time":1748965709865,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-13","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":50246},"msg":"incoming request"}
+2025-06-03 15:48:29: {"level":30,"time":1748965709866,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-13","res":{"statusCode":200},"responseTime":0.8258350007236004,"msg":"request completed"}
+2025-06-03 15:48:32: {"level":30,"time":1748965712092,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-14","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":50248},"msg":"incoming request"}
+2025-06-03 15:48:32: {"level":30,"time":1748965712093,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-15","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":50258},"msg":"incoming request"}
+2025-06-03 15:48:32: {"level":30,"time":1748965712093,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-16","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":50264},"msg":"incoming request"}
+2025-06-03 15:48:32: {"level":30,"time":1748965712095,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-14","res":{"statusCode":200},"responseTime":2.6053539998829365,"msg":"request completed"}
+2025-06-03 15:48:32: {"level":30,"time":1748965712095,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-15","res":{"statusCode":200},"responseTime":1.8913970030844212,"msg":"request completed"}
+2025-06-03 15:48:32: {"level":30,"time":1748965712095,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-16","res":{"statusCode":200},"responseTime":1.5179360024631023,"msg":"request completed"}
+2025-06-03 15:48:32: {"level":30,"time":1748965712798,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-17","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":50272},"msg":"incoming request"}
+2025-06-03 15:48:32: {"level":30,"time":1748965712803,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-17","res":{"statusCode":200},"responseTime":4.145844999700785,"msg":"request completed"}
+2025-06-03 15:48:32: {"level":30,"time":1748965712803,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-18","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":50282},"msg":"incoming request"}
+2025-06-03 15:48:32: {"level":30,"time":1748965712804,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-19","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":50298},"msg":"incoming request"}
+2025-06-03 15:48:32: {"level":30,"time":1748965712805,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-18","res":{"statusCode":200},"responseTime":1.8191870003938675,"msg":"request completed"}
+2025-06-03 15:48:32: {"level":30,"time":1748965712805,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-19","res":{"statusCode":200},"responseTime":1.114936999976635,"msg":"request completed"}
+2025-06-03 15:48:33: {"level":30,"time":1748965713277,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1a","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":50308},"msg":"incoming request"}
+2025-06-03 15:48:33: {"level":30,"time":1748965713278,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1b","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":50324},"msg":"incoming request"}
+2025-06-03 15:48:33: {"level":30,"time":1748965713279,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1a","res":{"statusCode":200},"responseTime":1.362109001725912,"msg":"request completed"}
+2025-06-03 15:48:33: {"level":30,"time":1748965713279,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1b","res":{"statusCode":200},"responseTime":0.9277169965207577,"msg":"request completed"}
+2025-06-03 15:48:33: {"level":30,"time":1748965713283,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1c","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":50330},"msg":"incoming request"}
+2025-06-03 15:48:33: {"level":30,"time":1748965713284,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1c","res":{"statusCode":200},"responseTime":1.409060001373291,"msg":"request completed"}
+2025-06-03 15:48:33: {"level":30,"time":1748965713857,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1d","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":41950},"msg":"incoming request"}
+2025-06-03 15:48:33: {"level":30,"time":1748965713858,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1e","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":41958},"msg":"incoming request"}
+2025-06-03 15:48:33: {"level":30,"time":1748965713858,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1d","res":{"statusCode":200},"responseTime":1.1490000002086163,"msg":"request completed"}
+2025-06-03 15:48:33: {"level":30,"time":1748965713858,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1e","res":{"statusCode":200},"responseTime":0.8345730006694794,"msg":"request completed"}
+2025-06-03 15:48:33: {"level":30,"time":1748965713885,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1f","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":41974},"msg":"incoming request"}
+2025-06-03 15:48:33: {"level":30,"time":1748965713887,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1f","res":{"statusCode":200},"responseTime":1.497494999319315,"msg":"request completed"}
+2025-06-03 15:48:34: {"level":30,"time":1748965714542,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1g","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":41978},"msg":"incoming request"}
+2025-06-03 15:48:34: {"level":30,"time":1748965714542,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1h","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":41990},"msg":"incoming request"}
+2025-06-03 15:48:34: {"level":30,"time":1748965714543,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1g","res":{"statusCode":200},"responseTime":1.105603002011776,"msg":"request completed"}
+2025-06-03 15:48:34: {"level":30,"time":1748965714544,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1h","res":{"statusCode":200},"responseTime":1.023148998618126,"msg":"request completed"}
+2025-06-03 15:48:34: {"level":30,"time":1748965714556,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1i","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":42002},"msg":"incoming request"}
+2025-06-03 15:48:34: {"level":30,"time":1748965714557,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1i","res":{"statusCode":200},"responseTime":1.2458689995110035,"msg":"request completed"}
+2025-06-03 15:48:35: {"level":30,"time":1748965715263,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1j","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":42008},"msg":"incoming request"}
+2025-06-03 15:48:35: {"level":30,"time":1748965715264,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1k","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":42016},"msg":"incoming request"}
+2025-06-03 15:48:35: {"level":30,"time":1748965715264,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1l","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":42022},"msg":"incoming request"}
+2025-06-03 15:48:35: {"level":30,"time":1748965715265,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1j","res":{"statusCode":200},"responseTime":1.5029240027070045,"msg":"request completed"}
+2025-06-03 15:48:35: {"level":30,"time":1748965715265,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1k","res":{"statusCode":200},"responseTime":1.2103889994323254,"msg":"request completed"}
+2025-06-03 15:48:35: {"level":30,"time":1748965715265,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1l","res":{"statusCode":200},"responseTime":0.9227549992501736,"msg":"request completed"}
+2025-06-03 15:48:36: {"level":30,"time":1748965716469,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1m","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":42032},"msg":"incoming request"}
+2025-06-03 15:48:36: {"level":30,"time":1748965716480,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1m","res":{"statusCode":200},"responseTime":10.543836999684572,"msg":"request completed"}
+2025-06-03 15:48:36: {"level":30,"time":1748965716485,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1n","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":42038},"msg":"incoming request"}
+2025-06-03 15:48:36: {"level":30,"time":1748965716486,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1n","res":{"statusCode":200},"responseTime":0.9692499972879887,"msg":"request completed"}
+2025-06-03 15:48:36: {"level":30,"time":1748965716487,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1o","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":42052},"msg":"incoming request"}
+2025-06-03 15:48:36: {"level":30,"time":1748965716489,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1o","res":{"statusCode":200},"responseTime":0.9903640002012253,"msg":"request completed"}
+2025-06-03 15:48:37: {"level":30,"time":1748965717958,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1p","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":42058},"msg":"incoming request"}
+2025-06-03 15:48:37: {"level":30,"time":1748965717959,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1p","res":{"statusCode":200},"responseTime":1.241636000573635,"msg":"request completed"}
+2025-06-03 15:48:37: {"level":30,"time":1748965717984,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1q","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":42068},"msg":"incoming request"}
+2025-06-03 15:48:37: {"level":30,"time":1748965717985,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1r","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":42072},"msg":"incoming request"}
+2025-06-03 15:48:37: {"level":30,"time":1748965717986,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1q","res":{"statusCode":200},"responseTime":2.2734830006957054,"msg":"request completed"}
+2025-06-03 15:48:37: {"level":30,"time":1748965717987,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1r","res":{"statusCode":200},"responseTime":1.5563610009849072,"msg":"request completed"}
+2025-06-03 15:49:26: {"level":30,"time":1748965766365,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1s","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":56696},"msg":"incoming request"}
+2025-06-03 15:49:26: {"level":30,"time":1748965766366,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1s","res":{"statusCode":200},"responseTime":0.9968129992485046,"msg":"request completed"}
+2025-06-03 15:49:26: {"level":30,"time":1748965766375,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1t","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":56706},"msg":"incoming request"}
+2025-06-03 15:49:26: {"level":30,"time":1748965766379,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1t","res":{"statusCode":200},"responseTime":4.4972549974918365,"msg":"request completed"}
+2025-06-03 15:49:26: {"level":30,"time":1748965766383,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1u","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":56708},"msg":"incoming request"}
+2025-06-03 15:49:26: {"level":30,"time":1748965766385,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1u","res":{"statusCode":200},"responseTime":1.924916997551918,"msg":"request completed"}
+2025-06-03 15:50:18: {"level":30,"time":1748965818037,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1v","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":47576},"msg":"incoming request"}
+2025-06-03 15:50:18: {"level":30,"time":1748965818038,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1w","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":47582},"msg":"incoming request"}
+2025-06-03 15:50:18: {"level":30,"time":1748965818039,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1v","res":{"statusCode":200},"responseTime":1.5869100019335747,"msg":"request completed"}
+2025-06-03 15:50:18: {"level":30,"time":1748965818039,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1w","res":{"statusCode":200},"responseTime":0.9842329993844032,"msg":"request completed"}
+2025-06-03 15:50:18: {"level":30,"time":1748965818070,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1x","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":47592},"msg":"incoming request"}
+2025-06-03 15:50:18: {"level":30,"time":1748965818071,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1x","res":{"statusCode":200},"responseTime":0.9433230012655258,"msg":"request completed"}
+2025-06-03 15:50:36: {"level":30,"time":1748965836140,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1y","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":48938},"msg":"incoming request"}
+2025-06-03 15:50:36: {"level":30,"time":1748965836141,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1y","res":{"statusCode":200},"responseTime":1.0549469999969006,"msg":"request completed"}
+2025-06-03 15:50:36: {"level":30,"time":1748965836149,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1z","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":48950},"msg":"incoming request"}
+2025-06-03 15:50:36: {"level":30,"time":1748965836150,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-1z","res":{"statusCode":200},"responseTime":0.9747160002589226,"msg":"request completed"}
+2025-06-03 15:50:36: {"level":30,"time":1748965836162,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-20","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":48960},"msg":"incoming request"}
+2025-06-03 15:50:36: {"level":30,"time":1748965836163,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-20","res":{"statusCode":200},"responseTime":1.0788130015134811,"msg":"request completed"}
+2025-06-03 15:50:36: {"level":30,"time":1748965836756,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-21","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":48976},"msg":"incoming request"}
+2025-06-03 15:50:36: {"level":30,"time":1748965836757,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-21","res":{"statusCode":200},"responseTime":1.198904998600483,"msg":"request completed"}
+2025-06-03 15:50:36: {"level":30,"time":1748965836771,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-22","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":48992},"msg":"incoming request"}
+2025-06-03 15:50:36: {"level":30,"time":1748965836771,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-23","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":48994},"msg":"incoming request"}
+2025-06-03 15:50:36: {"level":30,"time":1748965836772,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-22","res":{"statusCode":200},"responseTime":1.4120770022273064,"msg":"request completed"}
+2025-06-03 15:50:36: {"level":30,"time":1748965836773,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-23","res":{"statusCode":200},"responseTime":1.0654159970581532,"msg":"request completed"}
+2025-06-03 15:50:38: {"level":30,"time":1748965838730,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-24","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":49008},"msg":"incoming request"}
+2025-06-03 15:50:38: {"level":30,"time":1748965838731,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-24","res":{"statusCode":200},"responseTime":0.9135599993169308,"msg":"request completed"}
+2025-06-03 15:50:38: {"level":30,"time":1748965838739,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-25","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":49024},"msg":"incoming request"}
+2025-06-03 15:50:38: {"level":30,"time":1748965838740,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-25","res":{"statusCode":200},"responseTime":0.9340989999473095,"msg":"request completed"}
+2025-06-03 15:50:38: {"level":30,"time":1748965838749,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-26","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":49038},"msg":"incoming request"}
+2025-06-03 15:50:38: {"level":30,"time":1748965838750,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-26","res":{"statusCode":200},"responseTime":0.9082010015845299,"msg":"request completed"}
+2025-06-03 15:51:24: {"level":30,"time":1748965884466,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-27","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":56872},"msg":"incoming request"}
+2025-06-03 15:51:24: {"level":30,"time":1748965884472,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-27","res":{"statusCode":200},"responseTime":5.773634999990463,"msg":"request completed"}
+2025-06-03 15:51:24: {"level":30,"time":1748965884472,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-28","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":56886},"msg":"incoming request"}
+2025-06-03 15:51:24: {"level":30,"time":1748965884473,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-28","res":{"statusCode":200},"responseTime":0.7440740019083023,"msg":"request completed"}
+2025-06-03 15:51:36: {"level":30,"time":1748965896354,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-29","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":58144},"msg":"incoming request"}
+2025-06-03 15:51:36: {"level":30,"time":1748965896356,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-29","res":{"statusCode":200},"responseTime":1.9483450017869473,"msg":"request completed"}
+2025-06-03 15:51:36: {"level":30,"time":1748965896373,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-2a","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":58150},"msg":"incoming request"}
+2025-06-03 15:51:36: {"level":30,"time":1748965896375,"pid":138,"hostname":"4b749e1aa1a0","reqId":"req-2a","res":{"statusCode":200},"responseTime":1.6174860000610352,"msg":"request completed"}
+2025-06-03 15:56:18: {"level":40,"time":1748966178948,"pid":52,"hostname":"8c28cfae24d6","msg":"⚠️ Dossier \"public\" introuvable à /home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/public"}
+2025-06-03 15:56:18: └── (empty root node)
+2025-06-03 15:56:18:     ├── /
+2025-06-03 15:56:18:     │   ├── ws (GET, HEAD)
+2025-06-03 15:56:18:     │   ├── metrics (GET)
+2025-06-03 15:56:18:     │   └── api/
+2025-06-03 15:56:18:     │       ├── 2fa/
+2025-06-03 15:56:18:     │       │   ├── enable (POST)
+2025-06-03 15:56:18:     │       │   ├── verify (POST)
+2025-06-03 15:56:18:     │       │   └── disable (POST)
+2025-06-03 15:56:18:     │       ├── me (GET, HEAD)
+2025-06-03 15:56:18:     │       ├── user/me (PUT)
+2025-06-03 15:56:18:     │       ├── auth/
+2025-06-03 15:56:18:     │       │   ├── google (POST)
+2025-06-03 15:56:18:     │       │   └── sign_in (POST)
+2025-06-03 15:56:18:     │       ├── register (POST)
+2025-06-03 15:56:18:     │       ├── p
+2025-06-03 15:56:18:     │       │   ├── ing (GET, HEAD)
+2025-06-03 15:56:18:     │       │   └── ong/
+2025-06-03 15:56:18:     │       │       ├── host (POST)
+2025-06-03 15:56:18:     │       │       └── join (POST)
+2025-06-03 15:56:18:     │       ├── friends (GET, HEAD)
+2025-06-03 15:56:18:     │       │   └── /
+2025-06-03 15:56:18:     │       │       ├── request (POST)
+2025-06-03 15:56:18:     │       │       │   ├── /
+2025-06-03 15:56:18:     │       │       │   │   └── :id
+2025-06-03 15:56:18:     │       │       │   │       └── /accept (POST)
+2025-06-03 15:56:18:     │       │       │   └── s/
+2025-06-03 15:56:18:     │       │       │       ├── received (GET, HEAD)
+2025-06-03 15:56:18:     │       │       │       └── sent (GET, HEAD)
+2025-06-03 15:56:18:     │       │       └── :id (DELETE)
+2025-06-03 15:56:18:     │       └── games (POST)
+2025-06-03 15:56:18:     └── * (OPTIONS)
+2025-06-03 15:56:18: 
+2025-06-03 15:56:18: └── (empty root node)
+2025-06-03 15:56:18:     ├── /
+2025-06-03 15:56:18:     │   ├── ws (GET, HEAD)
+2025-06-03 15:56:18:     │   ├── metrics (GET)
+2025-06-03 15:56:18:     │   └── api/
+2025-06-03 15:56:18:     │       ├── 2fa/
+2025-06-03 15:56:18:     │       │   ├── enable (POST)
+2025-06-03 15:56:18:     │       │   ├── verify (POST)
+2025-06-03 15:56:18:     │       │   └── disable (POST)
+2025-06-03 15:56:18:     │       ├── me (GET, HEAD)
+2025-06-03 15:56:18:     │       ├── user/me (PUT)
+2025-06-03 15:56:18:     │       ├── auth/
+2025-06-03 15:56:18:     │       │   ├── google (POST)
+2025-06-03 15:56:18:     │       │   └── sign_in (POST)
+2025-06-03 15:56:18:     │       ├── register (POST)
+2025-06-03 15:56:18:     │       ├── p
+2025-06-03 15:56:18:     │       │   ├── ing (GET, HEAD)
+2025-06-03 15:56:18:     │       │   └── ong/
+2025-06-03 15:56:18:     │       │       ├── host (POST)
+2025-06-03 15:56:18:     │       │       └── join (POST)
+2025-06-03 15:56:18:     │       ├── friends (GET, HEAD)
+2025-06-03 15:56:18:     │       │   └── /
+2025-06-03 15:56:18:     │       │       ├── request (POST)
+2025-06-03 15:56:18:     │       │       │   ├── /
+2025-06-03 15:56:18:     │       │       │   │   └── :id
+2025-06-03 15:56:18:     │       │       │   │       └── /accept (POST)
+2025-06-03 15:56:18:     │       │       │   └── s/
+2025-06-03 15:56:18:     │       │       │       ├── received (GET, HEAD)
+2025-06-03 15:56:18:     │       │       │       └── sent (GET, HEAD)
+2025-06-03 15:56:18:     │       │       └── :id (DELETE)
+2025-06-03 15:56:18:     │       └── games (POST)
+2025-06-03 15:56:18:     └── * (OPTIONS)
+2025-06-03 15:56:18: 
+2025-06-03 15:56:18: {"level":30,"time":1748966178970,"pid":52,"hostname":"8c28cfae24d6","msg":"Server listening at https://127.0.0.1:3000"}
+2025-06-03 15:56:18: {"level":30,"time":1748966178970,"pid":52,"hostname":"8c28cfae24d6","msg":"Server listening at https://172.18.0.2:3000"}
+2025-06-03 15:56:18: {"level":30,"time":1748966178971,"pid":52,"hostname":"8c28cfae24d6","msg":"✅ Server running at https://localhost:3000"}
+2025-06-03 15:56:29: {"level":30,"time":1748966189146,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-1","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":48532},"msg":"incoming request"}
+2025-06-03 15:56:29: {"level":30,"time":1748966189154,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-1","res":{"statusCode":200},"responseTime":6.4607629999518394,"msg":"request completed"}
+2025-06-03 15:56:29: {"level":30,"time":1748966189163,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-2","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":48538},"msg":"incoming request"}
+2025-06-03 15:56:29: {"level":30,"time":1748966189165,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-2","res":{"statusCode":200},"responseTime":1.5539340004324913,"msg":"request completed"}
+2025-06-03 15:56:51: {"level":30,"time":1748966211619,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-3","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":54372},"msg":"incoming request"}
+2025-06-03 15:56:51: {"level":30,"time":1748966211620,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-3","res":{"statusCode":200},"responseTime":1.2096300013363361,"msg":"request completed"}
+2025-06-03 15:56:51: {"level":30,"time":1748966211627,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-4","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":54386},"msg":"incoming request"}
+2025-06-03 15:56:51: {"level":30,"time":1748966211629,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-4","res":{"statusCode":200},"responseTime":0.9724959991872311,"msg":"request completed"}
+2025-06-03 15:57:03: {"level":30,"time":1748966223065,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-5","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":59974},"msg":"incoming request"}
+2025-06-03 15:57:03: {"level":30,"time":1748966223066,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-5","res":{"statusCode":200},"responseTime":0.9772869981825352,"msg":"request completed"}
+2025-06-03 15:57:03: {"level":30,"time":1748966223082,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-6","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":59984},"msg":"incoming request"}
+2025-06-03 15:57:03: {"level":30,"time":1748966223084,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-6","res":{"statusCode":200},"responseTime":1.235741999000311,"msg":"request completed"}
+2025-06-03 15:57:20: {"level":30,"time":1748966240245,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-7","req":{"method":"POST","url":"/api/auth/sign_in","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":39744},"msg":"incoming request"}
+2025-06-03 15:57:20: {"level":30,"time":1748966240296,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-7","res":{"statusCode":200},"responseTime":50.86440400034189,"msg":"request completed"}
+2025-06-03 15:57:22: {"level":30,"time":1748966242866,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-8","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":39748},"msg":"incoming request"}
+2025-06-03 15:57:22: {"level":30,"time":1748966242867,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-8","res":{"statusCode":200},"responseTime":1.1854159981012344,"msg":"request completed"}
+2025-06-03 15:57:22: {"level":30,"time":1748966242901,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-9","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":39758},"msg":"incoming request"}
+2025-06-03 15:57:22: {"level":30,"time":1748966242903,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-9","res":{"statusCode":200},"responseTime":1.3665550015866756,"msg":"request completed"}
+2025-06-03 15:57:58: {"level":30,"time":1748966278567,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-a","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":50784},"msg":"incoming request"}
+2025-06-03 15:57:58: {"level":30,"time":1748966278569,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-a","res":{"statusCode":200},"responseTime":1.2038220018148422,"msg":"request completed"}
+2025-06-03 15:57:58: {"level":30,"time":1748966278589,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-b","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":50794},"msg":"incoming request"}
+2025-06-03 15:57:58: {"level":30,"time":1748966278591,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-b","res":{"statusCode":200},"responseTime":1.0769669972360134,"msg":"request completed"}
+2025-06-03 16:01:56: {"level":30,"time":1748966516550,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-c","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":36016},"msg":"incoming request"}
+2025-06-03 16:01:56: {"level":30,"time":1748966516551,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-c","res":{"statusCode":200},"responseTime":1.019581999629736,"msg":"request completed"}
+2025-06-03 16:01:56: {"level":30,"time":1748966516558,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-d","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":36024},"msg":"incoming request"}
+2025-06-03 16:01:56: {"level":30,"time":1748966516560,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-d","res":{"statusCode":200},"responseTime":1.450899999588728,"msg":"request completed"}
+2025-06-03 16:01:56: {"level":30,"time":1748966516588,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-e","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":36034},"msg":"incoming request"}
+2025-06-03 16:01:56: {"level":30,"time":1748966516589,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-e","res":{"statusCode":200},"responseTime":1.3085019998252392,"msg":"request completed"}
+2025-06-03 16:03:05: {"level":30,"time":1748966585943,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-f","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":60568},"msg":"incoming request"}
+2025-06-03 16:03:05: {"level":30,"time":1748966585944,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-f","res":{"statusCode":200},"responseTime":0.9703890010714531,"msg":"request completed"}
+2025-06-03 16:03:05: {"level":30,"time":1748966585949,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-g","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":60584},"msg":"incoming request"}
+2025-06-03 16:03:05: {"level":30,"time":1748966585950,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-g","res":{"statusCode":200},"responseTime":0.9802360013127327,"msg":"request completed"}
+2025-06-03 16:03:05: {"level":30,"time":1748966585970,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-h","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":60598},"msg":"incoming request"}
+2025-06-03 16:03:05: {"level":30,"time":1748966585972,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-h","res":{"statusCode":200},"responseTime":1.5478289984166622,"msg":"request completed"}
+2025-06-03 16:03:07: {"level":30,"time":1748966587569,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-i","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":60612},"msg":"incoming request"}
+2025-06-03 16:03:07: {"level":30,"time":1748966587572,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-i","res":{"statusCode":200},"responseTime":2.049966000020504,"msg":"request completed"}
+2025-06-03 16:03:07: {"level":30,"time":1748966587573,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-j","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":60626},"msg":"incoming request"}
+2025-06-03 16:03:07: {"level":30,"time":1748966587574,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-j","res":{"statusCode":200},"responseTime":0.9052379988133907,"msg":"request completed"}
+2025-06-03 16:03:07: {"level":30,"time":1748966587584,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-k","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":60636},"msg":"incoming request"}
+2025-06-03 16:03:07: {"level":30,"time":1748966587585,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-k","res":{"statusCode":200},"responseTime":0.8765380010008812,"msg":"request completed"}
+2025-06-03 16:03:40: {"level":30,"time":1748966620813,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-l","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":48986},"msg":"incoming request"}
+2025-06-03 16:03:40: {"level":30,"time":1748966620814,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-m","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":48992},"msg":"incoming request"}
+2025-06-03 16:03:40: {"level":30,"time":1748966620816,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-l","res":{"statusCode":200},"responseTime":2.2414830029010773,"msg":"request completed"}
+2025-06-03 16:03:40: {"level":30,"time":1748966620816,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-m","res":{"statusCode":200},"responseTime":1.218265000730753,"msg":"request completed"}
+2025-06-03 16:03:40: {"level":30,"time":1748966620817,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-n","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":49008},"msg":"incoming request"}
+2025-06-03 16:03:40: {"level":30,"time":1748966620818,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-n","res":{"statusCode":200},"responseTime":0.7721500024199486,"msg":"request completed"}
+2025-06-03 16:03:44: {"level":30,"time":1748966624309,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-o","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":41384},"msg":"incoming request"}
+2025-06-03 16:03:44: {"level":30,"time":1748966624310,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-o","res":{"statusCode":200},"responseTime":1.106215000152588,"msg":"request completed"}
+2025-06-03 16:03:44: {"level":30,"time":1748966624318,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-p","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":41396},"msg":"incoming request"}
+2025-06-03 16:03:44: {"level":30,"time":1748966624319,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-p","res":{"statusCode":200},"responseTime":0.9303799979388714,"msg":"request completed"}
+2025-06-03 16:03:44: {"level":30,"time":1748966624351,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-q","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":41400},"msg":"incoming request"}
+2025-06-03 16:03:44: {"level":30,"time":1748966624352,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-q","res":{"statusCode":200},"responseTime":1.1129739992320538,"msg":"request completed"}
+2025-06-03 16:04:04: {"level":30,"time":1748966644036,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-r","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":55018},"msg":"incoming request"}
+2025-06-03 16:04:04: {"level":30,"time":1748966644037,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-s","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":55022},"msg":"incoming request"}
+2025-06-03 16:04:04: {"level":30,"time":1748966644037,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-r","res":{"statusCode":200},"responseTime":1.0854239985346794,"msg":"request completed"}
+2025-06-03 16:04:04: {"level":30,"time":1748966644038,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-s","res":{"statusCode":200},"responseTime":0.9393769986927509,"msg":"request completed"}
+2025-06-03 16:04:04: {"level":30,"time":1748966644042,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-t","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":55036},"msg":"incoming request"}
+2025-06-03 16:04:04: {"level":30,"time":1748966644043,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-t","res":{"statusCode":200},"responseTime":0.8672679997980595,"msg":"request completed"}
+2025-06-03 16:04:05: {"level":30,"time":1748966645907,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-u","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":55046},"msg":"incoming request"}
+2025-06-03 16:04:05: {"level":30,"time":1748966645909,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-u","res":{"statusCode":200},"responseTime":1.3584799990057945,"msg":"request completed"}
+2025-06-03 16:04:05: {"level":30,"time":1748966645924,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-v","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":55058},"msg":"incoming request"}
+2025-06-03 16:04:05: {"level":30,"time":1748966645928,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-v","res":{"statusCode":200},"responseTime":4.038275998085737,"msg":"request completed"}
+2025-06-03 16:04:05: {"level":30,"time":1748966645929,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-w","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":55064},"msg":"incoming request"}
+2025-06-03 16:04:05: {"level":30,"time":1748966645930,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-w","res":{"statusCode":200},"responseTime":1.0803800001740456,"msg":"request completed"}
+2025-06-03 16:04:12: {"level":30,"time":1748966652322,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-x","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":55078},"msg":"incoming request"}
+2025-06-03 16:04:12: {"level":30,"time":1748966652322,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-y","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":55088},"msg":"incoming request"}
+2025-06-03 16:04:12: {"level":30,"time":1748966652323,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-x","res":{"statusCode":200},"responseTime":1.1989310011267662,"msg":"request completed"}
+2025-06-03 16:04:12: {"level":30,"time":1748966652323,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-y","res":{"statusCode":200},"responseTime":0.8111779987812042,"msg":"request completed"}
+2025-06-03 16:04:12: {"level":30,"time":1748966652349,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-z","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":55096},"msg":"incoming request"}
+2025-06-03 16:04:12: {"level":30,"time":1748966652350,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-z","res":{"statusCode":200},"responseTime":0.7985120005905628,"msg":"request completed"}
+2025-06-03 16:04:15: {"level":30,"time":1748966655317,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-10","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":39954},"msg":"incoming request"}
+2025-06-03 16:04:15: {"level":30,"time":1748966655318,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-11","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":39968},"msg":"incoming request"}
+2025-06-03 16:04:15: {"level":30,"time":1748966655320,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-10","res":{"statusCode":200},"responseTime":2.4729400016367435,"msg":"request completed"}
+2025-06-03 16:04:15: {"level":30,"time":1748966655320,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-11","res":{"statusCode":200},"responseTime":1.7940969988703728,"msg":"request completed"}
+2025-06-03 16:04:15: {"level":30,"time":1748966655346,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-12","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":39974},"msg":"incoming request"}
+2025-06-03 16:04:15: {"level":30,"time":1748966655347,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-12","res":{"statusCode":200},"responseTime":1.2046300023794174,"msg":"request completed"}
+2025-06-03 16:04:16: {"level":30,"time":1748966656812,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-13","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":39980},"msg":"incoming request"}
+2025-06-03 16:04:16: {"level":30,"time":1748966656813,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-13","res":{"statusCode":200},"responseTime":0.9359469972550869,"msg":"request completed"}
+2025-06-03 16:04:16: {"level":30,"time":1748966656826,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-14","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":39992},"msg":"incoming request"}
+2025-06-03 16:04:16: {"level":30,"time":1748966656830,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-14","res":{"statusCode":200},"responseTime":3.7196139991283417,"msg":"request completed"}
+2025-06-03 16:04:16: {"level":30,"time":1748966656830,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-15","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":39994},"msg":"incoming request"}
+2025-06-03 16:04:16: {"level":30,"time":1748966656831,"pid":52,"hostname":"8c28cfae24d6","reqId":"req-15","res":{"statusCode":200},"responseTime":0.6614539995789528,"msg":"request completed"}
+2025-06-03 16:06:18: {"level":40,"time":1748966778010,"pid":52,"hostname":"1c08a1c0e329","msg":"⚠️ Dossier \"public\" introuvable à /home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/public"}
+2025-06-03 16:06:18: └── (empty root node)
+2025-06-03 16:06:18:     ├── /
+2025-06-03 16:06:18:     │   ├── ws (GET, HEAD)
+2025-06-03 16:06:18:     │   ├── metrics (GET)
+2025-06-03 16:06:18:     │   └── api/
+2025-06-03 16:06:18:     │       ├── 2fa/
+2025-06-03 16:06:18:     │       │   ├── enable (POST)
+2025-06-03 16:06:18:     │       │   ├── verify (POST)
+2025-06-03 16:06:18:     │       │   └── disable (POST)
+2025-06-03 16:06:18:     │       ├── me (GET, HEAD)
+2025-06-03 16:06:18:     │       ├── user/me (PUT)
+2025-06-03 16:06:18:     │       ├── auth/
+2025-06-03 16:06:18:     │       │   ├── google (POST)
+2025-06-03 16:06:18:     │       │   └── sign_in (POST)
+2025-06-03 16:06:18:     │       ├── register (POST)
+2025-06-03 16:06:18:     │       ├── p
+2025-06-03 16:06:18:     │       │   ├── ing (GET, HEAD)
+2025-06-03 16:06:18:     │       │   └── ong/
+2025-06-03 16:06:18:     │       │       ├── host (POST)
+2025-06-03 16:06:18:     │       │       └── join (POST)
+2025-06-03 16:06:18:     │       ├── friends (GET, HEAD)
+2025-06-03 16:06:18:     │       │   └── /
+2025-06-03 16:06:18:     │       │       ├── request (POST)
+2025-06-03 16:06:18:     │       │       │   ├── /
+2025-06-03 16:06:18:     │       │       │   │   └── :id
+2025-06-03 16:06:18:     │       │       │   │       └── /accept (POST)
+2025-06-03 16:06:18:     │       │       │   └── s/
+2025-06-03 16:06:18:     │       │       │       ├── received (GET, HEAD)
+2025-06-03 16:06:18:     │       │       │       └── sent (GET, HEAD)
+2025-06-03 16:06:18:     │       │       └── :id (DELETE)
+2025-06-03 16:06:18:     │       └── games (POST)
+2025-06-03 16:06:18:     └── * (OPTIONS)
+2025-06-03 16:06:18: 
+2025-06-03 16:06:18: └── (empty root node)
+2025-06-03 16:06:18:     ├── /
+2025-06-03 16:06:18:     │   ├── ws (GET, HEAD)
+2025-06-03 16:06:18:     │   ├── metrics (GET)
+2025-06-03 16:06:18:     │   └── api/
+2025-06-03 16:06:18:     │       ├── 2fa/
+2025-06-03 16:06:18:     │       │   ├── enable (POST)
+2025-06-03 16:06:18:     │       │   ├── verify (POST)
+2025-06-03 16:06:18:     │       │   └── disable (POST)
+2025-06-03 16:06:18:     │       ├── me (GET, HEAD)
+2025-06-03 16:06:18:     │       ├── user/me (PUT)
+2025-06-03 16:06:18:     │       ├── auth/
+2025-06-03 16:06:18:     │       │   ├── google (POST)
+2025-06-03 16:06:18:     │       │   └── sign_in (POST)
+2025-06-03 16:06:18:     │       ├── register (POST)
+2025-06-03 16:06:18:     │       ├── p
+2025-06-03 16:06:18:     │       │   ├── ing (GET, HEAD)
+2025-06-03 16:06:18:     │       │   └── ong/
+2025-06-03 16:06:18:     │       │       ├── host (POST)
+2025-06-03 16:06:18:     │       │       └── join (POST)
+2025-06-03 16:06:18:     │       ├── friends (GET, HEAD)
+2025-06-03 16:06:18:     │       │   └── /
+2025-06-03 16:06:18:     │       │       ├── request (POST)
+2025-06-03 16:06:18:     │       │       │   ├── /
+2025-06-03 16:06:18:     │       │       │   │   └── :id
+2025-06-03 16:06:18:     │       │       │   │       └── /accept (POST)
+2025-06-03 16:06:18:     │       │       │   └── s/
+2025-06-03 16:06:18:     │       │       │       ├── received (GET, HEAD)
+2025-06-03 16:06:18:     │       │       │       └── sent (GET, HEAD)
+2025-06-03 16:06:18:     │       │       └── :id (DELETE)
+2025-06-03 16:06:18:     │       └── games (POST)
+2025-06-03 16:06:18:     └── * (OPTIONS)
+2025-06-03 16:06:18: 
+2025-06-03 16:06:18: {"level":30,"time":1748966778032,"pid":52,"hostname":"1c08a1c0e329","msg":"Server listening at https://127.0.0.1:3000"}
+2025-06-03 16:06:18: {"level":30,"time":1748966778032,"pid":52,"hostname":"1c08a1c0e329","msg":"Server listening at https://172.18.0.3:3000"}
+2025-06-03 16:06:18: {"level":30,"time":1748966778032,"pid":52,"hostname":"1c08a1c0e329","msg":"✅ Server running at https://localhost:3000"}
+2025-06-03 16:10:15: {"level":30,"time":1748967015941,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-1","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":37274},"msg":"incoming request"}
+2025-06-03 16:10:15: {"level":30,"time":1748967015948,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-1","res":{"statusCode":200},"responseTime":6.229263000190258,"msg":"request completed"}
+2025-06-03 16:10:15: {"level":30,"time":1748967015956,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-2","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":37278},"msg":"incoming request"}
+2025-06-03 16:10:15: {"level":30,"time":1748967015958,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-2","res":{"statusCode":200},"responseTime":1.9537349976599216,"msg":"request completed"}
+2025-06-03 16:14:13: {"level":30,"time":1748967253851,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-3","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":54770},"msg":"incoming request"}
+2025-06-03 16:14:13: {"level":30,"time":1748967253853,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-3","res":{"statusCode":200},"responseTime":1.0691270008683205,"msg":"request completed"}
+2025-06-03 16:14:13: {"level":30,"time":1748967253883,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-4","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":54774},"msg":"incoming request"}
+2025-06-03 16:14:13: {"level":30,"time":1748967253884,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-4","res":{"statusCode":200},"responseTime":0.9998010024428368,"msg":"request completed"}
+2025-06-03 16:14:20: {"level":30,"time":1748967260896,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-5","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":54778},"msg":"incoming request"}
+2025-06-03 16:14:20: {"level":30,"time":1748967260898,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-5","res":{"statusCode":200},"responseTime":1.2744450010359287,"msg":"request completed"}
+2025-06-03 16:14:20: {"level":30,"time":1748967260911,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-6","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":54792},"msg":"incoming request"}
+2025-06-03 16:14:20: {"level":30,"time":1748967260912,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-6","res":{"statusCode":200},"responseTime":1.1400210000574589,"msg":"request completed"}
+2025-06-03 16:14:32: {"level":30,"time":1748967272162,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-7","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":37410},"msg":"incoming request"}
+2025-06-03 16:14:32: {"level":30,"time":1748967272163,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-7","res":{"statusCode":200},"responseTime":1.1042510010302067,"msg":"request completed"}
+2025-06-03 16:14:32: {"level":30,"time":1748967272179,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-8","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":37420},"msg":"incoming request"}
+2025-06-03 16:14:32: {"level":30,"time":1748967272181,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-8","res":{"statusCode":200},"responseTime":1.1968160010874271,"msg":"request completed"}
+2025-06-03 16:14:39: {"level":30,"time":1748967279695,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-9","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":48558},"msg":"incoming request"}
+2025-06-03 16:14:39: {"level":30,"time":1748967279697,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-9","res":{"statusCode":200},"responseTime":1.273803997784853,"msg":"request completed"}
+2025-06-03 16:14:39: {"level":30,"time":1748967279712,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-a","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":48574},"msg":"incoming request"}
+2025-06-03 16:14:39: {"level":30,"time":1748967279714,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-a","res":{"statusCode":200},"responseTime":1.4991700015962124,"msg":"request completed"}
+2025-06-03 16:18:23: {"level":30,"time":1748967503286,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-b","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":38416},"msg":"incoming request"}
+2025-06-03 16:18:23: {"level":30,"time":1748967503293,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-b","res":{"statusCode":200},"responseTime":5.9660359993577,"msg":"request completed"}
+2025-06-03 16:18:23: {"level":30,"time":1748967503293,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-c","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":38432},"msg":"incoming request"}
+2025-06-03 16:18:23: {"level":30,"time":1748967503294,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-c","res":{"statusCode":200},"responseTime":0.8735879994928837,"msg":"request completed"}
+2025-06-03 16:18:23: {"level":30,"time":1748967503301,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-d","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":38440},"msg":"incoming request"}
+2025-06-03 16:18:23: {"level":30,"time":1748967503302,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-d","res":{"statusCode":200},"responseTime":1.2285760007798672,"msg":"request completed"}
+2025-06-03 16:18:25: {"level":30,"time":1748967505613,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-e","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":37084},"msg":"incoming request"}
+2025-06-03 16:18:25: {"level":30,"time":1748967505618,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-f","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":37100},"msg":"incoming request"}
+2025-06-03 16:18:25: {"level":30,"time":1748967505618,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-e","res":{"statusCode":200},"responseTime":5.389928996562958,"msg":"request completed"}
+2025-06-03 16:18:25: {"level":30,"time":1748967505619,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-g","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":37104},"msg":"incoming request"}
+2025-06-03 16:18:25: {"level":30,"time":1748967505620,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-f","res":{"statusCode":200},"responseTime":1.7173150032758713,"msg":"request completed"}
+2025-06-03 16:18:25: {"level":30,"time":1748967505620,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-g","res":{"statusCode":200},"responseTime":0.9313159994781017,"msg":"request completed"}
+2025-06-03 16:18:51: {"level":30,"time":1748967531834,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-h","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":39180},"msg":"incoming request"}
+2025-06-03 16:18:51: {"level":30,"time":1748967531835,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-i","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":39188},"msg":"incoming request"}
+2025-06-03 16:18:51: {"level":30,"time":1748967531837,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-h","res":{"statusCode":200},"responseTime":2.1764810010790825,"msg":"request completed"}
+2025-06-03 16:18:51: {"level":30,"time":1748967531837,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-i","res":{"statusCode":200},"responseTime":1.5497169978916645,"msg":"request completed"}
+2025-06-03 16:18:51: {"level":30,"time":1748967531868,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-j","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":39190},"msg":"incoming request"}
+2025-06-03 16:18:51: {"level":30,"time":1748967531870,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-j","res":{"statusCode":200},"responseTime":1.977282002568245,"msg":"request completed"}
+2025-06-03 16:18:54: {"level":30,"time":1748967534368,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-k","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":53112},"msg":"incoming request"}
+2025-06-03 16:18:54: {"level":30,"time":1748967534370,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-k","res":{"statusCode":200},"responseTime":1.1722860001027584,"msg":"request completed"}
+2025-06-03 16:18:54: {"level":30,"time":1748967534408,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-l","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":53120},"msg":"incoming request"}
+2025-06-03 16:18:54: {"level":30,"time":1748967534410,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-l","res":{"statusCode":200},"responseTime":1.427335999906063,"msg":"request completed"}
+2025-06-03 16:19:59: {"level":30,"time":1748967599470,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-m","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":60026},"msg":"incoming request"}
+2025-06-03 16:19:59: {"level":30,"time":1748967599472,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-m","res":{"statusCode":200},"responseTime":1.458967000246048,"msg":"request completed"}
+2025-06-03 16:19:59: {"level":30,"time":1748967599511,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-n","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":60032},"msg":"incoming request"}
+2025-06-03 16:19:59: {"level":30,"time":1748967599512,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-n","res":{"statusCode":200},"responseTime":0.8699890002608299,"msg":"request completed"}
+2025-06-03 16:21:05: {"level":30,"time":1748967665472,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-o","req":{"method":"GET","url":"/api/friends","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":34420},"msg":"incoming request"}
+2025-06-03 16:21:05: {"level":30,"time":1748967665475,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-p","req":{"method":"GET","url":"/api/friends/requests/received","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":34430},"msg":"incoming request"}
+2025-06-03 16:21:05: {"level":30,"time":1748967665477,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-q","req":{"method":"GET","url":"/api/friends/requests/sent","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":34446},"msg":"incoming request"}
+2025-06-03 16:21:05: {"level":30,"time":1748967665478,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-o","res":{"statusCode":200},"responseTime":5.814987000077963,"msg":"request completed"}
+2025-06-03 16:21:05: {"level":30,"time":1748967665478,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-p","res":{"statusCode":200},"responseTime":3.370089001953602,"msg":"request completed"}
+2025-06-03 16:21:05: {"level":30,"time":1748967665479,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-r","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":34452},"msg":"incoming request"}
+2025-06-03 16:21:05: {"level":30,"time":1748967665480,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-q","res":{"statusCode":200},"responseTime":2.3495999984443188,"msg":"request completed"}
+2025-06-03 16:21:05: {"level":30,"time":1748967665481,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-r","res":{"statusCode":200},"responseTime":1.6547269970178604,"msg":"request completed"}
+2025-06-03 16:21:05: {"level":30,"time":1748967665498,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-s","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":34474},"msg":"incoming request"}
+2025-06-03 16:21:05: {"level":30,"time":1748967665498,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-t","req":{"method":"GET","url":"/api/friends","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":34486},"msg":"incoming request"}
+2025-06-03 16:21:05: {"level":30,"time":1748967665499,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-u","req":{"method":"GET","url":"/api/friends/requests/sent","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":34464},"msg":"incoming request"}
+2025-06-03 16:21:05: {"level":30,"time":1748967665499,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-v","req":{"method":"GET","url":"/api/friends/requests/received","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":34492},"msg":"incoming request"}
+2025-06-03 16:21:05: {"level":30,"time":1748967665500,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-s","res":{"statusCode":200},"responseTime":1.930161003023386,"msg":"request completed"}
+2025-06-03 16:21:05: {"level":30,"time":1748967665500,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-t","res":{"statusCode":200},"responseTime":1.4220810011029243,"msg":"request completed"}
+2025-06-03 16:21:05: {"level":30,"time":1748967665500,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-u","res":{"statusCode":200},"responseTime":1.0337769985198975,"msg":"request completed"}
+2025-06-03 16:21:05: {"level":30,"time":1748967665500,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-v","res":{"statusCode":200},"responseTime":0.7468149997293949,"msg":"request completed"}
+2025-06-03 16:21:09: {"level":30,"time":1748967669931,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-w","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":34512},"msg":"incoming request"}
+2025-06-03 16:21:09: {"level":30,"time":1748967669932,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-x","req":{"method":"GET","url":"/api/friends","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":34498},"msg":"incoming request"}
+2025-06-03 16:21:09: {"level":30,"time":1748967669934,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-y","req":{"method":"GET","url":"/api/friends/requests/sent","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":34526},"msg":"incoming request"}
+2025-06-03 16:21:09: {"level":30,"time":1748967669935,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-w","res":{"statusCode":200},"responseTime":4.02989000082016,"msg":"request completed"}
+2025-06-03 16:21:09: {"level":30,"time":1748967669935,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-x","res":{"statusCode":200},"responseTime":2.8518540002405643,"msg":"request completed"}
+2025-06-03 16:21:09: {"level":30,"time":1748967669935,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-y","res":{"statusCode":200},"responseTime":1.3749129995703697,"msg":"request completed"}
+2025-06-03 16:21:09: {"level":30,"time":1748967669935,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-z","req":{"method":"GET","url":"/api/friends/requests/received","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":34540},"msg":"incoming request"}
+2025-06-03 16:21:09: {"level":30,"time":1748967669936,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-z","res":{"statusCode":200},"responseTime":0.6380220018327236,"msg":"request completed"}
+2025-06-03 16:21:09: {"level":30,"time":1748967669964,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-10","req":{"method":"GET","url":"/api/friends","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":34560},"msg":"incoming request"}
+2025-06-03 16:21:09: {"level":30,"time":1748967669965,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-11","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":34550},"msg":"incoming request"}
+2025-06-03 16:21:09: {"level":30,"time":1748967669968,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-12","req":{"method":"GET","url":"/api/friends/requests/sent","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":34564},"msg":"incoming request"}
+2025-06-03 16:21:09: {"level":30,"time":1748967669968,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-10","res":{"statusCode":200},"responseTime":4.381698001176119,"msg":"request completed"}
+2025-06-03 16:21:09: {"level":30,"time":1748967669968,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-11","res":{"statusCode":200},"responseTime":3.864358000457287,"msg":"request completed"}
+2025-06-03 16:21:09: {"level":30,"time":1748967669969,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-12","res":{"statusCode":200},"responseTime":0.7176910005509853,"msg":"request completed"}
+2025-06-03 16:21:09: {"level":30,"time":1748967669969,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-13","req":{"method":"GET","url":"/api/friends/requests/received","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":34578},"msg":"incoming request"}
+2025-06-03 16:21:09: {"level":30,"time":1748967669970,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-13","res":{"statusCode":200},"responseTime":0.6558960005640984,"msg":"request completed"}
+2025-06-03 16:21:10: {"level":30,"time":1748967670779,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-14","req":{"method":"POST","url":"/api/2fa/enable","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":34586},"msg":"incoming request"}
+2025-06-03 16:21:10: 🔍 user dans req: {
+2025-06-03 16:21:10:   id: 2,
+2025-06-03 16:21:10:   email: 'l',
+2025-06-03 16:21:10:   pseudo: 'l',
+2025-06-03 16:21:10:   twoFAEnabled: false,
+2025-06-03 16:21:10:   iat: 1748966240
+2025-06-03 16:21:10: }
+2025-06-03 16:21:10: {"level":30,"time":1748967670829,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-14","res":{"statusCode":200},"responseTime":49.1256139986217,"msg":"request completed"}
+2025-06-03 16:28:39: {"level":30,"time":1748968119571,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-15","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":58422},"msg":"incoming request"}
+2025-06-03 16:28:39: {"level":30,"time":1748968119572,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-15","res":{"statusCode":200},"responseTime":1.2692020013928413,"msg":"request completed"}
+2025-06-03 16:28:39: {"level":30,"time":1748968119593,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-16","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":58426},"msg":"incoming request"}
+2025-06-03 16:28:39: {"level":30,"time":1748968119594,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-17","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":58434},"msg":"incoming request"}
+2025-06-03 16:28:39: {"level":30,"time":1748968119595,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-16","res":{"statusCode":200},"responseTime":1.8349040001630783,"msg":"request completed"}
+2025-06-03 16:28:39: {"level":30,"time":1748968119595,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-17","res":{"statusCode":200},"responseTime":1.066390000283718,"msg":"request completed"}
+2025-06-03 16:28:39: {"level":30,"time":1748968119609,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-18","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":58450},"msg":"incoming request"}
+2025-06-03 16:28:39: {"level":30,"time":1748968119610,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-18","res":{"statusCode":200},"responseTime":0.7923879995942116,"msg":"request completed"}

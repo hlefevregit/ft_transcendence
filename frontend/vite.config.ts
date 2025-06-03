@@ -41,6 +41,10 @@ export default defineConfig({
     host: true,
     port: 5173,
     strictPort: true,
+    allowedHosts: [
+      'localhost',
+      'c2r10p2',
+    ],
     watch: {
       usePolling: true,
       interval: 100,
