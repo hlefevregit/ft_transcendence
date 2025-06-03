@@ -340,7 +340,7 @@ export const useOnlineLoop = (pong: React.RefObject<game.pongStruct>,
                 game.fitCameraToArena(pong.current);
 
                 // 1. Input du joueur local
-                game.doPaddleMovement(pong, gameModes);
+                // game.doPaddleMovement(pong, gameModes);
 
                 // 2. Score check
                 const maxScore = Math.max(pong.current.player1Score, pong.current.player2Score);
@@ -403,7 +403,7 @@ export const useOnlineLoop = (pong: React.RefObject<game.pongStruct>,
                     if (pong.current.ball) {
                         pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
                         pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;
-                        game.makeBallBounce(pong.current, states);
+                        // game.makeBallBounce(pong.current, states);
                         payload.ballPosition = {
                             x: pong.current.ball.position.x,
                             y: pong.current.ball.position.y,

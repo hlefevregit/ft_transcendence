@@ -87,9 +87,10 @@ export const	createSlider = (sliderName: string, minValue: number, maxValue: num
 	slider.background = game.colorsScheme.dark1;
 	slider.thumbColor = game.colorsScheme.auroraAccent1;
 	slider.borderColor = game.colorsScheme.auroraAccent1;
-	slider.thumbWidth = 20;
+	slider.thumbWidth = 10;
 	slider.isThumbCircle = true;
 	slider.displayThumb = true;
+	slider.isThumbClamped = true;
 
 	slider.minimum = minValue;
 	slider.maximum = maxValue;
@@ -392,7 +393,7 @@ export const	smoothStep = (start: number, end: number, alpha: number): number =>
 }
 
 let		time: number = 0;
-export const	transitionToCamera = async (cameraA: baby.FreeCamera | undefined, cameraB: baby.FreeCamera | undefined, duration: number, pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>): Promise<void> =>
+export const	transitionToCamera = async (cameraA: baby.FreeCamera | baby.FlyCamera | undefined, cameraB: baby.FreeCamera | baby.FlyCamera | undefined, duration: number, pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>): Promise<void> =>
 {
 	console.log("Started transition");
 	const	lastState = states.current;
@@ -571,4 +572,29 @@ export const	createDynamicButton = (
 	
 	block.addControl(button);
 	return block;
+}
+
+export const	resizeArenaShell = (pong: React.RefObject<game.pongStruct>): void =>
+{
+	if (   !pong.current.ceiling
+		|| !pong.current.floor
+		|| !pong.current.wallLeft
+		|| !pong.current.wallRight ) return;
+
+	if (pong.current.arenaWidth > pong.current.arenaHeight)
+		{pong.current.floor.scaling.x = Math.max(pong.current.arenaWidth, pong.current.arenaHeight) * 2 + 3;}
+	else
+		{pong.current.floor.scaling.x = Math.min(pong.current.arenaWidth, pong.current.arenaHeight) * 2 + 3;}
+
+	pong.current.floor.position.z = pong.current.arenaHeight + 1;
+	pong.current.ceiling.scaling.x = pong.current.floor.scaling.x;
+	pong.current.ceiling.position.z = -pong.current.floor.position.z;
+	if (pong.current.arenaWidth < pong.current.arenaHeight)
+		{pong.current.wallLeft.scaling.z = Math.max(pong.current.arenaWidth, pong.current.arenaHeight) * 2 + 3;}
+	else
+		{pong.current.wallLeft.scaling.z = Math.min(pong.current.arenaWidth, pong.current.arenaHeight) * 2 + 3;}
+
+	pong.current.wallLeft.position.x = pong.current.arenaWidth + 1;
+	pong.current.wallRight.scaling.z = pong.current.wallLeft.scaling.z;
+	pong.current.wallRight.position.x = -pong.current.wallLeft.position.x;
 }

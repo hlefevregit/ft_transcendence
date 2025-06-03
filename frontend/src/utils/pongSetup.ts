@@ -95,12 +95,18 @@ export type pongStruct =
 	mainMenuCam?: baby.FreeCamera;
 	arenaCam?: baby.FreeCamera;
 	pongSettingsCam?: baby.FreeCamera;
+	notFoundCam?: baby.FlyCamera;
 	map?: baby.AbstractMesh;
 	
 	// Pong objects
 	paddle1?: baby.Mesh;
 	paddle2?: baby.Mesh;
 	ball?: baby.Mesh;
+
+	ceiling?: baby.Mesh;
+	floor?: baby.Mesh;
+	wallLeft?: baby.Mesh;
+	wallRight?: baby.Mesh;
 	
 	// Variables
 	pressedKeys: Set<string>;
@@ -316,7 +322,7 @@ export enum	lang
 	english,
 	french,
 	italian,
-	brail,
+	braille,
 };
 
 export const	getLabel = (key: labelKey, currentLanguage: lang): string =>
@@ -330,7 +336,7 @@ export const	getLabel = (key: labelKey, currentLanguage: lang): string =>
 			return label[key][1];
 		case lang.italian:
 			return label[key][2];
-		case lang.brail:
+		case lang.braille:
 			return label[key][3] || "⠨⠇⠁⠝⠛ ⠨⠝⠕⠞ ⠨⠋⠕⠥⠝⠙"; // Fallback to English if Brail translation is not available
 		default:
 			return "❌ language not found ❌";

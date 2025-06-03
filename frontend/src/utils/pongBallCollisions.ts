@@ -77,7 +77,6 @@ export const chooseBouncingAngle = (pong: game.pongStruct, paddlePos: baby.Vecto
 
 	let	distance = (pong.ball.position.z - paddlePos.z) / distance2D(pong.ball.position, paddlePos) / 10;
 
-	console.log("Angle :", distance);
 	return distance;
 };
 

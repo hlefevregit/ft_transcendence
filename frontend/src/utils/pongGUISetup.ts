@@ -110,9 +110,6 @@ export const	updateGUIValues = (
 			control.markAsDirty();
 		}
 	}
-	
-	// Mark the GUI texture as dirty to ensure updates are rendered
-	pong.current.guiTexture.markAsDirty();
 }
 
 export const	refreshRoomsEntries = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>): baby.StackPanel =>
@@ -124,9 +121,6 @@ export const	refreshRoomsEntries = (pong: React.RefObject<game.pongStruct>, stat
 	}
 	console.log("🔁 Refreshing room list, rooms =", Array.from(pong.current.rooms.keys()));
 
-
-
-	
 	const	roomsVerticalPanel = game.createVerticalStackPanel("roomsVerticalPanel", 0);
 	for (const [key, valueOrGetter] of pong.current.rooms.entries()) {
 		console.log("🧱 Rendering room:", key);
@@ -283,7 +277,7 @@ export const    instantiateSettingsGUI = (pong: React.RefObject<game.pongStruct>
 
 	const	brailButton = game.createButton("brailButton", "🦮", () =>
 	{
-		lang.current = game.lang.brail;
+		lang.current = game.lang.braille;
 		game.updateGUIValues(pong, states, lang);
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").text = lang.current;
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").markAsDirty();
@@ -430,6 +424,7 @@ export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct
 	const	pongSettingsArenaWidth = game.createSlider("pongSettingsArenaWidth", 7, 20, 1, pong.current.arenaWidth, (value: number) =>
 	{
 		pong.current.arenaWidth = value;
+		game.resizeArenaShell(pong);
 		game.findComponentByName(pong, "pongSettingsArenaWidthTextValue").text = value.toString();
 	});
 
@@ -442,6 +437,7 @@ export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct
 	const	pongSettingsArenaHeight = game.createSlider("pongSettingsArenaHeight", 7, 20, 1, pong.current.arenaHeight, (value: number) =>
 	{
 		pong.current.arenaHeight = value;
+		game.resizeArenaShell(pong);
 		game.findComponentByName(pong, "pongSettingsArenaHeightTextValue").text = value.toString();
 	});
 
