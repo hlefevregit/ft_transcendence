@@ -83,8 +83,22 @@ const	Pong: React.FC = () =>
 		});
 
 
+		// Register WebSocket handlers for both online and tournament modes
 		useWebSocketOnline(pong, socketRef, gameModes, states, lang, userNameRef, ws);
-	
+		
+		// Add tournament WebSocket integration
+		import('@/utils/pong/tournament').then(tournamentModule => {
+			tournamentModule.useTournamentWebSocket(
+				pong, 
+				socketRef, 
+				gameModes, 
+				states, 
+				lang, 
+				userNameRef, 
+				ws
+			);
+		});
+    
 		
 		game.initializeAllGUIScreens(pong, gameModes, states, lang, socketRef, navigate);
 
@@ -189,7 +203,20 @@ const	Pong: React.FC = () =>
 			{
 				useOnlineLoop(pong, socketRef, gameModes, states, userNameRef, lastHandledState);
 			}
-
+			else if (gameModes.current === game.gameModes.tournament)
+			{
+				// Handle tournament gameplay loop
+				import('@/utils/pong/tournament').then(tournamentModule => {
+					tournamentModule.handleTournamentLoop(
+						pong,
+						socketRef,
+						gameModes,
+						states,
+						userNameRef,
+						lastHandledState
+					);
+				});
+			}
 			else 
 			{
 				switch (states.current)

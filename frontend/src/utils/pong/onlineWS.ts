@@ -38,189 +38,190 @@ export const useWebSocketOnline = (pong: React.RefObject<game.pongStruct>,
         console.error("❌ WebSocket erreur :", err);
     };
 
+    // Remove the game mode check to ensure the handler is always registered
+    // if (gameModes.current === game.gameModes.online) {  // REMOVE THIS LINE
 
-    if (gameModes.current === game.gameModes.online) {
-
-        ws.onmessage = (event) => {
-        
-            let data;
-            try {
-                data = JSON.parse(event.data);
-            } catch (err) {
-                console.error("❌ Erreur parsing JSON :", err);
-                return;
+    ws.onmessage = (event) => {
+    
+        let data;
+        try {
+            data = JSON.parse(event.data);
+            console.log("🔄 Message received:", data.type); // Add this debug line
+        } catch (err) {
+            console.error("❌ Erreur parsing JSON :", err);
+            return;
+        }
+    
+        switch (data.type) {
+    
+            case 'game_hosted': {
+                console.log('🎮 Game hosted with ID:', data.gameId);
+    
+                pong.current.isHost = true ;
+                const roomId = data.gameId;
+                pong.current.lastHostedRoomId = roomId;
+    
+                const roomName = `${userNameRef.current || 'Anonymous'}'s room`;
+                console.log("🧠 userNameRef.current =", userNameRef.current);
+    
+                const roomPanel = game.createRoomPanel(pong, lang, roomName, () => {
+                    console.log("🧩 Creating GUI for", roomId);
+                    socketRef.current?.send(JSON.stringify({
+                        type: 'join_game',
+                        gameId: roomId,
+                        roomName: roomName,
+                    }));
+                });
+                console.log("📦 roomPanel créé :", roomPanel?.name ?? 'undefined');
+    
+                pong.current.rooms.set(roomId, () => roomPanel);
+                console.log("🗂 Room ajoutée au Map avec ID:", roomId);
+                break;
             }
     
-            switch (data.type) {
+            case 'room_list': {
+                console.log("📜 Liste des rooms reçue:", data.rooms);
     
-                case 'game_hosted': {
-                    console.log('🎮 Game hosted with ID:', data.gameId);
+                // Réinitialise les rooms
+                pong.current.rooms.clear();
     
-                    pong.current.isHost = true ;
-                    const roomId = data.gameId;
-                    pong.current.lastHostedRoomId = roomId;
-    
-                    const roomName = `${userNameRef.current || 'Anonymous'}'s room`;
-                    console.log("🧠 userNameRef.current =", userNameRef.current);
-    
-                    const roomPanel = game.createRoomPanel(pong, lang, roomName, () => {
-                        console.log("🧩 Creating GUI for", roomId);
+                for (const room of data.rooms) {
+                    const roomPanel = game.createRoomPanel(pong, lang, room.roomName, () => {
+                        console.log("🔗 Joining room:", room.gameId);
+                        pong.current.isHost = false;
                         socketRef.current?.send(JSON.stringify({
                             type: 'join_game',
-                            gameId: roomId,
-                            roomName: roomName,
-                        }));
+                            gameId: room.gameId,
+                    }));
                     });
-                    console.log("📦 roomPanel créé :", roomPanel?.name ?? 'undefined');
-    
-                    pong.current.rooms.set(roomId, () => roomPanel);
-                    console.log("🗂 Room ajoutée au Map avec ID:", roomId);
-                    break;
+                    pong.current.rooms.set(room.gameId, () => roomPanel);
                 }
     
-                case 'room_list': {
-                    console.log("📜 Liste des rooms reçue:", data.rooms);
-    
-                    // Réinitialise les rooms
-                    pong.current.rooms.clear();
-    
-                    for (const room of data.rooms) {
-                        const roomPanel = game.createRoomPanel(pong, lang, room.roomName, () => {
-                            console.log("🔗 Joining room:", room.gameId);
-                            pong.current.isHost = false;
-                            socketRef.current?.send(JSON.stringify({
-                                type: 'join_game',
-                                gameId: room.gameId,
-                            }));
-                        });
-                        pong.current.rooms.set(room.gameId, () => roomPanel);
-                    }
-    
-                    // MAJ de l’affichage GUI
-                    const updatedList = game.refreshRoomsEntries(pong, states, gameModes);
-                    const verticalStack = pong.current.roomListVerticalStackPanel;
-                    if (verticalStack) {
-                        const old = verticalStack.getChildByName("roomsVerticalPanel");
-                        if (old) verticalStack.removeControl(old);
-                        verticalStack.addControl(updatedList);
-                    } else {
-                        console.warn("⚠️ roomListVerticalStackPanel introuvable");
-                    }
-    
-                    break;
+                // MAJ de l’affichage GUI
+                const updatedList = game.refreshRoomsEntries(pong, states, gameModes);
+                const verticalStack = pong.current.roomListVerticalStackPanel;
+                if (verticalStack) {
+                    const old = verticalStack.getChildByName("roomsVerticalPanel");
+                    if (old) verticalStack.removeControl(old);
+                    verticalStack.addControl(updatedList);
+                } else {
+                    console.warn("⚠️ roomListVerticalStackPanel introuvable");
                 }
     
-                case 'room_left': {
-                    const roomId = data.gameId;
-                    console.log("🚪 Room left:", roomId);
-    
-                    const roomPanel = pong.current.rooms.get(roomId)?.();
-                    if (roomPanel) {
-                        roomPanel.dispose();
-                        pong.current.rooms.delete(roomId);
-                        console.log("🗑️ Room removed from Map:", roomId);
-                    } else {
-                        console.warn("⚠️ Room panel not found for ID:", roomId);
-                    }
-                    break;
-                }
-    
-                case 'joined_game': {
-                    console.log('👥 Rejoint game:', data.gameId);
-    
-                    break;
-                }
-    
-                case 'start_game': {
-                    console.log("🚀 Start game triggered for:", data.gameId);
-                    if (gameModes.current !== game.gameModes.online)
-                        gameModes.current = game.gameModes.online;
-                    states.current = game.states.waiting_to_start;
-                    break;
-                }
-    
-                case 'state_update': {
-                    // console.log("🎮 Game update received:", data);
-    
-                    if (gameModes.current === game.gameModes.online) {
-                        // 🎯 HOST: applique la position de l'adversaire (player 2)
-                        if (pong.current.isHost && typeof data.paddle2Z === 'number') {
-                            pong.current.paddle2TargetZ = data.paddle2Z;
-                        }
-    
-                        if (!pong.current.isHost && typeof data.paddle1Z === 'number') {
-                            pong.current.paddle1TargetZ = data.paddle1Z;
-                        }
-    
-                        // 🟢 Seul le host reçoit et met à jour la balle
-                        if (!pong.current.isHost && data.ballPosition && pong.current.ball) {
-                            pong.current.ball.position.x = data.ballPosition.x;
-                            pong.current.ball.position.y = data.ballPosition.y;
-                            pong.current.ball.position.z = data.ballPosition.z;
-                        }
-    
-                        if (!pong.current.isHost && data.ballDirection) {
-                            pong.current.ballDirection = data.ballDirection;
-                        }
-    
-                        if (!pong.current.isHost && typeof data.ballSpeedModifier === 'number') {
-                            pong.current.ballSpeedModifier = data.ballSpeedModifier;
-                        }
-                    }
-    
-                    break;
-                }
-    
-                case 'game_finished': {
-                    console.log("🏁 Game finished:", data.reason || "normal");
-                    console.log("🏆 Winner:", (pong.current.player1Score > pong.current.player2Score ? data.player1Id : data.player2Id));
-                    // ✅ Mets à jour l'état interne de ton jeu
-                    states.current = game.states.game_finished;
-    
-                    // ✅ Stocke les infos du gagnant et de la raison
-                    pong.current.lastGameWinner = data.winner;
-                    pong.current.lastGameReason = data.reason || 'normal';
-    
-                    // ✅ Envoie les infos pour la DB (si pas déjà envoyé)
-                    if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-                        if (pong.current.isHost || data.reason !== 'normal') {
-                            const res = fetch(`https://${backendIP}:3000/api/games`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    Authorization: `Bearer ${localStorage.getItem('authToken')}`, // adapte si tu n'utilises pas JWT
-                                },
-                                body: JSON.stringify({
-                                    gameId: data.gameId || pong.current.lastHostedRoomId,
-                                    player1Id: data.player1Id,
-                                    player2Id: data.player2Id,
-                                    player1Score: pong.current.player1Score,
-                                    player2Score: pong.current.player2Score,
-                                    winnerId: data.winner || (pong.current.player1Score > pong.current.player2Score ? data.player1Id : data.player2Id),
-                                    reason: data.reason || 'normal',
-                                }),
-                            });
-                            if (!res) {
-                                console.error("❌ Erreur lors de l'envoi des données du jeu :", res);
-                            }
-                            else {
-                                console.log("✅ Données du jeu envoyées avec succès");
-                            }
-                        }
-                    }
-                    break;
-                }
-                case 'error': {
-                    console.error('❗ Erreur serveur:', data.message);
-                    break;
-                }
-    
-                default: {
-                    console.log('ℹ️ Message inconnu reçu:', data);
-                }
+                break;
             }
-        };
-    }
+    
+            case 'room_left': {
+                const roomId = data.gameId;
+                console.log("🚪 Room left:", roomId);
+    
+                const roomPanel = pong.current.rooms.get(roomId)?.();
+                if (roomPanel) {
+                    roomPanel.dispose();
+                    pong.current.rooms.delete(roomId);
+                    console.log("🗑️ Room removed from Map:", roomId);
+                } else {
+                    console.warn("⚠️ Room panel not found for ID:", roomId);
+                }
+                break;
+            }
+    
+            case 'joined_game': {
+                console.log('👥 Rejoint game:', data.gameId);
+    
+                break;
+            }
+    
+            case 'start_game': {
+                console.log("🚀 Start game triggered for:", data.gameId);
+                if (gameModes.current !== game.gameModes.online)
+                    gameModes.current = game.gameModes.online;
+                states.current = game.states.waiting_to_start;
+                break;
+            }
+    
+            case 'state_update': {
+                // console.log("🎮 Game update received:", data);
+    
+                if (gameModes.current === game.gameModes.online) {
+                    // 🎯 HOST: applique la position de l'adversaire (player 2)
+                    if (pong.current.isHost && typeof data.paddle2Z === 'number') {
+                        pong.current.paddle2TargetZ = data.paddle2Z;
+                    }
+    
+                    if (!pong.current.isHost && typeof data.paddle1Z === 'number') {
+                        pong.current.paddle1TargetZ = data.paddle1Z;
+                    }
+    
+                    // 🟢 Seul le host reçoit et met à jour la balle
+                    if (!pong.current.isHost && data.ballPosition && pong.current.ball) {
+                        pong.current.ball.position.x = data.ballPosition.x;
+                        pong.current.ball.position.y = data.ballPosition.y;
+                        pong.current.ball.position.z = data.ballPosition.z;
+                    }
+    
+                    if (!pong.current.isHost && data.ballDirection) {
+                        pong.current.ballDirection = data.ballDirection;
+                    }
+    
+                    if (!pong.current.isHost && typeof data.ballSpeedModifier === 'number') {
+                        pong.current.ballSpeedModifier = data.ballSpeedModifier;
+                    }
+                }
+    
+                break;
+            }
+    
+            case 'game_finished': {
+                console.log("🏁 Game finished:", data.reason || "normal");
+                console.log("🏆 Winner:", (pong.current.player1Score > pong.current.player2Score ? data.player1Id : data.player2Id));
+                // ✅ Mets à jour l'état interne de ton jeu
+                states.current = game.states.game_finished;
+    
+                // ✅ Stocke les infos du gagnant et de la raison
+                pong.current.lastGameWinner = data.winner;
+                pong.current.lastGameReason = data.reason || 'normal';
+    
+                // ✅ Envoie les infos pour la DB (si pas déjà envoyé)
+                if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+                    if (pong.current.isHost || data.reason !== 'normal') {
+                        const res = fetch(`/api/games`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization: `Bearer ${localStorage.getItem('authToken')}`, // adapte si tu n'utilises pas JWT
+                            },
+                            body: JSON.stringify({
+                                gameId: data.gameId || pong.current.lastHostedRoomId,
+                                player1Id: data.player1Id,
+                                player2Id: data.player2Id,
+                                player1Score: pong.current.player1Score,
+                                player2Score: pong.current.player2Score,
+                                winnerId: data.winner || (pong.current.player1Score > pong.current.player2Score ? data.player1Id : data.player2Id),
+                                reason: data.reason || 'normal',
+                            }),
+                        });
+                        if (!res) {
+                            console.error("❌ Erreur lors de l'envoi des données du jeu :", res);
+                        }
+                        else {
+                            console.log("✅ Données du jeu envoyées avec succès");
+                        }
+                    }
+                }
+                break;
+            }
+            case 'error': {
+                console.error('❗ Erreur serveur:', data.message);
+                break;
+            }
+    
+            default: {
+                console.log('ℹ️ Message inconnu reçu:', data);
+            }
+        }
+    };
+    // }
 
 }
 
