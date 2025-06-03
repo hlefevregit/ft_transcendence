@@ -8,7 +8,7 @@ services:
       - "3000:3000"
     volumes:
       - backend_data:${BACKEND_PATH}
-      - ./backend/certs:/app/certs:ro
+      - ${BACKEND_PATH}/certs:/app/certs:ro
       - sqlite_data:/app/prisma/sqlite
     environment:
       - NODE_ENV=development
@@ -20,14 +20,24 @@ services:
     networks:
       - ft_network
 
+  pong:
+    build:
+      context: ./backend/pong-service
+      dockerfile: Dockerfile.dev
+    ports:
+      - "4000:4000"
+    networks:
+      - ft_network
+
   twofa:
     build:
-      context: ${BACKEND_PATH}/src/2FA-service
+      context: ./backend/2FA-service
       dockerfile: Dockerfile.dev
     ports:
       - "4001:4001"
     networks:
       - ft_network
+    
 
   frontend:
     build:
@@ -53,7 +63,7 @@ services:
       - "8082:8082"  # pour nginx_status
     volumes:
       - ./nginx.dev.conf:/etc/nginx/nginx.conf
-      - ./backend/certs:/etc/nginx/certs:ro
+      - ./backend/main/certs:/etc/nginx/certs:ro
     depends_on:
       - frontend
       - backend

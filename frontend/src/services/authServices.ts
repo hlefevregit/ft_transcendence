@@ -40,13 +40,14 @@ export const handleEmailLogin = async (email: string, password: string) => {
   export const googleLogin = async (idToken: string) => {
     const response = await fetch('/api/auth/google', {
         method: 'POST',
+        credentials: 'include', // Assurez-vous que les cookies sont inclus
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id_token: idToken })
     });
     return response.json();
 };
 
-export const handle2FALogin = async (totp: string, userId: string) => {
+export const handle2FALogin = async (totp: string) => {
   const token = localStorage.getItem('authToken');
   if (!token) {
     throw new Error('No authentication token found');

@@ -1,6 +1,5 @@
 // imports
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
@@ -51,16 +50,19 @@ export enum	gameModes
 	local,
 	ai,
 	online,
+	tournament,
 }
 
 export enum states 
 {
 	main_menu,
 	settings,
+	host_or_join,
 	game_settings,
-	waiting_lobby,
+	tournament_settings,
+	hosting_waiting_players,
+	room_list,
 	waiting_to_start,
-	waiting_new_round,
 	countdown,
 	in_transition,
 	in_game,
@@ -76,7 +78,6 @@ export type pongStruct =
 	skybox?: baby.Mesh;
 
 	// Cameras
-	camera?: baby.FreeCamera;	// deprecated
 	transitionCam?: baby.FreeCamera;
 	mainMenuCam?: baby.FreeCamera;
 	arenaCam?: baby.FreeCamera;
@@ -110,6 +111,10 @@ export type pongStruct =
 	// player1Name: string;
 	// player2Name: string;
 
+	tournamentPlayerCount: number;
+	tournamentPlayerNames: string[];
+	tournamentPlayerScores: number[];
+
 	// Screens GUI
 	mainMenuGUI?: baby.Container;
 	settingsGUI?: baby.Container;
@@ -118,14 +123,44 @@ export type pongStruct =
 	debugGUI?: baby.Container;
 	testGUI?: baby.Container;
 	waitingRoundStartGUI?: baby.Container;
+	waitingScreenGUI?: baby.Container;
 	countdownGUI?: baby.Container;
 	finishedGameGUI?: baby.Container;
+	hostOrJoinGUI?: baby.Container;
+	roomListGUI?: baby.Container;
+	tournamentSettingsGUI?: baby.Container;
+	roomListVerticalStackPanel?: baby.StackPanel;
+
+	isHost?: boolean;
+	lastUpdateSetAt?: number;	// Used to avoid sending too many updates to the server
 	
 	// GUI's bindings
-	bindings: Map<string, any>;
+	rooms: Map<string, any>;
+	lastRoomJoined?: string;
+	lastHostedRoomId?: string;
+
+	lastGameWinner?: string;
+	lastGameReason?: string;
+
+	paddle2TargetZ?: number;
+	paddle1TargetZ?: number;
+	lastSentPaddleZ?: number | null;
+
+	// Other components bindings
+	pongSettingsPlayButton?: baby.StackPanel;
+	pongSettingsContinueButton?: baby.StackPanel;
 
 	// Engine and scene
 	guiTexture?: baby.AdvancedDynamicTexture;
+
+	// Music and sound
+	audioEngine?: baby.AudioEngine;
+	musicVolume: number;
+	soundVolume: number;
+
+	mainMenuMusic?: baby.Sound;
+	playingMusic?: baby.Sound;
+	waitingMusic?: baby.Sound;
 };
 
 export function initPongStruct(): pongStruct 
@@ -153,61 +188,87 @@ export function initPongStruct(): pongStruct
 		// player1Name: "",
 		// player2Name: "",
 
-		bindings: new Map<string, React.RefObject<any>>(),
+		tournamentPlayerCount: 3,
+		tournamentPlayerNames: [],
+		tournamentPlayerScores: [],
+
+		rooms: new Map<string, React.RefObject<any>>(),
+
+		musicVolume: 1,
+		soundVolume: 1,
 	};
 }
 
 export const	label =
 {
 	// Actions
-	back: ["Back", "Retour", "Indietro"],
-	play: ["Play", "Jouer", "Giaoca"],
-	replay: ["Replay", "Rejouer", "Rigioca"],
-	join: ["Join", "Rejoindre", "Unisciti"],
-	host: ["Host", "Héberger", "Hosta"],
+	back: ["Back ↩", "Retour ↩", "Indietro ↩", "⠨⠗⠑⠞⠕⠥⠗ ↩"],
+	play: ["Play ▸", "Jouer ▸", "Giaoca ▸", "⠨⠚⠕⠥⠑⠗ ▸"],
+	replay: ["Replay ↻", "Rejouer ↻", "Rigioca ↻", "⠨⠗⠑⠚⠕⠥⠑⠗ ↻"],
+	join: ["Join ⬇", "Rejoindre ⬇", "Unisciti ⬇", "⠨⠗⠑⠚⠕⠊⠝⠙⠗⠑ ⬇"],
+	host: ["Host 🏠︎", "Héberger 🏠︎", "Hosta 🏠︎", "⠨⠓⠿⠃⠑⠗⠛⠑⠗ 🏠︎"],
+	refresh: ["Refresh ⟳", "Rafraîchir ⟳", "Aggiorna ⟳", "⠨⠗⠑⠋⠗⠑⠎⠓ ⟳"],
+	cancel: ["Cancel ×", "Annuler ×", "Annulla ×", "⠨⠉⠁⠝⠉⠑⠇ ×"],
+	continue: ["Continue ▸", "Continuer ▸", "Continua ▸", "⠨⠉⠕⠝⠞⠊⠝⠥⠑⠗ ▸"],
 
 
 	// Main menu
-	mainMenuTitle: ["Pong Game", "Jeu Pong", "Gioco Pong"],
-	mainMenu: ["Main Menu", "Menu Principal", "Menu Principale"],
-	playLocally: ["Play Locally", "Jouer en local", "Gioca in locale"],
-	playAgainstAI: ["Play against AI", "Jouer contre l'IA", "Gioca contro l'IA"],
-	playOnline: ["Play Online", "Jouer en ligne", "Gioca online"],
-	settings:["Settings", "Paramètres", "Impostazioni"],
-	gameSettings: ["Game Settings", "Paramètres", "Impostazioni"],
-	returnToMuseumButton: ["Return to Museum", "Retour au musée", "Torna al museo"],
+	mainMenuTitle: ["Pong Game", "Jeu Pong", "Gioco Pong", "⠨⠚⠑⠥ ⠨⠏⠕⠝⠛"],
+	mainMenu: ["Main Menu", "Menu Principal", "Menu Principale", "⠨⠍⠑⠝⠥ ⠨⠏⠗⠊⠝⠉⠊⠏⠁⠇⠑"],
+	playLocally: ["Play Locally ⌨", "Jouer en local ⌨", "Gioca in locale ⌨", "⠨⠚⠕⠥⠑⠗ ⠨⠇⠕⠉⠁⠇ ⌨"],
+	playAgainstAI: ["Play against\nAI ☹", "Jouer contre\nl'IA ☹", "Gioca contro\nl'IA ☹", "⠨⠚⠕⠥⠑⠗ ⠨⠉⠕⠝⠞⠗⠑\n ⠨⠁⠊ ☹"],
+	playOnline: ["Play Online 🖧", "Jouer en ligne 🖧", "Gioca online 🖧", "⠨⠚⠕⠥⠑⠗ ⠑⠝ ⠇⠊⠛⠝⠑ 🖧"],
+	playTournament: ["Play Tournament 🎖", "Jouer au tournoi 🎖", "Gioca al torneo 🎖", "⠨⠚⠕⠥⠑⠗ ⠁⠥ ⠞⠕⠥⠗⠝⠕⠊ 🎖"],
+	settings:["Settings ⚙", "Paramètres ⚙", "Impostazioni ⚙", "⠨⠎⠑⠞⠞⠊⠝⠛⠎ ⚙"],
+	gameSettings: ["Game Settings ⚙", "Paramètres ⚙", "Impostazioni ⚙", "⠨⠛⠁⠍⠑ ⠨⠎⠑⠞⠞⠊⠝⠛⠎ ⚙"],
+	returnToMuseumButton: ["Return to Museum 🏛︎", "Retour au musée 🏛︎", "Torna al museo 🏛︎", "⠨⠗⠑⠞⠕⠥⠗ ⠁⠥ ⠍⠥⠎⠿⠑ 🏛︎"],
 
 	// Settings
-	settingsMusic: ["Music", "Musique", "Musica"],
-	settingsSound: ["Sound", "Son", "Suono"],
-	settingsLanguage: ["Language", "Langue", "Lingua"],
+	settingsMusic: ["♫ Music:", "♫ Musique:", "♫ Musica:", "♫ ⠨⠍⠥⠎⠊⠉: "],
+	settingsSound: ["🗣 Sound:", "🗣 Son:", "🗣 Suono:", "🗣 ⠨⠎⠕⠝⠒"],
 
 	// Pong Settings
-	pongSettingsTitle: ["Pong Settings", "Paramètres du Pong", "Impostazioni Pong"],
-	pointsRequiredToWin: ["Points required to win:", "Points requis pour gagner:", "Punti richiesti per vincere:"],
-	arenaHeight: ["Arena height:", "Hauteur de l'arène:", "Altezza dell'arena:"],
-	arenaWidth: ["Arena width:", "Largeur de l'arène:", "Larghezza dell'arena:"],
-	paddleHeight: ["Paddle height:", "Hauteur de la raquette:", "Altezza della racchetta:"],
-	paddleSpeed: ["Paddle speed:", "Vitesse de la raquette:", "Velocità della racchetta:"],
-	ballSpeed: ["Ball speed:", "Vitesse de la balle:", "Velocità della palla:"],
-	maxBallSpeed: ["Max ball speed:", "Vitesse maximale de la balle:", "Velocità massima della palla:"],
+	pongSettingsTitle: ["Pong Settings", "Paramètres du Pong", "Impostazioni Pong", "⠨⠏⠕⠝⠛ ⠨⠎⠑⠞⠞⠊⠝⠛⠎"],
+	pointsRequiredToWin: ["Points required to win:", "Points requis pour gagner:", "Punti richiesti per vincere:", "⠨⠏⠕⠝⠞ ⠨⠗⠑⠟⠥⠊ ⠨⠋⠕⠥⠗ ⠨⠛⠁⠝⠝⠑⠗:"],
+	arenaHeight: ["Arena height:", "Hauteur de l'arène:", "Altezza dell'arena:", "⠨⠁⠗⠑⠝⠁ ⠨⠓⠑⠊⠛⠓⠞:"],
+	arenaWidth: ["Arena width:", "Largeur de l'arène:", "Larghezza dell'arena:", "⠨⠁⠗⠑⠝⠁ ⠨⠺⠊⠙⠞⠓:"],
+	paddleHeight: ["Paddle height:", "Hauteur de la raquette:", "Altezza della racchetta:", "⠨⠏⠁⠙⠙⠇⠑ ⠨⠓⠑⠊⠛⠓⠞:"],
+	paddleSpeed: ["Paddle speed:", "Vitesse de la raquette:", "Velocità della racchetta:", "⠨⠏⠁⠙⠙⠇⠑ ⠨⠎⠏⠑⠑⠙:"],
+	ballSpeed: ["Ball speed:", "Vitesse de la balle:", "Velocità della palla:", "⠨⠃⠁⠇⠇ ⠨⠎⠏⠑⠑⠙:"],
+	maxBallSpeed: ["Max ball speed:", "Vitesse maximale de la balle:", "Velocità massima della palla:", "⠨⠍⠁⠭ ⠨⠃⠁⠇⠇ ⠨⠎⠏⠑⠑⠙:"],
 
 	// Coutdown
-	startingIn: ["Starting in", "Début dans", "Inizio tra"],
+	startingIn: ["Starting in", "Début dans", "Inizio tra", "⠨⠎⠞⠁⠗⠞ ⠨⠊⠝"],
 
 	// Arena
-	arenaScoreTitle: ["Score", "Score", "Punteggio"],
-	arenaPlayer1: ["Player 1:", "Joueur 1:", "Giocatore 1:"],
-	arenaPlayer2: ["Player 2:", "Joueur 2:", "Giocatore 2:"],
-	arenaRequiredPoints: ["Required points to win:", "Points requis pour gagner:", "Punti richiesti per vincere:"],
+	arenaScoreTitle: ["Score", "Score", "Punteggio", "⠨⠎⠉⠕⠗⠑"],
+	arenaPlayer1: ["Player 1:", "Joueur 1:", "Giocatore 1:", "⠨⠏⠇⠁⠽⠑⠗ 1:"],
+	arenaPlayer2: ["Player 2:", "Joueur 2:", "Giocatore 2:", "⠨⠏⠇⠁⠽⠑⠗ 2:"],
+	arenaRequiredPoints: ["Required points to win:", "Points requis pour gagner:", "Punti richiesti per vincere:", "⠨⠏⠕⠝⠞ ⠨⠗⠑⠟⠥⠊ ⠨⠋⠕⠥⠗ ⠨⠛⠁⠝⠝⠑⠗:"],
 
 	// Finished Game
-	resultPlayer1: ["Player 1", "Joueur 1", "Giocatore 1"],
-	resultPlayer2: ["Player 2", "Joueur 2", "Giocatore 2"],
-	finishedGameTitle: ["Game Finished", "Partie terminée", "Gioco terminato"],
-	winner: ["Winner:", "Gagnant:", "Vincitore:"],
-	looser: ["Loser:", "Perdant:", "Perdente:"],
-	scored: ["| Scored:", "| A marqué:", "| Ha segnato:"],
+	resultPlayer1: ["Player 1", "Joueur 1", "Giocatore 1", "⠨⠏⠇⠁⠽⠑⠗ 1"],
+	resultPlayer2: ["Player 2", "Joueur 2", "Giocatore 2", "⠨⠏⠇⠁⠽⠑⠗ 2"],
+	finishedGameTitle: ["Game Finished", "Partie terminée", "Gioco terminato", "⠨⠛⠁⠍⠑ ⠨⠞⠑⠗⠍⠊⠝é"],
+	winner: ["Winner:", "Gagnant:", "Vincitore:", "⠨⠺⠊⠝⠝⠑⠗:"],
+	looser: ["Loser:", "Perdant:", "Perdente:", "⠨⠇⠕⠕⠎⠑⠗:"],
+	scored: ["| Scored:", "| A marqué:", "| Ha segnato:", "| ⠨⠎⠉⠕⠗⠑⠙⠒"],
+
+	// Host or Join
+	hostText: ["Host", "Héberger", "Hosta", "⠨⠓⠕⠎⠞"],
+	joinText: ["Join", "Rejoindre", "Unisciti", "⠨⠗⠑⠚⠕⠊⠝"],
+
+	// Room List
+	roomListTitle: ["Room List", "Liste des salles", "Elenco delle stanze", "⠨⠗⠕⠕⠍ ⠨⠇⠊⠎⠞"],
+	roomListEmpty: ["No rooms available", "Aucune salle disponible", "Nessuna stanza disponibile",, "⠨⠝⠕ ⠗⠕⠕⠍⠎ ⠁⠧⠁⠊⠇⠁⠃⠇⠑" ],
+	roomListJoin: ["Join Room", "Rejoindre la salle", "Unisciti alla stanza", "⠨⠗⠑⠚⠕⠊⠝ ⠨⠗⠕⠕⠍"],
+
+	// Waiting Screen
+	waitingForPlayers: ["Waiting for players...", "En attente de joueurs...", "In attesa di giocatori...", "⠨⠺⠁⠊⠞⠊⠝⠛ ⠨⠋⠕⠗ ⠨⠏⠇⠁⠽⠑⠗⠎..."],
+
+	// Tournament Settings
+	tournamentSettingsTitle: ["Tournament Settings", "Paramètres du tournoi", "Impostazioni del torneo", "⠨⠞⠕⠥⠗⠝⠕ ⠨⠎⠑⠞⠞⠊⠝⠛⠎"],
+	tournamentSettingsPlayerCount: ["Player count:", "Nombre de joueurs:", "Numero di giocatori:", "⠨⠏⠇⠁⠽⠑⠗ ⠨⠉⠕⠥⠝⠞:"],
 	
 } as const;
 
@@ -233,9 +294,9 @@ export const	getLabel = (key: labelKey, currentLanguage: lang): string =>
 		case lang.italian:
 			return label[key][2];
 		case lang.brail:
-			return "brail not implemented";
+			return label[key][3] || "⠨⠇⠁⠝⠛ ⠨⠝⠕⠞ ⠨⠋⠕⠥⠝⠙"; // Fallback to English if Brail translation is not available
 		default:
-			return "language not found";
+			return "❌ language not found ❌";
 	}
 }
 

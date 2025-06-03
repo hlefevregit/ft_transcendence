@@ -65,13 +65,34 @@ export	const	doPaddleMovement = (pong: React.RefObject<game.pongStruct>, gamemod
 		case game.gameModes.local:
 			if (pong.current.pressedKeys.has('arrowup')) pong.current.paddle1.position.z = movePaddleUp(pong, pong.current.paddle1.position.z);
 			if (pong.current.pressedKeys.has('arrowdown')) pong.current.paddle1.position.z = movePaddleDown(pong, pong.current.paddle1.position.z);
+			if (pong.current.pressedKeys.has('w')) pong.current.paddle2.position.z = movePaddleUp(pong, pong.current.paddle2.position.z);
+			if (pong.current.pressedKeys.has('s')) pong.current.paddle2.position.z = movePaddleDown(pong, pong.current.paddle2.position.z);
 			break;
 		case game.gameModes.ai:
 			// setTimeout(() => {}, 200);	 // Simulate AI reaction time
 			AIMovePaddle(pong);
+		
+		case game.gameModes.online:
+		if (pong.current.isHost) {
+			// 🎮 Host contrôle paddle1
+			if (pong.current.pressedKeys.has('arrowup')) {
+				pong.current.paddle1.position.z = movePaddleUpOnline(pong, pong.current.paddle1);
+			}
+			if (pong.current.pressedKeys.has('arrowdown')) {
+				pong.current.paddle1.position.z = movePaddleDownOnline(pong, pong.current.paddle1);
+			}
+		} else {
+			// 🧑‍💻 Client contrôle paddle2
+			if (pong.current.pressedKeys.has('w')) {
+				pong.current.paddle2.position.z = movePaddleUpOnline(pong, pong.current.paddle2);
+			}
+			if (pong.current.pressedKeys.has('s')) {
+				pong.current.paddle2.position.z = movePaddleDownOnline(pong, pong.current.paddle2);
+			}
+		}
+		break;
 	}
-	if (pong.current.pressedKeys.has('w')) pong.current.paddle2.position.z = movePaddleUp(pong, pong.current.paddle2.position.z);
-	if (pong.current.pressedKeys.has('s')) pong.current.paddle2.position.z = movePaddleDown(pong, pong.current.paddle2.position.z);
+
 	// console.log("Pressed keys: ", pong.current.pressedKeys);
 }
 
@@ -92,3 +113,24 @@ export const	manageLocalKeyboardInputs = (pong: game.pongStruct): void =>
 		}
 	});
 }
+
+
+export const movePaddleUpOnline = (pong: React.RefObject<game.pongStruct>, paddle: baby.Mesh): number => {
+	return Math.max(
+		- pong.current.arenaHeight + (pong.current.paddleHeight / 2),
+		Math.min(
+			pong.current.arenaHeight - (pong.current.paddleHeight / 2),
+			paddle.position.z - pong.current.paddleSpeed
+		)
+	);
+};
+
+export const movePaddleDownOnline = (pong: React.RefObject<game.pongStruct>, paddle: baby.Mesh): number => {
+	return Math.max(
+		- pong.current.arenaHeight + (pong.current.paddleHeight / 2),
+		Math.min(
+			pong.current.arenaHeight - (pong.current.paddleHeight / 2),
+			paddle.position.z + pong.current.paddleSpeed
+		)
+	);
+};

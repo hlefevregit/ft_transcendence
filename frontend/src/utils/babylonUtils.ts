@@ -1,10 +1,8 @@
 // imports
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
-import { stat } from 'fs';
 
 export function fitCameraToArena(pong: game.pongStruct): void
 {
@@ -80,36 +78,6 @@ export const	createButton = (buttonName: string, buttonText: string, functionToE
 	return block;
 }
 
-export const	createDynamicButton = (buttonName: string, valueGetter: () => any, bindings: React.RefObject<game.pongStruct>, functionToExecute: () => void): baby.StackPanel =>
-{
-	const block = game.createDummyBlock();
-	const button = baby.Button.CreateSimpleButton(buttonName, String(valueGetter()));
-	button.width = "200px";
-	button.height = "100px";
-	button.color = game.colorsScheme.light1;
-	button.background = game.colorsScheme.dark1
-	button.fontSize = 24;
-	button.thickness = 0;
-	button.cornerRadius = 20;
-	setPaddings(button, "10px");
-
-	// button.onPointerUpObservable.add(functionToExecute);
-	button.onPointerClickObservable.add(functionToExecute);
-	button.onPointerEnterObservable.add(() => {
-		button.color = game.colorsScheme.auroraAccent1;
-		button.background = game.colorsScheme.light3;
-	});
-	button.onPointerOutObservable.add(() => {
-		button.color = game.colorsScheme.light3;
-		button.background = game.colorsScheme.dark1;
-	});
-
-	bindings.current.bindings.set(buttonName, valueGetter);
-
-	block.addControl(button);
-	return block;
-}
-
 export const	createSlider = (sliderName: string, minValue: number, maxValue: number, step: number, initialValue: number, functionToExecute: (value: number) => void): baby.StackPanel =>
 {
 	const	block = game.createDummyBlock();
@@ -151,23 +119,6 @@ export const	createTitle = (titleName: string, titleText: string): baby.StackPan
 	return block;
 }
 
-export const	createDynamicTitle = (titleName: string, valueGetter: () => any, bindings: React.RefObject<game.pongStruct>): baby.StackPanel =>
-{
-	const	block = game.createDummyBlock();
-	const	title = new baby.TextBlock(titleName, String(valueGetter()));
-	title.width = "50px";
-	title.height = "25px";
-	title.color = game.colorsScheme.light1;
-	title.resizeToFit = true;
-	title.fontSize = 48;
-
-	bindings.current.bindings.set(titleName, valueGetter);
-
-	block.addControl(title);
-	return block;
-}
-
-
 export const	createText = (textName: string, textText: string): baby.StackPanel =>
 {
 	const	block = game.createDummyBlock();
@@ -180,57 +131,20 @@ export const	createText = (textName: string, textText: string): baby.StackPanel 
 	return block;
 }
 
-export const	createDynamicText = (textName: string, valueGetter: () => any, bindings: React.RefObject<game.pongStruct>): baby.StackPanel =>
-{
-	const	block = game.createDummyBlock();
-	const	text = new baby.TextBlock(textName, String(valueGetter()));
-	text.width = "50px";
-	text.height = "25px";
-	text.color = game.colorsScheme.light1;
-	text.resizeToFit = true;
-	text.fontSize = 24;
-
-	// Bind the text to the value in the bindings map
-	bindings.current.bindings.set(textName, valueGetter);
-
-	block.addControl(text);
-	return block;
-}
-
-// export const	createHoldButton = (buttonName: string, buttonText: string, functionToExecute: () => void, holdTime: number): baby.StackPanel =>
+// export const	createDynamicText = (textName: string, valueGetter: () => any, bindings: React.RefObject<game.pongStruct>): baby.StackPanel =>
 // {
 // 	const	block = game.createDummyBlock();
-// 	const	button = baby.Button.CreateSimpleButton(buttonName, buttonText);
+// 	const	text = new baby.TextBlock(textName, String(valueGetter()));
+// 	text.width = "50px";
+// 	text.height = "25px";
+// 	text.color = game.colorsScheme.light1;
+// 	text.resizeToFit = true;
+// 	text.fontSize = 24;
+	
+// 	block.addControl(text);
 
-// 	button.width = "200px";
-// 	button.height = "100px";
-// 	button.color = game.colorsScheme.light1;
-// 	button.background = game.colorsScheme.dark1;
-// 	button.fontSize = 24;
-// 	button.thickness = 0;
-// 	button.cornerRadius = 20;
-// 	setPaddings(button, "10px");
-// 	button.onPointerClickObservable.add(functionToExecute);
-// 	button.onPointerDownObservable.add(() =>
-// 	{
-// 		button.color = game.colorsScheme.auroraAccent1;
-// 		button.background = game.colorsScheme.light3;
-// 		button.isEnabled = false; // Disable button to prevent multiple clicks
-// 	});
-// 	button.onPointerEnterObservable.add(() =>
-// 	{
-// 		button.color = game.colorsScheme.auroraAccent1;
-// 		button.background = game.colorsScheme.light3;
-// 	});
-// 	button.onPointerOutObservable.add(() =>
-// 	{
-// 		if (button.isEnabled)
-// 		{
-// 			button.color = game.colorsScheme.light3;
-// 			button.background = game.colorsScheme.dark1;
-// 		}
-// 	});
-// 	block.addControl(button);
+// 	// Bind the text to the value in the bindings map
+// 	bindings.current.bindings.set(textName, valueGetter);
 // 	return block;
 // }
 
@@ -317,7 +231,7 @@ export const	createVerticalStackPanel = (panelName: string, paddings?: number, a
 
 export const	createDummyBlock = (): baby.StackPanel =>
 {
-	const	dummy = new baby.StackPanel("dummy-" + Math.random());
+	const	dummy = new baby.StackPanel("dummy-" + Math.random().toString(36).substring(2, 15));
 
 	dummy.spacing = 0;
 	dummy.paddingTop = 0;
@@ -517,4 +431,144 @@ export const	transitionToCamera = async (cameraA: baby.FreeCamera | undefined, c
 	states.current = lastState; // Restore previous state
 	console.log("Transition complete");
 	return;
+}
+
+export const	findComponentByName = (pong: React.RefObject<game.pongStruct>, name: string): any =>
+{
+	const component = pong.current.guiTexture?.getControlByName(name);
+    return component as baby.TextBlock;
+};
+
+export const createRoomPanel = (
+	pong: React.RefObject<game.pongStruct>,
+	lang: React.RefObject<game.lang>,
+	roomName: string,
+	join: () => void,
+): baby.StackPanel =>
+{
+	const safeRoomName = roomName || "Unnamed Room";
+	const panelName = `roomPanel_${safeRoomName.replace(/\s+/g, '_')}_${Math.random().toString(36).substring(2)}`;
+	const roomPanel = game.createHorizontalStackPanel(panelName, 0);
+
+	const roomPanelNameText = game.createText("roomPanelNameText", safeRoomName);
+	(roomPanelNameText.children[0] as baby.TextBlock).fontSize = 48;
+
+	const roomPanelJoinButton = game.createDynamicButton
+	(
+		"roomPanelJoinButton",
+		join,
+		"join"
+	);
+
+	roomPanel.addControl(roomPanelNameText);
+	roomPanel.addControl(roomPanelJoinButton);
+
+	console.log("✅ Panel créé pour room:", safeRoomName, "| name =", roomPanel.name);
+
+	return roomPanel;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export const	createDynamicText = (
+	textName: string,
+	labelKey?: game.labelKey
+): baby.StackPanel =>
+{
+	const block = game.createDummyBlock();
+	
+	// Use the provided labelKey if available, otherwise use textName
+	const keyToUse = labelKey || textName as game.labelKey;
+	
+	// Create the text with initial value
+	const text = new baby.TextBlock(textName, "caca");
+	text.color = game.colorsScheme.light1;
+	text.resizeToFit = true;
+	text.fontSize = 24;
+	
+	// Store the label key in metadata for language updates
+	text.metadata = { labelKey: keyToUse };
+	
+	block.addControl(text);
+	return block;
+}
+
+export const	createDynamicTitle = (
+	titleName: string,
+	labelKey?: game.labelKey
+): baby.StackPanel =>
+{
+	const block = game.createDummyBlock();
+	
+	// Use the provided labelKey if available, otherwise use titleName
+	const keyToUse = labelKey || titleName as game.labelKey;
+	
+	// Create the title with initial value
+	// const title = new baby.TextBlock(titleName, game.getLabel(keyToUse, langRef.current));
+	const title = new baby.TextBlock(titleName, "caca");
+	title.width = "50px";
+	title.height = "25px";
+	title.color = game.colorsScheme.light1;
+	title.resizeToFit = true;
+	title.fontSize = 48;
+	
+	// Store the label key in metadata for language updates
+	title.metadata = { labelKey: keyToUse };
+	
+	block.addControl(title);
+	return block;
+}
+
+export const	createDynamicButton = (
+	buttonName: string,
+	functionToExecute: () => void,
+	labelKey?: game.labelKey
+): baby.StackPanel =>
+{
+	const block = game.createDummyBlock();
+	
+	// Use the provided labelKey if available, otherwise use buttonName
+	const keyToUse = labelKey || buttonName as game.labelKey;
+	
+	// Create the button with initial text value
+	const button = baby.Button.CreateSimpleButton(buttonName, "caca");
+	button.width = "200px";
+	button.height = "100px";
+	button.color = game.colorsScheme.light1;
+	button.background = game.colorsScheme.dark1;
+	button.fontSize = 24;
+	button.thickness = 0;
+	button.cornerRadius = 20;
+	setPaddings(button, "10px");
+	
+	// Store the label key in button's metadata for language updates
+	button.metadata = { labelKey: keyToUse };
+	
+	// Add button functionality
+	button.onPointerClickObservable.add(functionToExecute);
+	button.onPointerEnterObservable.add(() =>
+	{
+		button.color = game.colorsScheme.auroraAccent1;
+		button.background = game.colorsScheme.light3;
+	});
+	button.onPointerOutObservable.add(() =>
+	{
+		button.color = game.colorsScheme.light3;
+		button.background = game.colorsScheme.dark1;
+	});
+	
+	block.addControl(button);
+	return block;
 }
