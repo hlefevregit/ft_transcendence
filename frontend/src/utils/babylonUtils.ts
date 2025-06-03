@@ -172,7 +172,7 @@ export const	createAdaptiveContainer = (folderName: string, width?: string, heig
 	background.height = "100%";
 	background.background = BackgroundColor;
 	background.thickness = 0;
-	background.cornerRadius = 20;
+	background.cornerRadius = 40;
 	background.zIndex = 0;
 		
 	container.addControl(background);

@@ -59,8 +59,8 @@ export enum states
 	settings,
 	host_or_join,
 	game_settings,
-	tournament_settings,
 	hosting_waiting_players,
+	hosting_tournament_waiting_players,
 	room_list,
 	waiting_to_start,
 	countdown,
@@ -134,7 +134,9 @@ export type pongStruct =
 	finishedGameGUI?: baby.Container;
 	hostOrJoinGUI?: baby.Container;
 	roomListGUI?: baby.Container;
-	tournamentSettingsGUI?: baby.Container;
+	// tournamentSettingsGUI?: baby.Container; // deprecated
+	waitingTournamentGUI?: baby.Container;
+
 	roomListVerticalStackPanel?: baby.StackPanel;
 
 	isHost?: boolean;
@@ -160,7 +162,6 @@ export type pongStruct =
 	guiTexture?: baby.AdvancedDynamicTexture;
 
 	// Music and sound
-	audioEngine?: baby.AudioEngine;
 	musicVolume: number;
 	soundVolume: number;
 
@@ -285,7 +286,7 @@ export enum	lang
 	english,
 	french,
 	italian,
-	brail,
+	braille,
 };
 
 export const	getLabel = (key: labelKey, currentLanguage: lang): string =>
@@ -299,8 +300,8 @@ export const	getLabel = (key: labelKey, currentLanguage: lang): string =>
 			return label[key][1];
 		case lang.italian:
 			return label[key][2];
-		case lang.brail:
-			return "⢮ brail not implemented ⢮";
+		case lang.braille:
+			return "⢮ braille not implemented ⢮";
 		default:
 			return "❌ language not found ❌";
 	}

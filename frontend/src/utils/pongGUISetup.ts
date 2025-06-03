@@ -28,7 +28,8 @@ export const	initializeAllGUIScreens = (pong: React.RefObject<game.pongStruct>, 
 	game.instantiateHostOrJoinGUI(pong, states, gameModes);
 	game.instantiateRoomListGUI(pong, states, gameModes, socketRef);
 	game.instantiateWaitingScreenGUI(pong, states);
-	game.instantiateTournamentSettingsGUI(pong, states, gameModes);
+	// game.instantiateTournamentSettingsGUI(pong, states, gameModes);
+	game.instantiateWaitingTournamentGUI(pong, states);
 	game.instantiateDebugGUI(pong, states, gameModes, lang);
 	// etc.
 	console.log("complete initializing GUI screens");
@@ -46,8 +47,9 @@ export const	updateGUIVisibilityStates = (pong: React.RefObject<game.pongStruct>
 	setUIState(pong.current.hostOrJoinGUI, game.states.host_or_join);
 	setUIState(pong.current.roomListGUI, game.states.room_list);
 	setUIState(pong.current.waitingRoundStartGUI, game.states.waiting_to_start);
-	setUIState(pong.current.tournamentSettingsGUI, game.states.tournament_settings);
+	// setUIState(pong.current.tournamentSettingsGUI, game.states.tournament_settings);
 	setUIState(pong.current.waitingScreenGUI, game.states.hosting_waiting_players);
+	setUIState(pong.current.waitingTournamentGUI, game.states.hosting_tournament_waiting_players);
 }
 
 export const	updateGUIVisibilityGameModes = (pong: React.RefObject<game.pongStruct>, gameModes: game.gameModes): void =>
@@ -100,19 +102,7 @@ export const	updateGUIValues = (
 				control.markAsDirty();
 			}
 		}
-		// Check for nested TextBlocks with metadata in other controls
-		else if (control instanceof baby.Button 
-				&& control.children.length > 0
-				&& control.children[0] instanceof baby.TextBlock
-				&& control.children[0].metadata?.labelKey)
-		{
-			(control.children[0] as baby.TextBlock).text = game.getLabel(control.children[0].metadata.labelKey, lang.current);
-			control.markAsDirty();
-		}
 	}
-	
-	// Mark the GUI texture as dirty to ensure updates are rendered
-	// pong.current.guiTexture.markAsDirty();
 }
 
 export const	refreshRoomsEntries = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>): baby.StackPanel =>
@@ -122,10 +112,8 @@ export const	refreshRoomsEntries = (pong: React.RefObject<game.pongStruct>, stat
 		console.warn("Rooms map is not initialized !");
 		return (game.createDynamicText("roomsText", "roomListEmpty"));
 	}
+
 	console.log("🔁 Refreshing room list, rooms =", Array.from(pong.current.rooms.keys()));
-
-
-
 	
 	const	roomsVerticalPanel = game.createVerticalStackPanel("roomsVerticalPanel", 0);
 	for (const [key, valueOrGetter] of pong.current.rooms.entries()) {
@@ -141,7 +129,7 @@ export const    instantiateMainMenuGUI = (pong: React.RefObject<game.pongStruct>
 	// Canvas that will be used for the GUI
 	const	mainMenuGUI = game.createScreen("mainMenuGUI");
 	// All GUI components needed
-	const	mainMenuContainer = game.createAdaptiveContainer("mainMenuContainer", "300px", "300px");
+	const	mainMenuContainer = game.createAdaptiveContainer("mainMenuContainer");
 	const	mainMenuVerticalStackPanel = game.createVerticalStackPanel("mainMenuVerticalStackPanel");
 	const	mainMenuHorizontalStackPanel = game.createHorizontalStackPanel("mainMenuHorizontalStackPanel", 0);
 	const	mainMenuVerticalStackPanel1 = game.createVerticalStackPanel("mainMenuVerticalStackPanel1", 0);
@@ -281,16 +269,16 @@ export const    instantiateSettingsGUI = (pong: React.RefObject<game.pongStruct>
 			(italianButton.children[0] as baby.Button).height = "100px";
 			(italianButton.children[0] as baby.Button).fontSize = 36;
 
-	const	brailButton = game.createButton("brailButton", "🦮", () =>
+	const	brailleButton = game.createButton("brailleButton", "🦮", () =>
 	{
-		lang.current = game.lang.brail;
+		lang.current = game.lang.braille;
 		game.updateGUIValues(pong, states, lang);
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").text = lang.current;
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").markAsDirty();
 	});
-			(brailButton.children[0] as baby.Button).width = "100px";
-			(brailButton.children[0] as baby.Button).height = "100px";
-			(brailButton.children[0] as baby.Button).fontSize = 36;
+			(brailleButton.children[0] as baby.Button).width = "100px";
+			(brailleButton.children[0] as baby.Button).height = "100px";
+			(brailleButton.children[0] as baby.Button).fontSize = 36;
 
 	// Add GUI components to the main menu
 	// The order of adding controls matters for the layout
@@ -314,7 +302,7 @@ export const    instantiateSettingsGUI = (pong: React.RefObject<game.pongStruct>
 	settingsLanguagePanel1.addControl(englishButton);
 	settingsLanguagePanel1.addControl(frenchButton);
 	settingsLanguagePanel2.addControl(italianButton);
-	settingsLanguagePanel2.addControl(brailButton);
+	settingsLanguagePanel2.addControl(brailleButton);
 	
 	// Back button
 	settingsPanel.addControl(backButton);
@@ -347,16 +335,16 @@ export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct
 		{
 			case game.gameModes.online:
 				states.current = game.states.host_or_join;
-				// game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
+				game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
 				break;
 			case game.gameModes.tournament:
 				states.current = game.states.host_or_join;
-				// game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
+				game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
 				break;
 			default:
 				states.current = game.states.main_menu;
 				gameModes.current = game.gameModes.none;
-				// game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
+				game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
 				break;
 		}
 	}, "back");
@@ -368,7 +356,7 @@ export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct
 				states.current = game.states.hosting_waiting_players;
 				break;
 			case game.gameModes.tournament:
-				states.current = game.states.tournament_settings;
+				states.current = game.states.hosting_tournament_waiting_players;
 				break;
 			default:
 				states.current = game.states.waiting_to_start;
@@ -384,30 +372,30 @@ export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct
 			(pongSettingsPlayButton.children[0] as baby.Button).background = game.colorsScheme.dark1;
 	});
 	(pongSettingsPlayButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
-	const	pongSettingsContinueButton = game.createDynamicButton("pongSettingsContinueButton", () =>
-	{
-		switch (gameModes.current)
-		{
-			case game.gameModes.online:
-				states.current = game.states.hosting_waiting_players;
-				break;
-			case game.gameModes.tournament:
-				states.current = game.states.tournament_settings;
-				break;
-			default:
-				states.current = game.states.waiting_to_start;
-				break;
-		}
-	}, "continue");
-	(pongSettingsContinueButton.children[0] as baby.Button).onPointerEnterObservable.add(() => {
-			(pongSettingsContinueButton.children[0] as baby.Button).color = game.colorsScheme.dark1;
-			(pongSettingsContinueButton.children[0] as baby.Button).background = game.colorsScheme.auroraAccent4;
-	});
-	(pongSettingsContinueButton.children[0] as baby.Button).onPointerOutObservable.add(() => {
-			(pongSettingsContinueButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
-			(pongSettingsContinueButton.children[0] as baby.Button).background = game.colorsScheme.dark1;
-	});
-	(pongSettingsContinueButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
+	// const	pongSettingsContinueButton = game.createDynamicButton("pongSettingsContinueButton", () =>
+	// {
+	// 	switch (gameModes.current)
+	// 	{
+	// 		case game.gameModes.online:
+	// 			states.current = game.states.hosting_waiting_players;
+	// 			break;
+	// 		case game.gameModes.tournament:
+	// 			states.current = game.states.hosting_tournament_waiting_players;
+	// 			break;
+	// 		default:
+	// 			states.current = game.states.waiting_to_start;
+	// 			break;
+	// 	}
+	// }, "continue");
+	// (pongSettingsContinueButton.children[0] as baby.Button).onPointerEnterObservable.add(() => {
+	// 		(pongSettingsContinueButton.children[0] as baby.Button).color = game.colorsScheme.dark1;
+	// 		(pongSettingsContinueButton.children[0] as baby.Button).background = game.colorsScheme.auroraAccent4;
+	// });
+	// (pongSettingsContinueButton.children[0] as baby.Button).onPointerOutObservable.add(() => {
+	// 		(pongSettingsContinueButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
+	// 		(pongSettingsContinueButton.children[0] as baby.Button).background = game.colorsScheme.dark1;
+	// });
+	// (pongSettingsContinueButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
 
 	const	pongSettingsTotalPointsToWinText = game.createDynamicText("pongSettingsTotalPointsToWinText", "pointsRequiredToWin");
 	const	pongSettingsTotalPointsToWinTextValue = game.createDynamicText("pongSettingsTotalPointsToWinTextValue");
@@ -545,12 +533,12 @@ export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct
 
 	pongSettingsHorizontalStackPanel9.addControl(pongSettingsBackButton);
 	pongSettingsHorizontalStackPanel9.addControl(pongSettingsPlayButton);
-	pongSettingsHorizontalStackPanel9.addControl(pongSettingsContinueButton);
+	// pongSettingsHorizontalStackPanel9.addControl(pongSettingsContinueButton);
 
 	// Save and add to GUI texture
 	pong.current.pongSettingsGUI = pongSettingsGUI;
 	pong.current.pongSettingsPlayButton = pongSettingsPlayButton;
-	pong.current.pongSettingsContinueButton = pongSettingsContinueButton;
+	// pong.current.pongSettingsContinueButton = pongSettingsContinueButton;
 	pong.current.guiTexture?.addControl(pongSettingsGUI);
 }
 
@@ -970,67 +958,92 @@ export const	instantiateWaitingScreenGUI = (pong: React.RefObject<game.pongStruc
 	pong.current.guiTexture?.addControl(waitingScreenGUI);
 }
 
-export const	instantiateTournamentSettingsGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>): void =>
-{
-	const	tournamentSettingsGUI = game.createScreen("tournamentSettingsGUI", "center");
-	const	tournamentSettingsContainer = game.createAdaptiveContainer("tournamentSettingsContainer", "300px", "300px");
-	const	tournamentSettingsVerticalStackPanel1 = game.createVerticalStackPanel("tournamentSettingsVerticalStackPanel1");
-	const	tournamentSettingsHorizontalStackPanel1 = game.createHorizontalStackPanel("tournamentSettingsHorizontalStackPanel1", 0);
-	const	tournamentSettingsHorizontalStackPanel2 = game.createHorizontalStackPanel("tournamentSettingsHorizontalStackPanel2", 0);
+// export const	instantiateTournamentSettingsGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>): void =>
+// {
+// 	const	tournamentSettingsGUI = game.createScreen("tournamentSettingsGUI", "center");
+// 	const	tournamentSettingsContainer = game.createAdaptiveContainer("tournamentSettingsContainer", "300px", "300px");
+// 	const	tournamentSettingsVerticalStackPanel1 = game.createVerticalStackPanel("tournamentSettingsVerticalStackPanel1");
+// 	const	tournamentSettingsHorizontalStackPanel1 = game.createHorizontalStackPanel("tournamentSettingsHorizontalStackPanel1", 0);
+// 	const	tournamentSettingsHorizontalStackPanel2 = game.createHorizontalStackPanel("tournamentSettingsHorizontalStackPanel2", 0);
 	
-	// All GUI components needed
-	const	tournamentSettingsTitle = game.createDynamicTitle("tournamentSettingsTitle", "tournamentSettingsTitle");
+// 	// All GUI components needed
+// 	const	tournamentSettingsTitle = game.createDynamicTitle("tournamentSettingsTitle", "tournamentSettingsTitle");
 
-	const	tournamentSettingsPlayerCountText = game.createDynamicText("tournamentSettingsPlayerCountText", "tournamentSettingsPlayerCount");
-	const	tournamentSettingsPlayerCountValue = game.createDynamicText("tournamentSettingsPlayerCountValue");
-			(tournamentSettingsPlayerCountValue.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
-			{
-				game.findComponentByName(pong, "tournamentSettingsPlayerCountValue").text = pong.current.tournamentPlayerCount.toString();
-			});
-	const	tournamentSettingsPlayerCountSlider = game.createSlider("tournamentSettingsPlayerCountSlider", 3, 8, 1, pong.current.tournamentPlayerCount, (value: number) => 
-	{
-		pong.current.tournamentPlayerCount = value;
-	});
-	const	tournamentSettingsBackButton = game.createDynamicButton("tournamentSettingsBackButton", () =>
+// 	const	tournamentSettingsPlayerCountText = game.createDynamicText("tournamentSettingsPlayerCountText", "tournamentSettingsPlayerCount");
+// 	const	tournamentSettingsPlayerCountValue = game.createDynamicText("tournamentSettingsPlayerCountValue");
+// 			(tournamentSettingsPlayerCountValue.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
+// 			{
+// 				game.findComponentByName(pong, "tournamentSettingsPlayerCountValue").text = pong.current.tournamentPlayerCount.toString();
+// 			});
+// 	const	tournamentSettingsPlayerCountSlider = game.createSlider("tournamentSettingsPlayerCountSlider", 3, 8, 1, pong.current.tournamentPlayerCount, (value: number) => 
+// 	{
+// 		pong.current.tournamentPlayerCount = value;
+// 	});
+// 	const	tournamentSettingsBackButton = game.createDynamicButton("tournamentSettingsBackButton", () =>
+// 	{
+// 		states.current = game.states.game_settings;
+// 		gameModes.current = game.gameModes.tournament;
+// 	}, "back");
+// 	const	tournamentSettingsPlayButton = game.createDynamicButton("tournamentSettingsPlayButton", () =>
+// 	{
+// 		states.current = game.states.waiting_to_start;
+// 		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.arenaCam, 1, pong, states);
+// 	}, "play");
+// 	(tournamentSettingsPlayButton.children[0] as baby.Button).onPointerEnterObservable.add(() => {
+// 			(tournamentSettingsPlayButton.children[0] as baby.Button).color = game.colorsScheme.dark1;
+// 			(tournamentSettingsPlayButton.children[0] as baby.Button).background = game.colorsScheme.auroraAccent4;
+// 	});
+// 	(tournamentSettingsPlayButton.children[0] as baby.Button).onPointerOutObservable.add(() => {
+// 			(tournamentSettingsPlayButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
+// 			(tournamentSettingsPlayButton.children[0] as baby.Button).background = game.colorsScheme.dark1;
+// 	});
+// 	(tournamentSettingsPlayButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
+
+// 	// Add GUI components to the main menu
+// 	// The order of adding controls matters for the layout
+// 	tournamentSettingsVerticalStackPanel1.addControl(tournamentSettingsTitle);
+// 	tournamentSettingsVerticalStackPanel1.addControl(tournamentSettingsHorizontalStackPanel1);
+	
+// 	tournamentSettingsHorizontalStackPanel1.addControl(tournamentSettingsPlayerCountText);
+// 	tournamentSettingsHorizontalStackPanel1.addControl(tournamentSettingsPlayerCountValue);
+// 	tournamentSettingsVerticalStackPanel1.addControl(tournamentSettingsHorizontalStackPanel1);
+// 	tournamentSettingsVerticalStackPanel1.addControl(tournamentSettingsPlayerCountSlider);
+	
+	
+// 	tournamentSettingsHorizontalStackPanel2.addControl(tournamentSettingsBackButton);
+// 	tournamentSettingsHorizontalStackPanel2.addControl(tournamentSettingsPlayButton);
+	
+// 	tournamentSettingsVerticalStackPanel1.addControl(tournamentSettingsHorizontalStackPanel2);
+// 	tournamentSettingsContainer.addControl(tournamentSettingsVerticalStackPanel1);
+// 	tournamentSettingsGUI.addControl(tournamentSettingsContainer);
+
+// 	// Add the screen to the GUI texture
+// 	pong.current.tournamentSettingsGUI = tournamentSettingsGUI;
+// 	pong.current.guiTexture?.addControl(tournamentSettingsGUI);
+// }
+
+export const	instantiateWaitingTournamentGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>): void =>
+{
+	// Canvas that will be used for the GUI
+	const	waitingTournamentGUI = game.createScreen("waitingTournamentGUI", "center");
+
+	// All GUI components needed
+	const	waitingTournamentContainer = game.createAdaptiveContainer("waitingTournamentContainer", "300px", "300px");
+	const	waitingTournamentVerticalStackPanel = game.createVerticalStackPanel("waitingTournamentVerticalStackPanel");
+	const	waitingTournamentTitle = game.createDynamicTitle("waitingTournamentTitle", "waitingForPlayers");
+	const	waitingTournamentCancelButton = game.createDynamicButton("waitingTournamentCancelButton", () => 
 	{
 		states.current = game.states.game_settings;
-		gameModes.current = game.gameModes.tournament;
-	}, "back");
-	const	tournamentSettingsPlayButton = game.createDynamicButton("tournamentSettingsPlayButton", () =>
-	{
-		states.current = game.states.waiting_to_start;
-		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.arenaCam, 1, pong, states);
-	}, "play");
-	(tournamentSettingsPlayButton.children[0] as baby.Button).onPointerEnterObservable.add(() => {
-			(tournamentSettingsPlayButton.children[0] as baby.Button).color = game.colorsScheme.dark1;
-			(tournamentSettingsPlayButton.children[0] as baby.Button).background = game.colorsScheme.auroraAccent4;
-	});
-	(tournamentSettingsPlayButton.children[0] as baby.Button).onPointerOutObservable.add(() => {
-			(tournamentSettingsPlayButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
-			(tournamentSettingsPlayButton.children[0] as baby.Button).background = game.colorsScheme.dark1;
-	});
-	(tournamentSettingsPlayButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
+	}, "cancel");
 
 	// Add GUI components to the main menu
 	// The order of adding controls matters for the layout
-	tournamentSettingsVerticalStackPanel1.addControl(tournamentSettingsTitle);
-	tournamentSettingsVerticalStackPanel1.addControl(tournamentSettingsHorizontalStackPanel1);
-	
-	tournamentSettingsHorizontalStackPanel1.addControl(tournamentSettingsPlayerCountText);
-	tournamentSettingsHorizontalStackPanel1.addControl(tournamentSettingsPlayerCountValue);
-	tournamentSettingsVerticalStackPanel1.addControl(tournamentSettingsHorizontalStackPanel1);
-	tournamentSettingsVerticalStackPanel1.addControl(tournamentSettingsPlayerCountSlider);
-	
-	
-	tournamentSettingsHorizontalStackPanel2.addControl(tournamentSettingsBackButton);
-	tournamentSettingsHorizontalStackPanel2.addControl(tournamentSettingsPlayButton);
-	
-	tournamentSettingsVerticalStackPanel1.addControl(tournamentSettingsHorizontalStackPanel2);
-	tournamentSettingsContainer.addControl(tournamentSettingsVerticalStackPanel1);
-	tournamentSettingsGUI.addControl(tournamentSettingsContainer);
+	waitingTournamentVerticalStackPanel.addControl(waitingTournamentTitle);
+	waitingTournamentVerticalStackPanel.addControl(waitingTournamentCancelButton);
+	waitingTournamentContainer.addControl(waitingTournamentVerticalStackPanel);
+	waitingTournamentGUI.addControl(waitingTournamentContainer);
 
 	// Add the screen to the GUI texture
-	pong.current.tournamentSettingsGUI = tournamentSettingsGUI;
-	pong.current.guiTexture?.addControl(tournamentSettingsGUI);
+	pong.current.waitingTournamentGUI = waitingTournamentGUI;
+	pong.current.guiTexture?.addControl(waitingTournamentGUI);
 }
-
