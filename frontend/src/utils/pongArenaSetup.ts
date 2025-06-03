@@ -5,7 +5,6 @@ import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
 
 import mapUrl from '@/assets/transcendence_map.gltf?url';
-// import mainMenuMusic from '@/assets/vaporwave.mp3?url';
 
 export const	setupBabylon = async (pong: game.pongStruct, canvasRef: any): Promise<void> =>
 {
@@ -46,7 +45,15 @@ export const	setupBabylon = async (pong: game.pongStruct, canvasRef: any): Promi
 	const	transitionCamera = new baby.FreeCamera("transitionCam", baby.Vector3.Zero(), sceneInstance);
 	pong.transitionCam = transitionCamera;
 
-	
+	const	notFoundCamera = new baby.FlyCamera("notFoundCam", new baby.Vector3(0, 1, 0), sceneInstance);
+			notFoundCamera.position = new baby.Vector3(0, 10, 0);
+			notFoundCamera.attachControl(canvasRef);
+			notFoundCamera.keysUp = [87, 38];		// W, Up arrow
+			notFoundCamera.keysDown = [83, 40];		// S, Down arrow
+			notFoundCamera.keysLeft = [65, 37];		// A, Left arrow
+			notFoundCamera.keysRight = [68, 39];	// D, Right arrow
+	pong.notFoundCam = notFoundCamera;
+
 	const	ballMesh = baby.MeshBuilder.CreateSphere("ball", { diameter: pong.ballDiameter }, sceneInstance);
 	ballMesh.position = new baby.Vector3(0, 0, 0);
 	pong.ball = ballMesh;
@@ -59,36 +66,31 @@ export const	setupBabylon = async (pong: game.pongStruct, canvasRef: any): Promi
 	}
 	catch (error) { console.error("Error while loading map:", error); }
 
-	// async function initializeAudioEngine(): Promise<void>
-	// {
-	// 	console.log("Initializing audio engine...");
-	// 	try
-	// 	{
-	// 		const	audioEngine: baby.AudioEngineV2 = await baby.CreateAudioEngineAsync();
-	// 		await audioEngine.unlockAsync();
-	// 		if (audioEngine && typeof audioEngine.unlockAsync === 'function') await audioEngine.unlockAsync();
-	// 		pong.audioEngine = audioEngine as any;
-	// 	}
-	// 	catch (error)
-	// 	{
-	// 		console.error("Error initializing audio engine:", error);
-	// 		pong.audioEngine = undefined;
-	// 	}
-	// }
-	// initializeAudioEngine();
-	// const	currentMusic = new baby.Sound("mainMenuMusic", mainMenuMusic, pong.scene, function(this: baby.Sound)
-	// {
-	// 	console.log("READY");
-	// 	pong.mainMenuMusic = this;
-	// 	console.log("playing main menu music");
-	// },
-	// {
-	// 	loop:true,
-	// 	volume: pong.musicVolume,
-	// 	spatialSound: false,
-	// 	autoplay: true,
-	// });
-	// pong.mainMenuMusic = currentMusic;
+	const	ceiling = baby.MeshBuilder.CreateBox("ceiling", { width: 1, height: 0.1, depth: 1 }, sceneInstance);
+			ceiling.position.y = 0;
+			pong.ceiling = ceiling;
+	const	floor = baby.MeshBuilder.CreateBox("floor", { width: 1, height: 0.1, depth: 1 }, sceneInstance);
+			floor.position.y = 0;
+			pong.floor = floor;
+	const	wallLeft = baby.MeshBuilder.CreateBox("wallLeft", { width: 1, height: 0.1, depth: 1 }, sceneInstance);
+			wallLeft.position.y = 0;
+			pong.wallLeft = wallLeft;
+	const	wallRight = baby.MeshBuilder.CreateBox("wallRight", { width: 1, height: 0.1, depth: 1 }, sceneInstance);
+			wallRight.position.y = 0;
+			pong.wallRight = wallRight;
+
+	pong.ceiling.scaling.x = pong.arenaWidth * 2 + 3;
+	pong.ceiling.position.z = -pong.arenaWidth - 1;
+	pong.floor.scaling.x = pong.arenaWidth * 2 + 3;
+	pong.floor.position.z = pong.arenaWidth + 1;
+
+
+
+
+	pong.wallLeft.scaling.z = pong.arenaHeight * 2 + 3;
+	pong.wallLeft.position.x = pong.arenaHeight + 1;
+	pong.wallRight.scaling.z = pong.arenaHeight * 2 + 3;
+	pong.wallRight.position.x = -pong.arenaHeight - 1;
 
 }
 

@@ -79,31 +79,24 @@ const	Pong: React.FC = () =>
 
 		
 
-		// Game loop
+		
 		if (!pong.current.engine || !pong.current.scene) return;
 		
 		if (gameModes.current === game.gameModes.online)
 		{
-			switch (states.current) {
-
-				default: {
-					if (
-						socketRef.current &&
-						socketRef.current.readyState === WebSocket.OPEN &&
-						lastHandledState.current !== states.current
-					) {
-						console.log("Last handled state:", lastHandledState.current);
-						console.log("Sending current state:", states.current);
-						lastHandledState.current = states.current;
-					}
-					break;
-				}
+			if
+			(
+				socketRef.current &&
+				socketRef.current.readyState === WebSocket.OPEN &&
+				lastHandledState.current !== states.current
+			)
+			{
+				console.log("Last handled state:", lastHandledState.current);
+				console.log("Sending current state:", states.current);
+				lastHandledState.current = states.current;
 			}
 		}
-		else {
-			game.manageLocalKeyboardInputs(pong.current);
-		}
-
+		else game.manageLocalKeyboardInputs(pong.current);
 
 		const getUsernameFromBackend = async (userId: string): Promise<string | null> => {
 			try {
@@ -136,13 +129,16 @@ const	Pong: React.FC = () =>
 			console.warn("⚠️ Aucun userId dans le localStorage.");
 		}
 
+		pong.current.scene.debugLayer.show
+		({
+			embedMode: true,
+			handleResize: true,
+			overlay: true,
+		});
+
+		// Game loop
 		pong.current.engine.runRenderLoop(() =>
 		{
-			// console.log("mainMenuMusic is ready:", pong.current.mainMenuMusic?.isReady());
-			if (pong.current.mainMenuMusic && pong.current.mainMenuMusic.isReady() && !pong.current.mainMenuMusic.isPlaying) {pong.current.mainMenuMusic.play();}
-			// const	dummyTitle: baby.TextBlock = game.findComponentByName(pong, "mainMenuDummyTitle");
-			// if (dummyTitle instanceof baby.TextBlock) {Eg("found"); dummyTitle.text =  "banane"; dummyTitle.markAsDirty(); if (pong.current.guiTexture) { pong.current.guiTexture.markAsDirty(); }}
-			// if (pongTitle) {console.log("found"); pongTitle.text =  Math.random().toString(36).substring(2, 7).toUpperCase();}
 			game.updateGUIVisibilityStates(pong, states.current);
 			game.updateGUIVisibilityGameModes(pong, gameModes.current);
 			game.updateGUIValues(pong, states, lang);
@@ -189,6 +185,11 @@ const	Pong: React.FC = () =>
 						if (states.current > (Object.keys(game.states).length / 2) - 1) states.current = 0;
 						if (states.current < 0) states.current = (Object.keys(game.states).length / 2) - 1;
 						break;
+
+					case game.states.not_found:
+						if (pong.current.scene.activeCamera !== pong.current.notFoundCam)
+							{ game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.notFoundCam, 1, pong, states); }
+						break;
 	
 					case game.states.countdown:
 						pong.current.countdown -= pong.current.engine.getDeltaTime() / 1000;
@@ -212,23 +213,27 @@ const	Pong: React.FC = () =>
 	
 					case game.states.in_game:
 						const	maxScore = Math.max(pong.current.player1Score, pong.current.player2Score);
-						console.log("Max score: ", maxScore);
 						if (maxScore >= pong.current.requiredPointsToWin)
 							states.current = game.states.game_finished;
-						game.doPaddleMovement(pong, gameModes);
+						// game.doPaddleMovement(pong, gameModes);
 						game.fitCameraToArena(pong.current);
 						pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
 						pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;
-						game.makeBallBounce(pong.current, states);
+						// game.makeBallBounce(pong.current, states);
 						break;
-					
-				
 				}
 			}
 			
 			pong.current.scene.render();
 			document.title = `Pong - ${Object.keys(game.states).find(key => game.states[key as keyof typeof game.states] === states.current)}`;
 		});
+
+		// Handle movement in the background
+		const backgroundCalculations = setInterval(() =>
+		{
+			game.doPaddleMovement(pong, gameModes, states);
+			game.makeBallBounce(pong.current, states);
+		}, 1000 / 60);
 
 		// Debounced resize handler
 		const	handleResize = debounce(() =>
