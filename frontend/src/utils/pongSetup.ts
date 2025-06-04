@@ -44,6 +44,17 @@ export enum	colorsScheme
 
 }
 
+export enum playerStates
+{
+	none,
+	isHost,
+	isPlayer,
+	isPlayer1,
+	isPlayer2,
+	isPlayer3,
+	isPlayer4,
+}
+
 export enum	gameModes
 {
 	none,
@@ -59,7 +70,6 @@ export enum states
 	settings,
 	host_or_join,
 	game_settings,
-	tournament_settings,
 	hosting_waiting_players,
 	room_list,
 	waiting_to_start,
@@ -71,7 +81,7 @@ export enum states
 	// Adding tournament-specific states
 	waiting_tournament_to_start,
 	tournament_bracket_preview,
- launch_games,
+	launch_games,
 	tournament_round_1_game_1,
 	tournament_round_1_game_2,
 	in_game1,
@@ -183,12 +193,14 @@ export type pongStruct =
 	finishedGameGUI?: baby.Container;
 	hostOrJoinGUI?: baby.Container;
 	roomListGUI?: baby.Container;
-	tournamentSettingsGUI?: baby.Container;
-	roomListVerticalStackPanel?: baby.StackPanel;
+	waitingTournamentToStartGUI?: baby.Container;
+	roomListOnlineVerticalStackPanel?: baby.StackPanel;
+	roomListTournamentVerticalStackPanel?: baby.StackPanel;
 
 	// Other components bindings
-	pongSettingsPlayButton?: baby.StackPanel;
-	pongSettingsContinueButton?: baby.StackPanel;
+	waitingTournamentToStartButtonBack?: baby.StackPanel;
+	waitingTournamentToStartButtonPlay?: baby.StackPanel;
+	waitingTournamentToStartButtonCancel?: baby.StackPanel;
 
 	// Engine and scene
 	guiTexture?: baby.AdvancedDynamicTexture;
@@ -310,8 +322,8 @@ export const	label =
 	waitingForPlayers: ["Waiting for players...", "En attente de joueurs...", "In attesa di giocatori...", "⠨⠺⠁⠊⠞⠊⠝⠛ ⠨⠋⠕⠗ ⠨⠏⠇⠁⠽⠑⠗⠎..."],
 
 	// Tournament Settings
-	tournamentSettingsTitle: ["Tournament Settings", "Paramètres du tournoi", "Impostazioni del torneo", "⠨⠞⠕⠥⠗⠝⠕ ⠨⠎⠑⠞⠞⠊⠝⠛⠎"],
-	tournamentSettingsPlayerCount: ["Player count:", "Nombre de joueurs:", "Numero di giocatori:", "⠨⠏⠇⠁⠽⠑⠗ ⠨⠉⠕⠥⠝⠞:"],
+	waitingTournamentToStartTitle: ["Waiting for tournament to start", "En attente du tournoi", "In attesa dell'inizio del torneo", "⠨⠺⠁⠊⠞⠊⠝⠛ ⠨⠞⠕⠥⠗⠝⠕ ⠨⠞⠕ ⠨⠎⠞⠁⠗⠞"],
+	waitingTournamentToStartPlayerText: ["Players:", "Joueurs:", "Giocatori:", "⠨⠏⠇⠁⠽⠑⠗⠎:"],
 	
 } as const;
 

@@ -71,6 +71,11 @@ export const	AIMovePaddle = (pong: React.RefObject<game.pongStruct>): void =>
 	}
 }
 
+export const	predictBallImpactZ = (pong: React.RefObject<game.pongStruct>): number =>
+{
+	return 0;
+}
+
 // export const	predictBallImpactZ = (pong: React.RefObject<game.pongStruct>): number =>
 // {
 // 	// We convert all our needed values to a positive only range

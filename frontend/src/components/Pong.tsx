@@ -26,6 +26,7 @@ const	Pong: React.FC = () =>
 	const	pong = React.useRef<game.pongStruct>(game.initPongStruct());
 	const	states = React.useRef<game.states>(game.states.main_menu);
 	const	gameModes = React.useRef<game.gameModes>(game.gameModes.none);
+	const	playerState = React.useRef<game.playerStates>(game.playerStates.none);
 	const	lang = React.useRef<game.lang>(game.lang.english);
 	const	navigate = useNavigate();
 
@@ -58,10 +59,10 @@ const	Pong: React.FC = () =>
 
 		// Initialize the game
 		game.setupBabylon(pong.current, canvasRef.current);
+		// Initialize all the GUI
+		game.initializeAllGUIScreens(pong, gameModes, states, playerState, lang, socketRef, navigate);
 		
 
-		// Initialize all the GUI
-		if (!pong.current.engine || !pong.current.scene) return;
 		console.log("Initializing GUI...");
 		console.log("GUI initialization complete");
 		
@@ -98,17 +99,9 @@ const	Pong: React.FC = () =>
 				ws
 			);
 		});
-    
 		
-		game.initializeAllGUIScreens(pong, gameModes, states, lang, socketRef, navigate);
-
 		
 
-		
-
-		
-		if (!pong.current.engine || !pong.current.scene) return;
-		
 		if (gameModes.current === game.gameModes.online)
 		{
 			if
@@ -156,6 +149,7 @@ const	Pong: React.FC = () =>
 			console.warn("⚠️ Aucun userId dans le localStorage.");
 		}
 
+		if (!pong.current.scene) return;
 		pong.current.scene.debugLayer.show
 		({
 			embedMode: true,
@@ -164,10 +158,11 @@ const	Pong: React.FC = () =>
 		});
 
 		// Game loop
+		if (!pong.current.engine) return;
 		pong.current.engine.runRenderLoop(() =>
 		{
 			game.updateGUIVisibilityStates(pong, states.current);
-			game.updateGUIVisibilityGameModes(pong, gameModes.current);
+			game.updateGUIVisibilityPlayerStates(pong, playerState.current);
 			game.updateGUIValues(pong, states, lang);
 			if
 			(
