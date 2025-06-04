@@ -8,3 +8,5 @@ elk/elasticsearch/data/*
 logs/*
 monitoring/grafana/data/*
 monitoring/prometheus/data/*
+vault/data
+vault/secrets
