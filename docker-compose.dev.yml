@@ -73,8 +73,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - backend_data:${PWD}/backend
-      - ./backend/certs:/app/certs:ro
+      - backend_data:${PWD}/backend/main
+      - ./backend/main/certs:/app/certs:ro
       - sqlite_data:/app/prisma/sqlite
     environment:
       - NODE_ENV=development
@@ -309,7 +309,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ${PWD}/backend
+      device: ${PWD}/backend/main
       o: bind
   frontend_data:
     driver: local
@@ -321,7 +321,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ${PWD}/backend/prisma/sqlite
+      device: ${PWD}/backend/main/prisma/sqlite
       o: bind
   es_data:
     driver: local
