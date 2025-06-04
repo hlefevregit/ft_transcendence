@@ -6,7 +6,7 @@
 #    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/06/04 17:06:34 by hulefevr         ###   ########.fr        #
+#    Updated: 2025/06/04 17:09:27 by hulefevr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,7 @@ PROD_COMPOSE = docker-compose.yml
 .PHONY: build up down restart logs prune clean rebuild \
         build-dev up-dev down-dev restart-dev logs-dev rebuild-dev \
         build-prod up-prod down-prod restart-prod logs-prod rebuild-prod \
-		clean prune logs reset-db rebuild log \
-		clean prune logs reset-db rebuild log
+		reset-db log \
 
 #########################################################
 ### ------------------ ENV DEV ---------------------- ###
