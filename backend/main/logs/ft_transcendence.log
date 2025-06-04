@@ -8598,3 +8598,131 @@
 2025-06-03 16:28:39: {"level":30,"time":1748968119595,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-17","res":{"statusCode":200},"responseTime":1.066390000283718,"msg":"request completed"}
 2025-06-03 16:28:39: {"level":30,"time":1748968119609,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-18","req":{"method":"GET","url":"/api/me","host":"localhost","remoteAddress":"172.18.0.6","remotePort":58450},"msg":"incoming request"}
 2025-06-03 16:28:39: {"level":30,"time":1748968119610,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-18","res":{"statusCode":200},"responseTime":0.7923879995942116,"msg":"request completed"}
+2025-06-03 17:50:16: {"level":30,"time":1748973016115,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-19","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":51034},"msg":"incoming request"}
+2025-06-03 17:50:16: ❌ JWT error: FastifyError [Error]: Authorization token is invalid: The token is malformed.
+2025-06-03 17:50:16:     at decode (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:236:15)
+2025-06-03 17:50:16:     at _Request.requestVerify [as jwtVerify] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:492:26)
+2025-06-03 17:50:16:     at useGlobalOptions (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:455:31)
+2025-06-03 17:50:16:     at new Promise (<anonymous>)
+2025-06-03 17:50:16:     at _Request.requestVerify [as jwtVerify] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:454:14)
+2025-06-03 17:50:16:     at Object.authenticate (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/src/plugins/jwt.ts:14:21)
+2025-06-03 17:50:16:     at hookIterator (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:408:10)
+2025-06-03 17:50:16:     at next (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:242:18)
+2025-06-03 17:50:16:     at hookRunner (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:264:5)
+2025-06-03 17:50:16:     at handler (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/handleRequest.js:66:7) {
+2025-06-03 17:50:16:   code: 'FST_JWT_AUTHORIZATION_TOKEN_INVALID',
+2025-06-03 17:50:16:   statusCode: 401
+2025-06-03 17:50:16: }
+2025-06-03 17:50:16: {"level":30,"time":1748973016117,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-19","res":{"statusCode":401},"responseTime":1.8231169991195202,"msg":"request completed"}
+2025-06-03 17:50:16: {"level":30,"time":1748973016132,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-1a","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":51038},"msg":"incoming request"}
+2025-06-03 17:50:16: ❌ JWT error: FastifyError [Error]: Authorization token is invalid: The token is malformed.
+2025-06-03 17:50:16:     at decode (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:236:15)
+2025-06-03 17:50:16:     at _Request.requestVerify [as jwtVerify] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:492:26)
+2025-06-03 17:50:16:     at useGlobalOptions (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:455:31)
+2025-06-03 17:50:16:     at new Promise (<anonymous>)
+2025-06-03 17:50:16:     at _Request.requestVerify [as jwtVerify] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:454:14)
+2025-06-03 17:50:16:     at Object.authenticate (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/src/plugins/jwt.ts:14:21)
+2025-06-03 17:50:16:     at hookIterator (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:408:10)
+2025-06-03 17:50:16:     at next (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:242:18)
+2025-06-03 17:50:16:     at hookRunner (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:264:5)
+2025-06-03 17:50:16:     at handler (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/handleRequest.js:66:7) {
+2025-06-03 17:50:16:   code: 'FST_JWT_AUTHORIZATION_TOKEN_INVALID',
+2025-06-03 17:50:16:   statusCode: 401
+2025-06-03 17:50:16: }
+2025-06-03 17:50:16: {"level":30,"time":1748973016133,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-1a","res":{"statusCode":401},"responseTime":0.6720359995961189,"msg":"request completed"}
+2025-06-03 17:50:38: {"level":30,"time":1748973038987,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-1b","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":42266},"msg":"incoming request"}
+2025-06-03 17:50:38: ❌ JWT error: FastifyError [Error]: Authorization token is invalid: The token is malformed.
+2025-06-03 17:50:38:     at decode (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:236:15)
+2025-06-03 17:50:38:     at _Request.requestVerify [as jwtVerify] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:492:26)
+2025-06-03 17:50:38:     at useGlobalOptions (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:455:31)
+2025-06-03 17:50:38:     at new Promise (<anonymous>)
+2025-06-03 17:50:38:     at _Request.requestVerify [as jwtVerify] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:454:14)
+2025-06-03 17:50:38:     at Object.authenticate (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/src/plugins/jwt.ts:14:21)
+2025-06-03 17:50:38:     at hookIterator (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:408:10)
+2025-06-03 17:50:38:     at next (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:242:18)
+2025-06-03 17:50:38:     at hookRunner (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:264:5)
+2025-06-03 17:50:38:     at handler (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/handleRequest.js:66:7) {
+2025-06-03 17:50:38:   code: 'FST_JWT_AUTHORIZATION_TOKEN_INVALID',
+2025-06-03 17:50:38:   statusCode: 401
+2025-06-03 17:50:38: }
+2025-06-03 17:50:38: {"level":30,"time":1748973038988,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-1b","res":{"statusCode":401},"responseTime":0.6329940035939217,"msg":"request completed"}
+2025-06-03 17:50:39: {"level":30,"time":1748973039008,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-1c","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":42272},"msg":"incoming request"}
+2025-06-03 17:50:39: ❌ JWT error: FastifyError [Error]: Authorization token is invalid: The token is malformed.
+2025-06-03 17:50:39:     at decode (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:236:15)
+2025-06-03 17:50:39:     at _Request.requestVerify [as jwtVerify] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:492:26)
+2025-06-03 17:50:39:     at useGlobalOptions (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:455:31)
+2025-06-03 17:50:39:     at new Promise (<anonymous>)
+2025-06-03 17:50:39:     at _Request.requestVerify [as jwtVerify] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:454:14)
+2025-06-03 17:50:39:     at Object.authenticate (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/src/plugins/jwt.ts:14:21)
+2025-06-03 17:50:39:     at hookIterator (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:408:10)
+2025-06-03 17:50:39:     at next (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:242:18)
+2025-06-03 17:50:39:     at hookRunner (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:264:5)
+2025-06-03 17:50:39:     at handler (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/handleRequest.js:66:7) {
+2025-06-03 17:50:39:   code: 'FST_JWT_AUTHORIZATION_TOKEN_INVALID',
+2025-06-03 17:50:39:   statusCode: 401
+2025-06-03 17:50:39: }
+2025-06-03 17:50:39: {"level":30,"time":1748973039009,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-1c","res":{"statusCode":401},"responseTime":0.5503280013799667,"msg":"request completed"}
+2025-06-03 17:50:42: {"level":30,"time":1748973042664,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-1d","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":42280},"msg":"incoming request"}
+2025-06-03 17:50:42: ❌ JWT error: FastifyError [Error]: Authorization token is invalid: The token is malformed.
+2025-06-03 17:50:42:     at decode (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:236:15)
+2025-06-03 17:50:42:     at _Request.requestVerify [as jwtVerify] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:492:26)
+2025-06-03 17:50:42:     at useGlobalOptions (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:455:31)
+2025-06-03 17:50:42:     at new Promise (<anonymous>)
+2025-06-03 17:50:42:     at _Request.requestVerify [as jwtVerify] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:454:14)
+2025-06-03 17:50:42:     at Object.authenticate (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/src/plugins/jwt.ts:14:21)
+2025-06-03 17:50:42:     at hookIterator (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:408:10)
+2025-06-03 17:50:42:     at next (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:242:18)
+2025-06-03 17:50:42:     at hookRunner (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:264:5)
+2025-06-03 17:50:42:     at handler (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/handleRequest.js:66:7) {
+2025-06-03 17:50:42:   code: 'FST_JWT_AUTHORIZATION_TOKEN_INVALID',
+2025-06-03 17:50:42:   statusCode: 401
+2025-06-03 17:50:42: }
+2025-06-03 17:50:42: {"level":30,"time":1748973042665,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-1d","res":{"statusCode":401},"responseTime":0.5878180004656315,"msg":"request completed"}
+2025-06-03 17:50:42: {"level":30,"time":1748973042698,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-1e","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":42286},"msg":"incoming request"}
+2025-06-03 17:50:42: ❌ JWT error: FastifyError [Error]: Authorization token is invalid: The token is malformed.
+2025-06-03 17:50:42:     at decode (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:236:15)
+2025-06-03 17:50:42:     at _Request.requestVerify [as jwtVerify] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:492:26)
+2025-06-03 17:50:42:     at useGlobalOptions (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:455:31)
+2025-06-03 17:50:42:     at new Promise (<anonymous>)
+2025-06-03 17:50:42:     at _Request.requestVerify [as jwtVerify] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:454:14)
+2025-06-03 17:50:42:     at Object.authenticate (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/src/plugins/jwt.ts:14:21)
+2025-06-03 17:50:42:     at hookIterator (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:408:10)
+2025-06-03 17:50:42:     at next (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:242:18)
+2025-06-03 17:50:42:     at hookRunner (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:264:5)
+2025-06-03 17:50:42:     at handler (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/handleRequest.js:66:7) {
+2025-06-03 17:50:42:   code: 'FST_JWT_AUTHORIZATION_TOKEN_INVALID',
+2025-06-03 17:50:42:   statusCode: 401
+2025-06-03 17:50:42: }
+2025-06-03 17:50:42: {"level":30,"time":1748973042699,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-1e","res":{"statusCode":401},"responseTime":0.6609230004251003,"msg":"request completed"}
+2025-06-03 17:54:46: {"level":30,"time":1748973286698,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-1f","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":41282},"msg":"incoming request"}
+2025-06-03 17:54:46: ❌ JWT error: FastifyError [Error]: Authorization token is invalid: The token is malformed.
+2025-06-03 17:54:46:     at decode (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:236:15)
+2025-06-03 17:54:46:     at _Request.requestVerify [as jwtVerify] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:492:26)
+2025-06-03 17:54:46:     at useGlobalOptions (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:455:31)
+2025-06-03 17:54:46:     at new Promise (<anonymous>)
+2025-06-03 17:54:46:     at _Request.requestVerify [as jwtVerify] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:454:14)
+2025-06-03 17:54:46:     at Object.authenticate (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/src/plugins/jwt.ts:14:21)
+2025-06-03 17:54:46:     at hookIterator (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:408:10)
+2025-06-03 17:54:46:     at next (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:242:18)
+2025-06-03 17:54:46:     at hookRunner (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:264:5)
+2025-06-03 17:54:46:     at handler (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/handleRequest.js:66:7) {
+2025-06-03 17:54:46:   code: 'FST_JWT_AUTHORIZATION_TOKEN_INVALID',
+2025-06-03 17:54:46:   statusCode: 401
+2025-06-03 17:54:46: }
+2025-06-03 17:54:46: {"level":30,"time":1748973286699,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-1f","res":{"statusCode":401},"responseTime":0.6270099990069866,"msg":"request completed"}
+2025-06-03 17:54:46: {"level":30,"time":1748973286747,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-1g","req":{"method":"GET","url":"/api/me","host":"c2r10p2","remoteAddress":"172.18.0.6","remotePort":41288},"msg":"incoming request"}
+2025-06-03 17:54:46: ❌ JWT error: FastifyError [Error]: Authorization token is invalid: The token is malformed.
+2025-06-03 17:54:46:     at decode (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:236:15)
+2025-06-03 17:54:46:     at _Request.requestVerify [as jwtVerify] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:492:26)
+2025-06-03 17:54:46:     at useGlobalOptions (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:455:31)
+2025-06-03 17:54:46:     at new Promise (<anonymous>)
+2025-06-03 17:54:46:     at _Request.requestVerify [as jwtVerify] (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/@fastify/jwt/jwt.js:454:14)
+2025-06-03 17:54:46:     at Object.authenticate (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/src/plugins/jwt.ts:14:21)
+2025-06-03 17:54:46:     at hookIterator (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:408:10)
+2025-06-03 17:54:46:     at next (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:242:18)
+2025-06-03 17:54:46:     at hookRunner (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/hooks.js:264:5)
+2025-06-03 17:54:46:     at handler (/home/hulefevr/Cursus/final/ft_transcendence/ft_transcendence/backend/main/node_modules/fastify/lib/handleRequest.js:66:7) {
+2025-06-03 17:54:46:   code: 'FST_JWT_AUTHORIZATION_TOKEN_INVALID',
+2025-06-03 17:54:46:   statusCode: 401
+2025-06-03 17:54:46: }
+2025-06-03 17:54:46: {"level":30,"time":1748973286748,"pid":52,"hostname":"1c08a1c0e329","reqId":"req-1g","res":{"statusCode":401},"responseTime":0.9088490009307861,"msg":"request completed"}
