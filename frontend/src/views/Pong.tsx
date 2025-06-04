@@ -216,8 +216,8 @@ const	Pong: React.FC = () =>
 				switch (states.current)
 				{
 					default:
-						if (states.current > (Object.keys(game.states).length / 2) - 1) states.current = 0;
-						if (states.current < 0) states.current = (Object.keys(game.states).length / 2) - 1;
+						// if (states.current > (Object.keys(game.states).length / 2) - 1) states.current = 0;
+						// if (states.current < 0) states.current = (Object.keys(game.states).length / 2) - 1;
 						break;
 
 					case game.states.not_found:

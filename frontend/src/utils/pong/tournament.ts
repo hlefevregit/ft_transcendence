@@ -331,7 +331,7 @@ export const handleTournamentLoop = (
 				game.fitCameraToArena(pong.current);
 
 				// 1. Input du joueur local
-				game.doPaddleMovement(pong, gameModes);
+				game.doPaddleMovement(pong, gameModes, states);
 
 				// 2. Score check
 				const maxScore = Math.max(pong.current.player1Score, pong.current.player2Score);
@@ -423,7 +423,7 @@ export const handleTournamentLoop = (
 				game.fitCameraToArena(pong.current);
 
 				// 1. Input du joueur local
-				game.doPaddleMovement(pong, gameModes);
+				game.doPaddleMovement(pong, gameModes, states);
 
 				// 2. Score check
 				const maxScore = Math.max(pong.current.player1Score, pong.current.player2Score);
@@ -560,7 +560,7 @@ export const handleTournamentLoop = (
 				game.fitCameraToArena(pong.current);
 
 				// 1. Input du joueur local
-				game.doPaddleMovement(pong, gameModes);
+				game.doPaddleMovement(pong, gameModes, states);
 
 				// 2. Score check
 				const maxScore = Math.max(pong.current.player1Score, pong.current.player2Score);

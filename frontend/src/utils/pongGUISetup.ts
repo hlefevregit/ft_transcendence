@@ -8,9 +8,9 @@ import * as game from '@/libs/pongLibs';
 export const	instantiateGUI = (pong: React.RefObject<game.pongStruct>): void =>
 {
 	pong.current.guiTexture = baby.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, pong.current.scene);
-	if (pong.current.guiTexture.layer) {
-        pong.current.guiTexture.layer.renderingGroupId = 1;
-    }
+	// if (pong.current.guiTexture.layer) {
+    //     pong.current.guiTexture.layer.renderingGroupId = 1;
+    // }
 }
 
 export const	initializeAllGUIScreens = (pong: React.RefObject<game.pongStruct>, gameModes: React.RefObject<game.gameModes>, states: React.RefObject<game.states>, playerStates: React.RefObject<game.playerStates>, lang: React.RefObject<game.lang>, socketRef: React.RefObject<WebSocket | null>, navigate: (path: string) => void): void =>
@@ -32,6 +32,7 @@ export const	initializeAllGUIScreens = (pong: React.RefObject<game.pongStruct>, 
 	game.instantiateRoomListGUI(pong, states, gameModes, socketRef);
 	game.instantiateWaitingScreenGUI(pong, states);
 	game.instantiateWaitingTournamentToStartGUI(pong, states);
+	game.instantiateBracketGUI(pong, states, gameModes);
 	game.instantiateDebugGUI(pong, states, gameModes, playerStates, lang);
 	// etc.
 	console.log("complete initializing GUI screens");
@@ -51,6 +52,7 @@ export const	updateGUIVisibilityStates = (pong: React.RefObject<game.pongStruct>
 	setUIState(pong.current.waitingRoundStartGUI, game.states.waiting_to_start);
 	setUIState(pong.current.waitingTournamentToStartGUI, game.states.waiting_tournament_to_start);
 	setUIState(pong.current.waitingScreenGUI, game.states.hosting_waiting_players);
+	setUIState(pong.current.bracketGUI, game.states.tournament_bracket_preview);
 }
 
 export const	updateGUIVisibilityPlayerStates = (pong: React.RefObject<game.pongStruct>, playerStates: game.playerStates): void =>
@@ -64,13 +66,13 @@ export const	updateGUIVisibilityPlayerStates = (pong: React.RefObject<game.pongS
 	switch (playerStates)
 	{
 		case game.playerStates.isHost:
-			pong.current.waitingTournamentToStartButtonBack.isEnabled = pong.current.waitingTournamentToStartButtonBack.isVisible = true;
-			pong.current.waitingTournamentToStartButtonCancel.isEnabled = pong.current.waitingTournamentToStartButtonCancel.isVisible = false;
+			pong.current.waitingTournamentToStartButtonBack.isEnabled = pong.current.waitingTournamentToStartButtonBack.isVisible = false;
+			pong.current.waitingTournamentToStartButtonCancel.isEnabled = pong.current.waitingTournamentToStartButtonCancel.isVisible = true;
 			pong.current.waitingTournamentToStartButtonPlay.isEnabled = pong.current.waitingTournamentToStartButtonPlay.isVisible = true;
 			break;
 		case game.playerStates.isPlayer:
-			pong.current.waitingTournamentToStartButtonBack.isEnabled = pong.current.waitingTournamentToStartButtonBack.isVisible = false;
-			pong.current.waitingTournamentToStartButtonCancel.isEnabled = pong.current.waitingTournamentToStartButtonCancel.isVisible = true;
+			pong.current.waitingTournamentToStartButtonBack.isEnabled = pong.current.waitingTournamentToStartButtonBack.isVisible = true;
+			pong.current.waitingTournamentToStartButtonCancel.isEnabled = pong.current.waitingTournamentToStartButtonCancel.isVisible = false;
 			pong.current.waitingTournamentToStartButtonPlay.isEnabled = pong.current.waitingTournamentToStartButtonPlay.isVisible = false;
 			break;
 
@@ -261,7 +263,6 @@ export const    instantiateSettingsGUI = (pong: React.RefObject<game.pongStruct>
 	const	backButton = game.createDynamicButton("settingsButton", () =>
 	{
 		states.current = game.states.main_menu;
-		pong.current.mainMenuMusic?.play();
 	}, "back");
 	const	musicSlider = game.createSlider("musicSlider", 0, 100, 2, pong.current.musicVolume * 100, (value: number) =>
 	{
@@ -399,6 +400,7 @@ export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct
 				break;
 			case game.gameModes.tournament:
 				states.current = game.states.waiting_tournament_to_start;
+				console.log("🚀🚀🚀 switching to waiting_tournament_to_start 🚀🚀🚀");
 				break;
 			default:
 				states.current = game.states.waiting_to_start;
@@ -1002,7 +1004,8 @@ export const	instantiateWaitingTournamentToStartGUI = (pong: React.RefObject<gam
 
 	// Title and player count
 	const	waitingTournamentToStartTitle = game.createDynamicTitle("waitingTournamentToStartTitle");
-	const	waitingTournamentToStartPlayerText = game.createDynamicText("waitingTournamentToStartPlayerText");
+	const	waitingTournamentToStartPlayerText1 = game.createDynamicText("waitingTournamentToStartPlayerText1");
+	const	waitingTournamentToStartPlayerText2 = game.createText("waitingTournamentToStartPlayerText2", "/4");
 	const	waitingTournamentToStartPlayerTextValue = game.createText("waitingTournamentToStartPlayerTextValue", "0");
 
 	// Player list
@@ -1037,8 +1040,9 @@ export const	instantiateWaitingTournamentToStartGUI = (pong: React.RefObject<gam
 	// Title and player count
 	waitingTournamentToStartVerticalStackPanel.addControl(waitingTournamentToStartTitle);
 	waitingTournamentToStartVerticalStackPanel.addControl(waitingTournamentToStartHorizontalStackPanel);
-	waitingTournamentToStartHorizontalStackPanel.addControl(waitingTournamentToStartPlayerText);
+	waitingTournamentToStartHorizontalStackPanel.addControl(waitingTournamentToStartPlayerText1);
 	waitingTournamentToStartHorizontalStackPanel.addControl(waitingTournamentToStartPlayerTextValue);
+	waitingTournamentToStartHorizontalStackPanel.addControl(waitingTournamentToStartPlayerText2);
 
 	// Player list
 	waitingTournamentToStartVerticalStackPanel.addControl(waitingTournamentToStartPlayer1);
@@ -1055,4 +1059,94 @@ export const	instantiateWaitingTournamentToStartGUI = (pong: React.RefObject<gam
 	// Add GUI to the GUI texture
 	pong.current.waitingTournamentToStartGUI = waitingTournamentToStartGUI;
 	pong.current.guiTexture?.addControl(waitingTournamentToStartGUI);
+}
+
+export const	instantiateBracketGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>): void =>
+{
+	const	bracketGUI = game.createScreen("bracketGUI", "center");
+	const	bracketContainer = game.createAdaptiveContainer("bracketContainer");
+
+	const	bracketVerticalStackPanel = game.createVerticalStackPanel("bracketVerticalStackPanel");
+	const	bracketVerticalStackPanel1 = game.createVerticalStackPanel("bracketVerticalStackPanel1", 0);
+	const	bracketVerticalStackPanel2 = game.createVerticalStackPanel("bracketVerticalStackPanel2", 0);
+	const	bracketHorizontalStackPanel = game.createHorizontalStackPanel("bracketHorizontalStackPanel");
+	const	bracketHorizontalStackPanel1 = game.createHorizontalStackPanel("bracketHorizontalStackPanel1", 0);
+
+	// VS text separator
+	const	versusText1 = game.createDynamicText("versusText1", "versus");
+	const	versusText2 = game.createDynamicText("versusText2", "versus");
+	const	versusText3 = game.createDynamicText("versusText3", "versus");
+
+	// Lines vertical separators
+
+	// Title and texts
+	const	bracketTitle = game.createDynamicTitle("bracketTitle");
+	const	breacketRound1Text = game.createDynamicTitle("breacketRound1Text", "bracketRound1");
+	const	breacketRound2Text = game.createDynamicTitle("breacketRound2Text", "bracketRound2");
+
+	// Player cards
+	let		bracketPlayer1 = game.createText("bracketPlayer1", "player1");
+			pong.current.bracketPlayer1 = bracketPlayer1;
+	let		bracketPlayer2 = game.createText("bracketPlayer2", "player2");
+			pong.current.bracketPlayer2 = bracketPlayer2;
+	let		bracketPlayer3 = game.createText("bracketPlayer3", "player3");
+			pong.current.bracketPlayer3 = bracketPlayer3;
+	let		bracketPlayer4 = game.createText("bracketPlayer4", "player4");
+			pong.current.bracketPlayer4 = bracketPlayer4;
+
+	// Unknown player cards
+	const	bracketUnknownPlayer1 = game.createText("bracketUnknownPlayer1", "None");
+	const	bracketUnknownPlayer2 = game.createText("bracketUnknownPlayer2", "None");
+
+	// Abandon button
+	const	bracketAbandonButton = game.createDynamicButton("bracketAbandonButton", () =>
+	{
+		states.current = game.states.main_menu;
+		gameModes.current = game.gameModes.none;
+		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
+	}, "abandon");
+			(bracketAbandonButton.children[0] as baby.Button).onPointerEnterObservable.add(() => {
+			(bracketAbandonButton.children[0] as baby.Button).color = game.colorsScheme.dark1;
+			(bracketAbandonButton.children[0] as baby.Button).background = game.colorsScheme.auroraAccent1;
+	});
+			(bracketAbandonButton.children[0] as baby.Button).onPointerOutObservable.add(() => {
+			(bracketAbandonButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent1;
+			(bracketAbandonButton.children[0] as baby.Button).background = game.colorsScheme.dark1;
+	});
+			(bracketAbandonButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent1;
+
+	// Add GUI components to the main menu
+	bracketGUI.addControl(bracketContainer);
+	bracketContainer.addControl(bracketVerticalStackPanel);
+	bracketVerticalStackPanel.addControl(bracketTitle);
+
+	// Double column bracket layout
+	bracketVerticalStackPanel.addControl(bracketHorizontalStackPanel);
+	bracketHorizontalStackPanel.addControl(bracketVerticalStackPanel1);
+	bracketHorizontalStackPanel.addControl(bracketVerticalStackPanel2);
+
+	// First bracket entry - Player 1 vs Player 2
+	bracketVerticalStackPanel1.addControl(breacketRound1Text);
+	bracketVerticalStackPanel1.addControl(bracketPlayer1);
+	bracketVerticalStackPanel1.addControl(versusText1);
+	bracketVerticalStackPanel1.addControl(bracketPlayer2);
+
+	// First bracket entry - Player 3 vs Player 4
+	bracketVerticalStackPanel1.addControl(breacketRound2Text);
+	bracketVerticalStackPanel1.addControl(bracketPlayer3);
+	bracketVerticalStackPanel1.addControl(versusText2);
+	bracketVerticalStackPanel1.addControl(bracketPlayer4);
+
+	// Second bracket entry - Finals
+	bracketVerticalStackPanel2.addControl(breacketRound2Text);
+	bracketVerticalStackPanel2.addControl(bracketUnknownPlayer1);
+	bracketVerticalStackPanel2.addControl(versusText3);
+	bracketVerticalStackPanel2.addControl(bracketUnknownPlayer2);
+
+	// Add the abandon button
+	bracketVerticalStackPanel.addControl(bracketAbandonButton);
+
+	// Add GUI to the GUI texture
+	pong.current.bracketGUI = bracketGUI;
+	pong.current.guiTexture?.addControl(bracketGUI);
 }
