@@ -134,7 +134,7 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 
 					case 'game1_update': {
 						const session = [...games.values()].find(s => s.hasSocket(ws));
-						session?.handleGameUpdate(data);
+						session?.hanfleGameUpdateGame1(data);
 						break;
 					}
 					
