@@ -38,6 +38,11 @@ const	Pong: React.FC = () =>
 	const	socketRef = React.useRef<WebSocket | null>(null);
 	const	lastHandledState = React.useRef<game.states>(game.states.main_menu);
 
+	// lastState, lastPlayerState, and lastLang
+	const	lastState = React.useRef<game.states>(states.current);
+	const	lastPlayerState = React.useRef<game.playerStates>(playerState.current);
+	const	lastLang = React.useRef<game.lang>(lang.current);
+
 	React.useEffect(() =>
 	{
 		const audio = new Audio("/assets/vaporwave.mp3");
@@ -61,6 +66,9 @@ const	Pong: React.FC = () =>
 		game.setupBabylon(pong.current, canvasRef.current);
 		// Initialize all the GUI
 		game.initializeAllGUIScreens(pong, gameModes, states, playerState, lang, socketRef, navigate);
+		game.updateGUIVisibilityStates(pong, states.current);
+		game.updateGUIVisibilityPlayerStates(pong, playerState.current);
+		game.updateGUIValues(pong, states, lang);
 		
 
 		console.log("Initializing GUI...");
@@ -157,13 +165,13 @@ const	Pong: React.FC = () =>
 			overlay: true,
 		});
 
+
 		// Game loop
 		if (!pong.current.engine) return;
+
 		pong.current.engine.runRenderLoop(() =>
 		{
-			game.updateGUIVisibilityStates(pong, states.current);
-			game.updateGUIVisibilityPlayerStates(pong, playerState.current);
-			game.updateGUIValues(pong, states, lang);
+			game.updateGUIsWhenNeeded(pong, states, gameModes, playerState, lang, lastState, lastPlayerState, lastLang);
 			if
 			(
 				!pong.current.scene ||
@@ -268,7 +276,12 @@ const	Pong: React.FC = () =>
 		{
 			game.doPaddleMovement(pong, gameModes, states);
 			game.makeBallBounce(pong.current, states);
-		}, 1000 / 60);
+		}, 16);
+
+		const updateGUIsValuesWhenNeeded = setInterval(() =>
+		{
+			game.updateGUIValues(pong, states, lang);
+		}, 100);
 
 		// Debounced resize handler
 		const	handleResize = debounce(() =>
@@ -281,6 +294,8 @@ const	Pong: React.FC = () =>
 		
 		return () =>
 		{
+			clearInterval(backgroundCalculations);
+			clearInterval(updateGUIsValuesWhenNeeded);
 			if (!pong.current.engine) return;
 			pong.current.engine.dispose();
 		};
