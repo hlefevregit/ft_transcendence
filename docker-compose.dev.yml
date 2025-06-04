@@ -182,6 +182,8 @@ services:
   #   ports:
   #     - "5601:5601"
   #   environment:
+  #     - VAULT_ADDR=https://vault:8200
+  #     - VAULT_TOKEN=${cat ./vault/secrets/root_token.txt}
   #     - T_PORT_INTERN_LOGGING=9200
   #     - T_ENDPOINT_LOGGING=kibana
   #     - T_SERVER_NAME=localhost
@@ -191,6 +193,7 @@ services:
   #     - T_ENCRYPTION_PASSKEY_3=${KIBANA_ENCRYPTION_KEY}
   #     - T_KIBANA_TOKEN=${KIBANA_TOKEN}
   #   depends_on:
+  #     - vault
   #     - elasticsearch
   #   networks:
   #     - ft_network
