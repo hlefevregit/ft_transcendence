@@ -213,26 +213,27 @@ services:
   #     - ft_network
 
 
-  # kibana:
-  #   build:
-  #     context: ./elk/kibana
-  #     dockerfile: Dockerfile
-  #   container_name: kibana
-  #   ports:
-  #     - "5601:5601"
-  #   environment:
-  #     - T_PORT_INTERN_LOGGING=9200
-  #     - T_ENDPOINT_LOGGING=kibana
-  #     - T_SERVER_NAME=localhost
-  #     - T_KIBANA_MAXSOCKS=100
-  #     # REMOVETHIS
-  #     - T_ELASTIC_SYSPASS_1=${KIBANA_PASSWORD}
-  #     - T_ENCRYPTION_PASSKEY_3=${KIBANA_ENCRYPTION_KEY}
-  #     - T_KIBANA_TOKEN=${KIBANA_TOKEN}
-  #   depends_on:
-  #     - elasticsearch
-  #   networks:
-  #     - ft_network
+  kibana:
+    build:
+      context: ./elk/kibana
+      dockerfile: Dockerfile
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - T_PORT_INTERN_LOGGING=9200
+      - T_ENDPOINT_LOGGING=kibana
+      - T_SERVER_NAME=localhost
+      - T_KIBANA_MAXSOCKS=100
+      - VAULT_ADDR=https://vault:8200
+      - VAULT_SKIP_VERIFY=true
+      - VAULT_TOKEN=${VAULT_TOKEN}
+      - VAULT_SECRET_PATH=cubbyhole/kibana
+      # REMOVETHIS
+    depends_on:
+      - elasticsearch
+    networks:
+      - ft_network
 
   # # ------------------ ELK END -----------------------------------------------------------
   # #---------------------------------------------------------------------------------------
