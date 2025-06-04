@@ -6,7 +6,7 @@
 #    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/05/28 12:14:03 by hulefevr         ###   ########.fr        #
+#    Updated: 2025/06/04 17:06:34 by hulefevr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ PROD_COMPOSE = docker-compose.yml
 .PHONY: build up down restart logs prune clean rebuild \
         build-dev up-dev down-dev restart-dev logs-dev rebuild-dev \
         build-prod up-prod down-prod restart-prod logs-prod rebuild-prod \
+		clean prune logs reset-db rebuild log \
 		clean prune logs reset-db rebuild log
 
 #########################################################
@@ -40,7 +41,7 @@ restart-dev:
 logs-dev:
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) logs -f
 
-re-dev: 
+re-dev:
 	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) down --volumes --remove-orphans --rmi all
 	docker volume prune -f
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up --build -d
@@ -50,8 +51,13 @@ rebuild-dev:
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down -v --remove-orphans
 	docker system prune -af
 	docker volume prune -f
+	make reset_vault
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) build --no-cache
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up -d
+
+reset_vault:
+	sudo rm -rf ./vault/data ./vault/secrets
+	mkdir -p ./vault/data ./vault/secrets
 
 #########################################################
 ### ------------------ ENV PROD --------------------- ###
