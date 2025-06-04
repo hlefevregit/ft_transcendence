@@ -598,3 +598,33 @@ export const	resizeArenaShell = (pong: React.RefObject<game.pongStruct>): void =
 	pong.current.wallRight.scaling.z = pong.current.wallLeft.scaling.z;
 	pong.current.wallRight.position.x = -pong.current.wallLeft.position.x;
 }
+
+export const	updateGUIsWhenNeeded =
+(
+	pong: React.RefObject<game.pongStruct>,
+	states: React.RefObject<game.states>,
+	gameModes: React.RefObject<game.gameModes>,
+	playerStates: React.RefObject<game.playerStates>,
+	lang: React.RefObject<game.lang>,
+	lastState: React.RefObject<game.states>,
+	lastPlayerState: React.RefObject<game.playerStates>,
+	lastLang: React.RefObject<game.lang>
+): void =>
+{
+	if (lastState.current !== states.current)
+	{
+		game.updateGUIVisibilityStates(pong, states.current);
+		game.updateGUIValues(pong, states, lang);
+		lastState.current = states.current;
+	}
+	if (lastPlayerState.current !== playerStates.current)
+	{
+		game.updateGUIVisibilityPlayerStates(pong, playerStates.current);
+		lastPlayerState.current = playerStates.current;
+	}
+	if (lastLang.current !== lang.current)
+	{
+		game.updateGUIValues(pong, states, lang);
+		lastLang.current = lang.current;
+	}
+}
