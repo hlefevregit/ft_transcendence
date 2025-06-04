@@ -193,14 +193,19 @@ export type pongStruct =
 	finishedGameGUI?: baby.Container;
 	hostOrJoinGUI?: baby.Container;
 	roomListGUI?: baby.Container;
-	waitingTournamentToStartGUI?: baby.Container;
 	roomListOnlineVerticalStackPanel?: baby.StackPanel;
 	roomListTournamentVerticalStackPanel?: baby.StackPanel;
+	waitingTournamentToStartGUI?: baby.Container;
+	bracketGUI?: baby.Container;
 
 	// Other components bindings
 	waitingTournamentToStartButtonBack?: baby.StackPanel;
 	waitingTournamentToStartButtonPlay?: baby.StackPanel;
 	waitingTournamentToStartButtonCancel?: baby.StackPanel;
+	bracketPlayer1?: baby.StackPanel;
+	bracketPlayer2?: baby.StackPanel;
+	bracketPlayer3?: baby.StackPanel;
+	bracketPlayer4?: baby.StackPanel;
 
 	// Engine and scene
 	guiTexture?: baby.AdvancedDynamicTexture;
@@ -265,6 +270,8 @@ export const	label =
 	refresh: ["Refresh ⟳", "Rafraîchir ⟳", "Aggiorna ⟳", "⠨⠗⠑⠋⠗⠑⠎⠓ ⟳"],
 	cancel: ["Cancel ×", "Annuler ×", "Annulla ×", "⠨⠉⠁⠝⠉⠑⠇ ×"],
 	continue: ["Continue ▸", "Continuer ▸", "Continua ▸", "⠨⠉⠕⠝⠞⠊⠝⠥⠑⠗ ▸"],
+	abandon: ["Abandon ×", "Abandonner ×", "Abbandona ×", "⠨⠁⠃⠁⠝⠙⠕⠝⠑ ×"],
+	versus: ["Versus", "Contre", "Contro", "⠨⠉⠕⠝⠞⠗⠑"],
 
 
 	// Main menu
@@ -324,6 +331,9 @@ export const	label =
 	// Tournament Settings
 	waitingTournamentToStartTitle: ["Waiting for tournament to start", "En attente du tournoi", "In attesa dell'inizio del torneo", "⠨⠺⠁⠊⠞⠊⠝⠛ ⠨⠞⠕⠥⠗⠝⠕ ⠨⠞⠕ ⠨⠎⠞⠁⠗⠞"],
 	waitingTournamentToStartPlayerText: ["Players:", "Joueurs:", "Giocatori:", "⠨⠏⠇⠁⠽⠑⠗⠎:"],
+	bracketTitle: ["Tournament Bracket", "Tableau du tournoi", "Tabellone del torneo", "⠨⠞⠕⠥⠗⠝⠕ ⠨⠃⠗⠁⠉⠅⠑⠞"],
+	bracketRound1: ["First round", "Premier tour", "Primo turno", "⠨⠗⠕⠥⠝⠙⠑ 1"],
+	bracketRound2: ["Final", "Finale", "Finale", "⠨⠋⠊⠝⠁⠇"],
 	
 } as const;
 
