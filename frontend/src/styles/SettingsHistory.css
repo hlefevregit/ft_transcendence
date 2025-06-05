@@ -1,0 +1,17 @@
+/* ────────────────────────────────────────────── */
+/* Placeholder pour l’onglet “History”            */
+/* ────────────────────────────────────────────── */
+.placeholder-section {
+  text-align: center;
+  color: #6b7280;
+  font-size: 1rem;
+  padding: 60px 0;
+}
+
+/* Responsive : si on veut faire évoluer plus tard */
+@media (max-width: 400px) {
+  .placeholder-section {
+    font-size: 0.95rem;
+    padding: 50px 0;
+  }
+}

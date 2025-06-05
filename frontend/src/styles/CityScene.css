@@ -1,0 +1,17 @@
+/* src/styles/CityScene.css */
+
+.city-scene {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: url("/assets/2.jpg") no-repeat center center fixed;
+  background-size: cover;
+}
+
+.city-scene canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  outline: none;
+}
