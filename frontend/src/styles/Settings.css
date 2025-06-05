@@ -1,0 +1,126 @@
+/* ────────────────────────────────────────────── */
+/*  1) settings-page : wrapper complet            */
+/* ────────────────────────────────────────────── */
+.settings-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ────────────────────────────────────────────── */
+/*  2) settings-canvas : Canvas Babylon fullscreen */
+/* ────────────────────────────────────────────── */
+.settings-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* ────────────────────────────────────────────── */
+/*  3) settings-backdrop : flou + clic passe dessous */
+/* ────────────────────────────────────────────── */
+.settings-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ────────────────────────────────────────────── */
+/*  4) settings-container : Panneau blanc centré   */
+/*     – largeur fixe 450px, max 90vw               */
+/*     – fond 100% blanc, contour gris clair        */
+/*     – coins arrondis, padding généreux           */
+/* ────────────────────────────────────────────── */
+.settings-container {
+  position: relative;
+  z-index: 2;
+  width: 450px;
+  max-width: 90vw;
+  min-height: 520px;
+  margin: 0 auto;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 32px;
+  pointer-events: auto;
+}
+
+/* ────────────────────────────────────────────── */
+/*  5) Titre : imposant, majuscules, gris foncé     */
+/* ────────────────────────────────────────────── */
+.settings-title {
+  margin: -12px 0 10px 0;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  color: #4b5563;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ────────────────────────────────────────────── */
+/*  6) Onglets (Profile / Friends / History)        */
+/*     – texte inactif gris moyen                   */
+/*     – onglet actif : texte coloré                 */
+/*     – plus de bordure grise sous tous les onglets */
+/* ────────────────────────────────────────────── */
+.settings-tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.settings-tab {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 10px 0;
+  font-size: 0.9rem;
+  color: #6b7280; /* gris moyen */
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.settings-tab:hover {
+  color: #374151; /* gris plus foncé au survol */
+}
+
+.settings-tab.profile-tab.active {
+  color: #3b82f6; /* bleu */
+}
+.settings-tab.friends-tab.active {
+  color: #10b981; /* vert */
+}
+.settings-tab.history-tab.active {
+  color: #f59e0b; /* ambre */
+}
+
+/* ────────────────────────────────────────────── */
+/*  Barre unique (underline) qui se déplace      */
+/* ────────────────────────────────────────────── */
+.tab-underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background-color: #3b82f6;
+  transition: left 0.3s ease, background-color 0.3s ease;
+}
+
+.settings-content {
+  min-height: 260px;
+}

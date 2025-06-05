@@ -1,0 +1,236 @@
+/* ────────────────────────────────────────────── */
+/*  Container global                             */
+/* ────────────────────────────────────────────── */
+.friends-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  max-height: 60vh;      /* hauteur fixe pour scrolling interne */
+  overflow-y: auto;
+  padding-right: 8px;    /* place pour la scrollbar */
+}
+
+/* ────────────────────────────────────────────── */
+/*  Section “Add Friend”                         */
+/* ────────────────────────────────────────────── */
+.section-add {
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+
+  /* Au démarrage, fermé (hidden) */
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.section-add.open {
+  max-height: 100px;        /* assez pour input + message d’erreur */
+  opacity: 1;
+  transform: translateY(0);
+  margin: 4px 0;            /* même margin qu’avant */
+  padding: 0;               /* gérer l’intérieur dans .friend-input-row */
+}
+
+/* ────────────────────────────────────────────── */
+/*  Input “Add Friend”                           */
+/* ────────────────────────────────────────────── */
+.friend-input-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #d1d5db;
+  padding: 8px 16px;
+}
+
+.friend-input {
+  flex: 1;
+  font-size: 1rem;
+  padding: 6px 8px;
+  border: none;
+  outline: none;
+}
+
+.friend-input::placeholder {
+  color: #9ca3af;
+}
+
+.send-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: #6b7280;
+  padding-left: 8px;
+  transition: color 0.2s ease;
+}
+
+.send-button:hover {
+  color: #374151;
+}
+
+/* ────────────────────────────────────────────── */
+/*  Headers déroulants (“Sent”, “Received”, “Friends”) */
+/* ────────────────────────────────────────────── */
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #f3f4f6;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s ease;
+}
+
+.dropdown-header:hover {
+  background: #e5e7eb;
+}
+
+.dropdown-header.standalone {
+  border-radius: 10px;
+  margin: 4px 0;
+}
+
+.dropdown-header.expanded-header {
+  border-radius: 10px 10px 0 0;
+}
+
+.dropdown-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.dropdown-icon {
+  font-size: 1rem;
+  color: #6b7280;
+  transition: transform 0.2s ease;
+}
+
+.dropdown-icon.open {
+  transform: rotate(180deg);
+}
+
+/* ────────────────────────────────────────────── */
+/*  Contenu déplié sous chaque header            */
+/* ────────────────────────────────────────────── */
+.section-content {
+  background: #ffffff;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  overflow: hidden;
+
+  /* Par défaut fermé */
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.section-content.open {
+  max-height: 40vh;       /* hauteur maxi une fois ouvert */
+  opacity: 1;
+  transform: translateY(0);
+  margin: 0 0 4px 0;
+  padding: 0;
+}
+
+/* ────────────────────────────────────────────── */
+/*  Liste déroulante (ul/li)                      */
+/* ────────────────────────────────────────────── */
+.dropdown-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.dropdown-item-empty {
+  padding: 12px 16px;
+  color: #6b7280;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-top: 1px solid #e5e7eb;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f9fafb;
+}
+
+.item-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.item-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #e0e0e0;
+}
+
+.item-pseudo {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.item-status {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.item-text-group {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.item-actions-group {
+  display: flex;
+  gap: 10px;
+}
+
+.item-action-button,
+.item-accept-button,
+.item-decline-button,
+.item-remove-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #6b7280;
+  transition: color 0.2s ease;
+}
+
+.item-action-button:hover,
+.item-decline-button:hover,
+.item-remove-button:hover {
+  color: #ef4444;
+}
+
+.item-accept-button:hover {
+  color: #10b981;
+}
+
+/* ────────────────────────────────────────────── */
+/*  Messages d’erreur                             */
+/* ────────────────────────────────────────────── */
+.error-text {
+  color: #ef4444;
+  font-size: 0.9rem;
+  text-align: center;
+  margin: 4px 0 0 0;
+}

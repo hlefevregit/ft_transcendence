@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import CityScene from './components/CityScene';
-import LoginForm from './components/LoginForm';
-import RegisterForm from './components/RegisterForm';
-import Game1 from './components/Game1'
-import Settings from './components/Settings';
-import Pong from './components/Pong';
+import CityScene from './views/CityScene';
+import LoginForm from './views/LoginForm';
+import RegisterForm from './views/RegisterForm';
+import Game1 from './views/Game1'
+import Settings from './views/Settings/Settings';
+import Pong from './views/Pong';
 
 const App = () => {
   return (
