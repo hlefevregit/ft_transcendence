@@ -6,7 +6,7 @@ import * as game from '@/libs/pongLibs';
 
 export enum	colorsScheme
 {
-	// BASIC COLORS
+	// BASIC COLORS - Should not be used
 	red = "#FF0000",
 	green = "#00FF00",
 	blue = "#0000FF",
@@ -30,17 +30,17 @@ export enum	colorsScheme
 	
 	
 	// Accent colors - Frost
-	frostAccent1 = "#5e81ac",
-	frostAccent2 = "#81a1c1",
-	frostAccent3 = "#88c0d0",
-	frostAccent4 = "#8fbcbb",
+	frostAccent1 = "#5e81ac",	// turquoise
+	frostAccent2 = "#81a1c1",	// light blue
+	frostAccent3 = "#88c0d0",	// sky blue
+	frostAccent4 = "#8fbcbb",	// water blue
 
 	// Accent colors - Aurora
-	auroraAccent1 = "#bf616a",
-	auroraAccent2 = "#d08770",
-	auroraAccent3 = "#ebcb8b",
-	auroraAccent4 = "#a3be8c",
-	auroraAccent5 = "#b48ead",
+	auroraAccent1 = "#bf616a",	// red
+	auroraAccent2 = "#d08770",	// orange
+	auroraAccent3 = "#ebcb8b",	// yellow
+	auroraAccent4 = "#a3be8c",	// green
+	auroraAccent5 = "#b48ead",	// mauve
 
 }
 
@@ -206,6 +206,8 @@ export type pongStruct =
 	bracketPlayer2?: baby.StackPanel;
 	bracketPlayer3?: baby.StackPanel;
 	bracketPlayer4?: baby.StackPanel;
+	bracketFinalPlayer1?: baby.StackPanel;
+	bracketFinalPlayer2?: baby.StackPanel;
 
 	// Engine and scene
 	guiTexture?: baby.AdvancedDynamicTexture;
@@ -459,14 +461,4 @@ export const	reflectBallPaddles = (pong: pongStruct): void =>
 		pong.ballSpeedModifier += pong.ballSpeedModifier * pong.ballSpeed >= pong.maxBallSpeed ? 0 : pong.ballSpeed;
 		return;
 	}
-}
-
-export	const	setAreanWidth = (pong: pongStruct, width: number): void =>
-{
-	pong.arenaWidth = width;
-}
-
-export	const	setAreanHeight = (pong: pongStruct, height: number): void =>
-{
-	pong.arenaHeight = height;
 }
