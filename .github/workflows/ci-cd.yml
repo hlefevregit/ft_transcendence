@@ -1,0 +1,59 @@
+name: CI-CD Integration
+
+on:
+  push:
+    branches:
+      - main
+      - battleship
+      - feature/ci-cd-integration
+  pull_request:
+    branches:
+      - main
+      - battleship
+      - feature/ci-cd-integration
+  workflow_dispatch:
+
+jobs:
+  version:
+    name: Versioning
+    runs-on: ubuntu-latest
+    if: |
+      github.ref == 'refs/heads/main' ||
+      github.ref == 'refs/heads/battleship' ||
+      github.ref == 'refs/heads/feature/ci-cd-integration' ||
+      github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.17
+
+      - name: Install semantic-release plugins
+        run: npm install --save-dev @semantic-release/changelog @semantic-release/git @semantic-release/github @semantic-release/npm --legacy-peer-deps
+
+      - name: Cleanup tags and sync
+        run: |
+          git tag -l | xargs -r git tag -d
+          git fetch origin --prune --tags
+          git checkout ${{ github.ref_name }} --force
+          git reset --hard origin/${{ github.ref_name }}
+
+      - name: Run semantic-release (main / battleship / feature)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          if [[ "${{ github.ref_name }}" == "main" || "${{ github.ref_name }}" == "battleship" || "${{ github.ref_name }}" == "feature/ci-cd-integration" ]]; then
+            npx semantic-release
+            git describe --exact-match --tags HEAD > version || true
+          fi
+
+      - name: Upload version artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: version
+          path: version
