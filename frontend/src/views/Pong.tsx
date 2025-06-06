@@ -280,7 +280,7 @@ const	Pong: React.FC = () =>
 		const updateGUIsValuesWhenNeeded = setInterval(() =>
 		{
 			game.updateGUIValues(pong, states, lang);
-		}, 100);
+		}, 200);
 
 		// Debounced resize handler
 		const	handleResize = debounce(() =>
