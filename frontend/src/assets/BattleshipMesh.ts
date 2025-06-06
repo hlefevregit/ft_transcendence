@@ -1,13 +1,13 @@
-import BABYLON, { Vector3, MeshBuilder, ActionManager, ActionEvent } from 'babylonjs'
+import { Mesh, MeshBuilder, Scene, Vector3, Color4, ActionManager, ActionEvent, ExecuteCodeAction } from '@babylonjs/core'
 
 // Custom mesh encapsulating one Battleship player interface
-class BattleshipMesh extends BABYLON.Mesh {
-    pivot: BABYLON.Mesh
-    screen: BABYLON.Mesh
-    field: BABYLON.Mesh
-    cells: BABYLON.Mesh[] = []
+class BattleshipMesh extends Mesh {
+    pivot: Mesh
+    screen: Mesh
+    field: Mesh
+    cells: Mesh[] = []
 
-    constructor(name: string, scene: BABYLON.Scene, onClick: (ij:number, evt:ActionEvent) => void, position?: Vector3, rotation?: Vector3) {
+    constructor(name: string, scene: Scene, onClick: (ij:number, evt:ActionEvent) => void, position?: Vector3, rotation?: Vector3) {
         super(name, scene);
 
 		// Cylinder pivot for the screen's rotating animation. Mostly aesthetic
@@ -20,14 +20,14 @@ class BattleshipMesh extends BABYLON.Mesh {
 		this.screen.position = new Vector3(0, 5.6, 0.3);
 
 		// Array of 'cells', small clickable meshes used by player to select where to attack next
-        const cellColor = new BABYLON.Color4(0, 0.27, 1);
+        const cellColor = new Color4(0, 0.27, 1);
         for (let i=0; i < 10; i++) {
             for (let j=0; j < 10; j++) {
                 const cell = MeshBuilder.CreateBox("cell" + i + j + "-" + name, {size:0.8, depth:0.3, faceColors:Array(6).fill(cellColor)});
                 cell.parent = this.screen;
                 cell.position = new Vector3(i-4.5, j-4.25, -0.3);
 				cell.actionManager = new ActionManager(scene);
-				cell.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
+				cell.actionManager.registerAction(new ExecuteCodeAction(
 					ActionManager.OnPickTrigger,
 					(event) => onClick(i*10 + j, event))
 				);
