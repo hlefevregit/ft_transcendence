@@ -1,11 +1,11 @@
 /* Battleship styles */
 .board-button {
-  background: #fff;
+  /* background: #fff; */
   border: 1px solid #999;
   float: left;
   font-size: 24px;
   font-weight: bold;
-  color: #fff;
+  /* color: #fff; */
   line-height: 34px;
   height: 34px;
   margin-right: -1px;
@@ -15,12 +15,12 @@
   width: 34px;
 }
 
-.board-button:disabled {
-  background: #000000;
-}
+/* .board-button:disabled {
+  background: #ddd;
+} */
 
 .board-button:hover:enabled {
-  background: #e62626;
+  background: #ffdd48;
 }
 
 .board-row:after {
@@ -33,13 +33,13 @@
   margin: ;
 } */
 
-/* .battleship-local {
+.battleship-local {
   display: grid;
   grid-template-columns: repeat(13, 1fr);
   grid-template-rows: minmax(100px, auto);
   grid-template-areas: 
     "hd hd hd hd hd hd hd hd hd hd hd hd hd"
-    "ls ls b1 b1 b1 md md md b2 b2 b2 rs rs"
-    "ls ls b1 b1 b1 md md md b2 b2 b2 rs rs"
-    "ls ls b1 b1 b1 md md md b2 b2 b2 rs rs";
-} */
+    "ls ls ls b1 b1 b1 md b2 b2 b2 rs rs rs"
+    "ls ls ls b1 b1 b1 md b2 b2 b2 rs rs rs"
+    "ls ls ls b1 b1 b1 md b2 b2 b2 rs rs rs";
+}
