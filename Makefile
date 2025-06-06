@@ -6,11 +6,10 @@
 #    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/04/17 22:20:30 by hulefevr         ###   ########.fr        #
+#    Updated: 2025/05/28 12:14:03 by hulefevr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# Variables
 # Variables
 PROJECT_NAME = ft_transcendence
 DEV_COMPOSE = docker-compose.dev.yml
@@ -18,7 +17,8 @@ PROD_COMPOSE = docker-compose.yml
 
 .PHONY: build up down restart logs prune clean rebuild \
         build-dev up-dev down-dev restart-dev logs-dev rebuild-dev \
-        build-prod up-prod down-prod restart-prod logs-prod rebuild-prod
+        build-prod up-prod down-prod restart-prod logs-prod rebuild-prod \
+		clean prune logs reset-db rebuild log
 
 #########################################################
 ### ------------------ ENV DEV ---------------------- ###
@@ -96,3 +96,35 @@ prune:
 	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) down -v --remove-orphans
 	docker system prune -af
 	docker volume prune -f
+
+
+logs:
+	@mkdir -p ./logs
+	@for container in $$(docker ps --format '{{.Names}}'); do \
+		echo "Redirecting logs for $$container"; \
+		docker logs -f $$container > ./logs/$$container.log 2>&1 & \
+	done
+
+reset-db:
+	@echo "🗑️  Suppression de la base SQLite..."
+	rm -f ./backend/dev.db
+	@echo "🔄 Réinitialisation de la base avec Prisma..."
+	cd backend && npx prisma migrate reset --force
+	@echo "✅ Base de données réinitialisée."
+
+rebuild:
+	@if [ -z "$(name)" ]; then \
+		echo "❌ Error: please provide a container name (e.g. 'make rebuild name=backend')"; \
+		exit 1; \
+	fi
+	@echo "🔨 Rebuilding container: $(name)"
+	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) build --no-cache $(name)
+	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up -d $(name)
+
+log:
+	@if [ -z "$(name)" ]; then \
+		echo "❌ Error: please provide a container name (e.g. 'make log name=backend')"; \
+		exit 1; \
+	fi
+	@echo "📜 Displaying logs for container: $(name)"
+	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) logs -f $(name)
