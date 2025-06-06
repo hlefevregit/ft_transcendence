@@ -546,7 +546,7 @@ export const	createCard = (cardName: string, cardText: string): baby.StackPanel 
 {
 	const	block = game.createDummyBlock();
 	const	container = new baby.Container(cardName + "Container");
-			container.width = "240px";
+			container.width = "200px";
 			container.height = "60px";
 			container.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
 			container.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
@@ -559,7 +559,6 @@ export const	createCard = (cardName: string, cardText: string): baby.StackPanel 
 			cardBackground.height = "100%";
 			cardBackground.background = game.colorsScheme.dark3;
 			cardBackground.color = "transparent";
-			// cardBackground.color = game.colorsScheme.auroraAccent1;
 			cardBackground.cornerRadius = 20;
 			cardBackground.thickness = 2;
 			cardBackground.zIndex = 0;

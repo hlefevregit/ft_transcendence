@@ -1217,14 +1217,14 @@ export const instantiateBracketGUI = (pong: React.RefObject<game.pongStruct>, st
 	// (bracketFinalsText.children[0] as baby.TextBlock).fontSize = 32;
 
 	// Create player cards with the new function
-	const	bracketPlayer1Card = game.createCard("Player 1", "bracketPlayer1");
-	const	bracketPlayer2Card = game.createCard("Player 2", "bracketPlayer2");
-	const	bracketPlayer3Card = game.createCard("Player 3", "bracketPlayer3");
-	const	bracketPlayer4Card = game.createCard("Player 4", "bracketPlayer4");
+	const	bracketPlayer1Card = game.createCard("bracketPlayer1Card", "Player 1");
+	const	bracketPlayer2Card = game.createCard("bracketPlayer2Card", "Player 2");
+	const	bracketPlayer3Card = game.createCard("bracketPlayer3Card", "Player 3");
+	const	bracketPlayer4Card = game.createCard("bracketPlayer4Card", "Player 4");
 	
 	// Finals cards
-	const	finalPlayer1 = game.createCard("finalPlayer1", "finalPlayer1");
-	const	finalPlayer2 = game.createCard("finalPlayer2", "finalPlayer2");
+	const	finalPlayer1 = game.createCard("finalPlayer1", "Final Player 1");
+	const	finalPlayer2 = game.createCard("finalPlayer2", "Final Player 2");
 	
 	// Abandon button
 	const	bracketAbandonButton = game.createDynamicButton("bracketAbandonButton", () =>
@@ -1254,19 +1254,28 @@ export const instantiateBracketGUI = (pong: React.RefObject<game.pongStruct>, st
 	// Style the player cards
 	const	bracketPlayer1Container = pong.current.bracketPlayer1.children[0] as baby.Container;
 	const	bracketPlayer1Rectangle = bracketPlayer1Container.children[0] as baby.Rectangle;
-	bracketPlayer1Rectangle.color = game.colorsScheme.auroraAccent4;
+			bracketPlayer1Rectangle.color = game.colorsScheme.auroraAccent4;
 
 	const	bracketPlayer2Container = pong.current.bracketPlayer2.children[0] as baby.Container;
 	const	bracketPlayer2Rectangle = bracketPlayer2Container.children[0] as baby.Rectangle;
-	bracketPlayer2Rectangle.color = game.colorsScheme.auroraAccent1;
+			bracketPlayer2Rectangle.color = game.colorsScheme.auroraAccent1;
 
 	const	bracketPlayer3Container = pong.current.bracketPlayer3.children[0] as baby.Container;
 	const	bracketPlayer3Rectangle = bracketPlayer3Container.children[0] as baby.Rectangle;
-	bracketPlayer3Rectangle.color = game.colorsScheme.auroraAccent3;
+			bracketPlayer3Rectangle.color = game.colorsScheme.auroraAccent3;
 
 	const	bracketPlayer4Container = pong.current.bracketPlayer4.children[0] as baby.Container;
 	const	bracketPlayer4Rectangle = bracketPlayer4Container.children[0] as baby.Rectangle;
-	bracketPlayer4Rectangle.color = game.colorsScheme.auroraAccent3;
+			bracketPlayer4Rectangle.color = game.colorsScheme.auroraAccent3;
+
+	const	finalPlayer1Container = pong.current.bracketFinalPlayer1.children[0] as baby.Container;
+	const	finalPlayer1Rectangle = finalPlayer1Container.children[0] as baby.Rectangle;
+			finalPlayer1Rectangle.color = game.colorsScheme.auroraAccent3;
+
+	// approche plus rapide mais se reset à un changement de menu, il faudra donc resend l'info depuis le serveur (chose qu'on ne fera pas mdr)
+	// Alors ca marche pas parceque dans ma situation, cette GUI n'est pas affichée au lancement du jeu, mais seulement quand cette UI est actuellement affichée
+	const test: baby.Rectangle = game.findComponentByName(pong, "finalPlayer2Background");
+	if (test) test.color = game.colorsScheme.frostAccent1;
 
 	// Add GUI components
 	bracketGUI.addControl(bracketContainer);
