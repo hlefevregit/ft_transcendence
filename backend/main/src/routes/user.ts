@@ -103,8 +103,8 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
         const upd = await fastify.prisma.user.update({
           where: { id: userId },
           data: {
-            friends: { set: [] },   // vide le join-table implicite
-            email: '',            // ou une valeur factice
+            friends: { set: [] },
+            email: `deleted_${userId}_${Date.now()}@deleted.local`,
             status: null,
             password: null,
             twoFAEnabled: false,
