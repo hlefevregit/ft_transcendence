@@ -105,7 +105,6 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
           data: {
             friends: { set: [] },   // vide le join-table implicite
             email: '',            // ou une valeur factice
-            avatarUrl: null,
             status: null,
             password: null,
             twoFAEnabled: false,
