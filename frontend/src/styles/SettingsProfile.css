@@ -1,15 +1,13 @@
-/* ────────────────────────────────────────────── */
-/*  8) Profile Section Rows                         */
-/*     – chacun un fond blanc, contour gris clair      */
-/*     – padding généreux, coins arrondis              */
-/* ────────────────────────────────────────────── */
+/* src/styles/SettingsProfile.css */
+
+/* 1) Container */
 .profile-section {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-/* General row styling (avatar+status+pseudo, change avatar, 2FA) */
+/* 2) General row styling */
 .profile-row {
   display: flex;
   align-items: center;
@@ -18,30 +16,22 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 14px 16px;
-  transition: background 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  transition: background 0.2s, border-color 0.2s;
 }
-
 .profile-row.clickable {
   cursor: pointer;
 }
-
 .profile-row.clickable:hover {
-  background: #f9fafb; /* très léger gris */
-  border-color: #d1d5db; /* gris légèrement plus foncé */
+  background: #f9fafb;
+  border-color: #d1d5db;
 }
 
-/* ────────────────────────────────────────────── */
-/*  9) Avatar + Status + Pseudo + Crayon            */
-/* ────────────────────────────────────────────── */
+/* 3) Avatar + status */
 .avatar-wrapper {
   position: relative;
-  display: flex;
-  align-items: center;
   width: 56px;
   height: 56px;
 }
-
-/* Avatar image circular */
 .avatar-image {
   width: 100%;
   height: 100%;
@@ -49,253 +39,252 @@
   border-radius: 50%;
   border: 2px solid #e0e0e0;
 }
-
-/* Status dot: larger, clickable */
 .status-dot {
   position: absolute;
-  bottom: -2px; /* slightly below avatar */
-  right: -2px;  /* slightly to the right */
+  bottom: -2px;
+  right: -2px;
   width: 20px;
   height: 20px;
-  border: 2px solid #ffffff;
+  border: 2px solid #fff;
   border-radius: 50%;
   cursor: pointer;
 }
+.status-active { background: #10b981; }
+.status-offline { background: #ef4444; }
 
-.status-online {
-  background: #10b981; /* green */
-}
-
-.status-offline {
-  background: #ef4444; /* red */
-}
-
-/* ────────────────────────────────────────────── */
-/* 10) Pseudo area: left-aligned, no foultaille     */
-/*     – “button” pour pseudo non-édition            */
-/*     – input avec bord basique                    */
-/* ────────────────────────────────────────────── */
+/* 4) Username area */
 .pseudo-area {
   flex: 1;
   margin-left: 16px;
   display: flex;
   align-items: center;
 }
-
 .pseudo-text.editable {
+  width: 100%;
   font-size: 1rem;
   font-weight: 600;
-  color: #374151; /* dark gray */
-  background: transparent;
+  color: #374151;
+  background: none;
   border: none;
   text-align: left;
   cursor: pointer;
   padding: 0;
-  width: 100%;
-  outline: none;
 }
-
 .pseudo-input {
   width: 100%;
   font-size: 1rem;
   font-weight: 600;
   color: #374151;
+  background: none;
   border: none;
   border-bottom: 1px solid #d1d5db;
-  background: transparent;
   padding: 4px 0;
   outline: none;
-  transition: border-color 0.2s ease-in-out;
+  transition: border-color 0.2s;
 }
-
 .pseudo-input:focus {
-  border-bottom-color: #3b82f6; /* bright blue underline on focus */
+  border-bottom-color: #3b82f6;
 }
-
-/* Pencil icon (stays at far right) */
 .pencil-icon {
   font-size: 20px;
   color: #6b7280;
   margin-left: 8px;
 }
 
-/* ────────────────────────────────────────────── */
-/* 11) Change Avatar row                            */
-/* ────────────────────────────────────────────── */
-.row-text {
+/* 5) Avatar actions (reuse logout/delete styles) */
+.extra-actions.avatar-actions {
+  display: flex;
+  gap: 12px;
+}
+.avatar-actions .logout-button,
+.avatar-actions .delete-data-button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
   font-size: 1rem;
-  font-weight: 500;
-  color: #374151; /* dark gray */
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.avatar-actions .logout-button {
+  background: #f3f4f6;
+}
+.avatar-actions .logout-button:hover {
+  background: #e5e7eb;
+}
+.avatar-actions .delete-data-button {
+  background: #fee2e2;
+  color: #900;
+}
+.avatar-actions .delete-data-button:hover {
+  background: #fecaca;
 }
 
-/* ────────────────────────────────────────────── */
-/* 12) Save Button                                  */
-/* ────────────────────────────────────────────── */
+/* 6) Save button */
 .save-button {
   margin-top: 8px;
   width: 100%;
   padding: 14px;
-  background-color: #3b82f6;
+  background: #3b82f6;
   border: none;
   border-radius: 8px;
-  color: #ffffff;
+  color: #fff;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  transition: background 0.2s;
 }
-
 .save-button:hover {
-  background-color: #2563eb;
+  background: #2563eb;
 }
 
-/* ────────────────────────────────────────────── */
-/* 13) Toggle Switch for 2FA                         */
-/*     – row “2FA: Off/On” en anglais                 */
-/*     – clicking toggles QR ou disable                */
-/* ────────────────────────────────────────────── */
+/* 7) 2FA toggle row */
 .toggle-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #ffffff;
+  background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 14px 16px;
-  transition: background 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  transition: background 0.2s, border-color 0.2s;
   cursor: pointer;
 }
-
 .toggle-row:hover {
   background: #f9fafb;
   border-color: #d1d5db;
 }
-
 .toggle-row.enabled .slider {
-  background-color: #10b981; /* green */
+  background-color: #10b981;
 }
-
 .toggle-row.disabled .slider {
-  background-color: #ef4444; /* red */
+  background-color: #ef4444;
 }
-
-/* Slider decorative */
 .switch {
   position: relative;
-  display: inline-block;
   width: 50px;
   height: 26px;
 }
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
 .slider {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ef4444; /* red (off) */
-  transition: background-color 0.2s ease-in-out;
+  inset: 0;
   border-radius: 13px;
+  background: #ef4444;
+  transition: background 0.2s;
 }
-
 .slider:before {
-  position: absolute;
   content: "";
-  height: 22px;
+  position: absolute;
   width: 22px;
+  height: 22px;
   left: 2px;
   bottom: 2px;
-  background-color: #ffffff;
-  transition: transform 0.2s ease-in-out;
   border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
 }
-
 .toggle-row.enabled .slider:before {
   transform: translateX(24px);
 }
 
-/* ────────────────────────────────────────────── */
-/* 14) QR Section (uniquement quand enabling 2FA)  */
-/* ────────────────────────────────────────────── */
+/* 8) QR + inline input+button */
 .qr-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 16px;
+  text-align: center;
   gap: 12px;
   background: #fefefe;
   padding: 16px;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
 }
-
 .qr-instruction {
   font-size: 0.95rem;
   color: #374151;
-  text-align: center;
   margin: 0;
 }
-
 .qr-image {
+  margin: 0 auto;
   width: 160px;
   height: 160px;
   object-fit: contain;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
 }
-
-.qr-label {
-  align-self: flex-start;
-  font-size: 0.9rem;
-  color: #4b5563;
-}
-
-.qr-input {
+.qr-input-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
   width: 100%;
-  padding: 8px 10px;
+}
+.qr-input {
+  flex: 1;
+  padding: 8px 10px;  
   border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 1rem;
   outline: none;
-  transition: border-color 0.2s ease-in-out;
+  transition: border-color 0.2s;
 }
-
 .qr-input:focus {
-  border-color: #3b82f6; /* blue on focus */
+  border-color: #3b82f6;
 }
-
 .verify-button {
   padding: 10px 20px;
-  background-color: #3b82f6;
-  color: #ffffff;
+  background: #3b82f6;
+  color: #fff;
   border: none;
   border-radius: 6px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  transition: background 0.2s;
 }
-
 .verify-button:hover {
-  background-color: #2563eb;
+  background: #2563eb;
 }
 
+/* 9) Error text */
 .error-text {
   margin-top: 8px;
-  color: #ef4444; /* red for errors */
+  color: #ef4444;
   font-size: 0.9rem;
   text-align: center;
 }
 
-/* ────────────────────────────────────────────── */
-/* 15) Responsive Breakpoints                       */
-/* ────────────────────────────────────────────── */
+/* 10) Logout & Delete All Data */
+.extra-actions {
+  display: flex;
+  gap: 12px;
+}
+.logout-button,
+.delete-data-button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.logout-button {
+  background: #f3f4f6;
+}
+.logout-button:hover {
+  background: #e5e7eb;
+}
+.delete-data-button {
+  background: #fee2e2;
+  color: #900;
+}
+.delete-data-button:hover {
+  background: #fecaca;
+}
+
+/* 11) Responsive */
 @media (max-width: 400px) {
   .profile-row,
   .toggle-row {
@@ -308,20 +297,15 @@
   .status-dot {
     width: 18px;
     height: 18px;
-    bottom: -2px;
-    right: -2px;
   }
   .pseudo-area {
     margin-left: 12px;
   }
   .pseudo-input {
     font-size: 0.95rem;
-    padding: 4px 0;
   }
-  .row-text {
-    font-size: 0.95rem;
-  }
-  .pencil-icon {
+  .pencil-icon,
+  .avatar-icon {
     font-size: 18px;
   }
   .save-button,
@@ -334,8 +318,8 @@
     height: 24px;
   }
   .slider:before {
-    height: 20px;
     width: 20px;
+    height: 20px;
   }
   .toggle-row.enabled .slider:before {
     transform: translateX(21px);
