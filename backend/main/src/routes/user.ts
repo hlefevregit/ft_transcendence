@@ -43,8 +43,8 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
 
     const existingPseudo = pseudo
       ? await fastify.prisma.user.findFirst({
-          where: { pseudo },
-        })
+        where: { pseudo },
+      })
       : null;
     if (existingPseudo && existingPseudo.id !== userId) {
       return reply.status(400).send({ message: 'Pseudo already taken' });
@@ -71,4 +71,58 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
       return reply.status(400).send({ message: 'Update failed', error: err });
     }
   });
+
+
+  fastify.delete(
+    '/api/user/me',
+    { preValidation: [fastify.authenticate] },
+    async (req, reply) => {
+      const userId = (req.user as any).id
+
+      // 1) Supprime toutes les demandes d'ami
+      try {
+        const delReq = await fastify.prisma.friendRequest.deleteMany({
+          where: {
+            OR: [
+              { fromUserId: userId },
+              { toUserId: userId },
+            ],
+          },
+        })
+        fastify.log.info({ delReq }, 'friendRequest.deleteMany succeeded')
+      } catch (e: any) {
+        console.error('❌ Erreur deleteMany(friendRequest) :', e)
+        return reply.status(500).send({
+          message: 'Error deleting friend requests',
+          detail: e.message,
+        })
+      }
+
+      // 2) Vide la relation many-to-many et met à blanc le reste
+      try {
+        const upd = await fastify.prisma.user.update({
+          where: { id: userId },
+          data: {
+            friends: { set: [] },   // vide le join-table implicite
+            email: '',            // ou une valeur factice
+            avatarUrl: null,
+            status: null,
+            password: null,
+            twoFAEnabled: false,
+            twoFASecret: null,
+          },
+        })
+        fastify.log.info({ upd }, 'user.update succeeded')
+        return reply.status(204).send()
+      } catch (e: any) {
+        console.error('❌ Erreur user.update :', e)
+        return reply.status(500).send({
+          message: 'Error updating user record',
+          detail: e.message,
+        })
+      }
+    }
+  )
+
+
 }
