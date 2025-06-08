@@ -10,31 +10,27 @@ const steveBuffer = fs.readFileSync(stevePath);
 const defaultAvatarBase64 = `data:image/jpeg;base64,${steveBuffer.toString('base64')}`;
 
 export const setupAuthRoutes = (fastify: FastifyInstance) => {
-  // Google OAuth2
+  // Google OAuth2 route
   fastify.post('/api/auth/google', async (request, reply) => {
     const { id_token } = request.body as { id_token: string };
-    if (!id_token) {
-      return reply.status(400).send({ success: false, message: "Token manquant" });
-    }
+    if (!id_token) return reply.status(400).send({ success: false, message: 'Token manquant' });
 
     const client = new OAuth2Client(GOOGLE_CLIENT_ID);
     const ticket = await client.verifyIdToken({ idToken: id_token, audience: GOOGLE_CLIENT_ID });
     const payload = ticket.getPayload();
-    if (!payload || !payload.email) {
-      return reply.status(400).send({ success: false, message: "Informations introuvables" });
-    }
+    if (!payload || !payload.email) return reply.status(400).send({ success: false, message: 'Informations introuvables' });
 
     const { email, name } = payload;
-
     const existingUser = await fastify.prisma.user.findUnique({ where: { email } });
+
     if (existingUser) {
-      // compte natif déjà existant
+      // if native account exists, block
       if (existingUser.password) {
         return reply
           .status(400)
-          .send({ success: false, message: "This email is already associated with a native account. Please use your password or sign up with a different address." });
+          .send({ success: false, message: 'This email is already associated with a native account. Please login normally.' });
       }
-      // ancien compte Google → on renvoie simplement id/email/pseudo/2FA
+      // existing Google user: return token
       const token = fastify.jwt.sign({
         id: existingUser.id,
         email: existingUser.email,
@@ -44,61 +40,50 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
       return reply.send({ success: true, token, user: existingUser });
     }
 
-    // nouveau compte Google
-    const newUser = await fastify.prisma.user.create({
-      data: {
-        email,
-        pseudo: name.slice(0, 16),
-        avatarUrl: defaultAvatarBase64,
-        status: 'offline',
-        twoFAEnabled: false,
-      },
+    // create new Google user, then set pseudo = 'user' + id
+    const created = await fastify.prisma.$transaction(async (prisma) => {
+      // initial create without pseudo
+      const newUser = await prisma.user.create({
+        data: {
+          email,
+          avatarUrl: defaultAvatarBase64,
+          status: 'offline',
+          twoFAEnabled: false,
+          pseudo: '' // placeholder
+        },
+      });
+      const userPseudo = `user${newUser.id}`.slice(0, 16);
+      // update with generated pseudo
+      return await prisma.user.update({
+        where: { id: newUser.id },
+        data: { pseudo: userPseudo },
+      });
     });
 
-    // token « léger »
+    // generate lightweight token
     const token = fastify.jwt.sign({
-      id: newUser.id,
-      email: newUser.email,
-      pseudo: newUser.pseudo,
-      twoFAEnabled: newUser.twoFAEnabled,
+      id: created.id,
+      email: created.email,
+      pseudo: created.pseudo,
+      twoFAEnabled: created.twoFAEnabled,
     });
 
     return reply.send({
       success: true,
       token,
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        pseudo: newUser.pseudo,
-        avatarUrl: newUser.avatarUrl,
-        status: newUser.status,
-        twoFAEnabled: newUser.twoFAEnabled,
-      },
+      user: created,
     });
   });
 
-  // Connexion email/password
+  // email/password login
   fastify.post('/api/auth/sign_in', async (request, reply) => {
     const { email, password } = request.body as { email: string; password: string };
-
     const user = await fastify.prisma.user.findUnique({ where: { email } });
-    if (!user) {
-      return reply.status(401).send({ success: false, message: "Utilisateur non trouvé" });
-    }
-
-    // interdit si compte Google-only
-    if (!user.password) {
-      return reply
-        .status(400)
-        .send({ success: false, message: "Account linked to Google only. Please use Google login." });
-    }
-
+    if (!user) return reply.status(401).send({ success: false, message: 'Utilisateur non trouvé' });
+    if (!user.password) return reply.status(400).send({ success: false, message: 'Account linked to Google only.' });
     const match = await bcrypt.compare(password, user.password);
-    if (!match) {
-      return reply.status(401).send({ success: false, message: "Mot de passe invalide" });
-    }
+    if (!match) return reply.status(401).send({ success: false, message: 'Mot de passe invalide' });
 
-    // token « léger »
     const token = fastify.jwt.sign({
       id: user.id,
       email: user.email,
@@ -106,17 +91,6 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
       twoFAEnabled: user.twoFAEnabled,
     });
 
-    return reply.send({
-      success: true,
-      token,
-      user: {
-        id: user.id,
-        email: user.email,
-        pseudo: user.pseudo,
-        avatarUrl: user.avatarUrl,
-        status: user.status,
-        twoFAEnabled: user.twoFAEnabled,
-      },
-    });
+    return reply.send({ success: true, token, user });
   });
 };
