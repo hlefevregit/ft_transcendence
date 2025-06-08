@@ -1,7 +1,17 @@
-/* src/styles/SettingsProfile.css */
-
 /* 1) Container */
 .profile-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Block wrapper */
+.profile-block,
+.twofa-block {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  background: #ffffff;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -12,18 +22,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 14px 16px;
-  transition: background 0.2s, border-color 0.2s;
+  padding: 0; /* moved padding to block */
 }
 .profile-row.clickable {
   cursor: pointer;
 }
 .profile-row.clickable:hover {
   background: #f9fafb;
-  border-color: #d1d5db;
 }
 
 /* 3) Avatar + status */
@@ -60,7 +65,7 @@
   align-items: center;
 }
 .pseudo-text.editable {
-  width: 100%;
+  flex: 1;
   font-size: 1rem;
   font-weight: 600;
   color: #374151;
@@ -68,10 +73,11 @@
   border: none;
   text-align: left;
   cursor: pointer;
-  padding: 0;
+  border-bottom: 1px solid #d1d5db; /* ligne grise sous le pseudo */
+  padding-bottom: 4px; /* espace pour la ligne */
 }
 .pseudo-input {
-  width: 100%;
+  flex: 1;
   font-size: 1rem;
   font-weight: 600;
   color: #374151;
@@ -79,11 +85,9 @@
   border: none;
   border-bottom: 1px solid #d1d5db;
   padding: 4px 0;
-  outline: none;
-  transition: border-color 0.2s;
 }
-.pseudo-input:focus {
-  border-bottom-color: #3b82f6;
+.pseudo-input.error {
+  border-bottom-color: #ef4444;
 }
 .pencil-icon {
   font-size: 20px;
@@ -91,76 +95,90 @@
   margin-left: 8px;
 }
 
-/* 5) Avatar actions (reuse logout/delete styles) */
-.extra-actions.avatar-actions {
+/* 5) Avatar actions */
+.avatar-actions {
   display: flex;
   gap: 12px;
 }
-.avatar-actions .logout-button,
-.avatar-actions .delete-data-button {
+.change-avatar-btn,
+.delete-avatar-btn {
   flex: 1;
-  padding: 12px;
+  background: none;
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
+  padding: 8px;
+  font-size: 0.95rem;
   font-weight: 600;
+  border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s;
+  margin-top: 12px;
 }
-.avatar-actions .logout-button {
+.change-avatar-btn {
   background: #f3f4f6;
 }
-.avatar-actions .logout-button:hover {
+.change-avatar-btn:hover {
   background: #e5e7eb;
 }
-.avatar-actions .delete-data-button {
+.delete-avatar-btn {
   background: #fee2e2;
   color: #900;
 }
-.avatar-actions .delete-data-button:hover {
+.delete-avatar-btn:hover {
   background: #fecaca;
 }
 
-/* 6) Save button */
+/* Save + Reset */
+.save-reset-container {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
 .save-button {
-  margin-top: 8px;
-  width: 100%;
-  padding: 14px;
-  background: #3b82f6;
+  flex: 0 0 80%;
+  background: none;
   border: none;
-  border-radius: 8px;
-  color: #fff;
+  padding: 0;
   font-size: 1rem;
   font-weight: 600;
+  color: #9ca3af;
+  border-bottom: 1px solid #9ca3af;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: color 0.2s, border-color 0.2s;
 }
-.save-button:hover {
-  background: #2563eb;
+.save-button:disabled {
+  color: #d1d5db;
+  border-bottom-color: #e5e7eb;
+  cursor: default;
+}
+.save-button:enabled {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+.reset-button {
+  flex: 0 0 20%;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 1.3rem;
+  color: #ef4444;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.reset-button:disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 
-/* 7) 2FA toggle row */
+/* 2FA toggle row */
 .toggle-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 14px 16px;
-  transition: background 0.2s, border-color 0.2s;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background 0.2s;
 }
-.toggle-row:hover {
-  background: #f9fafb;
-  border-color: #d1d5db;
-}
-.toggle-row.enabled .slider {
-  background-color: #10b981;
-}
-.toggle-row.disabled .slider {
-  background-color: #ef4444;
-}
+
 .switch {
   position: relative;
   width: 50px;
@@ -173,8 +191,11 @@
   background: #ef4444;
   transition: background 0.2s;
 }
+.toggle-row.enabled .slider {
+  background: #10b981;
+}
 .slider:before {
-  content: "";
+  content: '';
   position: absolute;
   width: 22px;
   height: 22px;
@@ -188,25 +209,20 @@
   transform: translateX(24px);
 }
 
-/* 8) QR + inline input+button */
+/* QR + verify */
 .qr-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   gap: 12px;
-  background: #fefefe;
-  padding: 16px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  padding-top: 8px;
 }
 .qr-instruction {
   font-size: 0.95rem;
   color: #374151;
-  margin: 0;
 }
 .qr-image {
-  margin: 0 auto;
   width: 160px;
   height: 160px;
   object-fit: contain;
@@ -216,45 +232,29 @@
 .qr-input-group {
   display: flex;
   gap: 8px;
-  margin-top: 8px;
   width: 100%;
 }
 .qr-input {
   flex: 1;
-  padding: 8px 10px;  
+  padding: 8px;
   border: 1px solid #d1d5db;
   border-radius: 6px;
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.2s;
-}
-.qr-input:focus {
-  border-color: #3b82f6;
 }
 .verify-button {
-  padding: 10px 20px;
+  padding: 8px 16px;
   background: #3b82f6;
   color: #fff;
   border: none;
   border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.verify-button:hover {
-  background: #2563eb;
 }
 
-/* 9) Error text */
+/* Error text */
 .error-text {
-  margin-top: 8px;
   color: #ef4444;
-  font-size: 0.9rem;
   text-align: center;
 }
 
-/* 10) Logout & Delete All Data */
+/* Logout & Delete Account */
 .extra-actions {
   display: flex;
   gap: 12px;
@@ -263,32 +263,22 @@
 .delete-data-button {
   flex: 1;
   padding: 12px;
+  background: #f3f4f6;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
-}
-.logout-button {
-  background: #f3f4f6;
-}
-.logout-button:hover {
-  background: #e5e7eb;
 }
 .delete-data-button {
   background: #fee2e2;
   color: #900;
 }
-.delete-data-button:hover {
-  background: #fecaca;
-}
 
-/* 11) Responsive */
+/* Responsive */
 @media (max-width: 400px) {
-  .profile-row,
-  .toggle-row {
-    padding: 12px 14px;
+  .profile-block,
+  .twofa-block {
+    padding: 12px;
   }
   .avatar-wrapper {
     width: 48px;
@@ -298,34 +288,11 @@
     width: 18px;
     height: 18px;
   }
-  .pseudo-area {
-    margin-left: 12px;
-  }
   .pseudo-input {
     font-size: 0.95rem;
   }
-  .pencil-icon,
-  .avatar-icon {
-    font-size: 18px;
-  }
   .save-button,
   .verify-button {
-    padding: 12px;
     font-size: 0.95rem;
-  }
-  .switch {
-    width: 45px;
-    height: 24px;
-  }
-  .slider:before {
-    width: 20px;
-    height: 20px;
-  }
-  .toggle-row.enabled .slider:before {
-    transform: translateX(21px);
-  }
-  .qr-image {
-    width: 140px;
-    height: 140px;
   }
 }
