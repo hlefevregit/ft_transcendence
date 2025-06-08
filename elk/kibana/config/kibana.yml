@@ -12,17 +12,17 @@ server.publicBaseUrl: "http://localhost:5601/kibana"
 elasticsearch.hosts: ["http://elasticsearch:9200"]
 
 # Utilisation d'un service account token au lieu du compte "elastic"
-elasticsearch.serviceAccountToken: ${T_KIBANA_TOKEN}
+elasticsearch.serviceAccountToken: ${KIBANA_TOKEN}
 
 # ==================== Security ====================
-xpack.security.encryptionKey: ${T_ENCRYPTION_PASSKEY_3}
-xpack.encryptedSavedObjects.encryptionKey: ${T_ENCRYPTION_PASSKEY_3}
-xpack.reporting.encryptionKey: ${T_ENCRYPTION_PASSKEY_3}
+xpack.security.encryptionKey: ${KIBANA_ENCRYPTION_KEY}
+xpack.encryptedSavedObjects.encryptionKey: ${KIBANA_ENCRYPTION_KEY}
+xpack.reporting.encryptionKey: ${KIBANA_ENCRYPTION_KEY}
 
 # ==================== Monitoring ====================
 monitoring.ui.enabled: true
 monitoring.ui.elasticsearch.hosts: ["http://elasticsearch:9200"]
-monitoring.ui.elasticsearch.serviceAccountToken: ${T_KIBANA_TOKEN}
+monitoring.ui.elasticsearch.serviceAccountToken: ${KIBANA_TOKEN}
 
 # ==================== Optional ====================
 elasticsearch.ssl.verificationMode: none
