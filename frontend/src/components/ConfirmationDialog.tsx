@@ -34,7 +34,7 @@ export default function ConfirmationDialog({
             ✕
           </button>
           <button className="cd-btn cd-confirm" onClick={() => handleClose(true)}>
-            Valider
+            Confirm
           </button>
         </div>
       </div>
