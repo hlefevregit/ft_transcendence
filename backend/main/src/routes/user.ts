@@ -32,45 +32,66 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
   });
 
   // ✅ PUT update user (only self)
-  fastify.put('/api/user/me', { preValidation: [fastify.authenticate] }, async (req, reply) => {
-    const userId = (req.user as any).id;
-    const { pseudo, avatarUrl, status } = req.body as {
-      pseudo?: string;
-      avatarUrl?: string;
-      status?: string;
-    };
-    console.log('✅ User routes registered');
+  fastify.put(
+    '/api/user/me',
+    { preValidation: [fastify.authenticate] },
+    async (req, reply) => {
+      const userId = (req.user as any).id;
+      const { pseudo, avatarUrl, status } = req.body as {
+        pseudo?: string;
+        avatarUrl?: string;
+        status?: string;
+      };
 
-    const existingPseudo = pseudo
-      ? await fastify.prisma.user.findFirst({
-        where: { pseudo },
-      })
-      : null;
-    if (existingPseudo && existingPseudo.id !== userId) {
-      return reply.status(400).send({ message: 'Pseudo already taken' });
+      // 1) pseudo ≤ 16 chars
+      if (pseudo && pseudo.length > 16) {
+        return reply
+          .status(400)
+          .send({ message: 'Username too long (max 16 characters).' });
+      }
+
+      // 2) avatar must be either a data-URI (jpeg/png) OR a URL/path
+      if (avatarUrl) {
+        const isDataURI =
+          avatarUrl.startsWith('data:image/jpeg') ||
+          avatarUrl.startsWith('data:image/png');
+        const isURL = avatarUrl.startsWith('http') || avatarUrl.startsWith('/');
+        if (!isDataURI && !isURL) {
+          return reply
+            .status(400)
+            .send({
+              message:
+                'Invalid avatar format: only JPG/PNG data-URIs or URLs are allowed.',
+            });
+        }
+      }
+
+      // 3) check pseudo uniqueness
+      if (pseudo) {
+        const existing = await fastify.prisma.user.findUnique({
+          where: { pseudo },
+        });
+        if (existing && existing.id !== userId) {
+          return reply.status(400).send({ message: 'Username already taken.' });
+        }
+      }
+
+      // 4) perform the update
+      try {
+        const updated = await fastify.prisma.user.update({
+          where: { id: userId },
+          data: { pseudo, avatarUrl, status },
+        });
+        return reply.send(updated);
+      } catch (err: any) {
+        fastify.log.error(err);
+        return reply
+          .status(400)
+          .send({ message: 'Update failed.', error: err.message });
+      }
     }
+  );
 
-    const user = req.user as { id: number; email: string };
-    const existingEmail = await fastify.prisma.user.findUnique({
-      where: { email: (req.user as any).email },
-    });
-    if (existingEmail && existingEmail.id !== userId) {
-      return reply.status(400).send({ message: 'Email already taken' });
-    }
-
-    try {
-
-      const user = await fastify.prisma.user.update({
-        where: { id: userId },
-        data: { pseudo, avatarUrl, status },
-      });
-      console.log('✅ User updated');
-      return reply.send(user);
-    } catch (err) {
-      console.error('❌ Error updating user:', err);
-      return reply.status(400).send({ message: 'Update failed', error: err });
-    }
-  });
 
 
   fastify.delete(
