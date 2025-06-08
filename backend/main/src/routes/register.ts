@@ -70,14 +70,14 @@ export const setupRegisterRoute = (fastify: FastifyInstance) => {
     if (!nameRegex.test(name.trim())) {
       return reply.status(400).send({
         message:
-          'Pseudo invalide : 1 à 16 caractères, lettres, chiffres et underscore seulement.',
+          'Invalid username: 1 to 16 characters, letters, numbers, and underscore only.',
       });
     }
 
     // Valider l'email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email.trim())) {
-      return reply.status(400).send({ message: 'Adresse email invalide.' });
+      return reply.status(400).send({ message: 'Invalid email address.' });
     }
 
     // Politique de mot de passe
@@ -85,7 +85,7 @@ export const setupRegisterRoute = (fastify: FastifyInstance) => {
     if (!pwdRegex.test(password)) {
       return reply.status(400).send({
         message:
-          'Le mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial.',
+          'Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.',
       });
     }
 
@@ -123,7 +123,7 @@ export const setupRegisterRoute = (fastify: FastifyInstance) => {
       pseudo: newUser.pseudo,
     });
 
-    reply.send({ success: true, message: 'Inscription réussie', token });
+    reply.send({ success: true, message: 'Registration successful', token });
     console.log('✅ User registered:', newUser);
   });
 };
