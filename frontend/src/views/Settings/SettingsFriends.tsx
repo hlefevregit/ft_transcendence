@@ -469,7 +469,7 @@ export default function SettingsFriends() {
                 <div className="item-text-group">
                   <span className="item-pseudo">{friend.pseudo}</span>
                   <span className="item-status">
-                    {friend.status === "active" ? "Online" : "Offline"}
+                    {friend.status === "active" ? "online" : "offline"}
                   </span>
                 </div>
               </div>
