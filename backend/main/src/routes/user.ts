@@ -144,5 +144,97 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
     }
   )
 
+    // ─── GET /api/user/history ───
+  fastify.get(
+    '/api/user/history',
+    { preValidation: [fastify.authenticate] },
+    async (req, reply) => {
+      const userId = (req.user as any).id;
 
+      // 1) Récupérer pseudo et avatar de l'utilisateur
+      const meUser = await fastify.prisma.user.findUnique({
+        where: { id: userId },
+        select: { pseudo: true, avatarUrl: true }
+      });
+      if (!meUser) {
+        return reply.status(404).send({ message: 'User not found' });
+      }
+      const myPseudo = meUser.pseudo;
+      const myAvatar = meUser.avatarUrl;
+
+      // 2) Récupérer toutes les parties où il a joué
+      const games = await fastify.prisma.gameResult.findMany({
+        where: {
+          OR: [
+            { player1Id: myPseudo },
+            { player2Id: myPseudo }
+          ]
+        },
+        orderBy: { createdAt: 'desc' }
+      });
+
+      // 3) Calculer stats
+      let wins = 0;
+      let losses = 0;
+      const trophies = 0; // placeholder
+
+      // 4) Construire le tableau de matches
+      const matches = await Promise.all(
+        games.map(async (g) => {
+          const isP1 = g.player1Id === myPseudo;
+          const userScore     = isP1 ? g.player1Score   : g.player2Score;
+          const opponentScore = isP1 ? g.player2Score   : g.player1Score;
+          const opponentPseudo= isP1 ? g.player2Id      : g.player1Id;
+
+          // avatar de l'adversaire
+          const oppUser = await fastify.prisma.user.findUnique({
+            where: { pseudo: opponentPseudo },
+            select: { avatarUrl: true }
+          });
+
+          // déterminer résultat d'après winnerId, pas le score
+          let result: 'win'|'loss'|'draw';
+          if (g.winnerId === myPseudo) {
+            result = 'win';
+            wins++;
+          } else if (g.winnerId === opponentPseudo) {
+            result = 'loss';
+            losses++;
+          } else {
+            result = 'draw';
+          }
+
+          // formater la date jj/MM/yy
+          const d = g.createdAt;
+          const day   = String(d.getDate()).padStart(2, '0');
+          const month = String(d.getMonth() + 1).padStart(2, '0');
+          const year  = String(d.getFullYear()).slice(-2);
+          const date  = `${day}/${month}/${year}`;
+
+          return {
+            id: g.id,
+            user: {
+              pseudo: myPseudo,
+              avatarUrl: myAvatar
+            },
+            opponent: {
+              pseudo: opponentPseudo,
+              avatarUrl: oppUser?.avatarUrl
+            },
+            userScore,
+            opponentScore,
+            result,
+            date,
+            reason: g.reason
+          };
+        })
+      );
+
+      // 5) Envoyer la réponse
+      return reply.send({
+        stats: { wins, losses, trophies },
+        matches
+      });
+    }
+  );
 }
