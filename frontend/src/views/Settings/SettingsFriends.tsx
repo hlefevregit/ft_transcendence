@@ -7,6 +7,7 @@ import {
   FaTrash,
 } from "react-icons/fa";
 import "@/styles/SettingsFriends.css";
+import ConfirmationDialog from "@/components/ConfirmationDialog";
 
 interface User {
   id: number;
@@ -16,12 +17,12 @@ interface User {
 }
 
 interface SentRequest {
-  id: number;
+  id: number;      // ID de la friendRequest
   to: User;
 }
 
 interface ReceivedRequest {
-  id: number;
+  id: number;      // ID de la friendRequest
   from: User;
 }
 
@@ -29,7 +30,7 @@ type SectionKey = "sent" | "received" | "friends" | null;
 
 export default function SettingsFriends() {
   // ──────────────────────────────────────────────
-  // 1) États locaux
+  // États locaux
   // ──────────────────────────────────────────────
   const [newFriendPseudo, setNewFriendPseudo] = useState<string>("");
   const [friends, setFriends] = useState<User[]>([]);
@@ -37,11 +38,15 @@ export default function SettingsFriends() {
   const [receivedRequests, setReceivedRequests] = useState<ReceivedRequest[]>([]);
   const [error, setError] = useState<string>("");
 
+  // Pour la boite de confirmation
+  const [dialogVisible, setDialogVisible] = useState<boolean>(false);
+  const [selectedFriend, setSelectedFriend] = useState<User | null>(null);
+
   // Quelle section est ouverte (ou null si aucune)
   const [openSection, setOpenSection] = useState<SectionKey>(null);
 
   // ──────────────────────────────────────────────
-  // 2) Préparer l’en‐tête Authorization
+  // Préparer l’en‐tête Authorization
   // ──────────────────────────────────────────────
   const getAuthHeader = (): Record<string, string> => {
     const token = localStorage.getItem("authToken");
@@ -49,12 +54,12 @@ export default function SettingsFriends() {
   };
 
   // ──────────────────────────────────────────────
-  // 3) Récupérer amis + demandes (séparé en trois blocs)
+  // Récupérer amis + demandes
   // ──────────────────────────────────────────────
   const fetchFriendsData = async () => {
     setError("");
 
-    // 3.1) Récupérer la liste des amis
+    // 1) Amis
     try {
       const headers = getAuthHeader();
       const resFriends = await fetch("/api/friends", {
@@ -72,10 +77,10 @@ export default function SettingsFriends() {
     } catch (err: any) {
       console.error("Error fetching friends:", err);
       setError((prev) => prev || err.message || "Error fetching friends");
-      setFriends([]); // on garde au moins un tableau vide
+      setFriends([]);
     }
 
-    // 3.2) Récupérer la liste des demandes envoyées
+    // 2) Sent requests
     try {
       const headers = getAuthHeader();
       const resSent = await fetch("/api/friends/requests/sent", {
@@ -96,7 +101,7 @@ export default function SettingsFriends() {
       setSentRequests([]);
     }
 
-    // 3.3) Récupérer la liste des demandes reçues
+    // 3) Received requests
     try {
       const headers = getAuthHeader();
       const resReceived = await fetch("/api/friends/requests/received", {
@@ -118,33 +123,29 @@ export default function SettingsFriends() {
     }
   };
 
-  // ──────────────────────────────────────────────
-  // 4) Au montage, on charge les données
-  // ──────────────────────────────────────────────
   useEffect(() => {
     fetchFriendsData();
   }, []);
 
   // ──────────────────────────────────────────────
-  // 5) Envoyer une nouvelle demande d’ami
+  // Envoyer nouvelle demande d’ami
   // ──────────────────────────────────────────────
   const sendFriendRequest = async () => {
     setError("");
 
     const pseudoTrimmed = newFriendPseudo.trim();
     if (!pseudoTrimmed) {
-      // si champ vide, on efface l’erreur et on ne fait rien
       setError("");
       return;
     }
 
-    // 5.1) Vérifier si on est déjà amis
+    // déjà ami ?
     if (friends.some((f) => f.pseudo.toLowerCase() === pseudoTrimmed.toLowerCase())) {
       setError("User is already your friend");
       return;
     }
 
-    // 5.2) Vérifier si une demande est déjà pendante (envoyée ou reçue)
+    // demande déjà pendante ?
     const alreadySent = sentRequests.some(
       (r) => r.to.pseudo.toLowerCase() === pseudoTrimmed.toLowerCase()
     );
@@ -157,7 +158,7 @@ export default function SettingsFriends() {
     }
 
     try {
-      const headers: Record<string, string> = {
+      const headers = {
         ...getAuthHeader(),
         "Content-Type": "application/json",
       };
@@ -169,21 +170,18 @@ export default function SettingsFriends() {
         body: JSON.stringify({ pseudo: pseudoTrimmed }),
       });
       if (!res.ok) {
-        // Si ce n’est pas JSON, on lève une erreur
         let data: any;
         try {
           data = await res.json();
         } catch {
           throw new Error("Target user not found");
         }
-        // Si le message est en français, on le traduit
-        if (data.message?.includes("Utilisateur cible introuvable")) {
+        if (data.message?.includes("Target user not found")) {
           throw new Error("Target user not found");
         }
         throw new Error(data.message || "Failed to send request");
       }
       setNewFriendPseudo("");
-      // Une fois envoyé, on recharge uniquement la liste “sent” et “received”
       await fetchFriendsData();
     } catch (err: any) {
       console.error("Error sending request:", err);
@@ -191,29 +189,24 @@ export default function SettingsFriends() {
     }
   };
 
-  // Si Entrée → envoi
+  // Entrée → envoi
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      sendFriendRequest();
-    }
+    if (e.key === "Enter") sendFriendRequest();
   };
 
   // ──────────────────────────────────────────────
-  // 6) Annuler une demande envoyée
+  // Annuler une demande envoyée
   // ──────────────────────────────────────────────
-  const cancelSentRequest = async (toUserId: number) => {
+  const cancelSentRequest = async (requestId: number) => {
     setError("");
     try {
-      const headers: Record<string, string> = getAuthHeader();
-
-      const res = await fetch(`/api/friends/${toUserId}`, {
+      const headers = getAuthHeader();
+      const res = await fetch(`/api/friends/request/${requestId}`, {
         method: "DELETE",
         headers,
         credentials: "include",
       });
-      if (!res.ok) {
-        throw new Error("Failed to cancel request");
-      }
+      if (!res.ok) throw new Error("Failed to cancel request");
       await fetchFriendsData();
     } catch (err: any) {
       console.error("Error cancelling sent request:", err);
@@ -222,13 +215,12 @@ export default function SettingsFriends() {
   };
 
   // ──────────────────────────────────────────────
-  // 7) Accepter une demande reçue
+  // Accepter une demande reçue
   // ──────────────────────────────────────────────
   const acceptReceivedRequest = async (requestId: number) => {
     setError("");
     try {
-      const headers: Record<string, string> = getAuthHeader();
-
+      const headers = getAuthHeader();
       const res = await fetch(`/api/friends/request/${requestId}/accept`, {
         method: "POST",
         headers,
@@ -251,21 +243,18 @@ export default function SettingsFriends() {
   };
 
   // ──────────────────────────────────────────────
-  // 8) Refuser / supprimer une demande reçue
+  // Refuser une demande reçue
   // ──────────────────────────────────────────────
-  const declineReceivedRequest = async (fromUserId: number) => {
+  const declineReceivedRequest = async (requestId: number) => {
     setError("");
     try {
-      const headers: Record<string, string> = getAuthHeader();
-
-      const res = await fetch(`/api/friends/${fromUserId}`, {
+      const headers = getAuthHeader();
+      const res = await fetch(`/api/friends/request/${requestId}`, {
         method: "DELETE",
         headers,
         credentials: "include",
       });
-      if (!res.ok) {
-        throw new Error("Failed to decline request");
-      }
+      if (!res.ok) throw new Error("Failed to decline request");
       await fetchFriendsData();
     } catch (err: any) {
       console.error("Error declining received request:", err);
@@ -274,21 +263,35 @@ export default function SettingsFriends() {
   };
 
   // ──────────────────────────────────────────────
-  // 9) Supprimer un ami existant
+  // Supprimer un ami existant : ouverture du dialog
   // ──────────────────────────────────────────────
+  const handleRemoveClick = (friend: User) => {
+    setSelectedFriend(friend);
+    setDialogVisible(true);
+  };
+
+  const handleConfirmRemove = () => {
+    if (selectedFriend) removeFriend(selectedFriend.id);
+    setDialogVisible(false);
+    setSelectedFriend(null);
+  };
+
+  const handleCancelRemove = () => {
+    setDialogVisible(false);
+    setSelectedFriend(null);
+  };
+
+  // Appel API pour suppression d'ami
   const removeFriend = async (friendId: number) => {
     setError("");
     try {
-      const headers: Record<string, string> = getAuthHeader();
-
+      const headers = getAuthHeader();
       const res = await fetch(`/api/friends/${friendId}`, {
         method: "DELETE",
         headers,
         credentials: "include",
       });
-      if (!res.ok) {
-        throw new Error("Failed to remove friend");
-      }
+      if (!res.ok) throw new Error("Failed to remove friend");
       await fetchFriendsData();
     } catch (err: any) {
       console.error("Error removing friend:", err);
@@ -297,12 +300,20 @@ export default function SettingsFriends() {
   };
 
   // ──────────────────────────────────────────────
-  // 10) Rendu : on garde tous les headers dans le DOM,
-  //     mais on masque / affiche via CSS (.hidden ou .open/.closed)
+  // Rendu
   // ──────────────────────────────────────────────
   return (
     <section className="friends-section">
-      {/* ─────────── Add Friend (visible si aucune section ouverte) ─────────── */}
+      {/* Confirmation Dialog */}
+      {dialogVisible && selectedFriend && (
+        <ConfirmationDialog
+          message={`Do you really want to remove ${selectedFriend.pseudo} ?`}
+          onConfirm={handleConfirmRemove}
+          onCancel={handleCancelRemove}
+        />
+      )}
+
+      {/* Add Friend */}
       {openSection === null && (
         <div className="section-add open">
           <div className="friend-input-row">
@@ -312,9 +323,7 @@ export default function SettingsFriends() {
               value={newFriendPseudo}
               onChange={(e) => {
                 setNewFriendPseudo(e.target.value);
-                if (!e.target.value.trim()) {
-                  setError("");
-                }
+                if (!e.target.value.trim()) setError("");
               }}
               onKeyDown={handleKeyDown}
               className="friend-input"
@@ -331,13 +340,16 @@ export default function SettingsFriends() {
           {error && <p className="error-text">{error}</p>}
         </div>
       )}
-      {/* Si openSection ≠ null, on empêche “Add friend” d’apparaître */}
       {openSection !== null && <div className="section-add closed" />}
 
-      {/* ─────────── Sent Requests Header ─────────── */}
+      {/* Sent Requests */}
       <div
         className={`dropdown-header ${
-          openSection === "sent" ? "expanded-header" : openSection !== null ? "hidden" : "standalone"
+          openSection === "sent"
+            ? "expanded-header"
+            : openSection !== null
+            ? "hidden"
+            : "standalone"
         }`}
         onClick={() => {
           setOpenSection(openSection === "sent" ? null : "sent");
@@ -347,7 +359,9 @@ export default function SettingsFriends() {
         <span className="dropdown-title">
           Sent Requests ({sentRequests.length})
         </span>
-        <FaArrowDown className={`dropdown-icon ${openSection === "sent" ? "open" : ""}`} />
+        <FaArrowDown
+          className={`dropdown-icon ${openSection === "sent" ? "open" : ""}`}
+        />
       </div>
       <div className={`section-content ${openSection === "sent" ? "open" : "closed"}`}>
         <ul className="dropdown-list">
@@ -366,7 +380,7 @@ export default function SettingsFriends() {
               </div>
               <button
                 className="item-action-button"
-                onClick={() => cancelSentRequest(req.to.id)}
+                onClick={() => cancelSentRequest(req.id)}
                 type="button"
                 title="Cancel request"
               >
@@ -377,7 +391,7 @@ export default function SettingsFriends() {
         </ul>
       </div>
 
-      {/* ─────────── Received Requests Header ─────────── */}
+      {/* Received Requests */}
       <div
         className={`dropdown-header ${
           openSection === "received"
@@ -394,7 +408,9 @@ export default function SettingsFriends() {
         <span className="dropdown-title">
           Received Requests ({receivedRequests.length})
         </span>
-        <FaArrowDown className={`dropdown-icon ${openSection === "received" ? "open" : ""}`} />
+        <FaArrowDown
+          className={`dropdown-icon ${openSection === "received" ? "open" : ""}`}
+        />
       </div>
       <div className={`section-content ${openSection === "received" ? "open" : "closed"}`}>
         <ul className="dropdown-list">
@@ -422,7 +438,7 @@ export default function SettingsFriends() {
                 </button>
                 <button
                   className="item-decline-button"
-                  onClick={() => declineReceivedRequest(req.from.id)}
+                  onClick={() => declineReceivedRequest(req.id)}
                   type="button"
                   title="Decline request"
                 >
@@ -434,7 +450,7 @@ export default function SettingsFriends() {
         </ul>
       </div>
 
-      {/* ─────────── Friends List Header ─────────── */}
+      {/* Friends List */}
       <div
         className={`dropdown-header ${
           openSection === "friends"
@@ -448,10 +464,10 @@ export default function SettingsFriends() {
           setError("");
         }}
       >
-        <span className="dropdown-title">
-          Friends ({friends.length})
-        </span>
-        <FaArrowDown className={`dropdown-icon ${openSection === "friends" ? "open" : ""}`} />
+        <span className="dropdown-title">Friends ({friends.length})</span>
+        <FaArrowDown
+          className={`dropdown-icon ${openSection === "friends" ? "open" : ""}`}
+        />
       </div>
       <div className={`section-content ${openSection === "friends" ? "open" : "closed"}`}>
         <ul className="dropdown-list">
@@ -475,7 +491,7 @@ export default function SettingsFriends() {
               </div>
               <button
                 className="item-remove-button"
-                onClick={() => removeFriend(friend.id)}
+                onClick={() => handleRemoveClick(friend)}
                 type="button"
                 title="Remove friend"
               >

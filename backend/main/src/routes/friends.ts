@@ -1,157 +1,167 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 
-
-
 interface CustomFastifyInstance extends FastifyInstance {
   authenticate: (req: FastifyRequest, rep: FastifyReply) => Promise<void>;
 }
 
 export async function setupFriendRoutes(fastify: CustomFastifyInstance) {
-  // Middleware de protection
   const auth = { preValidation: [fastify.authenticate] };
 
   // Envoyer une demande d'ami
   fastify.post('/api/friends/request', auth, async (req, reply) => {
-    
-	const { pseudo } = req.body as { pseudo: string };
-	const user = req.user as { id: number };
+    const { pseudo } = req.body as { pseudo: string };
+    const user = req.user as { id: number };
+    const fromUserId = user.id;
 
-	const fromUserId = user.id;
+    const targetUser = await fastify.prisma.user.findUnique({
+      where: { pseudo },
+    });
 
-	const targetUser = await fastify.prisma.user.findUnique({
-		where: { pseudo },
-	});
+    if (!targetUser) {
+	return reply.status(404).send({ message: "Target user not found." });
+    }
 
-	if (!targetUser) {
-		return reply.status(404).send({ message: "Utilisateur cible introuvable." });
-	}
+    const toUserId = targetUser.id;
 
-	const toUserId = targetUser.id;
+    if (fromUserId === toUserId) {
+	return reply.status(400).send({ message: 'You cannot send a friend request to yourself.' });
+    }
 
-	if (fromUserId === toUserId) {
-		return reply.status(400).send({ message: 'Vous ne pouvez pas vous envoyer une demande d\'ami.' });
-	}
+    const existingRequest = await fastify.prisma.friendRequest.findFirst({
+      where: {
+        AND: [
+          { status: 'pending' },
+          {
+            OR: [
+              { fromUserId, toUserId },
+              { fromUserId: toUserId, toUserId: fromUserId },
+            ],
+          },
+        ],
+      },
+    });
 
-	const existingRequest = await fastify.prisma.friendRequest.findFirst({
-		where : {
-			OR : [
-				{ fromUserId, toUserId },
-				{ fromUserId: toUserId, toUserId: fromUserId },	
-			],
+    if (existingRequest) {
+      return reply.status(400).send({ message: 'A friend request is already pending.' });
+    }
 
-		},
-	});
 
-	if (existingRequest) {
-		return reply.status(400).send({ message: 'Une demande d\'ami existe déjà.' });
-	}
+    const request = await fastify.prisma.friendRequest.create({
+      data: {
+        fromUserId,
+        toUserId,
+      },
+    });
 
-	const request = await fastify.prisma.friendRequest.create({
-		data:{
-			fromUserId,
-			toUserId,
-		},
-	});
-
-	return reply.send({ message: 'Demande d\'ami envoyée.', request });
-
+	return reply.send({ message: 'Friend request sent.', request });
   });
 
-fastify.post('/api/friends/request/:id/accept', auth, async (req, reply) => {
-	const { id } = req.params as { id: string };
-	const requestId = parseInt(id, 10);
-	const user = req.user as { id: number };
-	const toUserId = user.id;
-  
-	// 🧠 Récupérer la demande avec son ID
-	const request = await fastify.prisma.friendRequest.findUnique({
-	  where: { id: requestId },
-	});
-  
-	if (!request) {
-	  return reply.status(404).send({ message: 'Demande introuvable.' });
-	}
-  
-	// ✅ Vérifier que c’est bien ce user qui est censé l’accepter
-	if (request.toUserId !== toUserId) {
-	  return reply.status(403).send({ message: 'Accès non autorisé.' });
-	}
-  
-	const fromUserId = request.fromUserId;
-  
-	// ✅ Connexion bidirectionnelle
-	await fastify.prisma.user.update({
-	  where: { id: fromUserId },
-	  data: {
-		friends: {
-		  connect: { id: toUserId },
-		},
-	  },
-	});
-  
-	await fastify.prisma.user.update({
-	  where: { id: toUserId },
-	  data: {
-		friends: {
-		  connect: { id: fromUserId },
-		},
-	  },
-	});
-  
-	// ✅ Mettre à jour le statut ou supprimer la requête (au choix)
-	await fastify.prisma.friendRequest.update({
-	  where: { id: request.id },
-	  data: { status: 'accepted' },
-	});
-  
-	return reply.send({ message: 'Demande d\'ami acceptée.' });
+  fastify.post('/api/friends/request/:id/accept', auth, async (req, reply) => {
+    const { id } = req.params as { id: string };
+    const requestId = parseInt(id, 10);
+    const user = req.user as { id: number };
+    const toUserId = user.id;
+
+    // 🧠 Récupérer la demande avec son ID
+    const request = await fastify.prisma.friendRequest.findUnique({
+      where: { id: requestId },
+    });
+
+    if (!request) {
+	return reply.status(404).send({ message: 'Request not found.' });
+
+    }
+
+    // ✅ Vérifier que c’est bien ce user qui est censé l’accepter
+    if (request.toUserId !== toUserId) {
+	return reply.status(403).send({ message: 'Unauthorized access.' });
+
+    }
+
+    const fromUserId = request.fromUserId;
+
+    // ✅ Connexion bidirectionnelle
+    await fastify.prisma.user.update({
+      where: { id: fromUserId },
+      data: {
+        friends: {
+          connect: { id: toUserId },
+        },
+      },
+    });
+
+    await fastify.prisma.user.update({
+      where: { id: toUserId },
+      data: {
+        friends: {
+          connect: { id: fromUserId },
+        },
+      },
+    });
+
+    // ✅ Mettre à jour le statut
+    await fastify.prisma.friendRequest.update({
+      where: { id: request.id },
+      data: { status: 'accepted' },
+    });
+
+	return reply.send({ message: 'Friend request accepted.' });
   });
 
-  // Supprimer ou refuser une demande d'ami
+  /**
+   * ### AJOUTÉ : Nouvelle route pour annuler/refuser une demande d'ami via l'ID de la requête
+   */
+  fastify.delete('/api/friends/request/:id', auth, async (req, reply) => {
+    const requestId = parseInt((req.params as any).id, 10);
+    const meId = (req.user as { id: number }).id;
+
+    const reqEntity = await fastify.prisma.friendRequest.findUnique({
+      where: { id: requestId },
+    });
+    if (!reqEntity) {
+	return reply.status(404).send({ message: 'Request not found.' });
+
+    }
+    if (![reqEntity.fromUserId, reqEntity.toUserId].includes(meId)) {
+	return reply.status(403).send({ message: 'Unauthorized access.' });
+
+    }
+
+    await fastify.prisma.friendRequest.delete({ where: { id: requestId } });
+	return reply.send({ message: 'Request deleted.' });
+  });
+
+  // Supprimer un ami existant (déconnexion de la relation)
   fastify.delete('/api/friends/:id', auth, async (req, reply) => {
+    const friendId = parseInt((req.params as any).id, 10);
+    const meId = (req.user as { id: number }).id;
 
-	const { id } = req.params as { id: string };
-	const userId = parseInt(id, 10);
-	const meId = (req.user as { id: number }).id;
+    try {
+      // ### MODIFIÉ : on ne touche plus aux friendRequest ici
+      await fastify.prisma.user.update({
+        where: { id: meId },
+        data: {
+          friends: { disconnect: { id: friendId } },
+        },
+      });
 
-	try {
-		// Supprime relation d’amitié si elle existe
-		await fastify.prisma.user.update({
-		  where: { id: meId },
-		  data: {
-			friends: { disconnect: { id: userId } },
-		  },
-		});
-	
-		await fastify.prisma.user.update({
-		  where: { id: userId },
-		  data: {
-			friends: { disconnect: { id: meId } },
-		  },
-		});
-	
-		// Supprime toutes demandes entre les deux
-		await fastify.prisma.friendRequest.deleteMany({
-		  where: {
-			OR: [
-			  { fromUserId: meId, toUserId: userId },
-			  { fromUserId: userId, toUserId: meId },
-			],
-		  },
-		});
+      await fastify.prisma.user.update({
+        where: { id: friendId },
+        data: {
+          friends: { disconnect: { id: meId } },
+        },
+      });
 
-		return reply.send({ message: 'Relation supprimée.' });
-	} catch (err) {
-		console.error('❌ Error deleting friend:', err);
-		return reply.status(500).send({ message: 'Erreur lors de la suppression de la relation.' });
-	}
-
+      return reply.send({ message: 'Ami supprimé.' });
+    } catch (err) {
+      console.error('❌ Error deleting friend:', err);
+	return reply.status(500).send({ message: 'Error while deleting friend.' });
+    }
   });
 
   // Récupérer les amis et demandes
   fastify.get('/api/friends', auth, async (req, reply) => {
-	const userx = req.user as { id: number }; // Ajoute ce cast localement
-
+    const userx = req.user as { id: number };
     const userId = userx.id as number;
 
     const user = await fastify.prisma.user.findUnique({
@@ -159,7 +169,7 @@ fastify.post('/api/friends/request/:id/accept', auth, async (req, reply) => {
       include: {
         friends: true,
         sentRequests: {
-          where: { status: 'pending' },
+          where: { status: 'pending' }, // ✅ MODIFIÉ : on récupère seulement les "pending"
           include: { toUser: true },
         },
         receivedRequests: {
@@ -169,7 +179,7 @@ fastify.post('/api/friends/request/:id/accept', auth, async (req, reply) => {
       },
     });
 
-    if (!user) return reply.status(404).send({ message: 'Utilisateur introuvable' });
+	if (!user) return reply.status(404).send({ message: 'User not found' });
 
     return reply.send({
       friends: user.friends,
@@ -178,81 +188,77 @@ fastify.post('/api/friends/request/:id/accept', auth, async (req, reply) => {
     });
   });
 
-  // Récupérer les requests
-
+  // Récupérer les demandes reçues (séparé si besoin)
   fastify.get('/api/friends/requests/received', auth, async (req, reply) => {
+    const user = req.user as { id: number };
+    const userId = user.id as number;
+    const requests = await fastify.prisma.friendRequest.findMany({
+      where: {
+        toUserId: userId,
+        status: 'pending',
+      },
+      include: {
+        fromUser: true,
+      },
+    });
+	if (!requests) return reply.status(404).send({ message: 'No requests found' });
 
-	const user = req.user as { id: number };
-	const userId = user.id as number;
-	const requests = await fastify.prisma.friendRequest.findMany({
-		where: {
-			toUserId: userId,
-			status: 'pending',
-		},
-		include: {
-			fromUser: true,
-		},
-	});
-	if (!requests) return reply.status(404).send({ message: 'Aucune demande trouvée' });
-	return requests.map((request) => ({
-		id: request.id,
-		from: {
-			id: request.fromUser.id,
-			pseudo: request.fromUser.pseudo,
-			avatarUrl: request.fromUser.avatarUrl,
-		},
-	}));
+    return requests.map((request) => ({
+      id: request.id,
+      from: {
+        id: request.fromUser.id,
+        pseudo: request.fromUser.pseudo,
+        avatarUrl: request.fromUser.avatarUrl,
+      },
+    }));
   });
 
-  fastify.get('/api/friends/requests/sent', { preValidation: [fastify.authenticate] }, async (req, reply) => {
-	const user = req.user as { id: number };
-	const userId = user.id as number;
-  
-	const requests = await fastify.prisma.friendRequest.findMany({
-	  where: { fromUserId: userId },
-	  include: { toUser: true },
-	});
-	return requests.map((r) => ({
-	  id: r.id,
-	  to: {
-		id: r.toUser.id,
-		pseudo: r.toUser.pseudo,
-		avatarUrl: r.toUser.avatarUrl,
-	  },
-	}));
+  // Récupérer les demandes envoyées (filtrées) ### MODIFIÉ : status = 'pending'
+  fastify.get('/api/friends/requests/sent', auth, async (req, reply) => {
+    const user = req.user as { id: number };
+    const userId = user.id as number;
+
+    const requests = await fastify.prisma.friendRequest.findMany({
+      where: { fromUserId: userId, status: 'pending' },
+      include: { toUser: true },
+    });
+    return requests.map((r) => ({
+      id: r.id,
+      to: {
+        id: r.toUser.id,
+        pseudo: r.toUser.pseudo,
+        avatarUrl: r.toUser.avatarUrl,
+      },
+    }));
   });
+
+  // Endpoint jeux (inchangé)
   fastify.post('/api/games', async (req, res) => {
-		try {
-			const { player1Id, player2Id, player1Score, player2Score, winnerId, reason, gameId } = req.body as any;
+    try {
+      const { player1Id, player2Id, player1Score, player2Score, winnerId, reason, gameId } = req.body as any;
 
-			console.log("📥 API received game result:", req.body);
+      console.log("📥 API received game result:", req.body);
 
-			const result = await fastify.prisma.gameResult.create({
-			data: {
-				id: gameId || undefined, // Si gameId est fourni, l'utiliser, sinon laisser Prisma en générer un 
-				player1Id: player1Id,
-				player2Id: player2Id,
-				player1Score: player1Score,
-				player2Score: player2Score,
-				winnerId: winnerId,
-				reason: reason || 'normal',
-				
-			},
-			});
+      const result = await fastify.prisma.gameResult.create({
+        data: {
+          id: gameId || undefined,
+          player1Id,
+          player2Id,
+          player1Score,
+          player2Score,
+          winnerId,
+          reason: reason || 'normal',
+        },
+      });
 
-			console.log("✅ Game saved:", result);
-			return res.status(201).send(result);
-
-		} catch (err: any) {
-			console.error("❌ Error in /api/games:", err);
-
-			// Sécurité : renvoie toujours une réponse
-			return res.status(500).send({
-			error: 'Internal server error',
-			detail: err?.message || 'Unknown error',
-			});
-		}
-  	});
-
+      console.log("✅ Game saved:", result);
+      return res.status(201).send(result);
+    } catch (err: any) {
+      console.error("❌ Error in /api/games:", err);
+      return res.status(500).send({
+        error: 'Internal server error',
+        detail: err?.message || 'Unknown error',
+      });
+    }
+  });
 }
-
