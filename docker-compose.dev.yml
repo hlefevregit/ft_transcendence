@@ -74,14 +74,17 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - backend_data:${PWD}/backend
+      - backend_data:${PWD}/backend/
       - ./backend/main/certs:/app/certs:ro
       - sqlite_data:/app/prisma/sqlite
     environment:
       - NODE_ENV=development
       - DATABASE_URL=file:./prisma/sqlite/dev.db
-      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
-      - JWT_SECRET=${JWT_SECRET}
+      - VAULT_ADDR=https://vault:8200
+      - VAULT_SKIP_VERIFY=true
+      - VAULT_TOKEN=${VAULT_TOKEN}
+      - VAULT_SECRET_PATH_GOOGLE=cubbyhole/google
+      - VAULT_SECRET_PATH_JWT=cubbyhole/JWT
     command: sh -c "npx prisma migrate deploy && npm run dev"
     working_dir: ${PWD}/backend
     networks:
@@ -252,11 +255,15 @@ services:
       - ft_network
 
   grafana:
-    image: grafana/grafana:latest
+    build:
+      context: ./monitoring/grafana
+      dockerfile: Dockerfile.dev
     container_name: grafana
     environment:
-      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+      - VAULT_ADDR=https://vault:8200
+      - VAULT_SKIP_VERIFY=true
+      - VAULT_TOKEN=${VAULT_TOKEN}
+      - VAULT_SECRET_PATH=cubbyhole/grafana
     ports:
       - "3001:3000"
     volumes:
@@ -289,7 +296,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ${PWD}/backend
+      device: ${PWD}/backend/main
       o: bind
   frontend_data:
     driver: local

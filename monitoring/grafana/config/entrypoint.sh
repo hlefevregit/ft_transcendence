@@ -38,4 +38,4 @@ vault_export_to_env() {
 echo "Starting entrypoint script..."
 vault_export_to_env "${VAULT_SECRET_PATH}"
 
-exec kibana
+exec /run.sh "$@"
