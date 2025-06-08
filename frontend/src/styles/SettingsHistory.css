@@ -1,17 +1,106 @@
-/* ────────────────────────────────────────────── */
-/* Placeholder pour l’onglet “History”            */
-/* ────────────────────────────────────────────── */
-.placeholder-section {
-  text-align: center;
-  color: #6b7280;
-  font-size: 1rem;
-  padding: 60px 0;
+/* src/styles/SettingsHistory.css */
+
+.history-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 0 8px;
 }
 
-/* Responsive : si on veut faire évoluer plus tard */
-@media (max-width: 400px) {
-  .placeholder-section {
-    font-size: 0.95rem;
-    padding: 50px 0;
-  }
+/* Statistiques */
+.history-stats {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+.stat-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f3f4f6;
+  border-radius: 8px;
+  padding: 16px;           /* agrandi padding */
+  min-width: 0;            /* pour que flex-shrink fonctionne */
+}
+.stat-value {
+  font-size: 2rem;         /* un peu plus gros */
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+.stat-label {
+  font-size: 1rem;
+}
+.win-card .stat-label    { color: #10b981; }
+.loss-card .stat-label   { color: #ef4444; }
+.trophy-card .stat-label { color: #f59e0b; }
+
+/* Liste des matchs */
+.matches-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.match-card {
+  display: flex;
+  justify-content: space-between;  /* pousse left et right aux extrémités */
+  align-items: center;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 16px;                   /* agrandi padding */
+  width: 100%;                     /* occupe toute la largeur disponible */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.match-card.win  { background: #d1fae5; }
+.match-card.loss { background: #fee2e2; }
+.match-card.draw { background: #e5e7eb; }
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.player--left  { justify-content: flex-start; }
+.player--right { justify-content: flex-end; }
+
+.avatar {
+  width: 40px;   /* légèrement plus grand */
+  height: 40px;
+  border-radius: 50%;
+}
+.pseudo {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.score-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;                   /* un peu plus large pour le score */
+  margin: 0 16px;
+}
+.score {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+}
+.dash { margin: 0 6px; }
+.reason {
+  position: absolute;
+  top: -18px;
+  font-size: 0.8rem;
+  pointer-events: none;
+}
+.date {
+  position: absolute;
+  bottom: -18px;
+  font-size: 0.75rem;
+  pointer-events: none;
 }
