@@ -2,6 +2,13 @@ import { FastifyInstance } from 'fastify';
 import bcrypt from 'bcrypt';
 import { OAuth2Client } from 'google-auth-library';
 import { GOOGLE_CLIENT_ID } from '../config/env';
+import fs from 'fs';
+import path from 'path';
+
+
+const stevePath = path.join(__dirname, '../assets/steve.jpg');
+const steveBuffer = fs.readFileSync(stevePath);
+const defaultAvatarBase64 = `data:image/jpeg;base64,${steveBuffer.toString('base64')}`;
 
 export const setupAuthRoutes = (fastify: FastifyInstance) => {
 	fastify.post('/api/auth/google', async (request, reply) => {
@@ -14,28 +21,35 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
 		if (!payload || !payload.email) return reply.status(400).send({ success: false, message: "Informations introuvables" });
 
 		const { email, name } = payload;
-		const existingUser = await fastify.prisma.user.findUnique({
-					where: { email },
-		});
-		
+
+		const existingUser = await fastify.prisma.user.findUnique({ where: { email } });
 		if (existingUser) {
-			return reply.send({ success: true, token: fastify.jwt.sign({
-				id: existingUser.id,
-				email: existingUser.email,
-				pseudo: existingUser.pseudo,
-				avatarUrl: existingUser.avatarUrl,
-				status: existingUser.status,
-				twoFAEnabled: existingUser.twoFAEnabled
-			}) });
+		// s’il a un mot de passe, c’est un compte “local” → on refuse la Google-login
+		if (existingUser.password) {
+			return reply
+			.status(400)
+			.send({ success: false, message: "This email is already associated with a native account. Please use your password or sign up with a different address." });
 		}
+		// sinon c’est un ancien compte Google → on renvoie un token
+		const token = fastify.jwt.sign({
+			id: existingUser.id,
+			email: existingUser.email,
+			pseudo: existingUser.pseudo,
+			avatarUrl: existingUser.avatarUrl,
+			status: existingUser.status,
+			twoFAEnabled: existingUser.twoFAEnabled
+		});
+		return reply.send({ success: true, token, user: existingUser });
+		}
+
 		
 		const newUser = await fastify.prisma.user.create({
 			data: {
 				email,
-				pseudo: name,
-				avatarUrl: "https://i1.sndcdn.com/artworks-RK9z0md6Fh0mkDYz-KAfiQg-t500x500.jpg", // Default avatar URL
-				status: 'Hello, I am using this app!', 
-				twoFAEnabled: false, // Default to false, can be updated later
+				pseudo: name.slice(0, 16), // Limite le pseudo à 20 caractères
+				avatarUrl: defaultAvatarBase64,
+				status: 'Offline',
+				twoFAEnabled: false,
 			},
 		});
 		
@@ -72,6 +86,12 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
 		if (!user) {
 			return reply.status(401).send({ success: false, message: "Utilisateur non trouvé" });
 		}
+
+    	if (!user.password) {
+      		return reply
+        	.status(400)
+        	.send({ success: false, message: "Compte lié à Google uniquement. Veuillez utiliser la connexion Google." });
+    	}
 
 		const match = await bcrypt.compare(password, user.password);
 		if (!match) {
