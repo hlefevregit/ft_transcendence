@@ -13,12 +13,13 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
   // Google OAuth2 route
   fastify.post('/api/auth/google', async (request, reply) => {
     const { id_token } = request.body as { id_token: string };
-    if (!id_token) return reply.status(400).send({ success: false, message: 'Token manquant' });
+    if (!id_token) return reply.status(400).send({ success: false, message: 'Missing token' });
+
 
     const client = new OAuth2Client(GOOGLE_CLIENT_ID);
     const ticket = await client.verifyIdToken({ idToken: id_token, audience: GOOGLE_CLIENT_ID });
     const payload = ticket.getPayload();
-    if (!payload || !payload.email) return reply.status(400).send({ success: false, message: 'Informations introuvables' });
+    if (!payload || !payload.email) return reply.status(400).send({ success: false, message: 'Information not found' });
 
     const { email, name } = payload;
     const existingUser = await fastify.prisma.user.findUnique({ where: { email } });
@@ -79,10 +80,10 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
   fastify.post('/api/auth/sign_in', async (request, reply) => {
     const { email, password } = request.body as { email: string; password: string };
     const user = await fastify.prisma.user.findUnique({ where: { email } });
-    if (!user) return reply.status(401).send({ success: false, message: 'Utilisateur non trouvé' });
-    if (!user.password) return reply.status(400).send({ success: false, message: 'Account linked to Google only.' });
+    if (!user) return reply.status(401).send({ success: false, message: 'User not found' });
+    if (!user.password) return reply.status(400).send({ success: false, message: 'This account is linked to Google only.' });
     const match = await bcrypt.compare(password, user.password);
-    if (!match) return reply.status(401).send({ success: false, message: 'Mot de passe invalide' });
+    if (!match) return reply.status(401).send({ success: false, message: 'Invalid password' });
 
     const token = fastify.jwt.sign({
       id: user.id,
