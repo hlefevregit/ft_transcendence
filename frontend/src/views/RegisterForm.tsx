@@ -43,15 +43,15 @@
 //             handleGoogleLogin(response.credential);
 //           },
 //         });
-  
+
 //         window.google.accounts.id.renderButton(
 //           document.getElementById('google-login-btn'),
 //           { theme: 'outline', size: 'large' }
 //         );
 //       }
 //     }, []);
-  
-    
+
+
 
 //   return (
 //     <div className="font-[sans-serif] bg-gray-50 flex items-center md:h-screen p-4">
@@ -182,6 +182,8 @@ const RegisterForm: React.FC = () => {
   };
 
   const handleCreateAccount = async () => {
+    // réinitialise les erreurs globales avant tentative
+    setErrors(e => ({ ...e, general: undefined }));
     if (!validate()) return;
     setLoading(true);
     try {
@@ -191,7 +193,14 @@ const RegisterForm: React.FC = () => {
         localStorage.setItem('authToken', res.token);
         navigate('/game1');
       } else {
-        setErrors({ general: res.message || 'Registration failed.' });
+        // mapper le message renvoyé sur le bon champ
+        const msg = res.message || 'Registration failed.';
+        const fieldErrors: typeof errors = {};
+        if (/email/i.test(msg)) fieldErrors.email = msg;
+        else if (/pseudo/i.test(msg)) fieldErrors.pseudo = msg;
+        else if (/password/i.test(msg)) fieldErrors.password = msg;
+        else fieldErrors.general = msg;
+        setErrors(fieldErrors);
       }
     } catch {
       setErrors({ general: 'An error occurred during registration.' });
@@ -201,16 +210,19 @@ const RegisterForm: React.FC = () => {
   };
 
   const handleGoogleLogin = async (idToken: string) => {
+    // réinitialise les erreurs globales avant tentative Google
+    setErrors(e => ({ ...e, general: undefined }));
     try {
       const res = await googleLogin(idToken);
       if (res.success) {
         localStorage.setItem('authToken', res.token);
         navigate('/game1');
       } else {
-        setErrors({ general: res.message || 'Google login failed.' });
+        setErrors(e => ({ ...e, general: res.message || 'Google login failed.' }));
       }
-    } catch {
-      setErrors({ general: 'Google login error.' });
+    } catch (err) {
+      console.error('Google login error:', err);
+      setErrors(e => ({ ...e, general: 'Google login error.' }));
     }
   };
 
@@ -240,7 +252,13 @@ const RegisterForm: React.FC = () => {
       <div className="w-full max-w-3xl max-md:max-w-xl mx-auto">
         <div className="bg-white grid md:grid-cols-1 gap-12 w-full sm:p-8 p-6 shadow-md rounded-md overflow-hidden">
           <form className="w-full">
-            <h3 className="text-gray-800 text-xl mb-8">Register</h3>
+            <h3 className="text-gray-800 text-xl mb-4">Register</h3>
+            {/* Affichage de l’erreur "générale" */}
+            {errors.general && (
+              <p className="text-red-600 text-sm mb-4">
+                {errors.general}
+              </p>
+            )}
             <div className="space-y-4">
               <div>
                 <label htmlFor="reg-pseudo" className="text-gray-800 text-sm mb-2 block">
