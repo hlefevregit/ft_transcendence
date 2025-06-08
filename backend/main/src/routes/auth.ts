@@ -90,7 +90,7 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
     	if (!user.password) {
       		return reply
         	.status(400)
-        	.send({ success: false, message: "Compte lié à Google uniquement. Veuillez utiliser la connexion Google." });
+        	.send({ success: false, message: "Account linked to Google only. Please use Google login." });
     	}
 
 		const match = await bcrypt.compare(password, user.password);
