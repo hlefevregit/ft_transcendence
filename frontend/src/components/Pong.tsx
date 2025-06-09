@@ -8,9 +8,7 @@ import BackgroundMusic from '@/components/BG';
 import { useWebSocketOnline, useOnlineLoop } from '@/utils/pong/onlineWS';
 import { get } from 'http';
 
-// Function to debounce the resize event
-// This will limit the number of times the resize function is called
-// to once every `ms` milliseconds
+// Limits the number of times the resizing can be called in a given time frame
 function	debounce(fn: Function, ms: number)
 {
 	let	timer: NodeJS.Timeout;
@@ -154,8 +152,6 @@ const	Pong: React.FC = () =>
 		// 	);
 		// });
 		
-		
-
 		if (gameModes.current === game.gameModes.online)
 		{
 			if
@@ -217,7 +213,6 @@ const	Pong: React.FC = () =>
 
 		// Game loop
 		if (!pong.current.engine) return;
-
 		pong.current.engine.runRenderLoop(() =>
 		{
 			game.updateGUIsWhenNeeded(pong, states, gameModes, playerState, lang, lastState, lastPlayerState, lastLang);
@@ -334,7 +329,7 @@ const	Pong: React.FC = () =>
 						break;
 				}
 			}
-			
+
 			pong.current.scene.render();
 			document.title = `Pong - ${Object.keys(game.states).find(key => game.states[key as keyof typeof game.states] === states.current)}`;
 		});
@@ -344,19 +339,20 @@ const	Pong: React.FC = () =>
 		{
 			game.doPaddleMovement(pong, gameModes, states);
 			game.makeBallBounce(pong.current, states);
-		}, 16);
+		}, 16.667);
 
+		// Update GUI values every 200ms
 		const updateGUIsValuesWhenNeeded = setInterval(() =>
 		{
 			game.updateGUIValues(pong, states, lang);
 		}, 200);
 
-		// Debounced resize handler
+		// Handle resizing of the canvas
 		const	handleResize = debounce(() =>
 		{
 			if (!pong.current.engine) return;
 			pong.current.engine.resize();
-		}, 50); // 50ms debounce to skip crashes
+		}, 50);
 
 		window.addEventListener('resize', handleResize);
 		

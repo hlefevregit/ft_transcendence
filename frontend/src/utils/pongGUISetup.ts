@@ -8,9 +8,6 @@ import * as game from '@/libs/pongLibs';
 export const	instantiateGUI = (pong: React.RefObject<game.pongStruct>): void =>
 {
 	pong.current.guiTexture = baby.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, pong.current.scene);
-	// if (pong.current.guiTexture.layer) {
-    //     pong.current.guiTexture.layer.renderingGroupId = 1;
-    // }
 }
 
 export const initializeAllGUIScreens = (
@@ -765,8 +762,11 @@ export const	instantiateArenaGUI = (pong: React.RefObject<game.pongStruct>): voi
 	const	arenaGUI = game.createScreen("scoresGUI", "top");
 
 	// All GUI components needed
+	const	BGSemiTransparentColor: string = "#2e344080";
 	const	arenaContainer = game.createAdaptiveContainer("arenaContainer", "300px", "300px", undefined, "top");
+			(arenaContainer.children[0] as baby.Rectangle).background = BGSemiTransparentColor;
 	const	arenaBotContainer = game.createAdaptiveContainer("arenaBotContainer", "300px", "300px", undefined, "bottom");
+			(arenaBotContainer.children[0] as baby.Rectangle).background = BGSemiTransparentColor;
 	const	arenaVerticalStackPanel = game.createVerticalStackPanel("arenaVerticalStackPanel");
 	const	arenaHorizontalStackPanel1 = game.createHorizontalStackPanel("arenaHorizontalStackPanel1", 0);
 	const	arenaHorizontalStackPanel2 = game.createHorizontalStackPanel("scoresHorizontalStackPanel2", 0);
@@ -1098,105 +1098,6 @@ export const	instantiateWaitingTournamentToStartGUI = (pong: React.RefObject<gam
 	// pong.current.guiTexture?.addControl(waitingTournamentToStartGUI);
 }
 
-// export const	instantiateBracketGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>): void =>
-// {
-// 	const	bracketGUI = game.createScreen("bracketGUI", "center");
-// 	const	bracketContainer = game.createAdaptiveContainer("bracketContainer");
-
-// 	const	bracketVerticalStackPanel = game.createVerticalStackPanel("bracketVerticalStackPanel");
-// 	const	bracketVerticalStackPanel1 = game.createVerticalStackPanel("bracketVerticalStackPanel1", 0);
-// 	const	bracketVerticalStackPanel2 = game.createVerticalStackPanel("bracketVerticalStackPanel2", 0);
-// 	const	bracketHorizontalStackPanel = game.createHorizontalStackPanel("bracketHorizontalStackPanel");
-// 	const	bracketHorizontalStackPanel1 = game.createHorizontalStackPanel("bracketHorizontalStackPanel1", 0);
-
-// 	// VS text separator
-// 	const	versusText1 = game.createDynamicText("versusText1", "versus");
-// 	const	versusText2 = game.createDynamicText("versusText2", "versus");
-// 	const	versusText3 = game.createDynamicText("versusText3", "versus");
-
-// 	// Lines vertical separators
-// 	const	bracketLines = game.createBracketLines("bracketLines");
-
-// 	// Title and texts
-// 	const	bracketTitle = game.createDynamicTitle("bracketTitle");
-// 	const	breacketRound1Text = game.createDynamicTitle("breacketRound1Text", "bracketRound1");
-// 	const	breacketRound2Text = game.createDynamicTitle("breacketRound2Text", "bracketRound2");
-
-// 	// Player cards
-// 	let		bracketPlayer1Container = game.createAdaptiveContainer("bracketPlayer1Container", "100%", "100%");
-// 	let		bracketPlayer1 = game.createText("bracketPlayer1", "player1");
-// 			pong.current.bracketPlayer1 = bracketPlayer1;
-// 			bracketPlayer1Container.addControl(bracketPlayer1);
-// 	let		bracketPlayer2Container = game.createAdaptiveContainer("bracketPlayer2Container", "100px", "100px", game.colorsScheme.dark4);
-// 	let		bracketPlayer2 = game.createText("bracketPlayer2", "player2");
-// 			pong.current.bracketPlayer2 = bracketPlayer2;
-// 			bracketPlayer2Container.addControl(bracketPlayer2);
-// 	let		bracketPlayer3Container = game.createAdaptiveContainer("bracketPlayer3Container", "100px", "100px", game.colorsScheme.dark4);
-// 	let		bracketPlayer3 = game.createText("bracketPlayer3", "player3");
-// 			pong.current.bracketPlayer3 = bracketPlayer3;
-// 			bracketPlayer3Container.addControl(bracketPlayer3);
-// 	let		bracketPlayer4Container = game.createAdaptiveContainer("bracketPlayer4Container", "100px", "100px", game.colorsScheme.dark4);
-// 	let		bracketPlayer4 = game.createText("bracketPlayer4", "player4");
-// 			pong.current.bracketPlayer4 = bracketPlayer4;
-// 			bracketPlayer4Container.addControl(bracketPlayer4);
-
-// 	// Unknown player cards
-// 	const	bracketUnknownPlayer1 = game.createText("bracketUnknownPlayer1", "None");
-// 	const	bracketUnknownPlayer2 = game.createText("bracketUnknownPlayer2", "None");
-
-// 	// Abandon button
-// 	const	bracketAbandonButton = game.createDynamicButton("bracketAbandonButton", () =>
-// 	{
-// 		states.current = game.states.main_menu;
-// 		gameModes.current = game.gameModes.none;
-// 		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
-// 	}, "abandon");
-// 			(bracketAbandonButton.children[0] as baby.Button).onPointerEnterObservable.add(() => {
-// 			(bracketAbandonButton.children[0] as baby.Button).color = game.colorsScheme.dark1;
-// 			(bracketAbandonButton.children[0] as baby.Button).background = game.colorsScheme.auroraAccent1;
-// 	});
-// 			(bracketAbandonButton.children[0] as baby.Button).onPointerOutObservable.add(() => {
-// 			(bracketAbandonButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent1;
-// 			(bracketAbandonButton.children[0] as baby.Button).background = game.colorsScheme.dark1;
-// 	});
-// 			(bracketAbandonButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent1;
-
-// 	// Add GUI components to the main menu
-// 	bracketGUI.addControl(bracketContainer);
-// 	bracketContainer.addControl(bracketVerticalStackPanel);
-// 	bracketVerticalStackPanel.addControl(bracketTitle);
-
-// 	// Double column bracket layout
-// 	bracketVerticalStackPanel.addControl(bracketHorizontalStackPanel);
-// 	bracketHorizontalStackPanel.addControl(bracketVerticalStackPanel1);
-// 	bracketHorizontalStackPanel.addControl(bracketVerticalStackPanel2);
-
-// 	// First bracket entry - Player 1 vs Player 2
-// 	bracketVerticalStackPanel1.addControl(breacketRound1Text);
-// 	bracketVerticalStackPanel1.addControl(bracketPlayer1Container);
-// 	bracketVerticalStackPanel1.addControl(versusText1);
-// 	bracketVerticalStackPanel1.addControl(bracketPlayer2Container);
-
-// 	// First bracket entry - Player 3 vs Player 4
-// 	bracketVerticalStackPanel1.addControl(breacketRound2Text);
-// 	bracketVerticalStackPanel1.addControl(bracketPlayer3Container);
-// 	bracketVerticalStackPanel1.addControl(versusText2);
-// 	bracketVerticalStackPanel1.addControl(bracketPlayer4Container);
-
-// 	// Second bracket entry - Finals
-// 	bracketVerticalStackPanel2.addControl(breacketRound2Text);
-// 	bracketVerticalStackPanel2.addControl(bracketUnknownPlayer1);
-// 	bracketVerticalStackPanel2.addControl(versusText3);
-// 	bracketVerticalStackPanel2.addControl(bracketUnknownPlayer2);
-
-// 	// Add the abandon button
-// 	bracketVerticalStackPanel.addControl(bracketAbandonButton);
-
-// 	// Add GUI to the GUI texture
-// 	pong.current.bracketGUI = bracketGUI;
-// 	pong.current.guiTexture?.addControl(bracketGUI);
-// }
-
 export const instantiateBracketGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>): void =>
 {
 	const	bracketGUI = game.createScreen("bracketGUI", "center");
@@ -1205,10 +1106,12 @@ export const instantiateBracketGUI = (pong: React.RefObject<game.pongStruct>, st
 	const	bracketVerticalStackPanel = game.createVerticalStackPanel("bracketVerticalStackPanel");
 	const	bracketVerticalStackPanel1 = game.createVerticalStackPanel("bracketVerticalStackPanel1", 10);
 	const	bracketVerticalStackPanel2 = game.createVerticalStackPanel("bracketVerticalStackPanel2", 10);
+	const	bracketVerticalStackPanel3 = game.createVerticalStackPanel("bracketVerticalStackPanel3", 10);
 	const	bracketHorizontalStackPanel = game.createHorizontalStackPanel("bracketHorizontalStackPanel", 0);
-	const	bracketHorizontalStackPanel1 = game.createHorizontalStackPanel("bracketHorizontalStackPanel1", 0);
 
-	const	bracketLines = game.createBracketLines("bracketLines");
+	const	bracketLines1 = game.createBracketLines("bracketLines1");
+	const	bracketLines2 = game.createBracketLines2("bracketLines2");
+
 	// VS text separator
 	const	versusText1 = game.createDynamicText("versusText1", "versus");
 	const	versusText2 = game.createDynamicText("versusText2", "versus");
@@ -1223,12 +1126,12 @@ export const instantiateBracketGUI = (pong: React.RefObject<game.pongStruct>, st
 	const	bracketTitle = game.createDynamicTitle("bracketTitle", "bracketTitle");
 	const	bracketRound1Text = game.createDynamicTitle("bracketRound1Text", "bracketRound1");
 	const	bracketRound2Text = game.createDynamicTitle("bracketRound2Text", "bracketRound2");
-	// const bracketFinalsText = game.createDynamicTitle("bracketFinalsText", "bracketFinals");
+	const	bracketRound3Text = game.createDynamicTitle("bracketRound3Text", "bracketRound3");
 	
 	// Style round titles
 	(bracketRound1Text.children[0] as baby.TextBlock).fontSize = 32;
 	(bracketRound2Text.children[0] as baby.TextBlock).fontSize = 32;
-	// (bracketFinalsText.children[0] as baby.TextBlock).fontSize = 32;
+	(bracketRound3Text.children[0] as baby.TextBlock).fontSize = 32;
 
 	// Create player cards with the new function
 	const	bracketPlayer1Card = game.createCard("bracketPlayer1Card", "Player 1");
@@ -1239,6 +1142,9 @@ export const instantiateBracketGUI = (pong: React.RefObject<game.pongStruct>, st
 	// Finals cards
 	const	finalPlayer1 = game.createCard("finalPlayer1", "Final Player 1");
 	const	finalPlayer2 = game.createCard("finalPlayer2", "Final Player 2");
+
+	// Winner card
+	const	winnerPlayer = game.createCard("winnerPlayer", "Winner Player");
 	
 	// Abandon button
 	const	bracketAbandonButton = game.createDynamicButton("bracketAbandonButton", () =>
@@ -1264,6 +1170,7 @@ export const instantiateBracketGUI = (pong: React.RefObject<game.pongStruct>, st
 	pong.current.bracketPlayer4 = bracketPlayer4Card;
 	pong.current.bracketFinalPlayer1 = finalPlayer1;
 	pong.current.bracketFinalPlayer2 = finalPlayer2;
+	pong.current.bracketWinnerPlayer = winnerPlayer;
 
 	// Style the player cards
 	const	bracketPlayer1Container = pong.current.bracketPlayer1.children[0] as baby.Container;
@@ -1296,11 +1203,13 @@ export const instantiateBracketGUI = (pong: React.RefObject<game.pongStruct>, st
 	bracketContainer.addControl(bracketVerticalStackPanel);
 	bracketVerticalStackPanel.addControl(bracketTitle);
 
-	// Double column bracket layout
+	// Triple column bracket layout
 	bracketVerticalStackPanel.addControl(bracketHorizontalStackPanel);
 	bracketHorizontalStackPanel.addControl(bracketVerticalStackPanel1);
-	bracketHorizontalStackPanel.addControl(bracketLines);
+	bracketHorizontalStackPanel.addControl(bracketLines1);
 	bracketHorizontalStackPanel.addControl(bracketVerticalStackPanel2);
+	bracketHorizontalStackPanel.addControl(bracketLines2);
+	bracketHorizontalStackPanel.addControl(bracketVerticalStackPanel3);
 
 	// First bracket entry - Player 1 vs Player 2
 	bracketVerticalStackPanel1.addControl(bracketRound1Text);
@@ -1321,6 +1230,10 @@ export const instantiateBracketGUI = (pong: React.RefObject<game.pongStruct>, st
 	bracketVerticalStackPanel2.addControl(finalPlayer1);
 	bracketVerticalStackPanel2.addControl(versusText3);
 	bracketVerticalStackPanel2.addControl(finalPlayer2);
+	
+	// Winner
+	bracketVerticalStackPanel3.addControl(bracketRound3Text);
+	bracketVerticalStackPanel3.addControl(winnerPlayer);
 
 	// Add the abandon button
 	bracketVerticalStackPanel.addControl(bracketAbandonButton);
