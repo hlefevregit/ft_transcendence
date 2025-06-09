@@ -271,17 +271,18 @@ const	Pong: React.FC = () =>
 			game.makeBallBounce(pong.current, states);
 		}, 16.667);
 
+		// Update GUI values every 200ms
 		const updateGUIsValuesWhenNeeded = setInterval(() =>
 		{
 			game.updateGUIValues(pong, states, lang);
 		}, 200);
 
-		// Debounced resize handler
+		// Handle resizing of the canvas
 		const	handleResize = debounce(() =>
 		{
 			if (!pong.current.engine) return;
 			pong.current.engine.resize();
-		}, 50); // 50ms debounce to skip crashes
+		}, 50);
 
 		window.addEventListener('resize', handleResize);
 		
