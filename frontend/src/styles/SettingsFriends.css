@@ -1,41 +1,26 @@
-/* ────────────────────────────────────────────── */
-/*  Container global                             */
-/* ────────────────────────────────────────────── */
+/* src/styles/SettingsFriends.css */
+
 .friends-section {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  max-height: 60vh;      /* hauteur fixe pour scrolling interne */
+  height: 60vh;
   overflow-y: auto;
-  padding-right: 8px;    /* place pour la scrollbar */
+  padding-right: 8px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* ────────────────────────────────────────────── */
-/*  Section “Add Friend”                         */
-/* ────────────────────────────────────────────── */
+/* ─── Add Friend (design original) ─── */
 .section-add {
   background: #ffffff;
   border-radius: 10px;
   overflow: hidden;
-
-  /* Au démarrage, fermé (hidden) */
-  max-height: 0;
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
-.section-add.open {
-  max-height: 100px;        /* assez pour input + message d’erreur */
+  max-height: 100px; /* toujours visible */
   opacity: 1;
   transform: translateY(0);
-  margin: 4px 0;            /* même margin qu’avant */
-  padding: 0;               /* gérer l’intérieur dans .friend-input-row */
+  margin: 4px 0;
+  transition: all 0.3s ease;
 }
 
-/* ────────────────────────────────────────────── */
-/*  Input “Add Friend”                           */
-/* ────────────────────────────────────────────── */
 .friend-input-row {
   display: flex;
   align-items: center;
@@ -69,82 +54,63 @@
   color: #374151;
 }
 
-/* ────────────────────────────────────────────── */
-/*  Headers déroulants (“Sent”, “Received”, “Friends”) */
-/* ────────────────────────────────────────────── */
+.error-text {
+  color: #ef4444;
+  font-size: 0.9rem;
+  text-align: center;
+  margin: 4px 0 0 0;
+}
+
+/* ─── Dropdown headers ─── */
 .dropdown-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   padding: 12px 16px;
-  background: #f3f4f6;
+  background: #f7fafc;
   cursor: pointer;
   user-select: none;
-  transition: background 0.2s ease;
+  border-radius: 8px;
+  margin: 8px 0 0 0;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .dropdown-header:hover {
-  background: #e5e7eb;
+  background: #edf2f7;
 }
 
-.dropdown-header.standalone {
-  border-radius: 10px;
-  margin: 4px 0;
-}
-
-.dropdown-header.expanded-header {
-  border-radius: 10px 10px 0 0;
-}
-
-.dropdown-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #374151;
-}
-
-.dropdown-icon {
-  font-size: 1rem;
-  color: #6b7280;
+.dropdown-header svg {
   transition: transform 0.2s ease;
 }
 
-.dropdown-icon.open {
+.dropdown-header svg.open {
   transform: rotate(180deg);
 }
 
-/* ────────────────────────────────────────────── */
-/*  Contenu déplié sous chaque header            */
-/* ────────────────────────────────────────────── */
+/* ─── Dropdown content ─── */
 .section-content {
-  background: #ffffff;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  overflow: hidden;
-
-  /* Par défaut fermé */
   max-height: 0;
   opacity: 0;
+  overflow: hidden;
   transform: translateY(-10px);
+  transition: max-height 0.4s ease, opacity 0.4s ease, transform 0.4s ease;
+  background: #ffffff;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  margin-bottom: 8px;
 }
 
 .section-content.open {
-  max-height: 40vh;       /* hauteur maxi une fois ouvert */
+  max-height: 40vh;
   opacity: 1;
   transform: translateY(0);
-  margin: 0 0 4px 0;
-  padding: 0;
 }
 
-/* ────────────────────────────────────────────── */
-/*  Liste déroulante (ul/li)                      */
-/* ────────────────────────────────────────────── */
+/* ─── List & items ─── */
 .dropdown-list {
   list-style: none;
   margin: 0;
   padding: 0;
-  background: #ffffff;
-  max-height: 100%;
-  overflow-y: auto;
 }
 
 .dropdown-item-empty {
@@ -156,15 +122,15 @@
 
 .dropdown-item {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   padding: 12px 16px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #e2e8f0;
   transition: background-color 0.2s ease;
 }
 
 .dropdown-item:hover {
-  background-color: #f9fafb;
+  background-color: #f7fafc;
 }
 
 .item-left {
@@ -178,18 +144,7 @@
   height: 44px;
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid #e0e0e0;
-}
-
-.item-pseudo {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #1f2937;
-}
-
-.item-status {
-  font-size: 0.85rem;
-  color: #6b7280;
+  border: 1px solid #e2e8f0;
 }
 
 .item-text-group {
@@ -198,9 +153,20 @@
   line-height: 1.2;
 }
 
+.item-pseudo {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #2d3748;
+}
+
+.item-status {
+  font-size: 0.85rem;
+  color: #718096;
+}
+
 .item-actions-group {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
 .item-action-button,
@@ -218,19 +184,9 @@
 .item-action-button:hover,
 .item-decline-button:hover,
 .item-remove-button:hover {
-  color: #ef4444;
+  color: #e53e3e;
 }
 
 .item-accept-button:hover {
-  color: #10b981;
-}
-
-/* ────────────────────────────────────────────── */
-/*  Messages d’erreur                             */
-/* ────────────────────────────────────────────── */
-.error-text {
-  color: #ef4444;
-  font-size: 0.9rem;
-  text-align: center;
-  margin: 4px 0 0 0;
+  color: #38a169;
 }
