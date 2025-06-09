@@ -59,10 +59,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          if [[ "${{ github.ref_name }}" == "main" || "${{ github.ref_name }}" == "battleship" || "${{ github.ref_name }}" == "feature/ci-cd-integration" || "${{ github.ref_name }}" == "feature/MAJOR_REMOTE" || "${{ github.ref_name }}" == "feature/pong" || "${{ github.ref_name }}" == "feature/Tournament" || "${{ github.ref_name }}" == "feature/WAF/HashiCorp"]]; then
+         run: |
+          if [[ "${{ github.ref_name }}" == "main" || \
+                "${{ github.ref_name }}" == "battleship" || \
+                "${{ github.ref_name }}" == "feature/ci-cd-integration" || \
+                "${{ github.ref_name }}" == "feature/MAJOR_REMOTE" || \
+                "${{ github.ref_name }}" == "feature/pong" || \
+                "${{ github.ref_name }}" == "feature/Tournament" || \
+                "${{ github.ref_name }}" == "feature/WAF/HashiCorp" ]]; then
             npx semantic-release
             git describe --exact-match --tags HEAD > version || true
           fi
+
 
       - name: Upload version artifact
         uses: actions/upload-artifact@v4
