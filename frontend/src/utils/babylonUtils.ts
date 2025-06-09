@@ -628,11 +628,10 @@ export const	createLine = (x1: string, y1: string, x2: string, y2: string): baby
 export const	createBracketLines = (bracketName: string): baby.StackPanel =>
 {
 	const	block = game.createDummyBlock();
-			block.top = "24px";	// Offset from the top of the stack panel
+			block.top = "24px";
 	const	container = new baby.Container(bracketName + "Container");
 			container.width = "100px";
 			container.height = "365px";
-			container.background = game.colorsScheme.red;
 			container.background = "transparent";
 
 	const	verticalLine1 = createLine("50px", "30px", "50px", "130px");
@@ -644,9 +643,6 @@ export const	createBracketLines = (bracketName: string): baby.StackPanel =>
 	const	horizontalLine3 = createLine("5px", "230px", "95px", "230px");
 	const	horizontalLine4 = createLine("5px", "335px", "50px", "335px");
 
-	// const	line1 = createLine("0px", "0px", "200px", "200px");
-
-	// container.addControl(line1);
 	container.addControl(verticalLine1);
 	container.addControl(verticalLine2);
 
@@ -654,6 +650,31 @@ export const	createBracketLines = (bracketName: string): baby.StackPanel =>
 	container.addControl(horizontalLine2);
 	container.addControl(horizontalLine3);
 	container.addControl(horizontalLine4);
+
+	block.addControl(container);
+	return block;
+}
+
+export const	createBracketLines2 = (bracketName: string): baby.StackPanel =>
+{
+	const	block = game.createDummyBlock();
+			block.top = "20px";
+	const	container = new baby.Container(bracketName + "Container");
+			container.width = "100px";
+			container.height = "200px";
+			container.background = "transparent";
+
+	const	verticalLine1 = createLine("50px", "50px", "50px", "150px");
+
+	const	horizontalLine1 = createLine("5px", "50px", "50px", "50px");
+	const	horizontalLine2 = createLine("5px", "150px", "50px", "150px");
+	const	horizontalLine3 = createLine("50px", "100px", "95px", "100px");
+
+	container.addControl(verticalLine1);
+
+	container.addControl(horizontalLine1);
+	container.addControl(horizontalLine2);
+	container.addControl(horizontalLine3);
 
 	block.addControl(container);
 	return block;
@@ -675,19 +696,6 @@ export const	createSpacer = (witdh: number, height: number): baby.StackPanel =>
 	return block;
 }
 
-// export const	createImage = (imageName: string, imageUrl: string, width: string, height: string): baby.Image =>
-// {
-// 	const	image = new baby.Image(imageName, imageUrl);
-// 	image.width = width;
-// 	image.height = height;
-// 	image.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
-// 	image.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
-// 	image.stretch = baby.Image.STRETCH_FILL;
-// 	image.zIndex = 1;
-
-// 	return image;
-// }
-
 export const	resizeArenaShell = (pong: React.RefObject<game.pongStruct>): void =>
 {
 	if
@@ -706,6 +714,7 @@ export const	resizeArenaShell = (pong: React.RefObject<game.pongStruct>): void =
 	pong.current.floor.position.z = pong.current.arenaHeight + 1;
 	pong.current.ceiling.scaling.x = pong.current.floor.scaling.x;
 	pong.current.ceiling.position.z = -pong.current.floor.position.z;
+
 	if (pong.current.arenaWidth < pong.current.arenaHeight)
 		pong.current.wallLeft.scaling.z = Math.max(pong.current.arenaWidth, pong.current.arenaHeight) * 2 + 3;
 	else

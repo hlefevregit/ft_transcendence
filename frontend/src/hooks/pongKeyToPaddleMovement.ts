@@ -15,7 +15,7 @@ export const	movePaddleUp = (pong: React.RefObject<game.pongStruct>, paddleZ: nu
 			Math.min
 			(
 				pong.current.arenaHeight - (pong.current.paddleHeight / 2),
-				paddleZ - pong.current.paddleSpeed / 2
+				paddleZ - pong.current.paddleSpeed
 			)
 		)
 	)
@@ -32,7 +32,7 @@ export const	movePaddleDown = (pong: React.RefObject<game.pongStruct>, paddleZ: 
 			Math.min
 			(
 				pong.current.arenaHeight - (pong.current.paddleHeight / 2),
-				paddleZ + pong.current.paddleSpeed / 2
+				paddleZ + pong.current.paddleSpeed
 			)
 		)
 	)
