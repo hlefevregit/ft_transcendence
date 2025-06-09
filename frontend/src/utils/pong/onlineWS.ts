@@ -92,16 +92,16 @@ export const useWebSocketOnline = (pong: React.RefObject<game.pongStruct>,
                         socketRef.current?.send(JSON.stringify({
                             type: 'join_game',
                             gameId: room.gameId,
-                    }));
+                        }));
                     });
                     pong.current.rooms.set(room.gameId, () => roomPanel);
                 }
     
                 // MAJ de l’affichage GUI
                 const updatedList = game.refreshOnlineRoomsEntries(pong, states, gameModes);
-                const verticalStack = pong.current.roomListOnlineVerticalStackPanel;
+                const verticalStack = pong.current.roomListVerticalStackPanel;
                 if (verticalStack) {
-                    const old = verticalStack.getChildByName("roomsVerticalPanel");
+                    const old = verticalStack.children[2];
                     if (old) verticalStack.removeControl(old);
                     verticalStack.addControl(updatedList);
                 } else {

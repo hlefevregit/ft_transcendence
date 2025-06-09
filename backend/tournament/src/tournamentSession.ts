@@ -61,7 +61,7 @@ export class tournamentSession {
 	setPlayer2(socket: WebSocket, player2Id: string) {
 		this.player2 = socket;
 		this.player2Id = player2Id;
-		this.broadcast({ type: 'game_start' });
+		// this.broadcast({ type: 'game_start' });
 	}
 
 	setPlayer1(socket: WebSocket, player1Id: string) {
