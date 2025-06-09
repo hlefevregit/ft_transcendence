@@ -45,7 +45,7 @@ jobs:
 
       - name: Run semantic-release (main / battleship / Tournament)
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           if [[ "${{ github.ref_name }}" == "main" || \
                 "${{ github.ref_name }}" == "battleship" || \
