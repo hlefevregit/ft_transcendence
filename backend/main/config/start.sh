@@ -39,6 +39,8 @@ echo "Starting entrypoint script..."
 vault_export_to_env "${VAULT_SECRET_PATH_GOOGLE}"
 vault_export_to_env "${VAULT_SECRET_PATH_JWT}"
 
+env > .env
+
 npm install -g typescript ts-node ts-node-dev pm2 fastify
 
 # Installe les dépendances, y compris nodemon
