@@ -1,23 +1,23 @@
 /* src/styles/SettingsFriends.css */
 
+/* ─── Container principal ─── */
 .friends-section {
   display: flex;
   flex-direction: column;
   height: 60vh;
-  overflow-y: auto;
   padding-right: 8px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* ─── Add Friend (design original) ─── */
+/* ─── Add Friend sticky ─── */
 .section-add {
+  position: sticky;
+  top: 0;
   background: #ffffff;
   border-radius: 10px;
   overflow: hidden;
-  max-height: 100px; /* toujours visible */
-  opacity: 1;
-  transform: translateY(0);
   margin: 4px 0;
+  z-index: 10;
   transition: all 0.3s ease;
 }
 
@@ -58,10 +58,18 @@
   color: #ef4444;
   font-size: 0.9rem;
   text-align: center;
-  margin: 4px 0 0 0;
+  margin: 4px 0 0;
 }
 
-/* ─── Dropdown headers ─── */
+/* ─── Bloc scrollable unique ─── */
+.scrollable-block {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+  overscroll-behavior: contain;
+}
+
+/* ─── Headers des dropdowns ─── */
 .dropdown-header {
   display: flex;
   justify-content: space-between;
@@ -71,8 +79,8 @@
   cursor: pointer;
   user-select: none;
   border-radius: 8px;
-  margin: 8px 0 0 0;
-  transition: background 0.2s ease, transform 0.2s ease;
+  margin: 8px 0 0;
+  transition: background 0.2s ease;
 }
 
 .dropdown-header:hover {
@@ -87,13 +95,16 @@
   transform: rotate(180deg);
 }
 
-/* ─── Dropdown content ─── */
+/* ─── Contenu animé avec hauteur dynamique ─── */
 .section-content {
   max-height: 0;
   opacity: 0;
   overflow: hidden;
   transform: translateY(-10px);
-  transition: max-height 0.4s ease, opacity 0.4s ease, transform 0.4s ease;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.3s ease,
+    transform 0.3s ease;
   background: #ffffff;
   border-radius: 0 0 8px 8px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.05);
@@ -101,12 +112,12 @@
 }
 
 .section-content.open {
-  max-height: 40vh;
+  max-height: none;
   opacity: 1;
   transform: translateY(0);
 }
 
-/* ─── List & items ─── */
+/* ─── Listes & items ─── */
 .dropdown-list {
   list-style: none;
   margin: 0;
