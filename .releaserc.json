@@ -1,38 +1,42 @@
 {
-	"branches": [
-	  "main",
-	  "battleship",
-	  "Tournament",
-	  {
-		"name": "feature/ci-cd-integration",
-		"prerelease": "ci-cd-integration"
-	  }
-	],
-	"tagFormat": "v${version}",
-	"plugins": [
-	  "@semantic-release/commit-analyzer",
-	  "@semantic-release/release-notes-generator",
-	  "@semantic-release/changelog",
-	  [
-		"@semantic-release/npm",
-		{
-		  "npmPublish": true
-		}
-	  ],
-	  [
-		"@semantic-release/git",
-		{
-		  "assets": [
-			"package.json",
-			"package-lock.json",
-			"CHANGELOG.md"
-		  ],
-		  "message": "chore(release): ${nextRelease.version} \n\n${nextRelease.notes}"
-		}
-	  ],
-	  [
-		"@semantic-release/github"
-	  ]
-	]
-  }
-  
+  "repositoryUrl": "https://github.com/hlefevregit/ft_transcendence",
+  "branches": [
+    "main",
+    {
+      "name": "battleship",
+      "channel": "battleship"
+    },
+    {
+      "name": "Tournament",
+      "channel": "Tournament"
+    },
+    {
+      "name": "feature/ci-cd-integration",
+      "prerelease": "ci-cd-integration"
+    }
+  ],
+  "tagFormat": "v${version}",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": true
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "package.json",
+          "package-lock.json",
+          "CHANGELOG.md"
+        ],
+        "message": "chore(release): ${nextRelease.version} \n\n${nextRelease.notes}"
+      }
+    ],
+    "@semantic-release/github"
+  ]
+}
