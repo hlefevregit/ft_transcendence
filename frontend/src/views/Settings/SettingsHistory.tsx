@@ -42,6 +42,9 @@ export default function SettingsHistory() {
       .catch(console.error);
   }, []);
 
+  // active le scroll si plus de 5 matchs
+  const isScrollable = matches.length > 5;
+
   return (
     <section className="history-section">
       {/* ─── Statistiques ─── */}
@@ -61,7 +64,7 @@ export default function SettingsHistory() {
       </div>
 
       {/* ─── Liste des matchs ─── */}
-      <div className="matches-list">
+      <div className={`matches-list${isScrollable ? " scrollable" : ""}`}>
         {matches.map((m) => (
           <div key={m.id} className={`match-card ${m.result}`}>
             <div className="player player--left">
