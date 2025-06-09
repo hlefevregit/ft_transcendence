@@ -11,7 +11,7 @@ services:
       - vault_data:/vault/file
       - ./vault/config:/vault/config
       - ./vault/init:/vault/init
-      - ./backend/certs:/vault/certs:ro
+      - ./backend/main/certs:/vault/certs:ro
       - ./vault/secrets:/vault/secrets
     networks:
       - vault_network
@@ -57,10 +57,9 @@ services:
     depends_on:
       - vault
     ports:
-      - "443:443"
       - "8200:8200"
     volumes:
-      - ./backend/certs:/etc/nginx/certs:ro
+      - ./backend/main/certs:/etc/nginx/certs:ro
       - ./vault/config/nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
       - vault_network
@@ -105,25 +104,6 @@ services:
       - ft_network
     
 
-  pong:
-    build:
-      context: ./backend/pong-service
-      dockerfile: Dockerfile.dev
-    ports:
-      - "4000:4000"
-    networks:
-      - ft_network
-
-  twofa:
-    build:
-      context: ./backend/2FA-service
-      dockerfile: Dockerfile.dev
-    ports:
-      - "4001:4001"
-    networks:
-      - ft_network
-    
-
   frontend:
     build:
       context: ./frontend
@@ -147,7 +127,6 @@ services:
       dockerfile: Dockerfile.nginx.dev
     ports:
       - "8080:8080"
-      - "80:80"
       - "8082:8082"  # pour nginx_status
     volumes:
       - ./nginx.dev.conf:/etc/nginx/nginx.conf
@@ -323,12 +302,12 @@ volumes:
       type: none
       device: ${PWD}/backend/main/prisma/sqlite
       o: bind
-  es_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${PWD}/elk/elasticsearch/data
-      o: bind
+  # es_data:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: ${PWD}/elk/elasticsearch/data
+  #     o: bind
   # volumes:
   #   elastic_data:
   #     driver: local
