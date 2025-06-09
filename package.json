@@ -2,5 +2,6 @@
   "name": "ft-transcendence",
   "devDependencies": {
     "semantic-release": "^24.2.5"
-  }
+  },
+  "version": "1.0.0"
 }
