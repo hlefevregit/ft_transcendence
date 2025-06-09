@@ -99,7 +99,7 @@ export const useWebSocketOnline = (pong: React.RefObject<game.pongStruct>,
     
                 // MAJ de l’affichage GUI
                 const updatedList = game.refreshOnlineRoomsEntries(pong, states, gameModes);
-                const verticalStack = pong.current.roomListOnlineVerticalStackPanel;
+                const verticalStack = pong.current.roomListVerticalStackPanel;
                 if (verticalStack) {
                     const old = verticalStack.getChildByName("roomsVerticalPanel");
                     if (old) verticalStack.removeControl(old);
