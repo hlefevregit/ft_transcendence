@@ -978,7 +978,7 @@ export const	instantiateRoomListGUI = (pong: React.RefObject<game.pongStruct>, s
 	roomListContainer.addControl(roomListVerticalStackPanel);
 	roomListGUI.addControl(roomListContainer);
 
-	pong.current.roomListOnlineVerticalStackPanel = roomListVerticalStackPanel;
+	pong.current.roomListVerticalStackPanel = roomListVerticalStackPanel;
 
 	// Add the screen to the GUI texture
 	pong.current.roomListGUI = roomListGUI;
