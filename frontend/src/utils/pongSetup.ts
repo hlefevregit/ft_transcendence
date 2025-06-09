@@ -208,6 +208,7 @@ export type pongStruct =
 	bracketPlayer4?: baby.StackPanel;
 	bracketFinalPlayer1?: baby.StackPanel;
 	bracketFinalPlayer2?: baby.StackPanel;
+	bracketWinnerPlayer?: baby.StackPanel;
 
 	// Engine and scene
 	guiTexture?: baby.AdvancedDynamicTexture;
@@ -335,7 +336,8 @@ export const	label =
 	waitingTournamentToStartPlayerText: ["Players:", "Joueurs:", "Giocatori:", "⠨⠏⠇⠁⠽⠑⠗⠎:"],
 	bracketTitle: ["Tournament Bracket", "Tableau du tournoi", "Tabellone del torneo", "⠨⠞⠕⠥⠗⠝⠕ ⠨⠃⠗⠁⠉⠅⠑⠞"],
 	bracketRound1: ["First round", "Premier tour", "Primo turno", "⠨⠗⠕⠥⠝⠙⠑ 1"],
-	bracketRound2: ["Final", "Finale", "Finale", "⠨⠋⠊⠝⠁⠇"],
+	bracketRound2: ["Finals", "Finales", "Finali", "⠨⠗⠕⠥⠝⠙⠑ 2"],
+	bracketRound3: ["Winner", "Gagnant", "Vincitore", "⠨⠺⠊⠝⠝⠑⠗"],
 	
 } as const;
 
