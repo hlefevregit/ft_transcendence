@@ -2,6 +2,10 @@
 	"branches": [
 	  "main",
 	  "battleship",
+	  "Tournament",
+	  "WAF/HashiCorp",
+	  "MAJOR_REMOTE",
+	  "pong",
 	  {
 		"name": "feature/ci-cd-integration",
 		"prerelease": "ci-cd-integration"

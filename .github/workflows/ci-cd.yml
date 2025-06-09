@@ -5,11 +5,19 @@ on:
     branches:
       - main
       - battleship
+      - MAJOR_REMOTE
+      - pong
+      - WAF/HashiCorp
+      - Tournament
       - feature/ci-cd-integration
   pull_request:
     branches:
       - main
       - battleship
+      - MAJOR_REMOTE
+      - pong
+      - WAF/HashiCorp
+      - Tournament
       - feature/ci-cd-integration
   workflow_dispatch:
 
@@ -20,6 +28,10 @@ jobs:
     if: |
       github.ref == 'refs/heads/main' ||
       github.ref == 'refs/heads/battleship' ||
+      github.ref == 'refs/heads/MAJOR_REMOTE' ||
+      github.ref == 'refs/heads/pong' ||
+      github.ref == 'refs/heads/WAF/HashiCorp' ||
+      github.ref == 'refs/heads/Tournament' ||
       github.ref == 'refs/heads/feature/ci-cd-integration' ||
       github.event_name == 'workflow_dispatch'
     steps:
@@ -43,11 +55,11 @@ jobs:
           git checkout ${{ github.ref_name }} --force
           git reset --hard origin/${{ github.ref_name }}
 
-      - name: Run semantic-release (main / battleship / feature)
+      - name: Run semantic-release (main / battleship / MAJOR_REMOTE / pong / WAF/HashiCorp / Tournament / feature)
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          if [[ "${{ github.ref_name }}" == "main" || "${{ github.ref_name }}" == "battleship" || "${{ github.ref_name }}" == "feature/ci-cd-integration" ]]; then
+          if [[ "${{ github.ref_name }}" == "main" || "${{ github.ref_name }}" == "battleship" || "${{ github.ref_name }}" == "feature/ci-cd-integration" || "${{ github.ref_name }}" == "feature/MAJOR_REMOTE" || "${{ github.ref_name }}" == "feature/pong" || "${{ github.ref_name }}" == "feature/Tournament" || "${{ github.ref_name }}" == "feature/WAF/HashiCorp"]]; then
             npx semantic-release
             git describe --exact-match --tags HEAD > version || true
           fi
