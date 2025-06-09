@@ -31,7 +31,7 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 		ws.on('message', async (message) => {
 			try {
 				const data = JSON.parse(message.toString());
-				console.log("📬 Message reçu:", data);
+				console.log("📬 Message reçu tournoi:", data);
 
 				switch (data.type) {
 					case 'host_tournament': {
@@ -44,17 +44,21 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 					}
 					
 					case 'join_tournament': {
+						
 						const session = games.get(data.gameId);
-						if (session && !session.player2) {
+						console.log("🔍 Recherche de la session pour gameId:", data.gameId);
+						if (session && session.player2 === null) {
+							console.log("🚪 Player 2 rejoint le tournoi");
 							session.setPlayer2(ws, username);
-
 							ws.send(JSON.stringify({ type: 'joined_tournament', gameId: session.id, isHost2: false }));
 						}
-						else if (session && !session.player3) {
+						else if (session && session.player3 === null) {
+							console.log("🚪 Player 3 rejoint le tournoi");
 							session.setPlayer3(ws, username);
 							ws.send(JSON.stringify({ type: 'joined_tournament', gameId: session.id, isHost2: true}));
 						}
-						else if (session && !session.player4) {
+						else if (session && session.player4 === null) {
+							console.log("🚪 Player 4 rejoint le tournoi");
 							session.setPlayer4(ws, username);
 							const player4 = session.player4 as WebSocket | null;
 							ws.send(JSON.stringify({ type: 'joined_tournament', gameId: session.id , isHost2: false}));
@@ -63,10 +67,11 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 							ws.send(JSON.stringify({ type: 'error', message: 'Game is full or does not exist' }));
 							return;
 						}
-						if (!session.player4) {
-							ws.send(JSON.stringify({ type: 'waiting_for_players', gameId: session.id }));
-						}
-						else {
+						// if (session.player4 === null) {
+						// 	ws.send(JSON.stringify({ type: 'waiting_for_players', gameId: session.id }));
+						// }
+						if (session.player4 && session.player4.readyState === WebSocket.OPEN) {
+							console.log("🚀 Tous les joueurs sont prêts, lancement du tournoi");
 							const message = {
 								type: 'start_tournament',
 								gameId: session.id,
@@ -108,6 +113,40 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 						}
 						else {
 							ws.send(JSON.stringify({ type: 'error', message: 'Game is not ready or does not exist' }));
+						}
+						break;
+					}
+
+					case 'leave_tournament': {
+						console.log("🚪 Client demande de quitter le tournoi");
+
+						if (!data.gameId) {
+							ws.send(JSON.stringify({ type: 'error', message: 'Game ID is required to leave a tournament' }));
+							break;
+						}
+						const session = games.get(data.gameId);
+						if (session) {
+							if (session.player1 === ws) {
+								console.log(`🚪 Host quitte le tournoi: ${data.gameId}`);
+								games.delete(data.gameId);
+							} else if (session.player2 === ws) {
+								console.log(`🚪 Player 2 quitte le tournoi: ${data.gameId}`);
+								session.player2 = null;
+							}
+							else if (session.player3 === ws) {
+								console.log(`🚪 Player 3 quitte le tournoi: ${data.gameId}`);
+								session.player3 = null;
+							}
+							else if (session.player4 === ws) {
+								console.log(`🚪 Player 4 quitte le tournoi: ${data.gameId}`);
+								session.player4 = null;
+							}
+							else {
+								console.warn(`⚠️ leave_tournament reçu, mais socket n'est pas le host ou un joueur de ${data.gameId}`);
+							}
+						}
+						else {
+							console.warn(`⚠️ Aucun session trouvée pour gameId: ${data.gameId}`);
 						}
 						break;
 					}
@@ -226,7 +265,8 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 							gameId: id,
 							roomName: session.roomName || `${session.id}'s room`,
 						}));
-						ws.send(JSON.stringify({ type: 'room_list', rooms: roomList }));
+						const roomListName = roomList.map(room => room.roomName).join(', ');
+						ws.send(JSON.stringify({ type: 'room_list', rooms: roomList, roomName: roomListName }));
 						break;
 					}
 					case 'leave_room': {

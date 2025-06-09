@@ -10,8 +10,16 @@ export const	instantiateGUI = (pong: React.RefObject<game.pongStruct>): void =>
 	pong.current.guiTexture = baby.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, pong.current.scene);
 }
 
-export const	initializeAllGUIScreens = (pong: React.RefObject<game.pongStruct>, gameModes: React.RefObject<game.gameModes>, states: React.RefObject<game.states>, playerStates: React.RefObject<game.playerStates>, lang: React.RefObject<game.lang>, socketRef: React.RefObject<WebSocket | null>, navigate: (path: string) => void): void =>
-{
+export const initializeAllGUIScreens = (
+	pong: React.RefObject<game.pongStruct>,
+	gameModes: React.RefObject<game.gameModes>,
+	states: React.RefObject<game.states>,
+	playerStates: React.RefObject<game.playerStates>,
+	lang: React.RefObject<game.lang>,
+	socketRef: React.RefObject<WebSocket | null>,
+	navigate: (path: string) => void,
+	setGameModeTrigger: React.Dispatch<React.SetStateAction<number>>
+): void =>{
 	// Initialize the GUI texture
 	console.log("initialized GUI texture...");
 	game.instantiateGUI(pong);
@@ -19,7 +27,7 @@ export const	initializeAllGUIScreens = (pong: React.RefObject<game.pongStruct>, 
 	
 	// Initialize all the GUI screens
 	console.log("initialized GUI screens...");
-	game.instantiateMainMenuGUI(pong, states, gameModes, navigate);
+	game.instantiateMainMenuGUI(pong, states, gameModes, navigate, setGameModeTrigger);
 	game.instantiateSettingsGUI(pong, states, lang);
 	game.instentiatePongSettingsGUI(pong, states, gameModes, playerStates);
 	game.instantiateArenaGUI(pong);
@@ -172,25 +180,29 @@ export const	refreshOnlineRoomsEntries = (pong: React.RefObject<game.pongStruct>
 
 export const	refreshTournamentRoomsEntries = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>): baby.StackPanel =>
 {
-	if (!pong.current.rooms)
+	if (!pong.current.party)
 	{
 		console.warn("Rooms map is not initialized !");
 		return (game.createDynamicText("roomsText", "roomListEmpty"));
 	}
-	console.log("🔁 Refreshing room list, rooms =", Array.from(pong.current.rooms.keys()));
+	console.log("🔁 Refreshing room list, rooms =", Array.from(pong.current.party.keys()));
 
 	const	roomsTournamentVerticalPanel = game.createVerticalStackPanel("roomsTournamentVerticalPanel", 0);
-	for (const [key, valueOrGetter] of pong.current.rooms.entries())
+	for (const [key, valueOrGetter] of pong.current.party.entries())
 	{
 		console.log("🧱 Rendering room:", key);
-		const room = valueOrGetter();
-		roomsTournamentVerticalPanel.addControl(room);
+		const party = valueOrGetter();
+		roomsTournamentVerticalPanel.addControl(party);
 	}
 	return roomsTournamentVerticalPanel;
 }
 
-export const    instantiateMainMenuGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>, navigate: (path: string) => void): void =>
-{
+export const    instantiateMainMenuGUI = (pong: React.RefObject<game.pongStruct>,
+	states: React.RefObject<game.states>,
+	gameModes: React.RefObject<game.gameModes>,
+	navigate: (path: string) => void,
+	setGameModeTrigger: React.Dispatch<React.SetStateAction<number>>
+): void => {
 	// Canvas that will be used for the GUI
 	const	mainMenuGUI = game.createScreen("mainMenuGUI");
 	// All GUI components needed
@@ -236,6 +248,7 @@ export const    instantiateMainMenuGUI = (pong: React.RefObject<game.pongStruct>
 	const	remotePong = game.createDynamicButton("remotePong", () =>
 	{
 		gameModes.current = game.gameModes.online;
+		setGameModeTrigger((prev: number) => prev + 1);
 		if (!pong.current.scene) return;
 		states.current = game.states.host_or_join;
 		states.current = game.states.host_or_join;
@@ -243,6 +256,7 @@ export const    instantiateMainMenuGUI = (pong: React.RefObject<game.pongStruct>
 	const	tournamentPong = game.createDynamicButton("tournamentPong", () =>
 	{
 		gameModes.current = game.gameModes.tournament;
+		setGameModeTrigger((prev: number) => prev + 1);
 		if (!pong.current.scene) return;
 		states.current = game.states.host_or_join;
 		states.current = game.states.host_or_join;
@@ -421,7 +435,7 @@ export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct
 				states.current = game.states.hosting_waiting_players;
 				break;
 			case game.gameModes.tournament:
-				states.current = game.states.waiting_tournament_to_start;
+				states.current = game.states.hosting_waiting_players;
 				console.log("🚀🚀🚀 switching to waiting_tournament_to_start 🚀🚀🚀");
 				break;
 			default:
