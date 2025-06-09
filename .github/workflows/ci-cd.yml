@@ -43,6 +43,16 @@ jobs:
           git checkout ${{ github.ref_name }} --force
           git reset --hard origin/${{ github.ref_name }}
 
+      - name: Check GH_TOKEN presence
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          if [ -n "$GH_TOKEN" ]; then
+            echo "✅ GH_TOKEN exists."
+          else
+            echo "❌ GH_TOKEN is missing!"
+          fi
+
       - name: Run semantic-release (main / battleship / Tournament)
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
