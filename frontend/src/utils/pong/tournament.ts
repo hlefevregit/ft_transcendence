@@ -5,6 +5,8 @@ import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
 import { stat } from 'fs';
 
+
+
 export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 	socketRef: React.RefObject<WebSocket | null>,
 	gameModes: React.RefObject<game.gameModes>,
@@ -15,6 +17,24 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 ) => {
 	socketRef.current = ws;
 
+
+
+	// const quitClient = () => {
+	// 	console.log("🏠 Tentative de déconnexion du client WebSocket");
+	// 	if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+	// 		socketRef.current.send(JSON.stringify({
+				// type: 'player_disconnected',
+	// 			gameId: pong.current.tournamentId,
+	// 		}));
+	// 		console.log("🏠 Envoi de la demande de déconnexion");
+	// 	}
+	// 	else {
+	// 		console.warn("⚠️ WebSocket non ouvert, impossible d'envoyer la demande de déconnexion");
+	// 	}
+	// 	socketRef.current = null;
+	// 	pong.current.party.clear();
+	// 	states.current = game.states.party_canceled;
+	// }
 
 	if (ws) {
 		ws.onopen = () => {
@@ -108,7 +128,7 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 						pong.current.tournamentPlayer3Id = data.player3Id;
 						pong.current.tournamentPlayer4Id = data.player4Id;
 
-						states.current = game.states.waiting_tournament_to_start;
+						states.current = game.states.tournament_bracket_preview;
 						break;
 					}
 
@@ -236,6 +256,34 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 						break;
 					}
 
+					// case 'party_canceled': {
+					// 	console.log("🏠 Vous avez quitté la partie:", data.gameId);
+						
+
+					// 	pong.current.party.clear();
+					// 	states.current = game.states.party_canceled;
+						
+
+					// 	break;
+					// }
+
+					case 'player_disconnected': {
+						console.log("⚠️ Un joueur a quitté la partie:", data.playerId);
+						if (data.playerId === pong.current.tournamentPlayer1Id) {
+							pong.current.tournamentPlayer1Id = undefined;
+							pong.current.tournamentPlayer1Score = 0;
+						} else if (data.playerId === pong.current.tournamentPlayer2Id) {
+							pong.current.tournamentPlayer2Id = undefined;
+							pong.current.tournamentPlayer2Score = 0;
+						} else if (data.playerId === pong.current.tournamentPlayer3Id) {
+							pong.current.tournamentPlayer3Id = undefined;
+							pong.current.tournamentPlayer3Score = 0;
+						} else if (data.playerId === pong.current.tournamentPlayer4Id) {
+							pong.current.tournamentPlayer4Id = undefined;
+							pong.current.tournamentPlayer4Score = 0;
+						}
+					}
+
 					default:
 						console.warn("⚠️ Type de message inconnu:", data.type);
 				}
@@ -252,7 +300,7 @@ export const handleTournamentLoop = (
 	userNameRef: React.RefObject<string>,
 	lastHandledState: React.RefObject<game.states>,
 ) => {
-
+	console.log("🔄 Exécution de la boucle de tournoi, state.current = ", states.current);
 	switch (states.current) {
 		case game.states.hosting_waiting_players: {
 			// console.log("🏠 current state = hosting_waiting_players");
@@ -268,6 +316,18 @@ export const handleTournamentLoop = (
 				console.log("🏠 Envoi de la demande d'hébergement de tournoi");
 			}
 			break;
+		}
+
+		case game.states.disconnecting: {
+			console.log("🏠 current state = disconnecting");
+			if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+				console.log("🏠 Envoi de la demande de déconnexion");
+				socketRef.current.send(JSON.stringify({
+					type: 'leave_room',
+					gameId: pong.current.tournamentId,
+				}));
+			}
+			// states.current = game.states.main_menu;
 		}
 
 		case game.states.room_list: {
@@ -287,40 +347,50 @@ export const handleTournamentLoop = (
 		}
 
 
-		case game.states.tournament_bracket_preview: {
-			// Handle tournament bracket preview logic here
-			// This could involve rendering the tournament tree, updating player states, etc.
-			console.log("🏆 Affichage du tableau du tournoi");
-			// states.current = game.states.launch_games;
-			break;
-		}
+		// case game.states.tournament_bracket_preview: {
+		// 	// Handle tournament bracket preview logic here
+		// 	// This could involve rendering the tournament tree, updating player states, etc.
+		// 	console.log("🏆 Affichage du tableau du tournoi");
+		// 	// states.current = game.states.launch_games;
+		// 	break;
+		// }
 
 		case game.states.waiting_tournament_to_start: {
 			
 			// AFFICHER LE PANEL D'ATTENTE
 			console.log("🏆 En attente du début du tournoi");
-		}
-
-		case game.states.launch_games: {
-			console.log("🏆 current state = launch_games");
-			if (pong.current.tournamentPlayer1Id === userNameRef.current) {
-				console.log("🏆 Lancement du premier round game 1");
-				if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-					socketRef.current.send(JSON.stringify({
-						type: 'start_round1_game1',
-						gameId: pong.current.tournamentId,
-					}));
-				} else if (pong.current.tournamentPlayer3Id === userNameRef.current) {
-					console.log("🏆 Lancement du premier round game 2");
-					if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-						socketRef.current.send(JSON.stringify({
-							type: 'start_round1_game2',
-							gameId: pong.current.tournamentId,
-						}));
-					}
-				}
+			if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+				socketRef.current.send(JSON.stringify({
+					type: 'waiting_for_players',
+					gameId: pong.current.tournamentId,
+					player1Id: pong.current.tournamentPlayer1Id,
+					player2Id: pong.current.tournamentPlayer2Id,
+					player3Id: pong.current.tournamentPlayer3Id,
+					player4Id: pong.current.tournamentPlayer4Id,
+				}));
 			}
 		}
+
+		// case game.states.launch_games: {
+		// 	console.log("🏆 current state = launch_games");
+		// 	if (pong.current.tournamentPlayer1Id === userNameRef.current) {
+		// 		console.log("🏆 Lancement du premier round game 1");
+		// 		if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+		// 			socketRef.current.send(JSON.stringify({
+		// 				type: 'start_round1_game1',
+		// 				gameId: pong.current.tournamentId,
+		// 			}));
+		// 		} else if (pong.current.tournamentPlayer3Id === userNameRef.current) {
+		// 			console.log("🏆 Lancement du premier round game 2");
+		// 			if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+		// 				socketRef.current.send(JSON.stringify({
+		// 					type: 'start_round1_game2',
+		// 					gameId: pong.current.tournamentId,
+		// 				}));
+		// 			}
+		// 		}
+		// 	}
+		// }
 		case game.states.tournament_round_1_game_1: {
 			if (
 				socketRef.current &&
