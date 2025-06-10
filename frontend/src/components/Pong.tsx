@@ -168,7 +168,7 @@ const	Pong: React.FC = () =>
 		}
 		else game.manageLocalKeyboardInputs(pong.current);
 
-		const getUsernameFromBackend = async (): Promise<string | null> => {
+		const getIdnameFromBackend = async (): Promise<string | null> => {
 			try {
 				const res = await fetch(`/api/me`, {
 					headers: {
@@ -177,8 +177,8 @@ const	Pong: React.FC = () =>
 				});
 				if (!res.ok) throw new Error("Failed to fetch user");
 				const data = await res.json();
-				console.log("Username récupéré:", data.pseudo);
-				return data.pseudo;
+				console.log("Username récupéré:", data.id);
+				return data.id;
 			} catch (err) {
 				console.error("❌ Erreur récupération username:", err);
 				return null;
@@ -187,8 +187,19 @@ const	Pong: React.FC = () =>
 
 
 
-		const userId = getUsernameFromBackend();
-		console.log("User ID récupéré:", userId);
+		getIdnameFromBackend().then((id) => {
+			if (id) {
+				userNameRef.current = id;
+				console.log("✅ Username set to:", userNameRef.current);
+			} else {
+				console.warn("⚠️ Username not found, fallback to 'Player'");
+				userNameRef.current = 'Player';
+			}
+		}).catch((err) => {
+			console.error("❌ Erreur récupération du nom d'utilisateur:", err);
+			userNameRef.current = 'Player'; // fallback
+		});
+
 		// userId.then((name) => {
 		// 	if (name) {
 		// 		userNameRef.current = name;
@@ -202,13 +213,13 @@ const	Pong: React.FC = () =>
 		// 	userNameRef.current = 'Player'; // Fallback to default name
 		// });
 
-		if (!pong.current.scene) return;
-		pong.current.scene.debugLayer.show
-		({
-			embedMode: true,
-			handleResize: true,
-			overlay: true,
-		});
+		// if (!pong.current.scene) return;
+		// pong.current.scene.debugLayer.show
+		// ({
+		// 	embedMode: true,
+		// 	handleResize: true,
+		// 	overlay: true,
+		// });
 
 
 		// Game loop
