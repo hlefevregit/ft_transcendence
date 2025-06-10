@@ -15,3 +15,5 @@ export * from '@/utils/pong/GUIOnline';
 export * from '@/components/BG';
 
 export * from '@/utils/pong/onlineWS';
+
+export * from '@/utils/pong/tournament';

@@ -97,6 +97,21 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 
 					}
 
+					case 'waiting_for_players': {
+						const session = games.get(data.gameId);
+						if (session) {
+							const message = {
+								type: 'waiting_for_players',
+								gameId: session.id,
+								roomName: session.roomName || `${session.id}'s room`,
+							};
+							ws.send(JSON.stringify(message));
+						} else {
+							ws.send(JSON.stringify({ type: 'error', message: 'Game does not exist' }));
+						}
+						break;
+					}
+
 					case 'start_round1_game1' : {
 						const session = games.get(data.gameId);
 						if (session && session.player1 && session.player2) {
@@ -279,18 +294,30 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 						if (session) {
 							if (session.player1 === ws) {
 								console.log(`🚪 Host quitte la room: ${data.gameId}`);
+								session.broadcast({
+									type: 'party_canceled',
+									player1Id: session.player1Id,
+									player2Id: session.player2Id,
+									player1Score: session.score1_game1,
+									player2Score: session.score2_game1,
+									reason: 'forfeit'
+								});
 								games.delete(data.gameId);
+								
 							} else if (session.player2 === ws) {
 								console.log(`🚪 Player 2 quitte la room: ${data.gameId}`);
 								session.player2 = null;
+								ws.send(JSON.stringify({ type: 'player_disconnected', gameId: data.gameId }))
 							}
 							else if (session.player3 === ws) {
 								console.log(`🚪 Player 3 quitte la room: ${data.gameId}`);
+								ws.send(JSON.stringify({ type: 'player_disconnected', gameId: data.gameId }))
 								session.player3 = null;
 							}
 							else if (session.player4 === ws) {
 								console.log(`🚪 Player 4 quitte la room: ${data.gameId}`);
 								session.player4 = null;
+								ws.send(JSON.stringify({ type: 'player_disconnected', gameId: data.gameId }))
 							}
 							else {
 								console.warn(`⚠️ leave_room reçu, mais socket n'est pas le host ou un joueur de ${data.gameId}`);
@@ -314,23 +341,50 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 		ws.on('close', () => {
 			console.log("🔌 Client déconnecté");
 
-			// const session = [...games.values()].find(s => s.player1 === ws || s.player2 === ws);
-			// if (!session) return;
+			const session = [...games.values()].find(s => s.player1 === ws || s.player2 === ws);
+			if (!session) return;
 
-			// const gameId = session.id;
-			// const isHost = session.player1 === ws;
-			// const winnerSocket = isHost ? session.player2 : session.player1;
-			// const winner = isHost ? session.player2Id : session.player1Id;
-
-			// console.log(`❌ ${isHost ? 'Host' : 'Player 2'} disconnected — Forfeit win for ${winner}`);
-
-			// if (winnerSocket && winnerSocket.readyState === WebSocket.OPEN) {
-			// 	winnerSocket.send(JSON.stringify({
-			// 		type: 'game_finished',
-			// 		reason: 'forfeit',
-			// 		winner: winner
-			// 	}));
+			// if (session.player1 === ws) {
+			// 	console.log(`🚪 Host quitte la room: ${session.id}`);
+			// 	games.delete(session.id);
+			// } else if (session.player2 === ws) {
+			// 	console.log(`🚪 Player 2 quitte la room: ${session.id}`);
+			// 	session.player2 = null;
+			// } else if (session.player3 === ws) {
+			// 	console.log(`🚪 Player 3 quitte la room: ${session.id}`);
+			// 	session.player3 = null;
+			// } else if (session.player4 === ws) {
+			// 	console.log(`🚪 Player 4 quitte la room: ${session.id}`);
+			// 	session.player4 = null;
 			// }
+			// else {
+			// 	console.warn(`⚠️ Client déconnecté, mais socket n'est pas le host ou un joueur de ${session.id}`);
+			// }
+			const gameId = session.id;
+			const isHost = session.player1 === ws;
+			if (isHost) {
+				console.log(`❌ Host déconnecté — Victoire par forfait pour ${session.player2Id}`);
+				session.broadcast({
+					type: 'party_canceled',
+					player1Id: session.player1Id,
+					player2Id: session.player2Id,
+					player1Score: session.score1_game1,
+					player2Score: session.score2_game1,
+					reason: 'forfeit'
+				});
+				games.delete(session.id);
+			}
+			else {
+				const playerId = session.getPlayerId(ws);
+				session.setPlayerToNull(ws);
+				console.log(`❌ Player déconnecté — Victoire par forfait pour ${session.player1Id}`);
+				session.broadcast({
+					type: 'player_disconnected',
+					playerId: playerId,
+				});
+
+			}
+		
 		});
 	});
 }

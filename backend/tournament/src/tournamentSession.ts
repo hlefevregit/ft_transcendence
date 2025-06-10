@@ -79,6 +79,30 @@ export class tournamentSession {
 		this.player4Id = player4Id;
 	}
 
+	getPlayerId(socket: WebSocket): string | null {
+		if (this.player1 === socket) return this.player1Id;
+		if (this.player2 === socket) return this.player2Id;
+		if (this.player3 === socket) return this.player3Id;
+		if (this.player4 === socket) return this.player4Id;
+		return null;
+	}
+	setPlayerToNull(socket: WebSocket) {
+		if (this.player1 === socket) {
+			this.player1 = null as any; // Type assertion to allow setting to null
+		} else if (this.player2 === socket) {
+			this.player2 = null;
+		} else if (this.player3 === socket) {
+			this.player3 = null;
+		} else if (this.player4 === socket) {
+			this.player4 = null;
+		} else if (this.finalist1 === socket) {
+			this.finalist1 = null;
+		} else if (this.finalist2 === socket) {
+			this.finalist2 = null;
+		} else {
+			console.warn('Socket not found in session:', socket);
+		}
+	}
 	// handleGameUpdate(data: any) {
 	// 	const state: any = { type: 'state_update' };
 

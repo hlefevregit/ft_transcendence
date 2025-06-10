@@ -37,7 +37,7 @@ export const initializeAllGUIScreens = (
 	game.instantiateRoomListGUI(pong, states, gameModes, socketRef);
 	game.instantiateWaitingScreenGUI(pong, states);
 	game.instantiateWaitingTournamentToStartGUI(pong, states);
-	game.instantiateBracketGUI(pong, states, gameModes);
+	game.instantiateBracketGUI(pong, states, gameModes, socketRef);
 	game.instantiateInputUsernameGUI(pong, states, gameModes, playerStates);
 	game.instantiateDebugGUI(pong, states, gameModes, playerStates, lang);
 	// etc.
@@ -1100,8 +1100,11 @@ export const	instantiateWaitingTournamentToStartGUI = (pong: React.RefObject<gam
 	// pong.current.guiTexture?.addControl(waitingTournamentToStartGUI);
 }
 
-export const instantiateBracketGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>): void =>
-{
+export const instantiateBracketGUI = (pong: React.RefObject<game.pongStruct>,
+	states: React.RefObject<game.states>,
+	gameModes: React.RefObject<game.gameModes>,
+	socketRef: React.RefObject<WebSocket | null>
+): void => {
 	const	bracketGUI = game.createScreen("bracketGUI", "center");
 	const	bracketContainer = game.createAdaptiveContainer("bracketContainer", "800px", "600px");
 
@@ -1151,6 +1154,15 @@ export const instantiateBracketGUI = (pong: React.RefObject<game.pongStruct>, st
 	// Abandon button
 	const	bracketAbandonButton = game.createDynamicButton("bracketAbandonButton", () =>
 	{
+		if (gameModes.current !== game.gameModes.none) {
+		// ✅ Envoie le leave_room au serveur
+			if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+				socketRef.current.send(JSON.stringify({
+					type: 'leave_room',
+					gameId: pong.current.tournamentId, // Assure-toi que tournamentId est bien set !
+				}));
+			}
+		}
 		states.current = game.states.main_menu;
 		gameModes.current = game.gameModes.none;
 		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
