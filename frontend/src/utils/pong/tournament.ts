@@ -17,7 +17,7 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 ) => {
 	socketRef.current = ws;
 
-
+	console.log(userNameRef.current, "is hosting a tournament? ", gameModes.current === game.gameModes.tournament);
 
 	// const quitClient = () => {
 	// 	console.log("🏠 Tentative de déconnexion du client WebSocket");
@@ -142,7 +142,12 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 						pong.current.tournamentPlayer3Id = data.player3Id;
 						pong.current.tournamentPlayer4Id = data.player4Id;
 
-						states.current = game.states.tournament_bracket_preview;
+						console.log(" USERNAME REF:", userNameRef.current);
+						console.log(" PLAYER 1 ID:", pong.current.tournamentPlayer1Id);
+						console.log(" PLAYER 2 ID:", pong.current.tournamentPlayer2Id);
+						console.log(" PLAYER 3 ID:", pong.current.tournamentPlayer3Id);
+						console.log(" PLAYER 4 ID:", pong.current.tournamentPlayer4Id);
+						// states.current = game.states.launch_games;
 						break;
 					}
 
@@ -371,26 +376,26 @@ export const handleTournamentLoop = (
 			}
 		}
 
-		// case game.states.launch_games: {
-		// 	console.log("🏆 current state = launch_games");
-		// 	if (pong.current.tournamentPlayer1Id === userNameRef.current) {
-		// 		console.log("🏆 Lancement du premier round game 1");
-		// 		if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-		// 			socketRef.current.send(JSON.stringify({
-		// 				type: 'start_round1_game1',
-		// 				gameId: pong.current.tournamentId,
-		// 			}));
-		// 		} else if (pong.current.tournamentPlayer3Id === userNameRef.current) {
-		// 			console.log("🏆 Lancement du premier round game 2");
-		// 			if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-		// 				socketRef.current.send(JSON.stringify({
-		// 					type: 'start_round1_game2',
-		// 					gameId: pong.current.tournamentId,
-		// 				}));
-		// 			}
-		// 		}
-		// 	}
-		// }
+		case game.states.launch_games: {
+			console.log("🏆 current state = launch_games");
+			if (pong.current.tournamentPlayer1Id === userNameRef.current) {
+				console.log("🏆 Lancement du premier round game 1");
+				if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+					socketRef.current.send(JSON.stringify({
+						type: 'start_round1_game1',
+						gameId: pong.current.tournamentId,
+					}));
+				} else if (pong.current.tournamentPlayer3Id === userNameRef.current) {
+					console.log("🏆 Lancement du premier round game 2");
+					if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+						socketRef.current.send(JSON.stringify({
+							type: 'start_round1_game2',
+							gameId: pong.current.tournamentId,
+						}));
+					}
+				}
+			}
+		}
 		case game.states.tournament_round_1_game_1: {
 			if (
 				socketRef.current &&
@@ -437,16 +442,20 @@ export const handleTournamentLoop = (
 			if (pong.current.engine) {
 				pong.current.countdown -= pong.current.engine.getDeltaTime() / 1000;
 			}
+			// console.log(" USERNAME REF:", userNameRef.current);
+			
 			if (pong.current.countdown <= 0)
 			{
 				pong.current.countdown = 4;
 				if (userNameRef.current === pong.current.tournamentPlayer1Id || userNameRef.current === pong.current.tournamentPlayer2Id) {
+					console.log("🏆 Démarrage de partie 1 en cours");
 					states.current = game.states.in_game1;
 				}
 				else if (userNameRef.current === pong.current.tournamentPlayer3Id || userNameRef.current === pong.current.tournamentPlayer4Id) {
+					console.log("🏆 Démarrage de partie 2 en cours");
 					states.current = game.states.in_game2;
 				}
-				console.log("🏆 Démarrage du jeu après le compte à rebours");
+				// console.log("🏆 Démarrage du jeu après le compte à rebours");
 			}
 			break;
 		}
@@ -454,7 +463,7 @@ export const handleTournamentLoop = (
 		case game.states.in_game1: {
 			const now = Date.now();
 			const timeSinceLastUpdate = now - (pong.current.lastUpdateSetAt || 0);
-
+			console.log("🔄 In game1, time since last update:", timeSinceLastUpdate, "ms");
 			if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
 				game.fitCameraToArena(pong.current);
 
