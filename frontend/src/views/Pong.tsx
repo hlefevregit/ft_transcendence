@@ -1,4 +1,3 @@
-// imports
 import React, { use } from 'react';
 import { useNavigate } from 'react-router-dom';
 

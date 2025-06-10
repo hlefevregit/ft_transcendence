@@ -1,0 +1,71 @@
+.cd-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0; transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 10000; /* sit above everything, even avatars */
+}
+
+.cd-overlay.in {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.cd-box {
+  background: #fff;
+  border-radius: 8px;
+  padding: 32px;        /* a bit larger */
+  max-width: 90%;
+  width: 360px;         /* a bit wider */
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  transform: translateY(-20px);
+  transition: transform 0.3s ease;
+}
+
+.cd-overlay.in .cd-box {
+  transform: translateY(0);
+}
+.cd-overlay.out .cd-box {
+  transform: translateY(-20px);
+}
+
+.cd-message {
+  margin-bottom: 24px;
+  font-size: 1.1rem;
+  color: #374151;
+  text-align: center;
+}
+
+.cd-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.cd-btn {
+  padding: 10px 24px;   /* larger tap target */
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.cd-cancel {
+  background: #f3f4f6;
+}
+.cd-cancel:hover {
+  background: #e5e7eb;
+}
+
+.cd-confirm {
+  background: #ef4444;
+  color: #fff;
+}
+.cd-confirm:hover {
+  background: #dc2626;
+}
