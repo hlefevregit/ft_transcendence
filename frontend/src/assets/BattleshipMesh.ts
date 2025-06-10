@@ -7,7 +7,7 @@ class BattleshipMesh extends Mesh {
     field: Mesh
     cells: Mesh[] = []
 
-    constructor(name: string, scene: Scene, onClick: (ij:number, evt:ActionEvent) => void, position?: Vector3, rotation?: Vector3) {
+    constructor(name: string, scene: Scene, onClick: (ij:number, evt:ActionEvent) => void, position?: Vector3, rotation?: number) {
         super(name, scene);
 
 		// Cylinder pivot for the screen's rotating animation. Mostly aesthetic
@@ -29,7 +29,10 @@ class BattleshipMesh extends Mesh {
 				cell.actionManager = new ActionManager(scene);
 				cell.actionManager.registerAction(new ExecuteCodeAction(
 					ActionManager.OnPickTrigger,
-					(event) => onClick(i*10 + j, event))
+					(event) => {
+						event.additionalData = name;
+						onClick(i*10 + j, event);
+					})
 				);
                 this.cells.push(cell);
             }
@@ -45,7 +48,7 @@ class BattleshipMesh extends Mesh {
         if (position !== undefined)
             this.position.addInPlace(position);
         if (rotation !== undefined)
-            this.rotation.addInPlace(rotation);
+            this.rotation.y += rotation;
     }
 }
 
