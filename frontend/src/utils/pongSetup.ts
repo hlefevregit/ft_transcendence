@@ -92,6 +92,8 @@ export enum states
 	waiting_to_start_final,
 	tournament_final,
 	tournament_final_game_finished,
+	party_canceled,
+	disconnecting,
 }
 
 export type pongStruct =

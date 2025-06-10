@@ -58,6 +58,13 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
 				avatarUrl: newUser.avatarUrl,
 				status: newUser.status,
 				twoFAEnabled: newUser.twoFAEnabled
+			} as {
+				id: number;
+				email: string;
+				pseudo: string;
+				avatarUrl?: string;
+				status?: string;
+				twoFAEnabled: boolean;
 			}
 		});
 	});

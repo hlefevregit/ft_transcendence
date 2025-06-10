@@ -6,7 +6,7 @@
 #    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/05/28 12:14:03 by hulefevr         ###   ########.fr        #
+#    Updated: 2025/06/09 14:59:48 by hulefevr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -109,7 +109,7 @@ reset-db:
 	@echo "🗑️  Suppression de la base SQLite..."
 	rm -f ./backend/dev.db
 	@echo "🔄 Réinitialisation de la base avec Prisma..."
-	cd backend && npx prisma migrate reset --force
+	cd backend/main && npx prisma migrate reset --force
 	@echo "✅ Base de données réinitialisée."
 
 rebuild:

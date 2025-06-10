@@ -27,5 +27,5 @@ fastify.post('/join', async (req, res) => {
 });
 
 server.listen(4002, '0.0.0.0', () => {
-    fastify.log.info('🟢 Server (Fastify + WebSocket) listening on http://${LOCALHOST}:4000');
+    fastify.log.info('🟢 Server (Fastify + WebSocket) listening on http://${LOCALHOST}:4002');
 });

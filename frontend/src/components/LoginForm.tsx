@@ -76,8 +76,8 @@ const LoginForm: React.FC = () => {
       if (res.success) {
         localStorage.setItem('authToken', res.token);
         const user = res.user;
-        localStorage.setItem('pseudo', user.pseudo || ''); // stocke le nom d'utilisateur
-        localStorage.setItem('userId', user.id); // ou un string unique
+        // localStorage.setItem('pseudo', user.pseudo || ''); // stocke le nom d'utilisateur
+        // localStorage.setItem('userId', user.id); // ou un string unique
         navigate('/game1');
       } else {
         setError(res.message || 'Google login failed');
