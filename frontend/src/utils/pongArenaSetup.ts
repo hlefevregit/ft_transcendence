@@ -28,6 +28,11 @@ export const	setupBabylon = async (pong: game.pongStruct, canvasRef: any): Promi
 	pong.paddle1 = paddle1Mesh;
 	pong.paddle2 = paddle2Mesh;
 	game.resetPaddlesPosition(pong);
+	const	PREDICT = baby.MeshBuilder.CreateBox("predict", { width: .2, height: 0.75, depth: .2 }, sceneInstance);
+	const	predictMaterial = new baby.StandardMaterial("predictMaterial", sceneInstance);
+			predictMaterial.diffuseColor = new baby.Color3(1, 0, 0); // Red color (R=1, G=0, B=0)
+			PREDICT.material = predictMaterial;
+	pong.PREDICT = PREDICT;
 	
 	const	cameraInstance = new baby.FreeCamera("mainMenuCam", new baby.Vector3(-40.0, 2.0, 25.0), sceneInstance);
 	cameraInstance.setTarget(baby.Vector3.Zero());

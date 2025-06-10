@@ -86,6 +86,7 @@ export enum states
 	tournament_round_1_game_2,
 	in_game1,
 	in_game2,
+	input_username,
 	game1_finished,
 	game2_finished,
 	waiting_to_start_final,
@@ -99,6 +100,7 @@ export type pongStruct =
 	engine?: baby.Engine;
 	scene?: baby.Scene;
 	skybox?: baby.Mesh;
+	PREDICT?: baby.Mesh;
 
 	// Cameras
 	transitionCam?: baby.FreeCamera;
@@ -137,6 +139,8 @@ export type pongStruct =
 	
 	player1Score: number;
 	player2Score: number;
+
+	username?:string;
 	
 	// Tournament-specific properties
 	tournamentPlayerCount: number;
@@ -197,6 +201,7 @@ export type pongStruct =
 	roomListTournamentVerticalStackPanel?: baby.StackPanel;
 	waitingTournamentToStartGUI?: baby.Container;
 	bracketGUI?: baby.Container;
+	inputUsernameGUI?: baby.Container;
 
 	// Other components bindings
 	waitingTournamentToStartButtonBack?: baby.StackPanel;
@@ -265,79 +270,80 @@ export function initPongStruct(): pongStruct
 export const	label =
 {
 	// Actions
-	back: ["Back ↩", "Retour ↩", "Indietro ↩", "⠨⠗⠑⠞⠕⠥⠗ ↩"],
-	play: ["Play ▸", "Jouer ▸", "Giaoca ▸", "⠨⠚⠕⠥⠑⠗ ▸"],
-	replay: ["Replay ↻", "Rejouer ↻", "Rigioca ↻", "⠨⠗⠑⠚⠕⠥⠑⠗ ↻"],
-	join: ["Join ⬇", "Rejoindre ⬇", "Unisciti ⬇", "⠨⠗⠑⠚⠕⠊⠝⠙⠗⠑ ⬇"],
-	host: ["Host 🏠︎", "Héberger 🏠︎", "Hosta 🏠︎", "⠨⠓⠿⠃⠑⠗⠛⠑⠗ 🏠︎"],
+	back: ["Back ↩", "Retour ↩", "Indietro ↩", "⠨⠃⠁⠉⠅ ↩"],
+	play: ["Play ▸", "Jouer ▸", "Giaoca ▸", "⠨⠏⠇⠁⠽ ▸"],
+	replay: ["Replay ↻", "Rejouer ↻", "Rigioca ↻", "⠨⠗⠑⠏⠇⠁⠽ ↻"],
+	join: ["Join ⬇", "Rejoindre ⬇", "Unisciti ⬇", "⠨⠚⠕⠊⠝ ⬇"],
+	host: ["Host 🏠︎", "Héberger 🏠︎", "Hosta 🏠︎", "⠨⠓⠕⠎⠞ 🏠︎"],
 	refresh: ["Refresh ⟳", "Rafraîchir ⟳", "Aggiorna ⟳", "⠨⠗⠑⠋⠗⠑⠎⠓ ⟳"],
 	cancel: ["Cancel ×", "Annuler ×", "Annulla ×", "⠨⠉⠁⠝⠉⠑⠇ ×"],
-	continue: ["Continue ▸", "Continuer ▸", "Continua ▸", "⠨⠉⠕⠝⠞⠊⠝⠥⠑⠗ ▸"],
-	abandon: ["Abandon ×", "Abandonner ×", "Abbandona ×", "⠨⠁⠃⠁⠝⠙⠕⠝⠑ ×"],
-	versus: ["Versus", "Contre", "Contro", "⠨⠉⠕⠝⠞⠗⠑"],
+	continue: ["Continue ▸", "Continuer ▸", "Continua ▸", "⠨⠉⠕⠝⠞⠊⠝⠥⠑ ▸"],
+	abandon: ["Abandon ×", "Abandonner ×", "Abbandona ×", "⠨⠁⠃⠁⠝⠙⠕⠝ ×"],
+	versus: ["Versus", "Contre", "Contro", "⠨⠧⠑⠗⠎⠥⠎"],
 
 
 	// Main menu
-	mainMenuTitle: ["Pong Game", "Jeu Pong", "Gioco Pong", "⠨⠚⠑⠥ ⠨⠏⠕⠝⠛"],
-	mainMenu: ["Main Menu", "Menu Principal", "Menu Principale", "⠨⠍⠑⠝⠥ ⠨⠏⠗⠊⠝⠉⠊⠏⠁⠇⠑"],
-	playLocally: ["Play Locally ⌨", "Jouer en local ⌨", "Gioca in locale ⌨", "⠨⠚⠕⠥⠑⠗ ⠨⠇⠕⠉⠁⠇ ⌨"],
-	playAgainstAI: ["Play against\nAI ☹", "Jouer contre\nl'IA ☹", "Gioca contro\nl'IA ☹", "⠨⠚⠕⠥⠑⠗ ⠨⠉⠕⠝⠞⠗⠑\n ⠨⠁⠊ ☹"],
-	playOnline: ["Play Online 🖧", "Jouer en ligne 🖧", "Gioca online 🖧", "⠨⠚⠕⠥⠑⠗ ⠑⠝ ⠇⠊⠛⠝⠑ 🖧"],
-	playTournament: ["Play Tournament 🎖", "Jouer au tournoi 🎖", "Gioca al torneo 🎖", "⠨⠚⠕⠥⠑⠗ ⠁⠥ ⠞⠕⠥⠗⠝⠕⠊ 🎖"],
+	mainMenuTitle: ["Pong Game", "Jeu Pong", "Gioco Pong", "⠨⠏⠕⠝⠛ ⠨⠛⠁⠍⠑"],
+	mainMenu: ["Main Menu", "Menu Principal", "Menu Principale", "⠨⠍⠁⠊⠝ ⠨⠍⠑⠝⠥"],
+	playLocally: ["Play Locally ⌨", "Jouer en local ⌨", "Gioca in locale ⌨", "⠨⠏⠇⠁⠽ ⠨⠇⠕⠉⠁⠇⠇⠽ ⌨"],
+	playAgainstAI: ["Play against\nAI ☹", "Jouer contre\nl'IA ☹", "Gioca contro\nl'IA ☹", "⠨⠏⠇⠁⠽ ⠁⠛⠁⠊⠝⠎⠞\n⠨⠁⠊ ☹"],
+	playOnline: ["Play Online 🖧", "Jouer en ligne 🖧", "Gioca online 🖧", "⠨⠏⠇⠁⠽ ⠨⠕⠝⠇⠊⠝⠑ 🖧"],
+	playTournament: ["Play Tournament 🎖", "Jouer au tournoi 🎖", "Gioca al torneo 🎖", "⠨⠏⠇⠁⠽ ⠨⠞⠕⠥⠗⠝⠁⠍⠑⠝⠞ 🎖"],
 	settings:["Settings ⚙", "Paramètres ⚙", "Impostazioni ⚙", "⠨⠎⠑⠞⠞⠊⠝⠛⠎ ⚙"],
 	gameSettings: ["Game Settings ⚙", "Paramètres ⚙", "Impostazioni ⚙", "⠨⠛⠁⠍⠑ ⠨⠎⠑⠞⠞⠊⠝⠛⠎ ⚙"],
-	returnToMuseumButton: ["Return to Museum 🏛︎", "Retour au musée 🏛︎", "Torna al museo 🏛︎", "⠨⠗⠑⠞⠕⠥⠗ ⠁⠥ ⠍⠥⠎⠿⠑ 🏛︎"],
+	returnToMuseumButton: ["Return to Museum 🏛︎", "Retour au musée 🏛︎", "Torna al museo 🏛︎", "⠨⠗⠑⠞⠥⠗⠝ ⠞⠕ ⠨⠍⠥⠎⠑⠥⠍ 🏛︎"],
 
 	// Settings
-	settingsMusic: ["♫ Music:", "♫ Musique:", "♫ Musica:", "♫ ⠨⠍⠥⠎⠊⠉: "],
-	settingsSound: ["🗣 Sound:", "🗣 Son:", "🗣 Suono:", "🗣 ⠨⠎⠕⠝⠒"],
+	settingsMusic: ["♫ Music:", "♫ Musique:", "♫ Musica:", "♫ ⠨⠍⠥⠎⠊⠉⠒: "],
+	settingsSound: ["🗣 Sound:", "🗣 Son:", "🗣 Suono:", "🗣 ⠨⠎⠕⠥⠝⠙⠒"],
 
 	// Pong Settings
 	pongSettingsTitle: ["Pong Settings", "Paramètres du Pong", "Impostazioni Pong", "⠨⠏⠕⠝⠛ ⠨⠎⠑⠞⠞⠊⠝⠛⠎"],
-	pointsRequiredToWin: ["Points required to win:", "Points requis pour gagner:", "Punti richiesti per vincere:", "⠨⠏⠕⠝⠞ ⠨⠗⠑⠟⠥⠊ ⠨⠋⠕⠥⠗ ⠨⠛⠁⠝⠝⠑⠗:"],
-	arenaHeight: ["Arena height:", "Hauteur de l'arène:", "Altezza dell'arena:", "⠨⠁⠗⠑⠝⠁ ⠨⠓⠑⠊⠛⠓⠞:"],
-	arenaWidth: ["Arena width:", "Largeur de l'arène:", "Larghezza dell'arena:", "⠨⠁⠗⠑⠝⠁ ⠨⠺⠊⠙⠞⠓:"],
-	paddleHeight: ["Paddle height:", "Hauteur de la raquette:", "Altezza della racchetta:", "⠨⠏⠁⠙⠙⠇⠑ ⠨⠓⠑⠊⠛⠓⠞:"],
-	paddleSpeed: ["Paddle speed:", "Vitesse de la raquette:", "Velocità della racchetta:", "⠨⠏⠁⠙⠙⠇⠑ ⠨⠎⠏⠑⠑⠙:"],
-	ballSpeed: ["Ball speed:", "Vitesse de la balle:", "Velocità della palla:", "⠨⠃⠁⠇⠇ ⠨⠎⠏⠑⠑⠙:"],
-	maxBallSpeed: ["Max ball speed:", "Vitesse maximale de la balle:", "Velocità massima della palla:", "⠨⠍⠁⠭ ⠨⠃⠁⠇⠇ ⠨⠎⠏⠑⠑⠙:"],
+	pointsRequiredToWin: ["Points required to win:", "Points requis pour gagner:", "Punti richiesti per vincere:", "⠨⠏⠕⠊⠝⠞⠎ ⠗⠑⠟⠥⠊⠗⠑⠙ ⠞⠕ ⠺⠊⠝⠒"],
+	arenaHeight: ["Arena height:", "Hauteur de l'arène:", "Altezza dell'arena:", "⠨⠁⠗⠑⠝⠁ ⠓⠑⠊⠛⠓⠞⠒"],
+	arenaWidth: ["Arena width:", "Largeur de l'arène:", "Larghezza dell'arena:", "⠨⠁⠗⠑⠝⠁ ⠺⠊⠙⠞⠓⠒"],
+	paddleHeight: ["Paddle height:", "Hauteur de la raquette:", "Altezza della racchetta:", "⠨⠏⠁⠙⠙⠇⠑ ⠓⠑⠊⠛⠓⠞⠒"],
+	paddleSpeed: ["Paddle speed:", "Vitesse de la raquette:", "Velocità della racchetta:", "⠨⠏⠁⠙⠙⠇⠑ ⠎⠏⠑⠑⠙⠒"],
+	ballSpeed: ["Ball speed:", "Vitesse de la balle:", "Velocità della palla:", "⠨⠃⠁⠇⠇ ⠎⠏⠑⠑⠙⠒"],
+	maxBallSpeed: ["Max ball speed:", "Vitesse maximale de la balle:", "Velocità massima della palla:", "⠨⠍⠁⠭ ⠃⠁⠇⠇ ⠎⠏⠑⠑⠙⠒"],
 
 	// Coutdown
-	startingIn: ["Starting in", "Début dans", "Inizio tra", "⠨⠎⠞⠁⠗⠞ ⠨⠊⠝"],
+	startingIn: ["Starting in", "Début dans", "Inizio tra", "⠨⠎⠞⠁⠗⠞⠊⠝⠛ ⠊⠝"],
 
 	// Arena
 	arenaScoreTitle: ["Score", "Score", "Punteggio", "⠨⠎⠉⠕⠗⠑"],
-	arenaPlayer1: ["Player 1:", "Joueur 1:", "Giocatore 1:", "⠨⠏⠇⠁⠽⠑⠗ 1:"],
-	arenaPlayer2: ["Player 2:", "Joueur 2:", "Giocatore 2:", "⠨⠏⠇⠁⠽⠑⠗ 2:"],
-	arenaRequiredPoints: ["Required points to win:", "Points requis pour gagner:", "Punti richiesti per vincere:", "⠨⠏⠕⠝⠞ ⠨⠗⠑⠟⠥⠊ ⠨⠋⠕⠥⠗ ⠨⠛⠁⠝⠝⠑⠗:"],
+	arenaPlayer1: ["Player 1:", "Joueur 1:", "Giocatore 1:", "⠨⠏⠇⠁⠽⠑⠗ ⠼⠁⠒"],
+	arenaPlayer2: ["Player 2:", "Joueur 2:", "Giocatore 2:", "⠨⠏⠇⠁⠽⠑⠗ ⠼⠃⠒"],
+	arenaRequiredPoints: ["Required points to win:", "Points requis pour gagner:", "Punti richiesti per vincere:", "⠨⠗⠑⠟⠥⠊⠗⠑⠙ ⠏⠕⠊⠝⠞⠎ ⠞⠕ ⠺⠊⠝⠒"],
 
 	// Finished Game
-	resultPlayer1: ["Player 1", "Joueur 1", "Giocatore 1", "⠨⠏⠇⠁⠽⠑⠗ 1"],
-	resultPlayer2: ["Player 2", "Joueur 2", "Giocatore 2", "⠨⠏⠇⠁⠽⠑⠗ 2"],
-	finishedGameTitle: ["Game Finished", "Partie terminée", "Gioco terminato", "⠨⠛⠁⠍⠑ ⠨⠞⠑⠗⠍⠊⠝é"],
-	winner: ["Winner:", "Gagnant:", "Vincitore:", "⠨⠺⠊⠝⠝⠑⠗:"],
-	looser: ["Loser:", "Perdant:", "Perdente:", "⠨⠇⠕⠕⠎⠑⠗:"],
-	scored: ["| Scored:", "| A marqué:", "| Ha segnato:", "| ⠨⠎⠉⠕⠗⠑⠙⠒"],
+	resultPlayer1: ["Player 1", "Joueur 1", "Giocatore 1", "⠨⠏⠇⠁⠽⠑⠗ ⠼⠁"],
+	resultPlayer2: ["Player 2", "Joueur 2", "Giocatore 2", "⠨⠏⠇⠁⠽⠑⠗ ⠼⠃"],
+	finishedGameTitle: ["Game Finished", "Partie terminée", "Gioco terminato", "⠨⠛⠁⠍⠑ ⠨⠋⠊⠝⠊⠎⠓⠑⠙"],
+	winner: ["Winner:", "Gagnant:", "Vincitore:", "⠨⠺⠊⠝⠝⠑⠗⠒"],
+	looser: ["Loser:", "Perdant:", "Perdente:", "⠨⠇⠕⠎⠑⠗⠒"],
+	scored: ["| Scored:", "| A marqué:", "| Ha segnato:", "⠨⠎⠉⠕⠗⠑⠙⠒"],
 
 	// Host or Join
 	hostText: ["Host", "Héberger", "Hosta", "⠨⠓⠕⠎⠞"],
-	joinText: ["Join", "Rejoindre", "Unisciti", "⠨⠗⠑⠚⠕⠊⠝"],
+	joinText: ["Join", "Rejoindre", "Unisciti", "⠨⠚⠕⠊⠝"],
 
 	// Room List
 	roomListTitle: ["Room List", "Liste des salles", "Elenco delle stanze", "⠨⠗⠕⠕⠍ ⠨⠇⠊⠎⠞"],
 	roomListEmpty: ["No rooms available", "Aucune salle disponible", "Nessuna stanza disponibile",, "⠨⠝⠕ ⠗⠕⠕⠍⠎ ⠁⠧⠁⠊⠇⠁⠃⠇⠑" ],
-	roomListJoin: ["Join Room", "Rejoindre la salle", "Unisciti alla stanza", "⠨⠗⠑⠚⠕⠊⠝ ⠨⠗⠕⠕⠍"],
+	roomListJoin: ["Join Room", "Rejoindre la salle", "Unisciti alla stanza", "⠨⠚⠕⠊⠝ ⠨⠗⠕⠕⠍"],
 
 	// Waiting Screen
-	waitingForPlayers: ["Waiting for players...", "En attente de joueurs...", "In attesa di giocatori...", "⠨⠺⠁⠊⠞⠊⠝⠛ ⠨⠋⠕⠗ ⠨⠏⠇⠁⠽⠑⠗⠎..."],
+	waitingForPlayers: ["Waiting for players...", "En attente de joueurs...", "In attesa di giocatori...", "⠨⠺⠁⠊⠞⠊⠝⠛ ⠋⠕⠗ ⠏⠇⠁⠽⠑⠗⠎⠲⠲⠲"],
 
 	// Tournament Settings
-	waitingTournamentToStartTitle: ["Waiting for tournament to start", "En attente du tournoi", "In attesa dell'inizio del torneo", "⠨⠺⠁⠊⠞⠊⠝⠛ ⠨⠞⠕⠥⠗⠝⠕ ⠨⠞⠕ ⠨⠎⠞⠁⠗⠞"],
-	waitingTournamentToStartPlayerText: ["Players:", "Joueurs:", "Giocatori:", "⠨⠏⠇⠁⠽⠑⠗⠎:"],
-	bracketTitle: ["Tournament Bracket", "Tableau du tournoi", "Tabellone del torneo", "⠨⠞⠕⠥⠗⠝⠕ ⠨⠃⠗⠁⠉⠅⠑⠞"],
-	bracketRound1: ["First round", "Premier tour", "Primo turno", "⠨⠗⠕⠥⠝⠙⠑ 1"],
-	bracketRound2: ["Finals", "Finales", "Finali", "⠨⠗⠕⠥⠝⠙⠑ 2"],
+	waitingTournamentToStartTitle: ["Waiting for tournament to start", "En attente du tournoi", "In attesa dell'inizio del torneo", "⠨⠺⠁⠊⠞⠊⠝⠛ ⠋⠕⠗ ⠞⠕⠥⠗⠝⠁⠍⠑⠝⠞ ⠞⠕ ⠎⠞⠁⠗⠞"],
+	waitingTournamentToStartPlayerText: ["Players:", "Joueurs:", "Giocatori:", "⠨⠏⠇⠁⠽⠑⠗⠎⠒"],
+	bracketTitle: ["Tournament Bracket", "Tableau du tournoi", "Tabellone del torneo", "⠨⠞⠕⠥⠗⠝⠁⠍⠑⠝⠞ ⠨⠃⠗⠁⠉⠅⠑⠞"],
+	bracketRound1: ["First round", "Premier tour", "Primo turno", "⠨⠋⠊⠗⠎⠞"],
+	bracketRound2: ["Finals", "Finales", "Finali", "⠨⠋⠊⠝⠁⠇⠎"],
 	bracketRound3: ["Winner", "Gagnant", "Vincitore", "⠨⠺⠊⠝⠝⠑⠗"],
+	inputUsernameTitle: ["Enter your username", "Entrez votre nom d'utilisateur", "Inserisci il tuo nome utente", "⠨⠑⠝⠞⠑⠗ ⠽⠕⠥⠗ ⠥⠎⠑⠗⠝⠁⠍⠑"],
 	
 } as const;
 

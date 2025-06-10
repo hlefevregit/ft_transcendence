@@ -7,7 +7,7 @@ import * as game from '@/libs/pongLibs';
 // Move paddle Up
 export const	movePaddleUp = (pong: React.RefObject<game.pongStruct>, paddleZ: number): number =>
 {
-	if (!pong.current.paddle1 ) return(0);
+	if (!pong.current.paddle1) return(0);
 	return(
 		Math.max
 		(
@@ -38,9 +38,10 @@ export const	movePaddleDown = (pong: React.RefObject<game.pongStruct>, paddleZ: 
 	)
 }
 
-let	timer = 1000 / 100;	// 1000 ms (1 second)
+let	timer = 1000;	// 1000 ms (1 second)
 let	previousBallDirection = baby.Vector3.Zero();
 let	previousBallPosition = baby.Vector3.Zero();
+let	lastZ = 0;	// Last Z position of the ball
 export const	AIMovePaddle = (pong: React.RefObject<game.pongStruct>): void =>
 {
 	if (   !pong.current.engine
@@ -55,7 +56,7 @@ export const	AIMovePaddle = (pong: React.RefObject<game.pongStruct>): void =>
 		// Get the need informations each seconds
 		previousBallDirection = pong.current.ballDirection.clone();
 		previousBallPosition = pong.current.ball.position.clone();
-		timer = 1000 / 100; // Reset timer
+		timer = 1000; // Reset timer
 	}
 	if (previousBallDirection.x > 0)	// Ball is going to the player paddle
 	{
@@ -66,31 +67,44 @@ export const	AIMovePaddle = (pong: React.RefObject<game.pongStruct>): void =>
 	else	// Ball is going to the AI paddle
 	{
 		// Move the AI paddle to the predicted position of the ball
-		if (pong.current.paddle1.position.z > predictBallImpactZ(pong) + 0.2) pong.current.paddle1.position.z = movePaddleUp(pong, pong.current.paddle1.position.z);
-		else if (pong.current.paddle1.position.z < predictBallImpactZ(pong) - 0.2) pong.current.paddle1.position.z = movePaddleDown(pong, pong.current.paddle1.position.z);
+		lastZ = predictBallImpactZ(pong);
+		if (pong.current.paddle1.position.z > lastZ + 0.2) pong.current.paddle1.position.z = movePaddleUp(pong, pong.current.paddle1.position.z);
+		else if (pong.current.paddle1.position.z < lastZ - 0.2) pong.current.paddle1.position.z = movePaddleDown(pong, pong.current.paddle1.position.z);
 	}
 }
 
 export const	predictBallImpactZ = (pong: React.RefObject<game.pongStruct>): number =>
 {
-	const	ballPos:	baby.Vector3 = previousBallPosition.clone();
-			ballPos.x += pong.current.arenaWidth / 2;	// Convert to positive range
-			ballPos.z += pong.current.arenaHeight / 2;	// Convert to positive range
-	const	ballDir:	baby.Vector3 = previousBallPosition.clone();
+	let		ballPos:	baby.Vector3 = previousBallPosition.clone();
+	let		ballDir:	baby.Vector3 = previousBallDirection.clone();
 
-	const	paddleXAxis:	number = pong.current.arenaWidth - 1;
-	const	distanceX:		number = paddleXAxis - ballPos.x;
+	const	arenaHeight:	number = pong.current.arenaHeight;
+	const	arenaWidth:		number = pong.current.arenaWidth;
+	const	paddleXAxis:	number = -(arenaWidth - 1);
 
-	const	stepsToReachPaddleXAxis:	number = 0 + (distanceX / ballDir.x);	// Calculate the number of marching steps to reach the paddle z axis
+	const	stepsToReachPaddleXAxis:	number = Math.abs(Math.ceil((paddleXAxis - ballPos.x) / ballDir.x));
+	console.log("Steps to reach paddle X axis:", stepsToReachPaddleXAxis);
+	// let		i = 0;
 
-	let		predictedZ:	number = ballPos.z + (ballDir.z * stepsToReachPaddleXAxis);	// Project the ball future pos at the paddle's z axis
-
-	predictedZ = predictedZ % (pong.current.arenaHeight * 2);	// Get the predicted z position in the arena height range
-
-	const	bounceCount:	number = Math.floor(predictedZ / pong.current.arenaHeight);
-	// If the bounce count is even, we need to flip the z position
-	if (bounceCount % 2 === 0) predictedZ = pong.current.arenaHeight - predictedZ;
-	return predictedZ;
+	// while (i < stepsToReachPaddleXAxis && ballPos.x <= paddleXAxis && ballDir.x <= 0)
+	if (ballDir.x < 0)	// Ball is moving towards the AI paddle
+	{
+		while (Math.abs(ballPos.x) <= Math.abs(paddleXAxis))
+		{
+			ballPos.x += ballDir.x;
+			ballPos.z += ballDir.z;
+			if (ballPos.z >= arenaHeight || ballPos.z <= -arenaHeight)
+				ballDir.z *= -1;
+			// i++;
+			// console.log("Ball position:", ballPos);
+		}
+	}
+	if (pong.current.PREDICT)
+	{
+		pong.current.PREDICT.position.x = ballPos.x;
+		pong.current.PREDICT.position.z = ballPos.z;
+	}
+	return (ballPos.z)
 }
 
 export	const	doPaddleMovement = (pong: React.RefObject<game.pongStruct>, gamemode: React.RefObject<game.gameModes>, states: React.RefObject<game.states>): void =>
@@ -152,9 +166,11 @@ export const	manageLocalKeyboardInputs = (pong: game.pongStruct): void =>
 
 
 export const movePaddleUpOnline = (pong: React.RefObject<game.pongStruct>, paddle: baby.Mesh): number => {
-	return Math.max(
+	return Math.max
+	(
 		- pong.current.arenaHeight + (pong.current.paddleHeight / 2),
-		Math.min(
+		Math.min
+		(
 			pong.current.arenaHeight - (pong.current.paddleHeight / 2),
 			paddle.position.z - pong.current.paddleSpeed
 		)
@@ -162,9 +178,11 @@ export const movePaddleUpOnline = (pong: React.RefObject<game.pongStruct>, paddl
 };
 
 export const movePaddleDownOnline = (pong: React.RefObject<game.pongStruct>, paddle: baby.Mesh): number => {
-	return Math.max(
+	return Math.max
+	(
 		- pong.current.arenaHeight + (pong.current.paddleHeight / 2),
-		Math.min(
+		Math.min
+		(
 			pong.current.arenaHeight - (pong.current.paddleHeight / 2),
 			paddle.position.z + pong.current.paddleSpeed
 		)

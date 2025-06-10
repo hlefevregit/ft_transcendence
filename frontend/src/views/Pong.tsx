@@ -150,13 +150,13 @@ const	Pong: React.FC = () =>
 			console.warn("⚠️ Aucun userId dans le localStorage.");
 		}
 
-		if (!pong.current.scene) return;
-		pong.current.scene.debugLayer.show
-		({
-			embedMode: true,
-			handleResize: true,
-			overlay: true,
-		});
+		// if (!pong.current.scene) return;
+		// pong.current.scene.debugLayer.show
+		// ({
+		// 	embedMode: true,
+		// 	handleResize: true,
+		// 	overlay: true,
+		// });
 
 
 		// Game loop
