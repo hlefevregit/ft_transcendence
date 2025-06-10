@@ -30,6 +30,7 @@ export const	initializeAllGUIScreens = (pong: React.RefObject<game.pongStruct>, 
 	game.instantiateWaitingScreenGUI(pong, states);
 	game.instantiateWaitingTournamentToStartGUI(pong, states);
 	game.instantiateBracketGUI(pong, states, gameModes);
+	game.instantiateInputUsernameGUI(pong, states, gameModes, playerStates);
 	game.instantiateDebugGUI(pong, states, gameModes, playerStates, lang);
 	// etc.
 	console.log("complete initializing GUI screens");
@@ -70,6 +71,7 @@ export const	updateGUIVisibilityStates = (pong: React.RefObject<game.pongStruct>
 	setUIState(pong.current.waitingTournamentToStartGUI, game.states.waiting_tournament_to_start);
 	setUIState(pong.current.waitingScreenGUI, game.states.hosting_waiting_players);
 	setUIState(pong.current.bracketGUI, game.states.tournament_bracket_preview);
+	setUIState(pong.current.inputUsernameGUI, game.states.input_username);
 
 	pong.current.guiTexture?.removeControl(pong.current.debugGUI as baby.Container);
 	pong.current.guiTexture?.addControl(pong.current.debugGUI as baby.Container);
@@ -455,7 +457,7 @@ export const	instentiatePongSettingsGUI = (pong: React.RefObject<game.pongStruct
 			{
 				game.findComponentByName(pong, "pongSettingsArenaWidthTextValue").text = pong.current.arenaWidth.toString();
 			});
-	const	pongSettingsArenaWidth = game.createSlider("pongSettingsArenaWidth", 7, 20, 1, pong.current.arenaWidth, (value: number) =>
+	const	pongSettingsArenaWidth = game.createSlider("pongSettingsArenaWidth", 7, 80, 1, pong.current.arenaWidth, (value: number) =>
 	{
 		pong.current.arenaWidth = value;
 		game.resizeArenaShell(pong);
@@ -1226,4 +1228,39 @@ export const instantiateBracketGUI = (pong: React.RefObject<game.pongStruct>, st
 
 	// Add GUI to the GUI texture
 	pong.current.bracketGUI = bracketGUI;
+}
+
+export const instantiateInputUsernameGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>, playerStates: React.RefObject<game.playerStates>): void =>
+{
+	// Canvas that will be used for the GUI
+	const	inputUsernameGUI = game.createScreen("inputUsernameGUI", "center");
+
+	// All GUI components needed
+	const	inputUsernameContainer = game.createAdaptiveContainer("inputUsernameContainer", "300px", "300px");
+	const	inputUsernameVerticalStackPanel = game.createVerticalStackPanel("inputUsernameVerticalStackPanel");
+	const	inputUsernameTitle = game.createDynamicTitle("inputUsernameTitle", "inputUsernameTitle");
+	const	inputUsernameTextBox = game.createInputText("inputUsernameTextBox", "Tabarnak69", (value: string) => {
+		pong.current.username = value;
+		pong.current.username = pong.current.username.trim();
+	});
+	const	inputUsernameButton = game.createDynamicButton("inputUsernameButton", () =>
+	{
+		if (pong.current.username && pong.current.username.length > 0)
+		{
+			playerStates.current = game.playerStates.isHost;
+			states.current = game.states.game_settings;
+			game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.pongSettingsCam, 1, pong, states);
+		}
+	}, "continue");
+
+	// Add GUI components to the main menu
+	// The order of adding controls matters for the layout
+	inputUsernameVerticalStackPanel.addControl(inputUsernameTitle);
+	inputUsernameVerticalStackPanel.addControl(inputUsernameTextBox);
+	inputUsernameVerticalStackPanel.addControl(inputUsernameButton);
+	inputUsernameContainer.addControl(inputUsernameVerticalStackPanel);
+	inputUsernameGUI.addControl(inputUsernameContainer);
+
+	// Add the screen to the GUI texture
+	pong.current.inputUsernameGUI = inputUsernameGUI;
 }

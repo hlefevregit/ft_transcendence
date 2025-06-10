@@ -696,6 +696,61 @@ export const	createSpacer = (witdh: number, height: number): baby.StackPanel =>
 	return block;
 }
 
+export const	createInputText = (inputName: string, initialValue: string, onChange: (value: string) => void): baby.StackPanel =>
+{
+	const	block = game.createDummyBlock();
+	
+	// Create a container for the rounded background
+	const	container = new baby.Container(inputName + "Container");
+	container.width = "200px";
+	container.height = "40px";
+	container.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
+	container.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
+	
+	// Create rounded background rectangle
+	const	background = new baby.Rectangle(inputName + "Background");
+	background.width = "100%";
+	background.height = "100%";
+	background.background = game.colorsScheme.dark1;
+	background.thickness = 0;
+	background.cornerRadius = 20; // This gives you rounded corners
+	
+	// Create the input text
+	const	input = new baby.InputText(inputName);
+	input.text = initialValue;
+	input.width = "100%";
+	input.height = "100%";
+	input.color = game.colorsScheme.light1;
+	input.background = "transparent"; // Make input background transparent
+	input.focusedBackground = "transparent"; // Keep transparent on focus
+	input.fontSize = 24;
+	input.thickness = 0;
+	input.paddingLeft = "10px";
+	input.paddingRight = "10px";
+
+	// Handle focus states by changing the background rectangle
+	input.onFocusObservable.add(() => {
+		background.background = game.colorsScheme.dark3;
+	});
+	
+	input.onBlurObservable.add(() => {
+		background.background = game.colorsScheme.dark1;
+	});
+
+	input.onTextChangedObservable.add(() =>
+	{
+		const	value = input.text.trim();
+		if (value.length > 0) onChange(value);
+		else onChange("Unnamed");
+	});
+
+	// Add background first, then input on top
+	container.addControl(background);
+	container.addControl(input);
+	block.addControl(container);
+	return block;
+}
+
 export const	resizeArenaShell = (pong: React.RefObject<game.pongStruct>): void =>
 {
 	if
