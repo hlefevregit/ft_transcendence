@@ -6,10 +6,9 @@ import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
 import BackgroundMusic from '@/components/BG';
 import { useWebSocketOnline, useOnlineLoop } from '@/utils/pong/onlineWS';
+import { get } from 'http';
 
-// Function to debounce the resize event
-// This will limit the number of times the resize function is called
-// to once every `ms` milliseconds
+// Limits the number of times the resizing can be called in a given time frame
 function	debounce(fn: Function, ms: number)
 {
 	let	timer: NodeJS.Timeout;
@@ -33,6 +32,7 @@ const	Pong: React.FC = () =>
 	const	userNameRef = React.useRef<string>(null as unknown as string);
 	const	audioRef = React.useRef<HTMLAudioElement | null>(null);
 
+	const [gameModeTrigger, setGameModeTrigger] = React.useState<number>(0);
 
 	// const	[userName, getUserName] = React.useState<string | null>(null);
 	const	socketRef = React.useRef<WebSocket | null>(null);
@@ -42,6 +42,48 @@ const	Pong: React.FC = () =>
 	const	lastState = React.useRef<game.states>(states.current);
 	const	lastPlayerState = React.useRef<game.playerStates>(playerState.current);
 	const	lastLang = React.useRef<game.lang>(lang.current);
+
+
+	React.useEffect(() => {
+		if (
+			gameModes.current === game.gameModes.online ||
+			gameModes.current === game.gameModes.tournament
+		) {
+			const token = localStorage.getItem('authToken');
+			const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+			const wsProtocol = isLocalhost ? 'ws:' : (window.location.protocol === 'https:' ? 'wss:' : 'ws:');
+
+			const wsUrl =
+				gameModes.current === game.gameModes.tournament
+					? `${wsProtocol}//${window.location.hostname}:4002/ws?token=${token || ''}`
+					: `${wsProtocol}//${window.location.hostname}:4000/ws?token=${token || ''}`;
+
+			console.log("🌐 Connecting WebSocket to:", wsUrl);
+			const ws = new WebSocket(wsUrl);
+			socketRef.current = ws;
+
+			ws.addEventListener('open', () => {
+				console.log("✅ WebSocket connected successfully");
+			});
+			ws.addEventListener('error', (event) => {
+				console.error("❌ WebSocket connection error:", event);
+			});
+
+			useWebSocketOnline(pong, socketRef, gameModes, states, lang, userNameRef, ws);
+
+			import('@/utils/pong/tournament').then(tournamentModule => {
+				tournamentModule.useTournamentWebSocket(
+					pong,
+					socketRef,
+					gameModes,
+					states,
+					lang,
+					userNameRef,
+					ws
+				);
+			});
+		}
+	}, [gameModeTrigger]);
 
 	React.useEffect(() =>
 	{
@@ -65,7 +107,7 @@ const	Pong: React.FC = () =>
 		// Initialize the game
 		game.setupBabylon(pong.current, canvasRef.current);
 		// Initialize all the GUI
-		game.initializeAllGUIScreens(pong, gameModes, states, playerState, lang, socketRef, navigate);
+		game.initializeAllGUIScreens(pong, gameModes, states, playerState, lang, socketRef, navigate, setGameModeTrigger);
 		game.updateGUIVisibilityStates(pong, states.current);
 		game.updateGUIVisibilityPlayerStates(pong, playerState.current);
 		game.updateGUIValues(pong, states, lang);
@@ -75,41 +117,41 @@ const	Pong: React.FC = () =>
 		console.log("GUI initialization complete");
 		
 
-		const token = localStorage.getItem('authToken');
-		const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-		const wsUrl = `${wsProtocol}//${window.location.host}/ws?token=${token || ''}`;
+		// const token = localStorage.getItem('authToken');
+		// const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+		// const wsUrl =
+		// 	gameModes.current === game.gameModes.tournament
+		// 		? `${wsProtocol}//${window.location.hostname}:4002/ws?token=${token || ''}`
+		// 		: `${wsProtocol}//${window.location.hostname}:4000/ws?token=${token || ''}`;
+		// console.log("🌐 Connecting WebSocket to:", wsUrl);
+		// const ws = new WebSocket(wsUrl);
 
-		console.log("🌐 Connecting WebSocket to:", wsUrl);
-		const ws = new WebSocket(wsUrl);
-
-		// Add event listeners for better debugging
-		ws.addEventListener('open', () => {
-			console.log("✅ WebSocket connected successfully");
-		});
+		// // Add event listeners for better debugging
+		// ws.addEventListener('open', () => {
+		// 	console.log("✅ WebSocket connected successfully");
+		// });
 		
-		ws.addEventListener('error', (event) => {
-			console.error("❌ WebSocket connection error:", event);
-		});
+		// ws.addEventListener('error', (event) => {
+		// 	console.error("❌ WebSocket connection error:", event);
+		// });
 
 
-		// Register WebSocket handlers for both online and tournament modes
-		useWebSocketOnline(pong, socketRef, gameModes, states, lang, userNameRef, ws);
+		// // Register WebSocket handlers for both online and tournament modes
+		// useWebSocketOnline(pong, socketRef, gameModes, states, lang, userNameRef, ws);
 		
-		// Add tournament WebSocket integration
-		import('@/utils/pong/tournament').then(tournamentModule => {
-			tournamentModule.useTournamentWebSocket(
-				pong, 
-				socketRef, 
-				gameModes, 
-				states, 
-				lang, 
-				userNameRef, 
-				ws
-			);
-		});
+		// // Add tournament WebSocket integration
+		// import('@/utils/pong/tournament').then(tournamentModule => {
+		// 	tournamentModule.useTournamentWebSocket(
+		// 		pong, 
+		// 		socketRef, 
+		// 		gameModes, 
+		// 		states, 
+		// 		lang, 
+		// 		userNameRef, 
+		// 		ws
+		// 	);
+		// });
 		
-		
-
 		if (gameModes.current === game.gameModes.online)
 		{
 			if
@@ -126,7 +168,7 @@ const	Pong: React.FC = () =>
 		}
 		else game.manageLocalKeyboardInputs(pong.current);
 
-		const getUsernameFromBackend = async (userId: string): Promise<string | null> => {
+		const getUsernameFromBackend = async (): Promise<string | null> => {
 			try {
 				const res = await fetch(`/api/me`, {
 					headers: {
@@ -145,17 +187,20 @@ const	Pong: React.FC = () =>
 
 
 
-		const userId = localStorage.getItem('userId');
-		if (userId) {
-			getUsernameFromBackend(userId).then(username => {
-				if (username !== null) {
-					userNameRef.current = username;
-					console.log("✅ Username stocké:", username);
-				}
-			});
-		} else {
-			console.warn("⚠️ Aucun userId dans le localStorage.");
-		}
+		const userId = getUsernameFromBackend();
+		console.log("User ID récupéré:", userId);
+		// userId.then((name) => {
+		// 	if (name) {
+		// 		userNameRef.current = name;
+		// 		console.log("Username set to:", userNameRef.current);
+		// 	} else {
+		// 		console.warn("Username not found, using default 'Player'");
+		// 		userNameRef.current = 'Player';
+		// 	}
+		// }).catch((err) => {
+		// 	console.error("❌ Erreur lors de la récupération du nom d'utilisateur:", err);
+		// 	userNameRef.current = 'Player'; // Fallback to default name
+		// });
 
 		if (!pong.current.scene) return;
 		pong.current.scene.debugLayer.show
@@ -168,7 +213,6 @@ const	Pong: React.FC = () =>
 
 		// Game loop
 		if (!pong.current.engine) return;
-
 		pong.current.engine.runRenderLoop(() =>
 		{
 			game.updateGUIsWhenNeeded(pong, states, gameModes, playerState, lang, lastState, lastPlayerState, lastLang);
@@ -191,15 +235,34 @@ const	Pong: React.FC = () =>
 				&& states.current !== game.states.waiting_to_start
 			) {
 				const roomId = pong.current.lastHostedRoomId;
-				if (roomId && socketRef.current?.readyState === WebSocket.OPEN) {
-					console.log("👋 Host a quitté la salle d'attente, envoi de leave_room pour", roomId);
-					socketRef.current.send(JSON.stringify({
-						type: 'leave_room',
-						gameId: roomId,
-					}));
-					console.log("🗑️ Suppression de la room:", roomId);
-					pong.current.lastHostedRoomId = 'none';
-					pong.current.rooms.delete(roomId);
+				if (gameModes.current === game.gameModes.online && roomId !== 'none') {
+
+					if (roomId && socketRef.current?.readyState === WebSocket.OPEN) {
+						console.log("👋 Host a quitté la salle d'attente, envoi de leave_room pour", roomId);
+						socketRef.current.send(JSON.stringify({
+							type: 'leave_room',
+							gameId: roomId,
+						}));
+						console.log("🗑️ Suppression de la room:", roomId);
+						pong.current.lastHostedRoomId = 'none';
+						pong.current.rooms.delete(roomId);
+					}
+				}
+				else if (gameModes.current === game.gameModes.tournament)
+				{
+					if (roomId && roomId !== 'none' && socketRef.current?.readyState === WebSocket.OPEN)
+					{
+						console.log("👋 Host a quitté la salle d'attente, envoi de leave_room pour tournoi");
+						if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+							socketRef.current.send(JSON.stringify({
+								type: 'leave_tournament',
+								gameId: roomId,
+							}));
+						}
+						console.log("🗑️ Suppression de la room de tournoi:", roomId);
+						pong.current.lastHostedRoomId = 'none';
+						pong.current.party.delete(roomId);
+					}
 				}
 			}
 			if (gameModes.current === game.gameModes.online)
@@ -266,7 +329,7 @@ const	Pong: React.FC = () =>
 						break;
 				}
 			}
-			
+
 			pong.current.scene.render();
 			document.title = `Pong - ${Object.keys(game.states).find(key => game.states[key as keyof typeof game.states] === states.current)}`;
 		});
@@ -276,19 +339,20 @@ const	Pong: React.FC = () =>
 		{
 			game.doPaddleMovement(pong, gameModes, states);
 			game.makeBallBounce(pong.current, states);
-		}, 16);
+		}, 16.667);
 
+		// Update GUI values every 200ms
 		const updateGUIsValuesWhenNeeded = setInterval(() =>
 		{
 			game.updateGUIValues(pong, states, lang);
-		}, 100);
+		}, 200);
 
-		// Debounced resize handler
+		// Handle resizing of the canvas
 		const	handleResize = debounce(() =>
 		{
 			if (!pong.current.engine) return;
 			pong.current.engine.resize();
-		}, 50); // 50ms debounce to skip crashes
+		}, 50);
 
 		window.addEventListener('resize', handleResize);
 		

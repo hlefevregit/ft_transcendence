@@ -9,14 +9,14 @@ export function fitCameraToArena(pong: game.pongStruct): void
 	if (!pong.arenaCam || !pong.engine) return;
 
 	// Get canvas size and compute aspect ratio
-	const canvasAspect = pong.engine.getRenderWidth() / pong.engine.getRenderHeight();
+	const	canvasAspect = pong.engine.getRenderWidth() / pong.engine.getRenderHeight();
 
 	// Compute arena aspect ratio
-	const arenaAspect = pong.arenaWidth / pong.arenaHeight;
+	const	arenaAspect = pong.arenaWidth / pong.arenaHeight;
 
 	// Choose the limiting factor: width or height
 	// We need to calculate how far the camera needs to be to fit the arena
-	let neededViewSize = 0;
+	let		neededViewSize = 0;
 	if (canvasAspect > arenaAspect)
 	{
 		// Canvas is wider than arena -> height is limiting
@@ -30,10 +30,10 @@ export function fitCameraToArena(pong: game.pongStruct): void
 	}
 
 	// Camera FOV is vertical (by default it's PI/4)
-	const fov = pong.arenaCam.fov; // radians
+	const	fov = pong.arenaCam.fov; // radians
 
 	// Calculate required camera height to fit `neededViewSize` vertically
-	const requiredY = (neededViewSize / 2) / Math.tan(fov / 2);
+	const	requiredY = (neededViewSize / 2) / Math.tan(fov / 2);
 
 	// Set the camera height
 	pong.arenaCam.position.y = requiredY * 2.11111111;
@@ -52,8 +52,8 @@ export const	setPaddings = (button: baby.Button, paddingSize: string): void =>
 
 export const	createButton = (buttonName: string, buttonText: string, functionToExecute: () => void): baby.StackPanel =>
 {
-	const block = game.createDummyBlock();
-	const button = baby.Button.CreateSimpleButton(buttonName, buttonText);
+	const	block = game.createDummyBlock();
+	const	button = baby.Button.CreateSimpleButton(buttonName, buttonText);
 	button.width = "200px";
 	button.height = "100px";
 	button.color = game.colorsScheme.light1;
@@ -132,31 +132,14 @@ export const	createText = (textName: string, textText: string): baby.StackPanel 
 	return block;
 }
 
-// export const	createDynamicText = (textName: string, valueGetter: () => any, bindings: React.RefObject<game.pongStruct>): baby.StackPanel =>
-// {
-// 	const	block = game.createDummyBlock();
-// 	const	text = new baby.TextBlock(textName, String(valueGetter()));
-// 	text.width = "50px";
-// 	text.height = "25px";
-// 	text.color = game.colorsScheme.light1;
-// 	text.resizeToFit = true;
-// 	text.fontSize = 24;
-	
-// 	block.addControl(text);
-
-// 	// Bind the text to the value in the bindings map
-// 	bindings.current.bindings.set(textName, valueGetter);
-// 	return block;
-// }
-
 export const	createAdaptiveContainer = (folderName: string, width?: string, height?: string, BackgroundColor?: string, alignment?: string): baby.Container =>
 {
 	width = width ?? "100%";
 	height = height ?? "100%";
 	BackgroundColor = BackgroundColor ?? game.colorsScheme.dark2;
 
-	// Create a container with FIXED dimensions
-	const container = new baby.Container(folderName + "Container");
+	// Create container
+	const	container = new baby.Container(folderName + "Container");
 	container.width = width;
 	container.height = height;
 	container.adaptWidthToChildren = true;
@@ -166,13 +149,13 @@ export const	createAdaptiveContainer = (folderName: string, width?: string, heig
 	container.background = "transparent";
 	container.zIndex = 0;
 
-	// Create background with FIXED dimensions
-	const background = new baby.Rectangle(folderName + "Background");
+	// Create background with dimensions tied to the container
+	const	background = new baby.Rectangle(folderName + "Background");
 	background.width = "100%";
 	background.height = "100%";
 	background.background = BackgroundColor;
 	background.thickness = 0;
-	background.cornerRadius = 20;
+	background.cornerRadius = 40;
 	background.zIndex = 0;
 		
 	container.addControl(background);
@@ -192,8 +175,6 @@ export const	createHorizontalStackPanel = (panelName: string, paddings?: number,
 	GUI.paddingBottom = paddings * 2 + "px";
 	GUI.paddingLeft = paddings * 2 + "px";
 	GUI.paddingRight = paddings * 2 + "px";
-	// GUI.width = "parent";
-	// GUI.height = "parent";
 	GUI.adaptWidthToChildren = true;
 	GUI.adaptHeightToChildren = true;
 	GUI.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
@@ -216,8 +197,6 @@ export const	createVerticalStackPanel = (panelName: string, paddings?: number, a
 	GUI.paddingBottom = paddings * 2 + "px";
 	GUI.paddingLeft = paddings * 2 + "px";
 	GUI.paddingRight = paddings * 2 + "px";
-	// GUI.width = "parent";
-	// GUI.height = "parent";
 	GUI.adaptWidthToChildren = true;
 	GUI.adaptHeightToChildren = true;
 	GUI.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
@@ -388,7 +367,7 @@ export const	smoothStep = (start: number, end: number, alpha: number): number =>
 	// Apply smoothStep function: 3x^2 - 2x^3
 	alpha = alpha * alpha * (3 - 2 * alpha);
 	
-	// Use Babylon's built-in lerp with our smoothed alpha
+	// Use our built-in lerp with our smoothed alpha
 	return game.lerp(start, end, alpha);
 }
 
@@ -417,9 +396,11 @@ export const	transitionToCamera = async (cameraA: baby.FreeCamera | baby.FlyCame
 		const	lerpedPosition = smoothStepVector3(cameraA.position.clone(), cameraB.position.clone(), time / duration);
 		const	lerpedRotation = smoothStepVector3(cameraA.rotation.clone(), cameraB.rotation.clone(), time / duration);
 		const	lerpedFOV = smoothStep(cameraA.fov, cameraB.fov, time / duration);
+
 		pong.current.transitionCam.position.set(lerpedPosition.x, lerpedPosition.y, lerpedPosition.z);
 		pong.current.transitionCam.rotation.set(lerpedRotation.x, lerpedRotation.y, lerpedRotation.z);
 		pong.current.transitionCam.fov = lerpedFOV;
+
 		const	deltaTime = pong.current.engine?.getDeltaTime() ?? 0;
 		time += deltaTime;
 		await sleep(deltaTime);
@@ -436,25 +417,26 @@ export const	transitionToCamera = async (cameraA: baby.FreeCamera | baby.FlyCame
 
 export const	findComponentByName = (pong: React.RefObject<game.pongStruct>, name: string): any =>
 {
-	const component = pong.current.guiTexture?.getControlByName(name);
+	const	component = pong.current.guiTexture?.getControlByName(name);
     return component as baby.TextBlock;
 };
 
-export const createRoomPanel = (
+export const createRoomPanel =
+(
 	pong: React.RefObject<game.pongStruct>,
 	lang: React.RefObject<game.lang>,
 	roomName: string,
 	join: () => void,
 ): baby.StackPanel =>
 {
-	const safeRoomName = roomName || "Unnamed Room";
-	const panelName = `roomPanel_${safeRoomName.replace(/\s+/g, '_')}_${Math.random().toString(36).substring(2)}`;
-	const roomPanel = game.createHorizontalStackPanel(panelName, 0);
+	const	safeRoomName = roomName || "Unnamed Room";
+	const	panelName = `roomPanel_${safeRoomName.replace(/\s+/g, '_')}_${Math.random().toString(36).substring(2)}`;
+	const	roomPanel = game.createHorizontalStackPanel(panelName, 0);
 
-	const roomPanelNameText = game.createText("roomPanelNameText", safeRoomName);
-	(roomPanelNameText.children[0] as baby.TextBlock).fontSize = 48;
+	const	roomPanelNameText = game.createText("roomPanelNameText", safeRoomName);
+			(roomPanelNameText.children[0] as baby.TextBlock).fontSize = 48;
 
-	const roomPanelJoinButton = game.createDynamicButton
+	const	roomPanelJoinButton = game.createDynamicButton
 	(
 		"roomPanelJoinButton",
 		join,
@@ -469,32 +451,18 @@ export const createRoomPanel = (
 	return roomPanel;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export const	createDynamicText = (
 	textName: string,
 	labelKey?: game.labelKey
 ): baby.StackPanel =>
 {
-	const block = game.createDummyBlock();
+	const	block = game.createDummyBlock();
 	
 	// Use the provided labelKey if available, otherwise use textName
-	const keyToUse = labelKey || textName as game.labelKey;
+	const	keyToUse = labelKey || textName as game.labelKey;
 	
 	// Create the text with initial value
-	const text = new baby.TextBlock(textName, "caca");
+	const	text = new baby.TextBlock(textName, "caca");
 	text.color = game.colorsScheme.light1;
 	text.resizeToFit = true;
 	text.fontSize = 24;
@@ -511,10 +479,10 @@ export const	createDynamicTitle = (
 	labelKey?: game.labelKey
 ): baby.StackPanel =>
 {
-	const block = game.createDummyBlock();
+	const	block = game.createDummyBlock();
 	
 	// Use the provided labelKey if available, otherwise use titleName
-	const keyToUse = labelKey || titleName as game.labelKey;
+	const	keyToUse = labelKey || titleName as game.labelKey;
 	
 	// Create the title with initial value
 	// const title = new baby.TextBlock(titleName, game.getLabel(keyToUse, langRef.current));
@@ -538,13 +506,13 @@ export const	createDynamicButton = (
 	labelKey?: game.labelKey
 ): baby.StackPanel =>
 {
-	const block = game.createDummyBlock();
+	const	block = game.createDummyBlock();
 	
 	// Use the provided labelKey if available, otherwise use buttonName
-	const keyToUse = labelKey || buttonName as game.labelKey;
+	const	keyToUse = labelKey || buttonName as game.labelKey;
 	
 	// Create the button with initial text value
-	const button = baby.Button.CreateSimpleButton(buttonName, "caca");
+	const	button = baby.Button.CreateSimpleButton(buttonName, "caca");
 	button.width = "200px";
 	button.height = "100px";
 	button.color = game.colorsScheme.light1;
@@ -574,25 +542,183 @@ export const	createDynamicButton = (
 	return block;
 }
 
+export const	createCard = (cardName: string, cardText: string): baby.StackPanel =>
+{
+	const	block = game.createDummyBlock();
+	const	container = new baby.Container(cardName + "Container");
+			container.width = "200px";
+			container.height = "60px";
+			container.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
+			container.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
+			container.background = "transparent";
+
+	const	cardLabel = createText(cardName + "Label", cardText);
+
+	const	cardBackground = new baby.Rectangle(cardName + "Background");
+			cardBackground.width = "100%";
+			cardBackground.height = "100%";
+			cardBackground.background = game.colorsScheme.dark3;
+			cardBackground.color = "transparent";
+			cardBackground.cornerRadius = 20;
+			cardBackground.thickness = 2;
+			cardBackground.zIndex = 0;
+
+	container.addControl(cardBackground);
+	container.addControl(cardLabel);
+	block.addControl(container);
+	return block;
+}
+
+export const	createLine = (x1: string, y1: string, x2: string, y2: string): baby.Container =>
+{
+	const	thickness: number = 6;
+	const	color: string = game.colorsScheme.light1;
+
+	const	x1Num = parseFloat(x1);
+	const	y1Num = parseFloat(y1);
+	const	x2Num = parseFloat(x2);
+	const	y2Num = parseFloat(y2);
+
+	const	container = new baby.Container("lineContainer-" + Math.random().toString(36).substring(2, 15));
+
+	// Create a line between two points
+	const	line = new baby.Line("line-" + Math.random().toString(36).substring(2, 15));
+			line.x1 = x1Num;
+			line.y1 = y1Num;
+
+			line.x2 = x2Num;
+			line.y2 = y2Num;
+
+			line.color = color;
+			line.lineWidth = thickness;
+			line.zIndex = 1;
+	
+	// Create spheres at the start and end of the line for rounding
+
+	const	sphereStart = new baby.Ellipse("sphereStart-" + Math.random().toString(36).substring(2, 15));
+			sphereStart.width = thickness + "px";
+			sphereStart.height = thickness + "px";
+			sphereStart.background = color;
+			sphereStart.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_LEFT;
+			sphereStart.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_TOP;
+			sphereStart.thickness = 0;
+			sphereStart.zIndex = 1;
+			sphereStart.left = x1Num - (thickness / 2) + "px";
+			sphereStart.top = y1Num - (thickness / 2) + "px";
+			sphereStart.zIndex = 1;
+	const	sphereEnd = new baby.Ellipse("sphereEnd-" + Math.random().toString(36).substring(2, 15));
+			sphereEnd.width = thickness + "px";
+			sphereEnd.height = thickness + "px";
+			sphereEnd.background = color;
+			sphereEnd.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_LEFT;
+			sphereEnd.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_TOP;
+			sphereEnd.thickness = 0;
+			sphereEnd.zIndex = 1;
+			sphereEnd.left = x2Num - (thickness / 2) + "px";
+			sphereEnd.top = y2Num - (thickness / 2) + "px";
+			sphereEnd.zIndex = 1;
+
+	container.addControl(line);
+	container.addControl(sphereStart);
+	container.addControl(sphereEnd);
+
+	return container;
+}
+
+export const	createBracketLines = (bracketName: string): baby.StackPanel =>
+{
+	const	block = game.createDummyBlock();
+			block.top = "24px";
+	const	container = new baby.Container(bracketName + "Container");
+			container.width = "100px";
+			container.height = "365px";
+			container.background = "transparent";
+
+	const	verticalLine1 = createLine("50px", "30px", "50px", "130px");
+	const	verticalLine2 = createLine("50px", "230px", "50px", "335px");
+
+	const	horizontalLine1 = createLine("5px", "30px", "50px", "30px");
+	const	horizontalLine2 = createLine("5px", "130px", "95px", "130px");
+
+	const	horizontalLine3 = createLine("5px", "230px", "95px", "230px");
+	const	horizontalLine4 = createLine("5px", "335px", "50px", "335px");
+
+	container.addControl(verticalLine1);
+	container.addControl(verticalLine2);
+
+	container.addControl(horizontalLine1);
+	container.addControl(horizontalLine2);
+	container.addControl(horizontalLine3);
+	container.addControl(horizontalLine4);
+
+	block.addControl(container);
+	return block;
+}
+
+export const	createBracketLines2 = (bracketName: string): baby.StackPanel =>
+{
+	const	block = game.createDummyBlock();
+			block.top = "20px";
+	const	container = new baby.Container(bracketName + "Container");
+			container.width = "100px";
+			container.height = "200px";
+			container.background = "transparent";
+
+	const	verticalLine1 = createLine("50px", "50px", "50px", "150px");
+
+	const	horizontalLine1 = createLine("5px", "50px", "50px", "50px");
+	const	horizontalLine2 = createLine("5px", "150px", "50px", "150px");
+	const	horizontalLine3 = createLine("50px", "100px", "95px", "100px");
+
+	container.addControl(verticalLine1);
+
+	container.addControl(horizontalLine1);
+	container.addControl(horizontalLine2);
+	container.addControl(horizontalLine3);
+
+	block.addControl(container);
+	return block;
+}
+
+export const	createSpacer = (witdh: number, height: number): baby.StackPanel =>
+{
+	const	block = game.createDummyBlock();
+
+	const	container = new baby.Container("container-" + Math.random().toString(36).substring(2, 15));
+			container.width = witdh + "px";
+			container.height = height + "px";
+			container.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
+			container.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
+			container.background = "transparent";
+			container.zIndex = 0;
+
+	block.addControl(container);
+	return block;
+}
+
 export const	resizeArenaShell = (pong: React.RefObject<game.pongStruct>): void =>
 {
-	if (   !pong.current.ceiling
+	if
+	(
+		   !pong.current.ceiling
 		|| !pong.current.floor
 		|| !pong.current.wallLeft
-		|| !pong.current.wallRight ) return;
+		|| !pong.current.wallRight
+	) return;
 
 	if (pong.current.arenaWidth > pong.current.arenaHeight)
-		{pong.current.floor.scaling.x = Math.max(pong.current.arenaWidth, pong.current.arenaHeight) * 2 + 3;}
+		pong.current.floor.scaling.x = Math.max(pong.current.arenaWidth, pong.current.arenaHeight) * 2 + 3;
 	else
-		{pong.current.floor.scaling.x = Math.min(pong.current.arenaWidth, pong.current.arenaHeight) * 2 + 3;}
+		pong.current.floor.scaling.x = Math.min(pong.current.arenaWidth, pong.current.arenaHeight) * 2 + 3;
 
 	pong.current.floor.position.z = pong.current.arenaHeight + 1;
 	pong.current.ceiling.scaling.x = pong.current.floor.scaling.x;
 	pong.current.ceiling.position.z = -pong.current.floor.position.z;
+
 	if (pong.current.arenaWidth < pong.current.arenaHeight)
-		{pong.current.wallLeft.scaling.z = Math.max(pong.current.arenaWidth, pong.current.arenaHeight) * 2 + 3;}
+		pong.current.wallLeft.scaling.z = Math.max(pong.current.arenaWidth, pong.current.arenaHeight) * 2 + 3;
 	else
-		{pong.current.wallLeft.scaling.z = Math.min(pong.current.arenaWidth, pong.current.arenaHeight) * 2 + 3;}
+		pong.current.wallLeft.scaling.z = Math.min(pong.current.arenaWidth, pong.current.arenaHeight) * 2 + 3;
 
 	pong.current.wallLeft.position.x = pong.current.arenaWidth + 1;
 	pong.current.wallRight.scaling.z = pong.current.wallLeft.scaling.z;
@@ -611,12 +737,14 @@ export const	updateGUIsWhenNeeded =
 	lastLang: React.RefObject<game.lang>
 ): void =>
 {
+	// Update GUI on state change
 	if (lastState.current !== states.current)
 	{
 		game.updateGUIVisibilityStates(pong, states.current);
 		game.updateGUIValues(pong, states, lang);
 		lastState.current = states.current;
 	}
+	// Update GUI on game mode change
 	if (lastPlayerState.current !== playerStates.current)
 	{
 		game.updateGUIVisibilityPlayerStates(pong, playerStates.current);

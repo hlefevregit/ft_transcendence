@@ -6,7 +6,7 @@ import * as game from '@/libs/pongLibs';
 
 export enum	colorsScheme
 {
-	// BASIC COLORS
+	// BASIC COLORS - Should not be used
 	red = "#FF0000",
 	green = "#00FF00",
 	blue = "#0000FF",
@@ -30,17 +30,17 @@ export enum	colorsScheme
 	
 	
 	// Accent colors - Frost
-	frostAccent1 = "#5e81ac",
-	frostAccent2 = "#81a1c1",
-	frostAccent3 = "#88c0d0",
-	frostAccent4 = "#8fbcbb",
+	frostAccent1 = "#5e81ac",	// turquoise
+	frostAccent2 = "#81a1c1",	// light blue
+	frostAccent3 = "#88c0d0",	// sky blue
+	frostAccent4 = "#8fbcbb",	// water blue
 
 	// Accent colors - Aurora
-	auroraAccent1 = "#bf616a",
-	auroraAccent2 = "#d08770",
-	auroraAccent3 = "#ebcb8b",
-	auroraAccent4 = "#a3be8c",
-	auroraAccent5 = "#b48ead",
+	auroraAccent1 = "#bf616a",	// red
+	auroraAccent2 = "#d08770",	// orange
+	auroraAccent3 = "#ebcb8b",	// yellow
+	auroraAccent4 = "#a3be8c",	// green
+	auroraAccent5 = "#b48ead",	// mauve
 
 }
 
@@ -91,6 +91,8 @@ export enum states
 	waiting_to_start_final,
 	tournament_final,
 	tournament_final_game_finished,
+	party_canceled,
+	disconnecting,
 }
 
 export type pongStruct =
@@ -193,7 +195,7 @@ export type pongStruct =
 	finishedGameGUI?: baby.Container;
 	hostOrJoinGUI?: baby.Container;
 	roomListGUI?: baby.Container;
-	roomListOnlineVerticalStackPanel?: baby.StackPanel;
+	roomListVerticalStackPanel?: baby.StackPanel;
 	roomListTournamentVerticalStackPanel?: baby.StackPanel;
 	waitingTournamentToStartGUI?: baby.Container;
 	bracketGUI?: baby.Container;
@@ -206,6 +208,9 @@ export type pongStruct =
 	bracketPlayer2?: baby.StackPanel;
 	bracketPlayer3?: baby.StackPanel;
 	bracketPlayer4?: baby.StackPanel;
+	bracketFinalPlayer1?: baby.StackPanel;
+	bracketFinalPlayer2?: baby.StackPanel;
+	bracketWinnerPlayer?: baby.StackPanel;
 
 	// Engine and scene
 	guiTexture?: baby.AdvancedDynamicTexture;
@@ -333,7 +338,8 @@ export const	label =
 	waitingTournamentToStartPlayerText: ["Players:", "Joueurs:", "Giocatori:", "⠨⠏⠇⠁⠽⠑⠗⠎:"],
 	bracketTitle: ["Tournament Bracket", "Tableau du tournoi", "Tabellone del torneo", "⠨⠞⠕⠥⠗⠝⠕ ⠨⠃⠗⠁⠉⠅⠑⠞"],
 	bracketRound1: ["First round", "Premier tour", "Primo turno", "⠨⠗⠕⠥⠝⠙⠑ 1"],
-	bracketRound2: ["Final", "Finale", "Finale", "⠨⠋⠊⠝⠁⠇"],
+	bracketRound2: ["Finals", "Finales", "Finali", "⠨⠗⠕⠥⠝⠙⠑ 2"],
+	bracketRound3: ["Winner", "Gagnant", "Vincitore", "⠨⠺⠊⠝⠝⠑⠗"],
 	
 } as const;
 
@@ -459,14 +465,4 @@ export const	reflectBallPaddles = (pong: pongStruct): void =>
 		pong.ballSpeedModifier += pong.ballSpeedModifier * pong.ballSpeed >= pong.maxBallSpeed ? 0 : pong.ballSpeed;
 		return;
 	}
-}
-
-export	const	setAreanWidth = (pong: pongStruct, width: number): void =>
-{
-	pong.arenaWidth = width;
-}
-
-export	const	setAreanHeight = (pong: pongStruct, height: number): void =>
-{
-	pong.arenaHeight = height;
 }
