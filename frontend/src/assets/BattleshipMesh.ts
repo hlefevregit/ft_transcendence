@@ -25,7 +25,7 @@ class BattleshipMesh extends Mesh {
             for (let j=0; j < 10; j++) {
                 const cell = MeshBuilder.CreateBox("cell" + i + j + "-" + name, {size:0.8, depth:0.3, faceColors:Array(6).fill(cellColor)});
                 cell.parent = this.screen;
-                cell.position = new Vector3(i-4.5, j-4.25, -0.3);
+                cell.position = new Vector3(i-4.5, (9-j)-4.25, -0.3);
 				cell.actionManager = new ActionManager(scene);
 				cell.actionManager.registerAction(new ExecuteCodeAction(
 					ActionManager.OnPickTrigger,

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import * as BABYLON from "@babylonjs/core";
+import { Inspector } from "@babylonjs/inspector"
 import '@/assets/BattleshipMesh'
-import { Mesh } from 'babylonjs';
 import BattleshipMesh from '@/assets/BattleshipMesh';
 
 type SceneCanvasProps = {
@@ -23,7 +23,8 @@ type PlayerInfo = {
 type GameRefType = {
   host: PlayerInfo
   guest: PlayerInfo
-  camera: BABYLON.TargetCamera
+  camera: BABYLON.FreeCamera
+  light: BABYLON.HemisphericLight
 }
 
 // #############################################################################
@@ -37,11 +38,13 @@ const Battleship = () => {
       if (!gameRef.current)
         return;
       const playing: string = evt.additionalData;
-      const cell: Mesh = evt.source;
+      const cell: BABYLON.Mesh = evt.source;
+      console.log(cell.name)
   }
 
   const onSceneReady = (scene:BABYLON.Scene) => {
-    gameRef.current = {
+    // Inspector.Show(scene, {});
+    const newGame = {
       host: {
         name: hostName,
         mesh: new BattleshipMesh(hostName, scene, onClick, new BABYLON.Vector3(0, -4, -5)),
@@ -54,16 +57,18 @@ const Battleship = () => {
         targets: new Map(),
         color: new BABYLON.Color4(1, 0, 0),
       },
-      camera: new BABYLON.TargetCamera("camera", new BABYLON.Vector3(0, 8, -30), scene),
+      camera: new BABYLON.FreeCamera("camera", new BABYLON.Vector3(0, 8, -30), scene, true),
+      light: new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0,1,0), scene)
     }
+    newGame.camera.setTarget(BABYLON.Vector3.Zero());
+    // newGame.camera.attachControl(scene.getEngine().getRenderingCanvas(), true);
+    gameRef.current = newGame;
   }
 
   return (
-    <div>
       <SceneCanvas onSceneReady={onSceneReady}/>
-    </div>
   );
-}
+};
 
 const SceneCanvas = ({ onRender, onSceneReady }: SceneCanvasProps) => {
   const canvasRef = useRef(null);
@@ -80,12 +85,11 @@ const SceneCanvas = ({ onRender, onSceneReady }: SceneCanvasProps) => {
     else
       scene.onReadyObservable.addOnce((scene) => onSceneReady(scene));
 
-    if (typeof onRender !== "undefined") {
-      engine.runRenderLoop(() => {
+    engine.runRenderLoop(() => {
+      if (typeof onRender === "function")
         onRender(scene);
-        scene.render();
-      });
-    }
+      scene.render();
+    });
 
     const resize = () => {
       scene.getEngine().resize();
@@ -104,7 +108,7 @@ const SceneCanvas = ({ onRender, onSceneReady }: SceneCanvasProps) => {
     };
   }, [onRender, onSceneReady]);
 
-    return <canvas ref={canvasRef} />;
+    return <canvas ref={canvasRef} style={{ width: '100%', height: '100%' }} />;
 };
 
 export default Battleship
