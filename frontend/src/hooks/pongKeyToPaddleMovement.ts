@@ -48,10 +48,10 @@ export const	AIMovePaddle = (pong: React.RefObject<game.pongStruct>): void =>
 		|| !pong.current.paddle1
 		|| !pong.current.paddle2
 		|| !pong.current.ball) return;
-		
-		
+
+
 	timer -= pong.current.engine.getDeltaTime();
-	if (timer <= 0)
+	if (timer <= 0 && pong.current.ballDirection.x < 0)
 	{
 		// Get the need informations each seconds
 		previousBallDirection = pong.current.ballDirection.clone();
@@ -150,7 +150,7 @@ export	const	doPaddleMovement = (pong: React.RefObject<game.pongStruct>, gamemod
 			if (pong.current.pressedKeys.has('s')) pong.current.paddle2.position.z = movePaddleDown(pong, pong.current.paddle2.position.z);
 			AIMovePaddle(pong);
 			break;
-		
+
 		case game.gameModes.online:
 			if (pong.current.isHost) {
 				// 🎮 Host contrôle paddle1
