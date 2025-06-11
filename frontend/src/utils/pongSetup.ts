@@ -157,6 +157,10 @@ export type pongStruct =
 	tournamentPlayer2Id?: string;
 	tournamentPlayer3Id?: string;
 	tournamentPlayer4Id?: string;
+	tournamentPlayer1Name?: string;
+	tournamentPlayer2Name?: string;
+	tournamentPlayer3Name?: string;
+	tournamentPlayer4Name?: string;
 	tournamentPlayer1Score?: number;
 	tournamentPlayer2Score?: number;
 	tournamentPlayer3Score?: number;
