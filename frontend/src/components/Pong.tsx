@@ -245,12 +245,22 @@ const	Pong: React.FC = () =>
 				&& states.current !== game.states.game_finished
 				&& states.current !== game.states.countdown
 				&& states.current !== game.states.tournament_bracket_preview
+				&& states.current !== game.states.in_transition
+				&& states.current !== game.states.not_found
+				&& states.current !== game.states.launch_games
 				&& states.current !== game.states.waiting_to_start) || (
 				lastHandledState.current === game.states.tournament_bracket_preview &&
 				states.current !== game.states.tournament_bracket_preview
 				&& states.current !== game.states.in_game
 				&& states.current !== game.states.game_finished
 				&& states.current !== game.states.countdown
+				&& states.current !== game.states.in_transition
+				&& states.current !== game.states.not_found
+				&& states.current !== game.states.launch_games
+				&& states.current !== game.states.tournament_round_1_game_1
+				&& states.current !== game.states.tournament_round_1_game_2
+				&& states.current !== game.states.in_game1
+				&& states.current !== game.states.in_game2
 				&& states.current !== game.states.waiting_to_start
 				&& states.current !== game.states.hosting_waiting_players
 				)
@@ -280,7 +290,7 @@ const	Pong: React.FC = () =>
 						console.log("👋 Host a quitté la salle d'attente, envoi de leave_room pour tournoi");
 						if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
 							socketRef.current.send(JSON.stringify({
-								type: 'leave_tournament',
+								type: 'leave_room',
 								gameId: roomId,
 							}));
 						}

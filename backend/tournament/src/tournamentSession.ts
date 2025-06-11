@@ -1,4 +1,49 @@
+import { match } from 'assert';
 import WebSocket from 'ws';
+
+
+class Match {
+	playerA: WebSocket | null = null;
+	playerB: WebSocket | null = null;
+	scoreA: number = 0;
+	scoreB: number = 0;
+	lastState: any = {
+		paddle1Z: 0,
+		paddle2Z: 0,
+		ballPosition: { x: 0, y: 0, z: 0 },
+		ballDirection: { x: 0, y: 0, z: 0 },
+		ballSpeedModifier: 1,
+	};
+
+	constructor(public matchId: 'game1' | 'game2' | 'final', playerA?: WebSocket, playerB?: WebSocket) {
+		if (playerA) this.playerA = playerA;
+		if (playerB) this.playerB = playerB;
+	}
+
+	updateState(data: any) {
+		const state: any = { type: 'state_update', matchId: this.matchId };
+
+		if (typeof data.paddle1Z === 'number') state.paddle1Z = data.paddle1Z;
+		if (typeof data.paddle2Z === 'number') state.paddle2Z = data.paddle2Z;
+		if (data.ballPosition) state.ballPosition = data.ballPosition;
+		if (data.ballDirection) state.ballDirection = data.ballDirection;
+		if (typeof data.ballSpeedModifier === 'number') state.ballSpeedModifier = data.ballSpeedModifier;
+
+		this.lastState = {
+			...this.lastState,
+			...state,
+		};
+
+		state.lastState = this.lastState;
+
+		this.broadcast(state);
+	}
+
+	broadcast(payload: any) {
+		this.playerA?.send(JSON.stringify(payload));
+		this.playerB?.send(JSON.stringify(payload));
+	}
+}
 
 
 export class tournamentSession {
@@ -34,27 +79,33 @@ export class tournamentSession {
 	score1_final: number = 0;
 	score2_final: number = 0;
 
-	lastStateGame1 = {
-		paddle1Z: 0,
-		paddle2Z: 0,
-		ballPosition: { x: 0, y: 0, z: 0 },
-		ballDirection: { x: 0, y: 0, z: 0 },
-		ballSpeedModifier: 1,
-	};
-	lastStateGame2 = {
-		paddle3Z: 0,
-		paddle4Z: 0,
-		ballPosition: { x: 0, y: 0, z: 0 },
-		ballDirection: { x: 0, y: 0, z: 0 },
-		ballSpeedModifier: 1,
-	};
-	lastStateFinal = {
-		paddle1Z: 0,
-		paddle2Z: 0,
-		ballPosition: { x: 0, y: 0, z: 0 },
-		ballDirection: { x: 0, y: 0, z: 0 },
-		ballSpeedModifier: 1,
-	};
+	// lastStateGame1 = {
+	// 	paddle1Z: 0,
+	// 	paddle2Z: 0,
+	// 	ballPosition: { x: 0, y: 0, z: 0 },
+	// 	ballDirection: { x: 0, y: 0, z: 0 },
+	// 	ballSpeedModifier: 1,
+	// };
+	// lastStateGame2 = {
+	// 	paddle3Z: 0,
+	// 	paddle4Z: 0,
+	// 	ballPosition: { x: 0, y: 0, z: 0 },
+	// 	ballDirection: { x: 0, y: 0, z: 0 },
+	// 	ballSpeedModifier: 1,
+	// };
+	// lastStateFinal = {
+	// 	paddle1Z: 0,
+	// 	paddle2Z: 0,
+	// 	ballPosition: { x: 0, y: 0, z: 0 },
+	// 	ballDirection: { x: 0, y: 0, z: 0 },
+	// 	ballSpeedModifier: 1,
+	// };
+
+
+	game1: Match = new Match('game1');
+	game2: Match = new Match('game2');
+	final: Match = new Match('final');
+
 
 	reported: boolean = false;
 
@@ -62,18 +113,24 @@ export class tournamentSession {
 		this.id = id;
 		this.player1 = socket;
 		this.roomName = roomName;
+
+		this.game1 = new Match('game1');
+		this.game2 = new Match('game2');
+		this.final = new Match('final');
 	}
+
 
 	setPlayer1(socket: WebSocket, player1Id: string, player1Pseudo: string) {
 		this.player1 = socket;
 		this.player1Id = player1Id;	
 		this.player1Pseudo = player1Pseudo;
 	}
-
+	
 	setPlayer2(socket: WebSocket, player2Id: string, player2Pseudo: string) {
 		this.player2 = socket;
 		this.player2Id = player2Id;
 		this.player2Pseudo = player2Pseudo;
+		new Match('game1', this.player1, this.player2);
 		// this.broadcast({ type: 'game_start' });
 	}
 
@@ -87,6 +144,7 @@ export class tournamentSession {
 		this.player4 = socket;
 		this.player4Id = player4Id;
 		this.player4Pseudo = player4Pseudo;
+		new Match('game2', this.player3 ?? undefined, this.player4 ?? undefined);
 	}
 
 	getPlayerId(socket: WebSocket): string | null {
@@ -131,49 +189,49 @@ export class tournamentSession {
 	// 	this.broadcast(state);
 	// }
 
-	hanfleGameUpdateGame1(data: any) {
-		const state: any = { type: 'state_update_game1' };
-		if (typeof data.paddle1Z === 'number') state.paddle1Z = data.paddle1Z;
-		if (typeof data.paddle2Z === 'number') state.paddle2Z = data.paddle2Z;
-		if (data.ballPosition) state.ballPosition = data.ballPosition;
-		if (data.ballDirection) state.ballDirection = data.ballDirection;
-		if (typeof data.ballSpeedModifier === 'number') state.ballSpeedModifier = data.ballSpeedModifier;
-		this.lastStateGame1 = {
-			...this.lastStateGame1,
-			...state,
-		};
-		state.lastStateGame1 = this.lastStateGame1;
-		this.broadCastGame1(state);
-	}
-	hanfleGameUpdateGame2(data: any) {
-		const state: any = { type: 'state_update_game2' };
-		if (typeof data.paddle3Z === 'number') state.paddle3Z = data.paddle3Z;
-		if (typeof data.paddle4Z === 'number') state.paddle4Z = data.paddle4Z;
-		if (data.ballPosition) state.ballPosition = data.ballPosition;
-		if (data.ballDirection) state.ballDirection = data.ballDirection;
-		if (typeof data.ballSpeedModifier === 'number') state.ballSpeedModifier = data.ballSpeedModifier;
-		this.lastStateGame2 = {
-			...this.lastStateGame2,
-			...state,
-		};
-		state.lastStateGame2 = this.lastStateGame2;
-		this.broadCastGame2(state);
-	}
+	// hanfleGameUpdateGame1(data: any) {
+	// 	const state: any = { type: 'state_update_game1' };
+	// 	if (typeof data.paddle1Z === 'number') state.paddle1Z = data.paddle1Z;
+	// 	if (typeof data.paddle2Z === 'number') state.paddle2Z = data.paddle2Z;
+	// 	if (data.ballPosition) state.ballPosition = data.ballPosition;
+	// 	if (data.ballDirection) state.ballDirection = data.ballDirection;
+	// 	if (typeof data.ballSpeedModifier === 'number') state.ballSpeedModifier = data.ballSpeedModifier;
+	// 	this.lastStateGame1 = {
+	// 		...this.lastStateGame1,
+	// 		...state,
+	// 	};
+	// 	state.lastStateGame1 = this.lastStateGame1;
+	// 	this.broadCastGame1(state);
+	// }
+	// hanfleGameUpdateGame2(data: any) {
+	// 	const state: any = { type: 'state_update_game2' };
+	// 	if (typeof data.paddle3Z === 'number') state.paddle3Z = data.paddle3Z;
+	// 	if (typeof data.paddle4Z === 'number') state.paddle4Z = data.paddle4Z;
+	// 	if (data.ballPosition) state.ballPosition = data.ballPosition;
+	// 	if (data.ballDirection) state.ballDirection = data.ballDirection;
+	// 	if (typeof data.ballSpeedModifier === 'number') state.ballSpeedModifier = data.ballSpeedModifier;
+	// 	this.lastStateGame2 = {
+	// 		...this.lastStateGame2,
+	// 		...state,
+	// 	};
+	// 	state.lastStateGame2 = this.lastStateGame2;
+	// 	this.broadCastGame2(state);
+	// }
 
-	handleFinalUpdate(data: any) {
-		const state: any = { type: 'state_update_final' };
-		if (typeof data.paddle1Z === 'number') state.paddle1Z = data.paddle1Z;
-		if (typeof data.paddle2Z === 'number') state.paddle2Z = data.paddle2Z;
-		if (data.ballPosition) state.ballPosition = data.ballPosition;
-		if (data.ballDirection) state.ballDirection = data.ballDirection;
-		if (typeof data.ballSpeedModifier === 'number') state.ballSpeedModifier = data.ballSpeedModifier;
-		this.lastStateFinal = {
-			...this.lastStateFinal,
-			...state,
-		};
-		state.lastStateFinal = this.lastStateFinal;
-		this.broadCastFinal(state);
-	}
+	// handleFinalUpdate(data: any) {
+	// 	const state: any = { type: 'state_update_final' };
+	// 	if (typeof data.paddle1Z === 'number') state.paddle1Z = data.paddle1Z;
+	// 	if (typeof data.paddle2Z === 'number') state.paddle2Z = data.paddle2Z;
+	// 	if (data.ballPosition) state.ballPosition = data.ballPosition;
+	// 	if (data.ballDirection) state.ballDirection = data.ballDirection;
+	// 	if (typeof data.ballSpeedModifier === 'number') state.ballSpeedModifier = data.ballSpeedModifier;
+	// 	this.lastStateFinal = {
+	// 		...this.lastStateFinal,
+	// 		...state,
+	// 	};
+	// 	state.lastStateFinal = this.lastStateFinal;
+	// 	this.broadCastFinal(state);
+	// }
 
 	broadcast(payload: any) {
 		this.player1.send(JSON.stringify(payload));
