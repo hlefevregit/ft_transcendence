@@ -175,6 +175,7 @@ export type pongStruct =
 	game2Finished?: boolean;
 	isHost?: boolean;
 	isHost2?: boolean;
+	launched?: boolean;	// Used to know if the tournament has been launched
 	
 	// Room management
 	rooms: Map<string, any>;
@@ -269,6 +270,7 @@ export function initPongStruct(): pongStruct
 
 		rooms: new Map<string, any>(),
 		party: new Map<string, any>(),
+		launched: false,
 
 		musicVolume: 1,
 		soundVolume: 1,
