@@ -20,9 +20,6 @@ COPY package*.json ./
 # Copie le reste du code
 COPY . .
 
-# Expose le port si besoin
-EXPOSE 3000
-
 RUN chmod +x ./config/start.sh
 
 RUN npx prisma generate

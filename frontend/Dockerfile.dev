@@ -15,10 +15,8 @@ COPY index.html ./
 
 
 COPY . .
-
-# Ouvre le port pour vite
-EXPOSE 5173
+RUN chmod +x entrypoint.sh
 
 RUN npm run build:css
 
-CMD ["npm", "run", "dev"]
+ENTRYPOINT ["bash", "entrypoint.sh"]
