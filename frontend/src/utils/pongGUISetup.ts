@@ -160,6 +160,23 @@ export const	updateGUIValues = (
 	}
 }
 
+export const	updatePlayerNames = (pong: React.RefObject<game.pongStruct>, gameModes: React.RefObject<game.gameModes>): void =>
+{
+	switch (gameModes.current)
+	{
+		case game.gameModes.tournament:
+			const player1Name = game.findComponentByName(pong, "player1ScoreText");
+			const player2Name = game.findComponentByName(pong, "player2ScoreText");
+
+			if (player1Name && player2Name)
+			{
+				player1Name.text = pong.current.playerNameLeft;
+				player2Name.text = pong.current.playerNameRight;
+			}
+			break;
+	}
+}
+
 export const	refreshOnlineRoomsEntries = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>): baby.StackPanel =>
 {
 	if (!pong.current.rooms)
