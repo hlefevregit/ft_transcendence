@@ -358,7 +358,7 @@ export const useOnlineLoop = (pong: React.RefObject<game.pongStruct>,
                     // return;
                 }
 
-                // 3. Interpolation position de l’adversaire
+               // 3. Interpolation position de l’adversaire
                 const smoothFactor = 0.9;
                 if (pong.current.isHost && typeof pong.current.paddle2TargetZ === 'number' && pong.current.paddle2) {
                     const cur = pong.current.paddle2.position.z;

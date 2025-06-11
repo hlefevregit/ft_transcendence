@@ -20,22 +20,44 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 
 	console.log(userNameRef.current, "is hosting a tournament? ", gameModes.current === game.gameModes.tournament);
 
-	// const quitClient = () => {
-	// 	console.log("🏠 Tentative de déconnexion du client WebSocket");
-	// 	if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-	// 		socketRef.current.send(JSON.stringify({
-				// type: 'player_disconnected',
-	// 			gameId: pong.current.tournamentId,
-	// 		}));
-	// 		console.log("🏠 Envoi de la demande de déconnexion");
-	// 	}
-	// 	else {
-	// 		console.warn("⚠️ WebSocket non ouvert, impossible d'envoyer la demande de déconnexion");
-	// 	}
-	// 	socketRef.current = null;
-	// 	pong.current.party.clear();
-	// 	states.current = game.states.party_canceled;
-	// }
+
+	function handleMatchUpdate({
+		pong,
+		data,
+		isHost,
+		paddle1ZKey,
+		paddle2ZKey,
+		ballUpdate = true
+	}: {
+		pong: React.RefObject<game.pongStruct>,
+		data: any,
+		isHost: boolean,
+		paddle1ZKey: 'paddle1Z' | 'paddle3Z',
+		paddle2ZKey: 'paddle2Z' | 'paddle4Z',
+		ballUpdate?: boolean
+	}) {
+		// 🎯 Paddle interpolation
+		if (isHost && typeof data[paddle2ZKey] === 'number') {
+			pong.current.paddle2TargetZ = data[paddle2ZKey];
+		}
+		if (!isHost && typeof data[paddle1ZKey] === 'number') {
+			pong.current.paddle1TargetZ = data[paddle1ZKey];
+		}
+
+		// 🎾 Ball update only if not host (host already moves it)
+		if (!isHost && ballUpdate && data.ballPosition && pong.current.ball) {
+			pong.current.ball.position.x = data.ballPosition.x;
+			pong.current.ball.position.y = data.ballPosition.y;
+			pong.current.ball.position.z = data.ballPosition.z;
+		}
+		if (!isHost && ballUpdate && data.ballDirection) {
+			pong.current.ballDirection = data.ballDirection;
+		}
+		if (!isHost && ballUpdate && typeof data.ballSpeedModifier === 'number') {
+			pong.current.ballSpeedModifier = data.ballSpeedModifier;
+		}
+	}
+
 
 	if (ws) {
 		ws.onopen = () => {
@@ -169,7 +191,7 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 						console.log(" PLAYER 2 ID:", pong.current.tournamentPlayer2Id);
 						console.log(" PLAYER 3 ID:", pong.current.tournamentPlayer3Id);
 						console.log(" PLAYER 4 ID:", pong.current.tournamentPlayer4Id);
-						// states.current = game.states.launch_games;
+						states.current = game.states.launch_games;
 						break;
 					}
 
@@ -189,65 +211,23 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 						break;
 					}
 
-					case 'game1_update': {
-						if (gameModes.current === game.gameModes.online) {
-							// 🎯 HOST: applique la position de l'adversaire (player 2)
-							if (pong.current.isHost && typeof data.paddle2Z === 'number') {
-								pong.current.paddle2TargetZ = data.paddle2Z;
-							}
-		
-							if (!pong.current.isHost && typeof data.paddle1Z === 'number') {
-								pong.current.paddle1TargetZ = data.paddle1Z;
-							}
-		
-							// 🟢 Seul le host reçoit et met à jour la balle
-							if (!pong.current.isHost && data.ballPosition && pong.current.ball) {
-								pong.current.ball.position.x = data.ballPosition.x;
-								pong.current.ball.position.y = data.ballPosition.y;
-								pong.current.ball.position.z = data.ballPosition.z;
-							}
-		
-							if (!pong.current.isHost && data.ballDirection) {
-								pong.current.ballDirection = data.ballDirection;
-							}
-		
-							if (!pong.current.isHost && typeof data.ballSpeedModifier === 'number') {
-								pong.current.ballSpeedModifier = data.ballSpeedModifier;
-							}
+					case 'state_update' : {
+						switch(data.matchId) {
+							case 'game1':
+								handleMatchUpdate({ pong, data, isHost: pong.current.isHost ?? false, paddle1ZKey: 'paddle1Z', paddle2ZKey: 'paddle2Z' });
+								break;
+							case 'game2':
+								handleMatchUpdate({ pong, data, isHost: pong.current.isHost2 ?? false, paddle1ZKey: 'paddle1Z', paddle2ZKey: 'paddle2Z' });
+								break;
+							case 'final':
+								const isFinalHost = pong.current.tournamentFinalist1 === userNameRef.current;
+								handleMatchUpdate({ pong, data, isHost: isFinalHost, paddle1ZKey: 'paddle1Z', paddle2ZKey: 'paddle2Z' });
+								break;
+							default:
+								console.warn('❓ matchId inconnu:', data.matchId);
 						}
-		
-						break;
 					}
 
-					case 'game2_update': {
-						if (gameModes.current === game.gameModes.online) {
-							// 🎯 HOST: applique la position de l'adversaire (player 2)
-							if (pong.current.isHost2 && typeof data.paddle2Z === 'number') {
-								pong.current.paddle2TargetZ = data.paddle2Z;
-							}
-		
-							if (!pong.current.isHost2 && typeof data.paddle1Z === 'number') {
-								pong.current.paddle1TargetZ = data.paddle1Z;
-							}
-		
-							// 🟢 Seul le host reçoit et met à jour la balle
-							if (!pong.current.isHost2 && data.ballPosition && pong.current.ball) {
-								pong.current.ball.position.x = data.ballPosition.x;
-								pong.current.ball.position.y = data.ballPosition.y;
-								pong.current.ball.position.z = data.ballPosition.z;
-							}
-		
-							if (!pong.current.isHost2 && data.ballDirection) {
-								pong.current.ballDirection = data.ballDirection;
-							}
-		
-							if (!pong.current.isHost2 && typeof data.ballSpeedModifier === 'number') {
-								pong.current.ballSpeedModifier = data.ballSpeedModifier;
-							}
-						}
-		
-						break;
-					}
 
 					case 'game1_finished': {
 						console.log("🏁 Game 1 finished, scores:", data.player1Score, data.player2Score)
@@ -282,6 +262,8 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 						states.current = game.states.tournament_final;
 						break;
 					}
+
+
 
 					// case 'party_canceled': {
 					// 	console.log("🏠 Vous avez quitté la partie:", data.gameId);
@@ -405,23 +387,28 @@ export const handleTournamentLoop = (
 
 		case game.states.launch_games: {
 			console.log("🏆 current state = launch_games");
-			if (pong.current.tournamentPlayer1Id === userNameRef.current) {
-				console.log("🏆 Lancement du premier round game 1");
-				if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-					socketRef.current.send(JSON.stringify({
-						type: 'start_round1_game1',
-						gameId: pong.current.tournamentId,
-					}));
-				} else if (pong.current.tournamentPlayer3Id === userNameRef.current) {
-					console.log("🏆 Lancement du premier round game 2");
+			if (!pong.current.launched)
+			{
+				if (pong.current.tournamentPlayer1Id === userNameRef.current) {
+					console.log("🏆 Lancement du premier round game 1");
 					if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
 						socketRef.current.send(JSON.stringify({
-							type: 'start_round1_game2',
+							type: 'start_round1_game1',
 							gameId: pong.current.tournamentId,
 						}));
+					} else if (pong.current.tournamentPlayer3Id === userNameRef.current) {
+						console.log("🏆 Lancement du premier round game 2");
+						if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+							socketRef.current.send(JSON.stringify({
+								type: 'start_round1_game2',
+								gameId: pong.current.tournamentId,
+							}));
+						}
 					}
 				}
+				pong.current.launched = true;
 			}
+				
 			break;
 		}
 		case game.states.tournament_round_1_game_1: {
@@ -491,12 +478,12 @@ export const handleTournamentLoop = (
 		case game.states.in_game1: {
 			const now = Date.now();
 			const timeSinceLastUpdate = now - (pong.current.lastUpdateSetAt || 0);
-			console.log("🔄 In game1, time since last update:", timeSinceLastUpdate, "ms");
+			// console.log("🔄 In game1, time since last update:", timeSinceLastUpdate, "ms");
 			if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
 				game.fitCameraToArena(pong.current);
 
 				// 1. Input du joueur local
-				game.doPaddleMovement(pong, gameModes, states);
+				// game.doPaddleMovement(pong, gameModes, states);
 
 				// 2. Score check
 				const maxScore = Math.max(pong.current.player1Score, pong.current.player2Score);
@@ -540,6 +527,7 @@ export const handleTournamentLoop = (
 				if (paddleMoved) {
 					const payload: any = {
 						type: 'game1_update',
+						gameId: pong.current.tournamentId,
 					};
 					// console.log("Paddle moved, preparing payload...");
 					if (isHost) {
@@ -555,6 +543,7 @@ export const handleTournamentLoop = (
 				if (isHost) {
 					const payload: any = {
 						type: 'game1_update',
+						gameId: pong.current.tournamentId,
 					}
 					if (pong.current.ball) {
 						pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
@@ -632,6 +621,7 @@ export const handleTournamentLoop = (
 				if (paddleMoved) {
 					const payload: any = {
 						type: 'game2_update',
+						gameId: pong.current.tournamentId,
 					};
 					// console.log("Paddle moved, preparing payload...");
 					if (isHost) {
@@ -647,6 +637,7 @@ export const handleTournamentLoop = (
 				if (isHost) {
 					const payload: any = {
 						type: 'game2_update',
+						gameId: pong.current.tournamentId,
 					}
 					if (pong.current.ball) {
 						pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
@@ -770,6 +761,7 @@ export const handleTournamentLoop = (
 				if (paddleMoved) {
 					const payload: any = {
 						type: 'final_update',
+						gameId: pong.current.tournamentId,
 					};
 					// console.log("Paddle moved, preparing payload...");
 					if (isHost) {
@@ -785,6 +777,7 @@ export const handleTournamentLoop = (
 				if (isHost) {
 					const payload: any = {
 						type: 'final_update',
+						gameId: pong.current.tournamentId,
 					}
 					if (pong.current.ball) {
 						pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;

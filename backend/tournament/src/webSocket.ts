@@ -2,7 +2,7 @@ import { WebSocketServer, WebSocket } from 'ws';
 import { tournamentSession } from './tournamentSession';
 import crypto from 'crypto';
 import { FastifyInstance } from 'fastify';
-import type { Server } from 'http';
+import { get, type Server } from 'http';
 import jwt from 'jsonwebtoken';
 import { URL } from 'url';
 
@@ -114,30 +114,11 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 						break;
 					}
 
-					case 'start_round1_game1' : {
-						const session = games.get(data.gameId);
-						if (session && session.player1 && session.player2) {
-							const message = {
-								type: 'start_round1_game1',
-								gameId: session.id,
-								player1Id: session.player1Id,
-								player2Id: session.player2Id,
-							};
-							session.player1.send(JSON.stringify(message));
-							if (session.player2 && session.player2.readyState === WebSocket.OPEN) {
-								session.player2.send(JSON.stringify(message));
-							}
-						}
-						else {
-							ws.send(JSON.stringify({ type: 'error', message: 'Game is not ready or does not exist' }));
-						}
-						break;
-					}
-
+					
 					case 'leave_tournament': {
 						console.log("🚪 Client demande de quitter le tournoi");
-				
-
+						
+						
 						if (!data.gameId) {
 							ws.send(JSON.stringify({ type: 'error', message: 'Game ID is required to leave a tournament' }));
 							break;
@@ -168,6 +149,27 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 						}
 						break;
 					}
+					
+					case 'start_round1_game1' : {
+						const session = games.get(data.gameId);
+						console.log("🔍 Recherche de la session pour gameId:", data.gameId);
+						if (session && session.player1 && session.player2) {
+							const message = {
+								type: 'start_round1_game1',
+								gameId: session.id,
+								player1Id: session.player1Id,
+								player2Id: session.player2Id,
+							};
+							session.player1.send(JSON.stringify(message));
+							if (session.player2 && session.player2.readyState === WebSocket.OPEN) {
+								session.player2.send(JSON.stringify(message));
+							}
+						}
+						else {
+							ws.send(JSON.stringify({ type: 'error', message: 'Game is not ready or does not exist' }));
+						}
+						break;
+					}
 
 					case 'start_round1_game2' : {
 						const session = games.get(data.gameId);
@@ -190,14 +192,18 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 					}
 
 					case 'game1_update': {
-						const session = [...games.values()].find(s => s.hasSocket(ws));
-						session?.hanfleGameUpdateGame1(data);
+						console.log("🔄 Mise à jour du jeu 1");
+						const session = games.get(data.gameId);
+						console.log("Game ID:", data.gameId);
+						session?.game1.updateState(data);
 						break;
 					}
 					
 					case 'game2_update': {
-						const session = [...games.values()].find(s => s.hasSocket(ws));
-						session?.hanfleGameUpdateGame2(data);
+						console.log("🔄 Mise à jour du jeu 2");
+						const session = games.get(data.gameId);
+						console.log("🔄 Mise à jour du jeu 2 pour la session:", session?.id);
+						session?.game2.updateState(data);
 						break;
 					}
 
@@ -258,8 +264,12 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 					}
 
 					case 'final_update': {
-						const session = [...games.values()].find(s => s.hasSocket(ws));
-						session?.handleFinalUpdate(data);
+						const session = games.get(data.gameId);
+						if (session) {
+							session.final.updateState(data);
+						} else {
+							ws.send(JSON.stringify({ type: 'error', message: 'Game is not ready or does not exist' }));
+						}
 						break;
 					}
 
