@@ -78,7 +78,8 @@ const	Pong: React.FC = () =>
 					states,
 					lang,
 					userNameRef,
-					ws
+					ws,
+					lastHandledState,
 				);
 			});
 		}
@@ -106,7 +107,7 @@ const	Pong: React.FC = () =>
 		// Initialize the game
 		game.setupBabylon(pong.current, canvasRef.current);
 		// Initialize all the GUI
-		game.initializeAllGUIScreens(pong, gameModes, states, playerState, lang, socketRef, navigate, setGameModeTrigger);
+		game.initializeAllGUIScreens(pong, gameModes, states, playerState, lang, socketRef, navigate, setGameModeTrigger, lastHandledState);
 		game.updateGUIVisibilityStates(pong, states.current);
 		game.updateGUIVisibilityPlayerStates(pong, playerState.current);
 		game.updateGUIValues(pong, states, lang);
@@ -239,13 +240,23 @@ const	Pong: React.FC = () =>
 
 
 			if (
-				lastHandledState.current === game.states.hosting_waiting_players &&
+				(lastHandledState.current === game.states.hosting_waiting_players &&
 				states.current !== game.states.hosting_waiting_players
 				&& states.current !== game.states.in_game 
 				&& states.current !== game.states.game_finished
 				&& states.current !== game.states.countdown
+				&& states.current !== game.states.tournament_bracket_preview
+				&& states.current !== game.states.waiting_to_start) || (
+				lastHandledState.current === game.states.tournament_bracket_preview &&
+				states.current !== game.states.tournament_bracket_preview
+				&& states.current !== game.states.in_game
+				&& states.current !== game.states.game_finished
+				&& states.current !== game.states.countdown
 				&& states.current !== game.states.waiting_to_start
+				&& states.current !== game.states.hosting_waiting_players
+				)
 			) {
+				console.log("roomId:", pong.current.lastHostedRoomId);
 				const roomId = pong.current.lastHostedRoomId;
 				if (gameModes.current === game.gameModes.online && roomId !== 'none') {
 
@@ -260,10 +271,13 @@ const	Pong: React.FC = () =>
 						pong.current.rooms.delete(roomId);
 					}
 				}
-				else if (gameModes.current === game.gameModes.tournament)
+				else if (gameModes.current === game.gameModes.tournament && pong.current.isHost)
 				{
+					console.log("🏆 Tournament mode active, checking if host is leaving tournament room");
 					if (roomId && roomId !== 'none' && socketRef.current?.readyState === WebSocket.OPEN)
 					{
+						console.log("||||||||||||||||||||||||||||||| roomId:", roomId);
+						
 						console.log("👋 Host a quitté la salle d'attente, envoi de leave_room pour tournoi");
 						if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
 							socketRef.current.send(JSON.stringify({
@@ -276,6 +290,7 @@ const	Pong: React.FC = () =>
 						pong.current.party.delete(roomId);
 					}
 				}
+				lastHandledState.current = states.current;
 			}
 			if (gameModes.current === game.gameModes.online)
 			{

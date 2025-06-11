@@ -16,6 +16,12 @@ export class tournamentSession {
 	player3Id: string = 'player3';
 	player4Id: string = 'player4';
 
+	player1Pseudo: string = 'Player 1';
+	player2Pseudo: string = 'Player 2';
+	player3Pseudo: string = 'Player 3';
+	player4Pseudo: string = 'Player 4';
+
+
 	finalist1: WebSocket | null = null;
 	finalist2: WebSocket | null = null;
 
@@ -58,25 +64,29 @@ export class tournamentSession {
 		this.roomName = roomName;
 	}
 
-	setPlayer2(socket: WebSocket, player2Id: string) {
+	setPlayer1(socket: WebSocket, player1Id: string, player1Pseudo: string) {
+		this.player1 = socket;
+		this.player1Id = player1Id;	
+		this.player1Pseudo = player1Pseudo;
+	}
+
+	setPlayer2(socket: WebSocket, player2Id: string, player2Pseudo: string) {
 		this.player2 = socket;
 		this.player2Id = player2Id;
+		this.player2Pseudo = player2Pseudo;
 		// this.broadcast({ type: 'game_start' });
 	}
 
-	setPlayer1(socket: WebSocket, player1Id: string) {
-		this.player1 = socket;
-		this.player1Id = player1Id;	
-	}
-
-	setPlayer3(socket: WebSocket, player3Id: string) {
+	setPlayer3(socket: WebSocket, player3Id: string, player3Pseudo: string) {
 		this.player3 = socket;
 		this.player3Id = player3Id;
+		this.player3Pseudo = player3Pseudo;
 	}
 
-	setPlayer4(socket: WebSocket, player4Id: string) {
+	setPlayer4(socket: WebSocket, player4Id: string, player4Pseudo: string) {
 		this.player4 = socket;
 		this.player4Id = player4Id;
+		this.player4Pseudo = player4Pseudo;
 	}
 
 	getPlayerId(socket: WebSocket): string | null {

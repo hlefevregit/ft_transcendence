@@ -16,17 +16,17 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 		const url = new URL(req.url || '', `http://${req.headers.host}`);
 		const token = url.searchParams.get('token');
 
-		let username = 'anonymous';
+		let userID = 'anonymous';
 		if (token) {
 			try {
 				const payload: any = jwt.verify(token, 'supersecretkey');
-				username = payload.pseudo || 'unknown';
+				userID = payload.id || 'unknown';
 			} catch (err) {
 				console.error('❌ JWT invalide :', err);
 			}
 		}
 
-		console.log('🆕 New WebSocket client connected as:', username);
+		console.log('🆕 New WebSocket client connected as:', userID);
 
 		ws.on('message', async (message) => {
 			try {
@@ -34,32 +34,34 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 				console.log("📬 Message reçu tournoi:", data);
 
 				switch (data.type) {
+
 					case 'host_tournament': {
 						const gameId = crypto.randomUUID();
 						const session = new tournamentSession(gameId, ws, data.roomName || `${gameId}'s tournament`);
-						session.setPlayer1(ws, username);
+						session.setPlayer1(ws, userID, data.username);
 						games.set(gameId, session);
 						ws.send(JSON.stringify({ type: 'tournament_hosted', gameId, roomName: session.roomName }));
 						break;
 					}
 					
 					case 'join_tournament': {
+						console.log("🚪 Client demande de rejoindre le tournoi, username = ", data.username);
 						
 						const session = games.get(data.gameId);
 						console.log("🔍 Recherche de la session pour gameId:", data.gameId);
 						if (session && session.player2 === null) {
 							console.log("🚪 Player 2 rejoint le tournoi");
-							session.setPlayer2(ws, username);
+							session.setPlayer2(ws, userID, data.username);
 							ws.send(JSON.stringify({ type: 'joined_tournament', gameId: session.id, isHost2: false }));
 						}
 						else if (session && session.player3 === null) {
 							console.log("🚪 Player 3 rejoint le tournoi");
-							session.setPlayer3(ws, username);
+							session.setPlayer3(ws, userID, data.username);
 							ws.send(JSON.stringify({ type: 'joined_tournament', gameId: session.id, isHost2: true}));
 						}
 						else if (session && session.player4 === null) {
 							console.log("🚪 Player 4 rejoint le tournoi");
-							session.setPlayer4(ws, username);
+							session.setPlayer4(ws, userID, data.username);
 							const player4 = session.player4 as WebSocket | null;
 							ws.send(JSON.stringify({ type: 'joined_tournament', gameId: session.id , isHost2: false}));
 						}
@@ -134,6 +136,7 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 
 					case 'leave_tournament': {
 						console.log("🚪 Client demande de quitter le tournoi");
+				
 
 						if (!data.gameId) {
 							ws.send(JSON.stringify({ type: 'error', message: 'Game ID is required to leave a tournament' }));

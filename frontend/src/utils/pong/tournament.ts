@@ -14,6 +14,7 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 	lang: React.RefObject<game.lang>,
 	userNameRef: React.RefObject<string>,
 	ws: WebSocket | null,
+	lastHandledState: React.RefObject<game.states>,
 ) => {
 	socketRef.current = ws;
 
@@ -64,13 +65,15 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 
 						const roomName = `${userNameRef.current || 'Anonymous'}'s room`;
 
-						console.log("🏠 Room name:", roomName);
+						console.log("🏠 Room name:", roomName, " Username = ", pong.current.username);
+		
 
 						const roomPanel = game.createRoomPanel(pong, lang, roomName, () => {
 							if (socketRef.current) {
 								socketRef.current.send(JSON.stringify({
 									type: 'join_tournament',
 									gameId: roomId,
+									username: pong.current.username,
 								}));
 							}
 						});
@@ -78,23 +81,42 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 
 						pong.current.party.set(roomId, () => roomPanel);
 						console.log("🏠 Party set for room:", roomId);
+						lastHandledState.current = game.states.hosting_waiting_players;
+						states.current = game.states.tournament_bracket_preview;
 						break;
 					}
 
 					case 'room_list': {
 						console.log("🏠 Liste des salles reçue:", data.rooms);
 						pong.current.party.clear();
+
 						data.rooms.forEach((room: any) => {
 							const roomId = room.gameId;
 							const roomName = room.name + 's tournament';
-							const roomPanel = game.createRoomPanel(pong, lang, roomName, () => {
-								if (socketRef.current) {
-									socketRef.current.send(JSON.stringify({
-										type: 'join_tournament',
-										gameId: roomId,
-									}));
+
+							const waitForUsername = () => {
+								if (pong.current.username && pong.current.username.trim() !== '') {
+									console.log("✅ Username prêt:", pong.current.username);
+									if (socketRef.current) {
+										socketRef.current.send(JSON.stringify({
+											type: 'join_tournament',
+											gameId: roomId,
+											username: pong.current.username,
+										}));
+									}
+								} else {
+									console.log("⏳ En attente du username...");
+									requestAnimationFrame(waitForUsername);
 								}
+							};
+
+							const roomPanel = game.createRoomPanel(pong, lang, roomName, () => {
+								states.current = game.states.input_username;
+								game.updateGUIValues(pong, states, lang);
+								console.log("📥 Passage à l'état input_username pour rejoindre:", roomId);
+								waitForUsername(); // Lancement de la boucle d'attente
 							});
+
 							pong.current.party.set(roomId, () => roomPanel);
 						});
 
@@ -107,6 +129,7 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 						} else {
 							console.warn("⚠️ roomListVerticalStackPanel introuvable");
 						}
+
 						break;
 					}
 
@@ -116,21 +139,20 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 						if (data.isHost2 === true) {
 							pong.current.isHost2 = true;
 							console.log("🏠 En attente de joueurs pour le tournoi:", data.gameId)
-							// states.current = game.states.waiting_tournament_to_start;
 						}
 					}
 
-					case 'waiting_for_players': {
-						console.log("🏠 En attente du tournoi à démarrer:", data.gameId);
-						pong.current.tournamentId = data.gameId;
-						pong.current.tournamentPlayer1Id = data.player1Id;
-						pong.current.tournamentPlayer2Id = data.player2Id;
-						pong.current.tournamentPlayer3Id = data.player3Id;
-						pong.current.tournamentPlayer4Id = data.player4Id;
+					// case 'waiting_for_players': {
+					// 	console.log("🏠 En attente du tournoi à démarrer:", data.gameId);
+					// 	pong.current.tournamentId = data.gameId;
+					// 	pong.current.tournamentPlayer1Id = data.player1Id;
+					// 	pong.current.tournamentPlayer2Id = data.player2Id;
+					// 	pong.current.tournamentPlayer3Id = data.player3Id;
+					// 	pong.current.tournamentPlayer4Id = data.player4Id;
 
-						states.current = game.states.tournament_bracket_preview;
-						break;
-					}
+					// 	states.current = game.states.tournament_bracket_preview;
+					// 	break;
+					// }
 
 
 					case 'start_tournament': {
@@ -287,7 +309,9 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 							pong.current.tournamentPlayer4Id = undefined;
 							pong.current.tournamentPlayer4Score = 0;
 						}
+						break;
 					}
+
 
 					default:
 						console.warn("⚠️ Type de message inconnu:", data.type);
@@ -316,6 +340,7 @@ export const handleTournamentLoop = (
 				socketRef.current.send(JSON.stringify({
 					type: 'host_tournament',
 					roomName: `${userNameRef.current}'s tournament`,
+					username: pong.current.username,
 				}));
 				lastHandledState.current = game.states.hosting_waiting_players;
 				console.log("🏠 Envoi de la demande d'hébergement de tournoi");
@@ -332,6 +357,7 @@ export const handleTournamentLoop = (
 					gameId: pong.current.tournamentId,
 				}));
 			}
+			break;
 			// states.current = game.states.main_menu;
 		}
 
@@ -352,13 +378,13 @@ export const handleTournamentLoop = (
 		}
 
 
-		// case game.states.tournament_bracket_preview: {
-		// 	// Handle tournament bracket preview logic here
-		// 	// This could involve rendering the tournament tree, updating player states, etc.
-		// 	console.log("🏆 Affichage du tableau du tournoi");
-		// 	// states.current = game.states.launch_games;
-		// 	break;
-		// }
+		case game.states.tournament_bracket_preview: {
+			// Handle tournament bracket preview logic here
+			// This could involve rendering the tournament tree, updating player states, etc.
+			lastHandledState.current = game.states.tournament_bracket_preview;
+			// states.current = game.states.launch_games;
+			break;
+		}
 
 		case game.states.waiting_tournament_to_start: {
 			
@@ -374,6 +400,7 @@ export const handleTournamentLoop = (
 					player4Id: pong.current.tournamentPlayer4Id,
 				}));
 			}
+			break;
 		}
 
 		case game.states.launch_games: {
@@ -395,6 +422,7 @@ export const handleTournamentLoop = (
 					}
 				}
 			}
+			break;
 		}
 		case game.states.tournament_round_1_game_1: {
 			if (
@@ -687,6 +715,7 @@ export const handleTournamentLoop = (
 			else {
 				console.log("🏆 En attente de la fin des jeux pour démarrer la finale");
 			}
+			break;
 		}
 
 		case game.states.tournament_final: {
