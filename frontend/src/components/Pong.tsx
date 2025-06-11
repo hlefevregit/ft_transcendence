@@ -371,6 +371,7 @@ const	Pong: React.FC = () =>
 		const updateGUIsValuesWhenNeeded = setInterval(() =>
 		{
 			game.updateGUIValues(pong, states, lang);
+			game.updatePlayerNames(pong, gameModes);
 		}, 200);
 
 		// Handle resizing of the canvas
