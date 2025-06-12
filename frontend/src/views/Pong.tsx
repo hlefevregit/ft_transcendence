@@ -31,9 +31,8 @@ const	Pong: React.FC = () =>
 	const	userNameRef = React.useRef<string>(null as unknown as string);
 	const	audioRef = React.useRef<HTMLAudioElement | null>(null);
 
-	const [gameModeTrigger, setGameModeTrigger] = React.useState<number>(0);
+	const	[gameModeTrigger, setGameModeTrigger] = React.useState<number>(0);
 
-	// const	[userName, getUserName] = React.useState<string | null>(null);
 	const	socketRef = React.useRef<WebSocket | null>(null);
 	const	lastHandledState = React.useRef<game.states>(game.states.main_menu);
 
@@ -104,21 +103,14 @@ const	Pong: React.FC = () =>
 		if (!canvasRef.current) return;
 		canvasRef.current.focus();
 
-		// Initialize the game
+		// Initialize babylon
 		game.setupBabylon(pong.current, canvasRef.current);
-		// Initialize all the GUI
+		// Initialize all the GUI screens
 		game.initializeAllGUIScreens(pong, gameModes, states, playerState, lang, socketRef, navigate, setGameModeTrigger, lastHandledState);
 		game.updateGUIVisibilityStates(pong, states.current);
 		game.updateGUIVisibilityPlayerStates(pong, playerState.current , gameModes.current);
 		game.updateGUIValues(pong, states, lang);
 		
-
-		console.log("Initializing GUI...");
-		console.log("GUI initialization complete");
-		
-
-		
-
 		if (gameModes.current === game.gameModes.online)
 		{
 			if
@@ -249,8 +241,8 @@ const	Pong: React.FC = () =>
 				switch (states.current)
 				{
 					default:
-						// if (states.current > (Object.keys(game.states).length / 2) - 1) states.current = 0;
-						// if (states.current < 0) states.current = (Object.keys(game.states).length / 2) - 1;
+						if (states.current > 25) states.current = 0;
+						if (states.current < 0) states.current = 25;
 						break;
 
 					case game.states.not_found:
@@ -282,11 +274,9 @@ const	Pong: React.FC = () =>
 						const	maxScore = Math.max(pong.current.player1Score, pong.current.player2Score);
 						if (maxScore >= pong.current.requiredPointsToWin)
 							states.current = game.states.game_finished;
-						// game.doPaddleMovement(pong, gameModes);
 						game.fitCameraToArena(pong.current);
 						pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
 						pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;
-						// game.makeBallBounce(pong.current, states);
 						break;
 				}
 			}

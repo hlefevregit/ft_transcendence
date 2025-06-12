@@ -8,12 +8,10 @@ import mapUrl from '@/assets/transcendence_map.gltf?url';
 
 export const	setupBabylon = async (pong: game.pongStruct, canvasRef: any): Promise<void> =>
 {
-
 	const	engineInstance = new baby.Engine(canvasRef, true);
 	const	sceneInstance = new baby.Scene(engineInstance);
 	pong.engine = engineInstance;
 	pong.scene = sceneInstance;
-
 
 	new baby.HemisphericLight("light", new baby.Vector3(1, 1, 0), sceneInstance);
 
@@ -106,38 +104,38 @@ export const	setupBabylon = async (pong: game.pongStruct, canvasRef: any): Promi
     sceneInstance.setRenderingAutoClearDepthStencil(1, false); // Don't clear depth for rendering group 1
 }
 
-// Updated to use module-level import function instead of SceneLoader
-export const importMap = async (scene: baby.Scene) =>
+export const	importMap = async (scene: baby.Scene) =>
 {
-    try
+	try
 	{
-        // Make sure the scene is still valid
-        if (scene.isDisposed)
+		// Make sure the scene is still valid
+		if (scene.isDisposed)
 		{
-            console.error("Scene is disposed before loading model");
-            return null;
-        }
-        
-        // Use proper parameters for ImportMeshAsync
-        const result = await baby.ImportMeshAsync(
-            mapUrl, // URL from Vite import
+			console.error("Scene is disposed before loading model");
+			return null;
+		}
+		
+		// Use proper parameters for ImportMeshAsync
+		const result = await baby.ImportMeshAsync
+		(
+			mapUrl, // URL from Vite import
 			scene, // Scene to load into
-        );
-        
-        if (!result || !result.meshes || result.meshes.length === 0)
+		);
+		
+		if (!result || !result.meshes || result.meshes.length === 0)
 		{
-            console.warn("No meshes loaded");
-            return null;
-        }
-        
-        // Configure meshes
-        result.meshes.forEach(mesh => {mesh.receiveShadows = true;});
-        
-        return result.meshes;
-    }
+			console.warn("No meshes loaded");
+			return null;
+		}
+		
+		// Configure meshes
+		result.meshes.forEach(mesh => {mesh.receiveShadows = true;});
+		
+		return result.meshes;
+	}
 	catch (error)
 	{
-        console.error("Error loading map model:", error);
-        return null;
-    }
+		console.error("Error loading map model:", error);
+		return null;
+	}
 };

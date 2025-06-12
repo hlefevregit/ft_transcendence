@@ -78,7 +78,6 @@ export enum states
 	in_game,
 	game_finished,
 	not_found,
-	// Adding tournament-specific states
 	waiting_tournament_to_start,
 	tournament_bracket_preview,
 	launch_games,
