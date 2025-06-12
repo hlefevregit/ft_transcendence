@@ -16252,3 +16252,7 @@
 2025-06-12 15:48:49: {"level":30,"time":1749743329280,"pid":52,"hostname":"d99c71430631","reqId":"req-2x","res":{"statusCode":200},"responseTime":4.5573220029473305,"msg":"request completed"}
 2025-06-12 16:01:57: {"level":30,"time":1749744117894,"pid":52,"hostname":"d99c71430631","reqId":"req-2y","req":{"method":"POST","url":"/api/2fa/enable","host":"localhost","remoteAddress":"172.19.0.8","remotePort":50260},"msg":"incoming request"}
 2025-06-12 16:01:58: {"level":30,"time":1749744118054,"pid":52,"hostname":"d99c71430631","reqId":"req-2y","res":{"statusCode":200},"responseTime":160.38212499767542,"msg":"request completed"}
+2025-06-12 16:11:29: {"level":30,"time":1749744689623,"pid":52,"hostname":"d99c71430631","reqId":"req-2z","req":{"method":"POST","url":"/api/2fa/enable","host":"localhost","remoteAddress":"172.19.0.8","remotePort":35800},"msg":"incoming request"}
+2025-06-12 16:11:29: {"level":30,"time":1749744689668,"pid":52,"hostname":"d99c71430631","reqId":"req-2z","res":{"statusCode":200},"responseTime":44.092426002025604,"msg":"request completed"}
+2025-06-12 16:11:50: {"level":30,"time":1749744710095,"pid":52,"hostname":"d99c71430631","reqId":"req-30","req":{"method":"POST","url":"/api/2fa/enable","host":"localhost","remoteAddress":"172.19.0.8","remotePort":50202},"msg":"incoming request"}
+2025-06-12 16:11:50: {"level":30,"time":1749744710134,"pid":52,"hostname":"d99c71430631","reqId":"req-30","res":{"statusCode":200},"responseTime":38.85115400701761,"msg":"request completed"}
