@@ -186,6 +186,7 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 						pong.current.tournamentPlayer2Id = data.player2Id;
 						pong.current.tournamentPlayer3Id = data.player3Id;
 						pong.current.tournamentPlayer4Id = data.player4Id;
+						pong.current.requiredPointsToWin = data.points_to_win || 3; // Valeur par défaut si non spécifiée
 
 						console.log(" USERNAME REF:", userNameRef.current);
 						console.log(" PLAYER 1 ID:", pong.current.tournamentPlayer1Id);
@@ -354,6 +355,7 @@ export const handleTournamentLoop = (
 					type: 'host_tournament',
 					roomName: `${userNameRef.current}'s tournament`,
 					username: pong.current.username,
+					points_to_win: pong.current.requiredPointsToWin,
 				}));
 				lastHandledState.current = game.states.hosting_waiting_players;
 				console.log("🏠 Envoi de la demande d'hébergement de tournoi");
@@ -453,6 +455,7 @@ export const handleTournamentLoop = (
 				lastHandledState.current = game.states.waiting_to_start;
 				pong.current.tournamentPlayer1Score = 0;
 				pong.current.tournamentPlayer2Score = 0;
+				pong.current.isInGame1 = true;
 				game.resetPaddlesPosition(pong.current);
 				game.resetBall(pong.current);
 				game.setBallDirectionRandom(pong.current);
@@ -474,6 +477,7 @@ export const handleTournamentLoop = (
 				lastHandledState.current = game.states.waiting_to_start;
 				pong.current.tournamentPlayer3Score = 0;
 				pong.current.tournamentPlayer4Score = 0;
+				pong.current.isInGame2 = true;
 				game.resetPaddlesPosition(pong.current);
 				game.resetBall(pong.current);
 				game.setBallDirectionRandom(pong.current);
@@ -573,7 +577,7 @@ export const handleTournamentLoop = (
 					if (pong.current.ball) {
 						pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
 						pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;
-						game.makeBallBounce(pong.current, states);
+						game.makeBallBounce(pong, states, gameModes);
 						payload.ballPosition = {
 							x: pong.current.ball.position.x,
 							y: pong.current.ball.position.y,
@@ -667,7 +671,7 @@ export const handleTournamentLoop = (
 					if (pong.current.ball) {
 						pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
 						pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;
-						game.makeBallBounce(pong.current, states);
+						game.makeBallBounce(pong, states, gameModes);
 						payload.ballPosition = {
 							x: pong.current.ball.position.x,
 							y: pong.current.ball.position.y,
@@ -726,6 +730,7 @@ export const handleTournamentLoop = (
 						player1Id: pong.current.tournamentFinalist1,
 						player2Id: pong.current.tournamentFinalist2,
 					}));
+					pong.current.isFinal = true;
 				}
 			}
 			else {
@@ -807,7 +812,7 @@ export const handleTournamentLoop = (
 					if (pong.current.ball) {
 						pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
 						pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;
-						game.makeBallBounce(pong.current, states);
+						game.makeBallBounce(pong, states, gameModes);
 						payload.ballPosition = {
 							x: pong.current.ball.position.x,
 							y: pong.current.ball.position.y,

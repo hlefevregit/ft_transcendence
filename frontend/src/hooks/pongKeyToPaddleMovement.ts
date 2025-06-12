@@ -134,9 +134,16 @@ export const predictBallImpactZ = (pong: React.RefObject<game.pongStruct>): numb
 // 	return (ballPos.z)
 // }
 
-export	const	doPaddleMovement = (pong: React.RefObject<game.pongStruct>, gamemode: React.RefObject<game.gameModes>, states: React.RefObject<game.states>): void =>
+export	const	doPaddleMovement = (pong: React.RefObject<game.pongStruct>,
+	gamemode: React.RefObject<game.gameModes>,
+	states: React.RefObject<game.states>
+): void => 
 {
-	if (!pong.current.paddle1 || !pong.current.paddle2 || states.current !== game.states.in_game) return;
+	if (((!pong.current.paddle1 || !pong.current.paddle2) ||
+	(states.current !== game.states.in_game
+		&& states.current !== game.states.in_game1
+		&& states.current !== game.states.in_game2
+		&& states.current !== game.states.tournament_final) )) return;
 	switch (gamemode.current)
 	{
 		case game.gameModes.local:
@@ -172,7 +179,10 @@ export	const	doPaddleMovement = (pong: React.RefObject<game.pongStruct>, gamemod
 			break;
 
 		case game.gameModes.tournament: 
+			console.log("In tournament mode");
+			console.log("Key pressed : ", pong.current.pressedKeys);
 			if (pong.current.isHost || pong.current.isHost2) {
+				console.log("Host contrôle paddle1");
 				// 🎮 Host contrôle paddle1
 				if (pong.current.pressedKeys.has('arrowup')) {
 					pong.current.paddle1.position.z = movePaddleUpOnline(pong, pong.current.paddle1);
@@ -181,6 +191,7 @@ export	const	doPaddleMovement = (pong: React.RefObject<game.pongStruct>, gamemod
 					pong.current.paddle1.position.z = movePaddleDownOnline(pong, pong.current.paddle1);
 				}
 			} else {
+				console.log("Client contrôle paddle2");
 				// 🧑‍💻 Client contrôle paddle2
 				if (pong.current.pressedKeys.has('w')) {
 					pong.current.paddle2.position.z = movePaddleUpOnline(pong, pong.current.paddle2);

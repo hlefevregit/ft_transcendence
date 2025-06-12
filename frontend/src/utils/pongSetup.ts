@@ -177,7 +177,13 @@ export type pongStruct =
 	isHost2?: boolean;
 	launched?: boolean;	// Used to know if the tournament has been launched
 	
+
+	isInGame1?: boolean;	// Used to know if the player is in game 1 of the tournament
+	isInGame2?: boolean;	// Used to know if the player is in game 2 of the tournament
+	isFinal?: boolean;	// Used to know if the player is in the final of the tournament
 	// Room management
+
+
 	rooms: Map<string, any>;
 	party: Map<string, any>;
 	lastRoomJoined?: string;
