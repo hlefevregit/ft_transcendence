@@ -1,13 +1,79 @@
 services:
+  vault:
+    image: hashicorp/vault:latest
+    restart: unless-stopped
+    cap_add:
+      - IPC_LOCK
+    environment:
+      VAULT_ADDR: "https://vault:8200"
+      VAULT_API_ADDR: "https://vault:8200"
+    volumes:
+      - vault_data:/vault/file
+      - ./vault/config:/vault/config
+      - ./vault/init:/vault/init
+      - ./backend/main/certs:/vault/certs:ro
+      - ./vault/secrets:/vault/secrets
+    networks:
+      - vault_network
+      - ft_network
+    command: vault server -config=/vault/config/vault.hcl
+
+  vault_init:
+    image: hashicorp/vault:latest
+    depends_on:
+      - vault
+    volumes:
+      - ./vault/init:/vault/init
+      - ./vault/secrets:/vault/secrets
+      - ./.env:/vault/secrets/.env
+    environment:
+      VAULT_ADDR: "https://vault:8200"
+      VAULT_SKIP_VERIFY: "true"
+    networks:
+      - ft_network
+    entrypoint: sh -c "apk add --no-cache curl bash && bash /vault/init/setup.sh"
+
+  watcher:
+    image: alpine
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - vault
+      - vault_init
+    entrypoint: >
+      sh -c "
+        apk add --no-cache docker-cli;
+        echo '👀 Watching for vault restarts...';
+        docker events --filter container=ft_transcendence-vault-1 --filter event=die --filter event=stop --filter event=restart |
+        while read -r event; do
+          echo '🔁 Vault restarted. Restarting vault_init...';
+          docker restart ft_transcendence-vault_init-1;
+        done
+      "
+
+  vault_nginx:
+    image: nginx:latest
+    depends_on:
+      - vault
+    ports:
+      - "8200:8200"
+    volumes:
+      - ./backend/main/certs:/etc/nginx/certs:ro
+      - ./vault/config/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - vault_network
+    command: nginx -g 'daemon off;'
+
   backend:
     build:
-      context: ${BACKEND_PATH}
+      context: ${PWD}/backend/main
       dockerfile: Dockerfile.dev
     ports:
       - "3000:3000"
     volumes:
-      - backend_data:${BACKEND_PATH}
-      - ${BACKEND_PATH}/certs:/app/certs:ro
+      - backend_data:${PWD}/backend/main
+      - ./backend/main/certs:/app/certs:ro
       - sqlite_data:/app/prisma/sqlite
     environment:
       - NODE_ENV=development
@@ -15,7 +81,7 @@ services:
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - JWT_SECRET=${JWT_SECRET}
     command: sh -c "npx prisma migrate deploy && npm run dev"
-    working_dir: ${BACKEND_PATH}
+    working_dir: ${PWD}/backend/main
     networks:
       - ft_network
 
@@ -54,7 +120,7 @@ services:
       - "5173:5173"
     volumes:
       - ./frontend:/app
-      - ./frontend/public:/app/public 
+      - ./frontend/public:/app/public
       - /app/node_modules
     environment:
       - NODE_ENV=development
@@ -64,12 +130,14 @@ services:
       - ft_network
 
   nginx:
-    image: nginx:alpine
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.nginx.dev
     ports:
       - "0.0.0.0:8080:8080"  # Changed from "8080:8080" to bind to all interfaces
       - "0.0.0.0:8082:8082"  # Changed from "8082:8082" to bind to all interfaces
     volumes:
-      - ./nginx.dev.conf:/etc/nginx/nginx.conf
+      #- ./nginx.dev.conf:/etc/nginx/nginx.conf
       - ./backend/main/certs:/etc/nginx/certs:ro
     depends_on:
       - frontend
@@ -80,7 +148,7 @@ services:
 
   #   #---------------------------------------------------------------------------------------
   #   # ---------------- ELK ----------------------------------------------------------------
-  #   #---------------------------------------------------------------------------------------  
+  #   #---------------------------------------------------------------------------------------
 
 
   # elasticsearch:
@@ -143,9 +211,10 @@ services:
   #     - T_PORT_INTERN_LOGGING=9200
   #     - T_ENDPOINT_LOGGING=kibana
   #     - T_SERVER_NAME=localhost
-  #     - T_ELASTIC_SYSPASS_1=changeme # ⚠️ mets le bon mot de passe ici
-  #     - T_ENCRYPTION_PASSKEY_3=${KIBANA_ENCRYPTION_KEY}
   #     - T_KIBANA_MAXSOCKS=100
+  #     # REMOVETHIS
+  #     - T_ELASTIC_SYSPASS_1=${KIBANA_PASSWORD}
+  #     - T_ENCRYPTION_PASSKEY_3=${KIBANA_ENCRYPTION_KEY}
   #     - T_KIBANA_TOKEN=${KIBANA_TOKEN}
   #   depends_on:
   #     - elasticsearch
@@ -175,7 +244,7 @@ services:
   #     - '--web.enable-lifecycle'
   #   networks:
   #     - ft_network
-  
+
   # cadvisor:
   #   image: gcr.io/cadvisor/cadvisor:latest
   #   container_name: cadvisor
@@ -217,30 +286,36 @@ services:
 
 
 volumes:
+  vault_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/vault/data
+      o: bind
   backend_data:
     driver: local
     driver_opts:
       type: none
-      device: ${BACKEND_PATH}
+      device: ${PWD}/backend/main
       o: bind
   frontend_data:
     driver: local
     driver_opts:
       type: none
-      device: ${FRONTEND_PATH}
+      device: ${PWD}/frontend
       o: bind
   sqlite_data:
     driver: local
     driver_opts:
       type: none
-      device: ${BACKEND_PATH}/prisma/sqlite
+      device: ${PWD}/backend/main/prisma/sqlite
       o: bind
-  es_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${ES_DATA_PATH}
-      o: bind
+  # es_data:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: ${PWD}/elk/elasticsearch/data
+  #     o: bind
   # volumes:
   #   elastic_data:
   #     driver: local
@@ -249,15 +324,16 @@ volumes:
   #   driver: local
   #   driver_opts:
   #     type: none
-  #     device: ${PROMETHEUS_DATA_PATH}
+  #     device: ${PWD}/monitoring/prometheus/data
   #     o: bind
 
   # grafana_data:
   #   driver: local
   #   driver_opts:
   #     type: none
-  #     device: ${GRAFANA_DATA_PATH}
+  #     device: ${PWD}/monitoring/grafana/data
   #     o: bind
-  
+
 networks:
   ft_network:
+  vault_network:

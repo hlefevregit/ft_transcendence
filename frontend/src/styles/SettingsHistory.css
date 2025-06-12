@@ -1,0 +1,114 @@
+/* src/styles/SettingsHistory.css */
+
+.history-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 8px;
+}
+
+/* Statistiques */
+.history-stats {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+.stat-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f3f4f6;
+  border-radius: 8px;
+  padding: 16px;
+  min-width: 0;
+}
+.stat-value {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+.stat-label {
+  font-size: 1rem;
+}
+.win-card .stat-label    { color: #10b981; }
+.loss-card .stat-label   { color: #ef4444; }
+.trophy-card .stat-label { color: #f59e0b; }
+
+/* Liste des matchs */
+.matches-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /* par défaut, pas de scroll */
+  max-height: none;
+  overflow: visible;
+}
+
+.matches-list.scrollable {
+  /* limite la hauteur pour 5 cartes de matchs */
+  max-height: 450px; /* ajuster selon la taille de vos .match-card */
+  overflow-y: auto;
+}
+
+.match-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 16px;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.match-card.win  { background: #d1fae5; }
+.match-card.loss { background: #fee2e2; }
+.match-card.draw { background: #e5e7eb; }
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.player--left  { justify-content: flex-start; }
+.player--right { justify-content: flex-end; }
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.pseudo {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.score-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+  margin: 0 16px;
+}
+.score {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+}
+.dash { margin: 0 6px; }
+.reason {
+  position: absolute;
+  top: -18px;
+  font-size: 0.8rem;
+  pointer-events: none;
+}
+.date {
+  position: absolute;
+  bottom: -18px;
+  font-size: 0.75rem;
+  pointer-events: none;
+}

@@ -1,4 +1,3 @@
-// imports
 import React, { use } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -153,6 +152,8 @@ const	Pong: React.FC = () =>
 		// 	);
 		// });
 		
+		
+
 		if (gameModes.current === game.gameModes.online)
 		{
 			if

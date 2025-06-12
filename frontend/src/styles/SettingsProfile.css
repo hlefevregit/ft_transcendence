@@ -1,0 +1,338 @@
+/* 1) Container */
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+
+  max-width: 780px;      /* largeur un peu plus généreuse */
+  margin: 0 auto;      /* centrer le contenu */
+  padding: 24px 12px;
+  font-size: 1.05rem;    /* légère augmentation de la taille de base */
+  min-height: 600px;
+}
+
+
+/* Block wrapper */
+.profile-block,
+.twofa-block {
+  width: 100%;           /* prend tout l’espace */
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 20px;         /* padding augmenté */
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;             /* plus d’espace entre les lignes */
+}
+
+/* 2) General row styling */
+.profile-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+}
+.profile-row.clickable {
+  cursor: pointer;
+}
+
+/* 3) Avatar + status */
+.avatar-wrapper {
+  position: relative;
+  width: 80px;           /* avatar agrandi */
+  height: 80px;
+}
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #e0e0e0;
+}
+.status-dot {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 28px;           /* statut agrandi */
+  height: 28px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.status-active { background: #10b981; }
+.status-offline { background: #ef4444; }
+
+/* 4) Username area */
+.pseudo-area {
+  flex: 1;
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
+}
+.pseudo-text.editable {
+  flex: 1;
+  font-size: 1.1rem;     /* pseudo plus gros */
+  font-weight: 600;
+  color: #374151;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  border-bottom: 1px solid #d1d5db;
+  padding-bottom: 6px;
+}
+.pseudo-input {
+  flex: 1;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #d1d5db;
+  padding: 6px 0;
+}
+.pseudo-input.error {
+  border-bottom-color: #ef4444;
+}
+.pencil-icon {
+  font-size: 22px;
+  color: #6b7280;
+  margin-left: 10px;
+}
+
+/* 5) Avatar actions */
+.avatar-actions {
+  display: flex;
+  gap: 12px;
+}
+.change-avatar-btn,
+.delete-avatar-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 14px 0;       /* bouton plus grand */
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.change-avatar-btn {
+  background: #f3f4f6;
+}
+.change-avatar-btn:hover {
+  background: #e5e7eb;
+}
+.delete-avatar-btn {
+  background: #fee2e2;
+  color: #900;
+}
+.delete-avatar-btn:hover {
+  background: #fecaca;
+}
+
+/* Save + Reset */
+.save-reset-container {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.save-button {
+  flex: 1;
+  font-size: 1.05rem;
+  padding-bottom: 6px;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  border-bottom: 1px solid #9ca3af;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.save-button:disabled {
+  color: #d1d5db;
+  border-bottom-color: #e5e7eb;
+  cursor: default;
+}
+.save-button:enabled {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+.reset-button {
+  flex: 0 0 auto;
+  font-size: 1.6rem;     /* croix plus visible */
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.reset-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* 2FA toggle row */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.switch {
+  position: relative;
+  width: 60px;           /* interrupteur agrandi */
+  height: 32px;
+}
+.slider {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: #ef4444;
+  transition: background 0.2s;
+}
+.toggle-row.enabled .slider {
+  background: #10b981;
+}
+.slider:before {
+  content: '';
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  left: 2px;
+  bottom: 2px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
+}
+.toggle-row.enabled .slider:before {
+  transform: translateX(28px);
+}
+
+/* QR + verify */
+.qr-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "qr-instruction qr-image"
+    "qr-input-group qr-input-group";
+  gap: 16px;
+  align-items: center; /* centre verticalement texte et QR */
+}
+
+.qr-instruction {
+  grid-area: qr-instruction;
+  margin: 0;
+  font-size: 1rem;
+  color: #374151;
+  text-align: center;    /* centrer chaque ligne */
+  justify-self: center;  /* centrer horizontalement dans la moitié gauche */
+  line-height: 1.4;      /* espacement entre lignes */
+}
+
+.qr-image {
+  grid-area: qr-image;
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  justify-self: center;  /* centrer horizontalement dans la moitié droite */
+  align-self: center;    /* centrer verticalement */
+}
+
+.qr-input-group {
+  grid-area: qr-input-group;
+  grid-column: 1 / -1;   /* s’étend sur toute la largeur */
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.qr-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.verify-button {
+  padding: 10px 18px;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+
+/* Error text */
+.error-text {
+  color: #ef4444;
+  text-align: center;
+  font-size: 1rem;
+}
+
+/* Logout & Delete Account */
+.extra-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: auto;           /* pousse les boutons en bas de la div parente */
+  justify-content: flex-end;  /* optionnel : aligne à droite, sinon enlever */
+}
+.logout-button,
+.delete-data-button {
+  flex: 1;
+  padding: 14px 0;       /* bouton plus grand */
+  font-size: 1rem;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.delete-data-button {
+  background: #fee2e2;
+  color: #900;
+}
+
+/* Responsive */
+@media (max-width: 420px) {
+  .profile-section {
+    max-width: 100%;
+    padding: 16px 8px;
+    gap: 20px;
+  }
+  .profile-block,
+  .twofa-block {
+    padding: 16px;
+    gap: 16px;
+  }
+  .avatar-wrapper {
+    width: 64px;
+    height: 64px;
+  }
+  .status-dot {
+    width: 24px;
+    height: 24px;
+    bottom: -3px;
+    right: -3px;
+  }
+  .change-avatar-btn,
+  .delete-avatar-btn,
+  .logout-button,
+  .delete-data-button {
+    padding: 10px 0;
+    font-size: 0.95rem;
+  }
+  .switch {
+    width: 52px;
+    height: 28px;
+  }
+  .slider:before {
+    width: 24px;
+    height: 24px;
+  }
+}
