@@ -1,0 +1,11 @@
+{
+  "sign_in": "Se connecter",
+  "email_placeholder": "Adresse e-mail",
+  "password_placeholder": "Mot de passe",
+  "login_button": "Connexion",
+  "2fa_placeholder": "Entrez le code 2FA",
+  "verify_2fa_button": "Vérifier le 2FA",
+  "no_account": "Vous n'avez pas de compte ?",
+  "register_here": "Inscrivez-vous ici",
+  "or": "ou"
+}

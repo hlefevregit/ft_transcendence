@@ -6,5 +6,6 @@
 	"2fa_placeholder": "Enter 2FA Code",
 	"verify_2fa_button": "Verify 2FA",
 	"no_account": "Don't have an account?",
-	"register_here": "Register here"
+	"register_here": "Register here",
+	"or": "or"
 }

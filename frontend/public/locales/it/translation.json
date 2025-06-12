@@ -1,0 +1,11 @@
+{
+  "sign_in": "Accedi",
+  "email_placeholder": "Indirizzo email",
+  "password_placeholder": "Password",
+  "login_button": "Accedi",
+  "2fa_placeholder": "Inserisci il codice 2FA",
+  "verify_2fa_button": "Verifica codice 2FA",
+  "no_account": "Non hai un account?",
+  "register_here": "Registrati qui",
+  "or": "o"
+}

@@ -174,7 +174,7 @@ const LoginForm: React.FC = () => {
 
             <div className="my-4 flex items-center gap-4">
               <hr className="w-full border-gray-300" />
-              <p className="text-gray-800 text-sm text-center">or</p>
+              <p className="text-gray-800 text-sm text-center">{t('or')}</p>
               <hr className="w-full border-gray-300" />
             </div>
 
