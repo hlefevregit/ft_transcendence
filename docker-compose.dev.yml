@@ -67,7 +67,7 @@ services:
 
   backend:
     build:
-      context: ${PWD}/backend
+      context: ${PWD}/backend/main
       dockerfile: Dockerfile.dev
     ports:
       - "3000:3000"
@@ -81,7 +81,7 @@ services:
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - JWT_SECRET=${JWT_SECRET}
     command: sh -c "npx prisma migrate deploy && npm run dev"
-    working_dir: ${PWD}/backend
+    working_dir: ${PWD}/backend/main
     networks:
       - ft_network
 
@@ -102,7 +102,7 @@ services:
       - "4001:4001"
     networks:
       - ft_network
-    
+
 
   frontend:
     build:
@@ -129,7 +129,7 @@ services:
       - "8080:8080"
       - "8082:8082"  # pour nginx_status
     volumes:
-      - ./nginx.dev.conf:/etc/nginx/nginx.conf
+      #- ./nginx.dev.conf:/etc/nginx/nginx.conf
       - ./backend/main/certs:/etc/nginx/certs:ro
     depends_on:
       - frontend
