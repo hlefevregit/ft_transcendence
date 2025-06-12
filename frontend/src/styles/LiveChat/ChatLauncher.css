@@ -1,0 +1,19 @@
+/* src/styles/LiveChat/ChatLauncher.css */
+/* Bouton fixe pour lancer/fermer le chat */
+.chat-launcher-button {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 1000;
+  padding: 0.75rem;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 9999px;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.chat-launcher-button:hover {
+  background-color: #f3f4f6;
+}
