@@ -409,7 +409,7 @@ export default function SettingsProfile() {
             <div className="qr-input-group">
               <input
                 className="qr-input"
-                placeholder="Enter 2FA code"
+                placeholder={t('2fa_placeholder')}
                 value={totp}
                 onChange={e => setTotp(e.target.value)}
               />
