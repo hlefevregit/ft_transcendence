@@ -1,0 +1,52 @@
+/* src/styles/LiveChat/Conversation.css */
+
+.chat-conversation {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #ffffff;
+}
+
+.chat-conversation__messages {
+  flex: 1;
+  padding: 0.5rem;
+  overflow-y: auto;
+}
+
+.chat-conversation__messages::-webkit-scrollbar {
+  width: 6px;
+}
+.chat-conversation__messages::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 3px;
+}
+
+.chat-conversation__placeholder {
+  color: #9ca3af;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* Bulle générique */
+.chat-conversation__message {
+  margin: 0.25rem 0;
+  padding: 0.5rem 0.75rem;   /* moins d’espace latéral */
+  border-radius: 1rem;       /* arrondi modéré */
+  max-width: 60%;            /* champ max à 60% */
+  width: fit-content;
+  word-wrap: break-word;
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+/* Bulles reçues : alignées à gauche */
+.chat-conversation__message--received {
+  margin-right: auto;
+  background-color: #e5e7eb;
+}
+
+/* Bulles envoyées (les vôtres) : alignées à droite */
+.chat-conversation__message--sent {
+  margin-left: auto;
+  background-color: #bfdbfe;
+}
