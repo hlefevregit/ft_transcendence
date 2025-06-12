@@ -1,3 +1,22 @@
+# [1.2.0](https://github.com/hlefevregit/ft_transcendence/compare/v1.1.0...v1.2.0) (2025-06-12)
+
+
+### Bug Fixes
+
+* **AI:** lpolizzi: made the AI linear, no more while loop to get stuck in. ([3dd27d6](https://github.com/hlefevregit/ft_transcendence/commit/3dd27d6cf7e00bf1bea32c11cf2b1a456ad9c91a))
+* **BracketGUI:** ldalmass: Added winner player card to the bracketGUI. Removed some unused content ([c58ca8a](https://github.com/hlefevregit/ft_transcendence/commit/c58ca8a628edf09fdefc461b1fb22d28801a357a))
+* **renaming:** ldalmass: Renamed a variable for tournament purpose in the GUI ([029afb1](https://github.com/hlefevregit/ft_transcendence/commit/029afb1eecb7827bdc9a57482ac4eafb727d2d34))
+* **tournament:** gameId correctly passed in the websocket, tournament start for game1 but not game2, paddle mouvement does not work ([62600ea](https://github.com/hlefevregit/ft_transcendence/commit/62600ea2acfca74b67a40ce62ed3cb4242802b44))
+
+
+### Features
+
+* **AI): ldalmass: Finally succeeded making the AI bot for the pong. feat(usernameGUI:** Added a new GUI to enter the users alias when joining or hosting a tournament ([59fa480](https://github.com/hlefevregit/ft_transcendence/commit/59fa480b267c2b3f8fd3952ae206ae3df38599b3))
+* **AI:** ldalmass: WIP version of the bouncing ball predition calculation ([bdd3b04](https://github.com/hlefevregit/ft_transcendence/commit/bdd3b041378856a9929e28618ffd24e63b20d6a9))
+* **DisplayingAliases:** ldalmass: Created a function that displays the current two aliases from the player 1 and 2 in game when in a tournament ([0465de8](https://github.com/hlefevregit/ft_transcendence/commit/0465de8965d399ce37484e316978178d530c091d))
+* **tournament pseudo:** Host can now see the bracket, pseudo handled ([bb647f8](https://github.com/hlefevregit/ft_transcendence/commit/bb647f82eff7339fae26fa4b0bd313a6db2f638b))
+* **Tournament:** Party created and destoyed succesfully, issue on joining ([e06c4f7](https://github.com/hlefevregit/ft_transcendence/commit/e06c4f768030040f2584a7096065349eb98ff501))
+
 # [1.1.0](https://github.com/hlefevregit/ft_transcendence/compare/v1.0.1...v1.1.0) (2025-06-12)
 
 
