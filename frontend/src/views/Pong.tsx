@@ -5,41 +5,29 @@ import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
 import BackgroundMusic from '@/components/BG';
 import { useWebSocketOnline, useOnlineLoop } from '@/utils/pong/onlineWS';
-import { get } from 'http';
 
-// Limits the number of times the resizing can be called in a given time frame
-function	debounce(fn: Function, ms: number)
-{
-	let	timer: NodeJS.Timeout;
-	return (...args: any[]) =>
-	{
-		clearTimeout(timer);
-		timer = setTimeout(() => { fn(...args); }, ms);
-	};
-}
+
 
 const	Pong: React.FC = () =>
 {
-	const	canvasRef = React.useRef<HTMLCanvasElement | null>(null);
-	const	pong = React.useRef<game.pongStruct>(game.initPongStruct());
-	const	states = React.useRef<game.states>(game.states.main_menu);
-	const	gameModes = React.useRef<game.gameModes>(game.gameModes.none);
-	const	playerState = React.useRef<game.playerStates>(game.playerStates.none);
-	const	lang = React.useRef<game.lang>(game.lang.english);
+	// Refs
+	const	canvasRef =			React.useRef<HTMLCanvasElement | null>(null);
+	const	pong =				React.useRef<game.pongStruct>(game.initPongStruct());
+	const	state =				React.useRef<game.states>(game.states.main_menu);
+	const	lastState =			React.useRef<game.states>(state.current);
+	const	gameModes =			React.useRef<game.gameModes>(game.gameModes.none);
+	const	playerState =		React.useRef<game.playerStates>(game.playerStates.none);
+	const	lastPlayerState =	React.useRef<game.playerStates>(playerState.current);
+	const	lang =				React.useRef<game.lang>(game.lang.english);
+	const	lastLang =			React.useRef<game.lang>(lang.current);
+	const	userNameRef =		React.useRef<string>(null as unknown as string);
+	const	audioRef =			React.useRef<HTMLAudioElement | null>(null);
+	const	socketRef =			React.useRef<WebSocket | null>(null);
+
+	// Hooks
+	const	[gameModeTrigger, setGameModeTrigger] = React.useState<number>(0);
 	const	navigate = useNavigate();
 
-	const	userNameRef = React.useRef<string>(null as unknown as string);
-	const	audioRef = React.useRef<HTMLAudioElement | null>(null);
-
-	const	[gameModeTrigger, setGameModeTrigger] = React.useState<number>(0);
-
-	const	socketRef = React.useRef<WebSocket | null>(null);
-	const	lastHandledState = React.useRef<game.states>(game.states.main_menu);
-
-	// lastState, lastPlayerState, and lastLang
-	const	lastState = React.useRef<game.states>(states.current);
-	const	lastPlayerState = React.useRef<game.playerStates>(playerState.current);
-	const	lastLang = React.useRef<game.lang>(lang.current);
 
 
 	React.useEffect(() => {
@@ -67,18 +55,18 @@ const	Pong: React.FC = () =>
 				console.error("❌ WebSocket connection error:", event);
 			});
 
-			useWebSocketOnline(pong, socketRef, gameModes, states, lang, userNameRef, ws);
+			useWebSocketOnline(pong, socketRef, gameModes, state, lang, userNameRef, ws);
 
 			import('@/utils/pong/tournament').then(tournamentModule => {
 				tournamentModule.useTournamentWebSocket(
 					pong,
 					socketRef,
 					gameModes,
-					states,
+					state,
 					lang,
 					userNameRef,
 					ws,
-					lastHandledState,
+					lastState,
 				);
 			});
 		}
@@ -106,23 +94,23 @@ const	Pong: React.FC = () =>
 		// Initialize babylon
 		game.setupBabylon(pong.current, canvasRef.current);
 		// Initialize all the GUI screens
-		game.initializeAllGUIScreens(pong, gameModes, states, playerState, lang, socketRef, navigate, setGameModeTrigger, lastHandledState);
-		game.updateGUIVisibilityStates(pong, states.current);
+		game.initializeAllGUIScreens(pong, gameModes, state, playerState, lang, socketRef, navigate, setGameModeTrigger, lastState);
+		game.updateGUIVisibilityStates(pong, state.current);
 		game.updateGUIVisibilityPlayerStates(pong, playerState.current , gameModes.current);
-		game.updateGUIValues(pong, states, lang);
+		game.updateGUIValues(pong, lang);
 		
 		if (gameModes.current === game.gameModes.online)
 		{
 			if
 			(
-				socketRef.current &&
-				socketRef.current.readyState === WebSocket.OPEN &&
-				lastHandledState.current !== states.current
+				   socketRef.current
+				&& socketRef.current.readyState === WebSocket.OPEN
+				&& lastState.current !== state.current
 			)
 			{
-				console.log("Last handled state:", lastHandledState.current);
-				console.log("Sending current state:", states.current);
-				lastHandledState.current = states.current;
+				console.log("Last handled state:", lastState.current);
+				console.log("Sending current state:", state.current);
+				lastState.current = state.current;
 			}
 		}
 		else game.manageLocalKeyboardInputs(pong.current);
@@ -164,44 +152,49 @@ const	Pong: React.FC = () =>
 		if (!pong.current.engine) return;
 		pong.current.engine.runRenderLoop(() =>
 		{
-			game.updateGUIsWhenNeeded(pong, states, gameModes, playerState, lang, lastState, lastPlayerState, lastLang);
+			game.updateGUIsWhenNeeded(pong, state, gameModes, playerState, lang, lastState, lastPlayerState, lastLang);
 			if
 			(
-				!pong.current.scene ||
-				!pong.current.engine ||
-				!pong.current.paddle1 ||
-				!pong.current.paddle2 ||
-				!pong.current.ball
+				   !pong.current.scene
+				|| !pong.current.engine
+				|| !pong.current.paddle1
+				|| !pong.current.paddle2
+				|| !pong.current.ball
 			) return;
 
-
-			if (
-				(lastHandledState.current === game.states.hosting_waiting_players &&
-				states.current !== game.states.hosting_waiting_players
-				&& states.current !== game.states.in_game 
-				&& states.current !== game.states.game_finished
-				&& states.current !== game.states.countdown
-				&& states.current !== game.states.tournament_bracket_preview
-				&& states.current !== game.states.in_transition
-				&& states.current !== game.states.not_found
-				&& states.current !== game.states.launch_games
-				&& states.current !== game.states.waiting_to_start) || (
-				lastHandledState.current === game.states.tournament_bracket_preview &&
-				states.current !== game.states.tournament_bracket_preview
-				&& states.current !== game.states.in_game
-				&& states.current !== game.states.game_finished
-				&& states.current !== game.states.countdown
-				&& states.current !== game.states.in_transition
-				&& states.current !== game.states.not_found
-				&& states.current !== game.states.launch_games
-				&& states.current !== game.states.tournament_round_1_game_1
-				&& states.current !== game.states.tournament_round_1_game_2
-				&& states.current !== game.states.in_game1
-				&& states.current !== game.states.in_game2
-				&& states.current !== game.states.waiting_to_start
-				&& states.current !== game.states.hosting_waiting_players
+			if
+			(
+				(
+					   lastState.current === game.states.hosting_waiting_players
+					&& state.current !== game.states.hosting_waiting_players
+					&& state.current !== game.states.in_game 
+					&& state.current !== game.states.game_finished
+					&& state.current !== game.states.countdown
+					&& state.current !== game.states.tournament_bracket_preview
+					&& state.current !== game.states.in_transition
+					&& state.current !== game.states.not_found
+					&& state.current !== game.states.launch_games
+					&& state.current !== game.states.waiting_to_start
 				)
-			) {
+				||
+				(
+					   lastState.current === game.states.tournament_bracket_preview
+					&& state.current !== game.states.tournament_bracket_preview
+					&& state.current !== game.states.in_game
+					&& state.current !== game.states.game_finished
+					&& state.current !== game.states.countdown
+					&& state.current !== game.states.in_transition
+					&& state.current !== game.states.not_found
+					&& state.current !== game.states.launch_games
+					&& state.current !== game.states.tournament_round_1_game_1
+					&& state.current !== game.states.tournament_round_1_game_2
+					&& state.current !== game.states.in_game1
+					&& state.current !== game.states.in_game2
+					&& state.current !== game.states.waiting_to_start
+					&& state.current !== game.states.hosting_waiting_players
+				)
+			)
+			{
 				// console.log("roomId:", pong.current.lastHostedRoomId);
 				const roomId = pong.current.lastHostedRoomId;
 				if (gameModes.current === game.gameModes.online && roomId !== 'none') {
@@ -220,7 +213,7 @@ const	Pong: React.FC = () =>
 			}
 			if (gameModes.current === game.gameModes.online)
 			{
-				useOnlineLoop(pong, socketRef, gameModes, states, userNameRef, lastHandledState);
+				useOnlineLoop(pong, socketRef, gameModes, state, userNameRef, lastState);
 			}
 			else if (gameModes.current === game.gameModes.tournament)
 			{
@@ -230,24 +223,24 @@ const	Pong: React.FC = () =>
 						pong,
 						socketRef,
 						gameModes,
-						states,
+						state,
 						userNameRef,
-						lastHandledState
+						lastState
 					);
 				});
 			}
 			else 
 			{
-				switch (states.current)
+				switch (state.current)
 				{
 					default:
-						if (states.current > 25) states.current = 0;
-						if (states.current < 0) states.current = 25;
+						if (state.current > 25) state.current = 0;
+						if (state.current < 0) state.current = 25;
 						break;
 
 					case game.states.not_found:
 						if (pong.current.scene.activeCamera !== pong.current.notFoundCam)
-							{ game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.notFoundCam, 1, pong, states); }
+							game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.notFoundCam, 1, pong, state);
 						break;
 	
 					case game.states.countdown:
@@ -255,7 +248,7 @@ const	Pong: React.FC = () =>
 						if (pong.current.countdown <= 0)
 						{
 							pong.current.countdown = 4;
-							states.current = game.states.in_game;
+							state.current = game.states.in_game;
 						}
 						break;
 						
@@ -266,14 +259,14 @@ const	Pong: React.FC = () =>
 						game.resetBall(pong.current);
 						game.setBallDirectionRandom(pong.current);
 						game.fitCameraToArena(pong.current);
-						states.current = game.states.countdown;
-						game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.arenaCam, 1, pong, states);
+						state.current = game.states.countdown;
+						game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.arenaCam, 1, pong, state);
 						break;
 	
 					case game.states.in_game:
 						const	maxScore = Math.max(pong.current.player1Score, pong.current.player2Score);
 						if (maxScore >= pong.current.requiredPointsToWin)
-							states.current = game.states.game_finished;
+							state.current = game.states.game_finished;
 						game.fitCameraToArena(pong.current);
 						pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
 						pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;
@@ -282,26 +275,26 @@ const	Pong: React.FC = () =>
 			}
 
 			pong.current.scene.render();
-			document.title = `Pong - ${Object.keys(game.states).find(key => game.states[key as keyof typeof game.states] === states.current)}`;
+			document.title = `Pong - ${Object.keys(game.states).find(key => game.states[key as keyof typeof game.states] === state.current)}`;
 		});
 
 		// Handle movement in the background
 		const backgroundCalculations = setInterval(() =>
 		{
-			game.doPaddleMovement(pong, gameModes, states);
-			game.makeBallBounce(pong, states, gameModes);
+			game.doPaddleMovement(pong, gameModes, state);
+			game.makeBallBounce(pong, state, gameModes);
 		}, 16.667);
 
 		// Update GUI values every 200ms
 		const updateGUIsValuesWhenNeeded = setInterval(() =>
 		{
-			game.updateGUIValues(pong, states, lang);
+			game.updateGUIValues(pong, lang);
 			game.updatePlayerNames(pong, gameModes);
 			game.updateGUIVisibilityPlayerStates(pong, playerState.current , gameModes.current);
 		}, 200);
 
 		// Handle resizing of the canvas
-		const	handleResize = debounce(() =>
+		const	handleResize = game.debounce(() =>
 		{
 			if (!pong.current.engine) return;
 			pong.current.engine.resize();

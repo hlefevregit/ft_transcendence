@@ -24,15 +24,21 @@ export const	doBallCollideWithCeiling = (ballPos: baby.Vector3, collideAxis: num
 }
 
 // Ball bouncing
-export const	makeBallBounce = (pong: React.RefObject<game.pongStruct>,
+export const	makeBallBounce =
+(
+	pong: React.RefObject<game.pongStruct>,
 	states: React.RefObject<game.states>,
 	gameModes: React.RefObject<game.gameModes>
 ): void =>
 {
-	if (!pong.current.ball) return;
-	if (!pong.current.paddle1 || !pong.current.paddle2) return;
+	if
+	(
+		   !pong.current.ball
+		|| !pong.current.paddle1
+		|| !pong.current.paddle2
+	) return;
 
-	// RESET CASE (TOUCHES WALL)
+	// RESET CASE (TOUCHES WALLS)
 	if (doBallCollideWithWall(pong.current.ball.position, pong.current.arenaWidth))
 	{
 		game.resetPaddlesPosition(pong.current);
@@ -62,14 +68,10 @@ export const	makeBallBounce = (pong: React.RefObject<game.pongStruct>,
 		else
 			states.current = game.states.in_game;
 	}
-	// BOUNCE OF CEILING
-	// if (doBallCollideWithCeiling(pong.ball.position, pong.arenaHeight)) game.reflectBallCeiling(pong);
+
+	// MAKE BALL BOUNCE
 	game.reflectBallCeiling(pong.current);
-
-	// BOUNCE OF PADDLES
 	game.reflectBallPaddles(pong.current);
-
-	// console.log("Ball speed: ", pong.ballSpeedModifier * pong.ballSpeed);
 }
 
 export const	collideWithPaddle = (pong: game.pongStruct, paddlePos: baby.Vector3) : Boolean =>

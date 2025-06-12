@@ -61,7 +61,9 @@ export const movePaddleDownOnline = (pong: React.RefObject<game.pongStruct>, pad
 	);
 };
 
-export	const	doPaddleMovement = (pong: React.RefObject<game.pongStruct>,
+export	const	doPaddleMovement =
+(
+	pong: React.RefObject<game.pongStruct>,
 	gamemode: React.RefObject<game.gameModes>,
 	states: React.RefObject<game.states>
 ): void => 
@@ -86,46 +88,44 @@ export	const	doPaddleMovement = (pong: React.RefObject<game.pongStruct>,
 			break;
 
 		case game.gameModes.online:
-			if (pong.current.isHost) {
+			if (pong.current.isHost)
+			{
 				// 🎮 Host contrôle paddle1
-				if (pong.current.pressedKeys.has('arrowup')) {
+				if (pong.current.pressedKeys.has('arrowup'))
 					pong.current.paddle1.position.z = movePaddleUpOnline(pong, pong.current.paddle1);
-				}
-				if (pong.current.pressedKeys.has('arrowdown')) {
+				if (pong.current.pressedKeys.has('arrowdown'))
 					pong.current.paddle1.position.z = movePaddleDownOnline(pong, pong.current.paddle1);
-				}
-			} else {
+			}
+			else
+			{
 				// 🧑‍💻 Client contrôle paddle2
-				if (pong.current.pressedKeys.has('w')) {
+				if (pong.current.pressedKeys.has('w'))
 					pong.current.paddle2.position.z = movePaddleUpOnline(pong, pong.current.paddle2);
-				}
-				if (pong.current.pressedKeys.has('s')) {
+				if (pong.current.pressedKeys.has('s'))
 					pong.current.paddle2.position.z = movePaddleDownOnline(pong, pong.current.paddle2);
-				}
 			}
 			break;
 
 		case game.gameModes.tournament: 
 			console.log("In tournament mode");
 			console.log("Key pressed : ", pong.current.pressedKeys);
-			if (pong.current.isHost || pong.current.isHost2) {
+			if (pong.current.isHost || pong.current.isHost2)
+			{
 				console.log("Host contrôle paddle1");
 				// 🎮 Host contrôle paddle1
-				if (pong.current.pressedKeys.has('arrowup')) {
+				if (pong.current.pressedKeys.has('arrowup'))
 					pong.current.paddle1.position.z = movePaddleUpOnline(pong, pong.current.paddle1);
-				}
-				if (pong.current.pressedKeys.has('arrowdown')) {
+				if (pong.current.pressedKeys.has('arrowdown'))
 					pong.current.paddle1.position.z = movePaddleDownOnline(pong, pong.current.paddle1);
-				}
-			} else {
+			}
+			else
+			{
 				console.log("Client contrôle paddle2");
 				// 🧑‍💻 Client contrôle paddle2
-				if (pong.current.pressedKeys.has('w')) {
+				if (pong.current.pressedKeys.has('w'))
 					pong.current.paddle2.position.z = movePaddleUpOnline(pong, pong.current.paddle2);
-				}
-				if (pong.current.pressedKeys.has('s')) {
+				if (pong.current.pressedKeys.has('s'))
 					pong.current.paddle2.position.z = movePaddleDownOnline(pong, pong.current.paddle2);
-				}
 			}
 			break;
 	}
@@ -137,13 +137,8 @@ export const	manageLocalKeyboardInputs = (pong: game.pongStruct): void =>
 	pong.scene?.onKeyboardObservable.add((kbInfo) =>
 	{
 		const	key = kbInfo.event.key.toLowerCase();
-		if (kbInfo.type === baby.KeyboardEventTypes.KEYDOWN)
-		{
-			pong.pressedKeys.add(key);
-		}
-		else if (kbInfo.type === baby.KeyboardEventTypes.KEYUP)
-		{
-			pong.pressedKeys.delete(key);
-		}
+
+		if (kbInfo.type === baby.KeyboardEventTypes.KEYDOWN)	pong.pressedKeys.add(key);
+		else if (kbInfo.type === baby.KeyboardEventTypes.KEYUP)	pong.pressedKeys.delete(key);
 	});
 }

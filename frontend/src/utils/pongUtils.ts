@@ -50,6 +50,10 @@ export const	setPaddings = (button: baby.Button, paddingSize: string): void =>
 	button.paddingRight = paddingSize;
 }
 
+/**
+ * Converts a quaternion to Euler angles for Babylon.js FreeCamera
+ * @param {string} alignment - "top", "bottom", "left", "right", "top-left", "top-right", "bottom-left", "bottom-right"
+ */
 export const	setAlignment = (control: baby.Control, alignment?: string): void =>
 {
 	switch (alignment)
@@ -254,4 +258,97 @@ export const	resizeArenaShell = (pong: React.RefObject<game.pongStruct>): void =
 	pong.current.wallLeft.position.x = pong.current.arenaWidth + 1;
 	pong.current.wallRight.scaling.z = pong.current.wallLeft.scaling.z;
 	pong.current.wallRight.position.x = -pong.current.wallLeft.position.x;
+}
+
+// Limits the number of times the resizing can be called in a given time frame
+export function	debounce(fn: Function, ms: number)
+{
+	let	timer: NodeJS.Timeout;
+	return (...args: any[]) =>
+	{
+		clearTimeout(timer);
+		timer = setTimeout(() => { fn(...args); }, ms);
+	};
+}
+
+export const	resetBall = (pong: game.pongStruct): void =>
+{
+	if (!pong.ball) return;
+	pong.ball.position = baby.Vector3.Zero();
+	pong.ballDirection = baby.Vector3.Zero();
+	pong.ballSpeedModifier = 1;
+}
+
+export const	setPaddlePosition = (paddle: baby.Mesh, position: baby.Vector3): void =>
+{
+	if (!paddle) return;
+	paddle.position = position;
+}
+
+export const	resetPaddlesPosition = (pong: game.pongStruct): void =>
+{
+	if (!pong.paddle1 || !pong.paddle2) return;
+	setPaddlePosition(pong.paddle1, new baby.Vector3(-(pong.arenaWidth - 1), 0, 0));
+	setPaddlePosition(pong.paddle2, new baby.Vector3((pong.arenaWidth - 1), 0, 0));
+}
+
+export const	setBallDirection = (pong: game.pongStruct, direction: baby.Vector3): void =>
+{
+	if (!pong.ball) return;
+	pong.ballDirection = direction;
+}
+
+export const	setBallDirectionRight = (pong: game.pongStruct): void =>
+{
+	if (!pong.ball) return;
+	setBallDirection(pong, new baby.Vector3(pong.ballSpeed, 0, 0));
+}
+
+export const	setBallDirectionLeft = (pong: game.pongStruct): void =>
+{
+	if (!pong.ball) return;
+	setBallDirection(pong, new baby.Vector3(-pong.ballSpeed, 0, 0));
+}
+
+export const	setBallDirectionRandom = (pong: game.pongStruct): void =>
+{
+	if (!pong.ball) return;
+	setBallDirection(pong, Math.random() > 0.5
+		? new baby.Vector3(pong.ballSpeed, 0, 0)
+		: new baby.Vector3(-pong.ballSpeed, 0, 0));
+}
+
+export const	reflectBallCeiling = (pong: game.pongStruct): void =>
+{
+	if (!pong.ball) return;
+	if (pong.ballDirection.z < 0 && pong.ball.position.z <= -pong.arenaHeight)
+	{
+		pong.ballDirection.z *= -1;
+		pong.ballSpeedModifier += pong.ballSpeedModifier * pong.ballSpeed >= pong.maxBallSpeed ? 0 : pong.ballSpeed;
+	}
+	if (pong.ballDirection.z > 0 && pong.ball.position.z >= pong.arenaHeight)
+	{
+		pong.ballDirection.z *= -1;
+		pong.ballSpeedModifier += pong.ballSpeedModifier * pong.ballSpeed >= pong.maxBallSpeed ? 0 : pong.ballSpeed;
+	}
+	return;
+}
+
+export const	reflectBallPaddles = (pong: game.pongStruct): void =>
+{
+	if
+	(
+		   !pong.ball
+		|| !pong.paddle1 
+		|| !pong.paddle2
+	) return;
+	let	paddlePos: baby.Vector3 = pong.paddle2.position;
+	if (pong.ballDirection.x < 0) { paddlePos = pong.paddle1.position; } // Choose the right paddle to bounce off
+	if (game.collideWithPaddle(pong, paddlePos))
+	{
+		pong.ballDirection.z = (pong.ballDirection.z + game.chooseBouncingAngle(pong, paddlePos)) / 2;
+		pong.ballDirection.x *= -1;
+		pong.ballSpeedModifier += pong.ballSpeedModifier * pong.ballSpeed >= pong.maxBallSpeed ? 0 : pong.ballSpeed;
+		return;
+	}
 }

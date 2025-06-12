@@ -3,35 +3,47 @@ import React from 'react';
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
 
-export const	createButton = (buttonName: string, buttonText: string, functionToExecute: () => void): baby.StackPanel =>
+export const	createButton =
+(buttonName: string,
+	buttonText: string,
+	functionToExecute: () => void
+): baby.StackPanel =>
 {
 	const	block = game.createDummyBlock();
 	const	button = baby.Button.CreateSimpleButton(buttonName, buttonText);
-	button.width = "200px";
-	button.height = "100px";
-	button.color = game.colorsScheme.light1;
-	button.background = game.colorsScheme.dark1
-	button.fontSize = 24;
-	button.thickness = 0;
-	button.cornerRadius = 20;
+			button.width = "200px";
+			button.height = "100px";
+			button.color = game.colorsScheme.light1;
+			button.background = game.colorsScheme.dark1
+			button.fontSize = 24;
+			button.thickness = 0;
+			button.cornerRadius = 20;
+			button.onPointerClickObservable.add(functionToExecute);
+			button.onPointerEnterObservable.add(() =>
+			{
+				button.color = game.colorsScheme.auroraAccent1;
+				button.background = game.colorsScheme.light3;
+			});
+			button.onPointerOutObservable.add(() =>
+			{
+				button.color = game.colorsScheme.light3;
+				button.background = game.colorsScheme.dark1;
+			});
+
 	game.setPaddings(button, "10px");
-
-	// button.onPointerUpObservable.add(functionToExecute);
-	button.onPointerClickObservable.add(functionToExecute);
-	button.onPointerEnterObservable.add(() => {
-		button.color = game.colorsScheme.auroraAccent1;
-		button.background = game.colorsScheme.light3;
-	});
-	button.onPointerOutObservable.add(() => {
-		button.color = game.colorsScheme.light3;
-		button.background = game.colorsScheme.dark1;
-	});
-
 	block.addControl(button);
 	return block;
 }
 
-export const	createSlider = (sliderName: string, minValue: number, maxValue: number, step: number, initialValue: number, functionToExecute: (value: number) => void): baby.StackPanel =>
+export const	createSlider =
+(
+	sliderName: string,
+	minValue: number,
+	maxValue: number,
+	step: number,
+	initialValue: number,
+	functionToExecute: (value: number) => void
+): baby.StackPanel =>
 {
 	const	block = game.createDummyBlock();
 
@@ -59,21 +71,29 @@ export const	createSlider = (sliderName: string, minValue: number, maxValue: num
 	return block;
 }
 
-export const	createTitle = (titleName: string, titleText: string): baby.StackPanel =>
+export const	createTitle =
+(
+	titleName: string,
+	titleText: string
+): baby.StackPanel =>
 {
 	const	block = game.createDummyBlock();
 	const	title = new baby.TextBlock(titleName, titleText);
-	title.width = "50px";
-	title.height = "25px";
-	title.color = game.colorsScheme.light1;
-	title.resizeToFit = true;
-	title.fontSize = 48;
+			title.width = "50px";
+			title.height = "25px";
+			title.color = game.colorsScheme.light1;
+			title.resizeToFit = true;
+			title.fontSize = 48;
 
 	block.addControl(title);
 	return block;
 }
 
-export const	createText = (textName: string, textText: string): baby.StackPanel =>
+export const	createText =
+(
+	textName: string,
+	textText: string
+): baby.StackPanel =>
 {
 	const	block = game.createDummyBlock();
 	const	text = new baby.TextBlock(textName, textText);
@@ -85,7 +105,14 @@ export const	createText = (textName: string, textText: string): baby.StackPanel 
 	return block;
 }
 
-export const	createAdaptiveContainer = (folderName: string, width?: string, height?: string, BackgroundColor?: string, alignment?: string): baby.Container =>
+export const	createAdaptiveContainer =
+(
+	folderName: string,
+	width?: string,
+	height?: string,
+	BackgroundColor?: string,
+	alignment?: string
+): baby.Container =>
 {
 	width = width ?? "100%";
 	height = height ?? "100%";
@@ -93,95 +120,104 @@ export const	createAdaptiveContainer = (folderName: string, width?: string, heig
 
 	// Create container
 	const	container = new baby.Container(folderName + "Container");
-	container.width = width;
-	container.height = height;
-	container.adaptWidthToChildren = true;
-	container.adaptHeightToChildren = true;
-	container.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
-	container.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
-	container.background = "transparent";
-	container.zIndex = 0;
+			container.width = width;
+			container.height = height;
+			container.adaptWidthToChildren = true;
+			container.adaptHeightToChildren = true;
+			container.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
+			container.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
+			container.background = "transparent";
+			container.zIndex = 0;
 
 	// Create background with dimensions tied to the container
 	const	background = new baby.Rectangle(folderName + "Background");
-	background.width = "100%";
-	background.height = "100%";
-	background.background = BackgroundColor;
-	background.thickness = 0;
-	background.cornerRadius = 40;
-	background.zIndex = 0;
+			background.width = "100%";
+			background.height = "100%";
+			background.background = BackgroundColor;
+			background.thickness = 0;
+			background.cornerRadius = 40;
+			background.zIndex = 0;
 		
-	container.addControl(background);
-
 	game.setAlignment(container, alignment);
-
+	container.addControl(background);
 	return container;
 }
 
-export const	createHorizontalStackPanel = (panelName: string, paddings?: number, alignment?: string): baby.StackPanel =>
+export const	createHorizontalStackPanel =
+(
+	panelName: string,
+	paddings?: number,
+	alignment?: string
+): baby.StackPanel =>
 {
 	paddings = paddings ?? 5;
 	const	GUI = new baby.StackPanel(panelName);
-	GUI.isVertical = false;
-	GUI.spacing = paddings;
-	GUI.paddingTop = paddings * 2 + "px";
-	GUI.paddingBottom = paddings * 2 + "px";
-	GUI.paddingLeft = paddings * 2 + "px";
-	GUI.paddingRight = paddings * 2 + "px";
-	GUI.adaptWidthToChildren = true;
-	GUI.adaptHeightToChildren = true;
-	GUI.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
-	GUI.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
-	GUI.background = "transparent";
-	GUI.zIndex = 1;
+			GUI.isVertical = false;
+			GUI.spacing = paddings;
+			GUI.paddingTop = paddings * 2 + "px";
+			GUI.paddingBottom = paddings * 2 + "px";
+			GUI.paddingLeft = paddings * 2 + "px";
+			GUI.paddingRight = paddings * 2 + "px";
+			GUI.adaptWidthToChildren = true;
+			GUI.adaptHeightToChildren = true;
+			GUI.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
+			GUI.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
+			GUI.background = "transparent";
+			GUI.zIndex = 1;
 
 	game.setAlignment(GUI, alignment);
-
 	return GUI;
 }
 
-export const	createVerticalStackPanel = (panelName: string, paddings?: number, alignment?: string): baby.StackPanel =>
+export const	createVerticalStackPanel =
+(
+	panelName: string,
+	paddings?: number,
+	alignment?: string
+): baby.StackPanel =>
 {
 	paddings = paddings ?? 5;
 	const	GUI = new baby.StackPanel(panelName);
-	GUI.isVertical = true;
-	GUI.spacing = paddings;
-	GUI.paddingTop = paddings * 2 + "px";
-	GUI.paddingBottom = paddings * 2 + "px";
-	GUI.paddingLeft = paddings * 2 + "px";
-	GUI.paddingRight = paddings * 2 + "px";
-	GUI.adaptWidthToChildren = true;
-	GUI.adaptHeightToChildren = true;
-	GUI.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
-	GUI.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
-	GUI.background = "transparent";
-	GUI.zIndex = 1;
+			GUI.isVertical = true;
+			GUI.spacing = paddings;
+			GUI.paddingTop = paddings * 2 + "px";
+			GUI.paddingBottom = paddings * 2 + "px";
+			GUI.paddingLeft = paddings * 2 + "px";
+			GUI.paddingRight = paddings * 2 + "px";
+			GUI.adaptWidthToChildren = true;
+			GUI.adaptHeightToChildren = true;
+			GUI.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
+			GUI.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
+			GUI.background = "transparent";
+			GUI.zIndex = 1;
 	
 	game.setAlignment(GUI, alignment);
-
 	return GUI;
 }
 
 export const	createDummyBlock = (): baby.StackPanel =>
 {
 	const	dummy = new baby.StackPanel("dummy-" + Math.random().toString(36).substring(2, 15));
-
-	dummy.spacing = 0;
-	dummy.paddingTop = 0;
-	dummy.paddingBottom = 0;
-	dummy.paddingLeft = 0;
-	dummy.paddingRight = 0;
-	dummy.adaptWidthToChildren = true;
-	dummy.adaptHeightToChildren = true;
-	dummy.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
-	dummy.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
-	dummy.background = "transparent";
-	dummy.zIndex = 1;
+			dummy.spacing = 0;
+			dummy.paddingTop = 0;
+			dummy.paddingBottom = 0;
+			dummy.paddingLeft = 0;
+			dummy.paddingRight = 0;
+			dummy.adaptWidthToChildren = true;
+			dummy.adaptHeightToChildren = true;
+			dummy.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
+			dummy.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
+			dummy.background = "transparent";
+			dummy.zIndex = 1;
 
 	return dummy;
 }
 
-export const	createScreen = (screenName: string, alignment?: string): baby.Rectangle =>
+export const	createScreen =
+(
+	screenName: string,
+	alignment?: string
+): baby.Rectangle =>
 {
 	const	screen = new baby.Rectangle(screenName);
 	screen.width = "100%";
@@ -217,15 +253,16 @@ export const createRoomPanel =
 		"join"
 	);
 
+	
+	// console.log("✅ Panel créé pour room:", safeRoomName, "| name =", roomPanel.name);
+	
 	roomPanel.addControl(roomPanelNameText);
 	roomPanel.addControl(roomPanelJoinButton);
-
-	console.log("✅ Panel créé pour room:", safeRoomName, "| name =", roomPanel.name);
-
 	return roomPanel;
 };
 
-export const	createDynamicText = (
+export const	createDynamicText =
+(
 	textName: string,
 	labelKey?: game.labelKey
 ): baby.StackPanel =>
@@ -248,7 +285,8 @@ export const	createDynamicText = (
 	return block;
 }
 
-export const	createDynamicTitle = (
+export const	createDynamicTitle =
+(
 	titleName: string,
 	labelKey?: game.labelKey
 ): baby.StackPanel =>
@@ -259,22 +297,20 @@ export const	createDynamicTitle = (
 	const	keyToUse = labelKey || titleName as game.labelKey;
 	
 	// Create the title with initial value
-	// const title = new baby.TextBlock(titleName, game.getLabel(keyToUse, langRef.current));
-	const title = new baby.TextBlock(titleName, "caca");
-	title.width = "50px";
-	title.height = "25px";
-	title.color = game.colorsScheme.light1;
-	title.resizeToFit = true;
-	title.fontSize = 48;
-	
-	// Store the label key in metadata for language updates
-	title.metadata = { labelKey: keyToUse };
+	const	title = new baby.TextBlock(titleName, "caca");
+			title.width = "50px";
+			title.height = "25px";
+			title.color = game.colorsScheme.light1;
+			title.resizeToFit = true;
+			title.fontSize = 48;
+			title.metadata = { labelKey: keyToUse };	// Store the label key in metadata for language updates
 	
 	block.addControl(title);
 	return block;
 }
 
-export const	createDynamicButton = (
+export const	createDynamicButton =
+(
 	buttonName: string,
 	functionToExecute: () => void,
 	labelKey?: game.labelKey
@@ -287,36 +323,38 @@ export const	createDynamicButton = (
 	
 	// Create the button with initial text value
 	const	button = baby.Button.CreateSimpleButton(buttonName, "caca");
-	button.width = "200px";
-	button.height = "100px";
-	button.color = game.colorsScheme.light1;
-	button.background = game.colorsScheme.dark1;
-	button.fontSize = 24;
-	button.thickness = 0;
-	button.cornerRadius = 20;
+			button.width = "200px";
+			button.height = "100px";
+			button.color = game.colorsScheme.light1;
+			button.background = game.colorsScheme.dark1;
+			button.fontSize = 24;
+			button.thickness = 0;
+			button.cornerRadius = 20;
+			button.metadata = { labelKey: keyToUse };	// Store the label key in button's metadata for language updates
+	
+			// Add button functionality
+			button.onPointerClickObservable.add(functionToExecute);
+			button.onPointerEnterObservable.add(() =>
+			{
+				button.color = game.colorsScheme.auroraAccent1;
+				button.background = game.colorsScheme.light3;
+			});
+			button.onPointerOutObservable.add(() =>
+			{
+				button.color = game.colorsScheme.light3;
+				button.background = game.colorsScheme.dark1;
+			});
+
 	game.setPaddings(button, "10px");
-	
-	// Store the label key in button's metadata for language updates
-	button.metadata = { labelKey: keyToUse };
-	
-	// Add button functionality
-	button.onPointerClickObservable.add(functionToExecute);
-	button.onPointerEnterObservable.add(() =>
-	{
-		button.color = game.colorsScheme.auroraAccent1;
-		button.background = game.colorsScheme.light3;
-	});
-	button.onPointerOutObservable.add(() =>
-	{
-		button.color = game.colorsScheme.light3;
-		button.background = game.colorsScheme.dark1;
-	});
-	
 	block.addControl(button);
 	return block;
 }
 
-export const	createCard = (cardName: string, cardText: string): baby.StackPanel =>
+export const	createCard =
+(
+	cardName: string,
+	cardText: string
+): baby.StackPanel =>
 {
 	const	block = game.createDummyBlock();
 	const	container = new baby.Container(cardName + "Container");
@@ -325,8 +363,6 @@ export const	createCard = (cardName: string, cardText: string): baby.StackPanel 
 			container.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
 			container.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
 			container.background = "transparent";
-
-	const	cardLabel = createText(cardName + "Label", cardText);
 
 	const	cardBackground = new baby.Rectangle(cardName + "Background");
 			cardBackground.width = "100%";
@@ -337,13 +373,21 @@ export const	createCard = (cardName: string, cardText: string): baby.StackPanel 
 			cardBackground.thickness = 2;
 			cardBackground.zIndex = 0;
 
+	const	cardLabel = createText(cardName + "Label", cardText);
+
 	container.addControl(cardBackground);
 	container.addControl(cardLabel);
 	block.addControl(container);
 	return block;
 }
 
-export const	createLine = (x1: string, y1: string, x2: string, y2: string): baby.Container =>
+export const	createLine =
+(
+	x1: string,
+	y1: string,
+	x2: string,
+	y2: string
+): baby.Container =>
 {
 	const	thickness: number = 6;
 	const	color: string = game.colorsScheme.light1;
@@ -395,7 +439,6 @@ export const	createLine = (x1: string, y1: string, x2: string, y2: string): baby
 	container.addControl(line);
 	container.addControl(sphereStart);
 	container.addControl(sphereEnd);
-
 	return container;
 }
 
@@ -454,7 +497,11 @@ export const	createBracketLines2 = (bracketName: string): baby.StackPanel =>
 	return block;
 }
 
-export const	createSpacer = (witdh: number, height: number): baby.StackPanel =>
+export const	createSpacer =
+(
+	witdh: number,
+	height: number
+): baby.StackPanel =>
 {
 	const	block = game.createDummyBlock();
 
@@ -470,53 +517,60 @@ export const	createSpacer = (witdh: number, height: number): baby.StackPanel =>
 	return block;
 }
 
-export const	createInputText = (inputName: string, initialValue: string, onChange: (value: string) => void): baby.StackPanel =>
+export const	createInputText =
+(
+	inputName: string,
+	initialValue: string,
+	onChange: (value: string) => void
+): baby.StackPanel =>
 {
 	const	block = game.createDummyBlock();
 	
 	// Create a container for the rounded background
 	const	container = new baby.Container(inputName + "Container");
-	container.width = "200px";
-	container.height = "40px";
-	container.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
-	container.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
+			container.width = "200px";
+			container.height = "40px";
+			container.horizontalAlignment = baby.Control.HORIZONTAL_ALIGNMENT_CENTER;
+			container.verticalAlignment = baby.Control.VERTICAL_ALIGNMENT_CENTER;
 	
 	// Create rounded background rectangle
 	const	background = new baby.Rectangle(inputName + "Background");
-	background.width = "100%";
-	background.height = "100%";
-	background.background = game.colorsScheme.dark1;
-	background.thickness = 0;
-	background.cornerRadius = 20; // This gives you rounded corners
+			background.width = "100%";
+			background.height = "100%";
+			background.background = game.colorsScheme.dark1;
+			background.thickness = 0;
+			background.cornerRadius = 20; // This gives you rounded corners
 	
 	// Create the input text
 	const	input = new baby.InputText(inputName);
-	input.text = initialValue;
-	input.width = "100%";
-	input.height = "100%";
-	input.color = game.colorsScheme.light1;
-	input.background = "transparent"; // Make input background transparent
-	input.focusedBackground = "transparent"; // Keep transparent on focus
-	input.fontSize = 24;
-	input.thickness = 0;
-	input.paddingLeft = "10px";
-	input.paddingRight = "10px";
+			input.text = initialValue;
+			input.width = "100%";
+			input.height = "100%";
+			input.color = game.colorsScheme.light1;
+			input.background = "transparent"; // Make input background transparent
+			input.focusedBackground = "transparent"; // Keep transparent on focus
+			input.fontSize = 24;
+			input.thickness = 0;
+			input.paddingLeft = "10px";
+			input.paddingRight = "10px";
 
-	// Handle focus states by changing the background rectangle
-	input.onFocusObservable.add(() => {
-		background.background = game.colorsScheme.dark3;
-	});
-	
-	input.onBlurObservable.add(() => {
-		background.background = game.colorsScheme.dark1;
-	});
+			// Handle focus states by changing the background rectangle
+			input.onFocusObservable.add(() =>
+			{
+				background.background = game.colorsScheme.dark3;
+			});
+			
+			input.onBlurObservable.add(() =>
+			{
+				background.background = game.colorsScheme.dark1;
+			});
 
-	input.onTextChangedObservable.add(() =>
-	{
-		const	value = input.text.trim();
-		if (value.length > 0) onChange(value);
-		else onChange("Unnamed");
-	});
+			input.onTextChangedObservable.add(() =>
+			{
+				const	value = input.text.trim();
+				if (value.length > 0) onChange(value);
+				else onChange("Unnamed");
+			});
 
 	// Add background first, then input on top
 	container.addControl(background);

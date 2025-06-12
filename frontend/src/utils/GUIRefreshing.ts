@@ -4,13 +4,13 @@ import React from 'react';
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
 
-
 export const	instantiateGUI = (pong: React.RefObject<game.pongStruct>): void =>
 {
 	pong.current.guiTexture = baby.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, pong.current.scene);
 }
 
-export const initializeAllGUIScreens = (
+export const initializeAllGUIScreens =
+(
 	pong: React.RefObject<game.pongStruct>,
 	gameModes: React.RefObject<game.gameModes>,
 	states: React.RefObject<game.states>,
@@ -20,7 +20,8 @@ export const initializeAllGUIScreens = (
 	navigate: (path: string) => void,
 	setGameModeTrigger: React.Dispatch<React.SetStateAction<number>>,
 	lastHandledState: React.RefObject<game.states>
-): void =>{
+): void =>
+{
 	// Initialize the GUI texture
 	console.log("initialized GUI texture...");
 	game.instantiateGUI(pong);
@@ -45,7 +46,11 @@ export const initializeAllGUIScreens = (
 	console.log("complete initializing GUI screens");
 }
 
-export const	updateGUIVisibilityStates = (pong: React.RefObject<game.pongStruct>, states: game.states): void =>
+export const	updateGUIVisibilityStates =
+(
+	pong: React.RefObject<game.pongStruct>,
+	states: game.states
+): void =>
 {
 	const setUIState = (ui: baby.Container | undefined, stateToCheck: game.states): void =>
 	{
@@ -54,8 +59,8 @@ export const	updateGUIVisibilityStates = (pong: React.RefObject<game.pongStruct>
         const	shouldShow: boolean = states === stateToCheck;
         const	isCurrentlyAdded: boolean = pong.current.guiTexture.getDescendants().includes(ui);
         
-        if (shouldShow && !isCurrentlyAdded) pong.current.guiTexture.addControl(ui);
-        else if (!shouldShow && isCurrentlyAdded) pong.current.guiTexture.removeControl(ui);
+        if		(shouldShow && !isCurrentlyAdded) pong.current.guiTexture.addControl(ui);
+        else if	(!shouldShow && isCurrentlyAdded) pong.current.guiTexture.removeControl(ui);
     }
 	setUIState(pong.current.mainMenuGUI, game.states.main_menu);
 	setUIState(pong.current.settingsGUI, game.states.settings);
@@ -102,8 +107,6 @@ export const	updateGUIVisibilityPlayerStates =
 			pong.current.waitingTournamentToStartButtonCancel.isEnabled = pong.current.waitingTournamentToStartButtonCancel.isVisible = false;
 			pong.current.waitingTournamentToStartButtonPlay.isEnabled = pong.current.waitingTournamentToStartButtonPlay.isVisible = false;
 			break;
-
-		// For all other player states
 		default:
 			pong.current.waitingTournamentToStartButtonBack.isEnabled = pong.current.waitingTournamentToStartButtonBack.isVisible = false;
 			pong.current.waitingTournamentToStartButtonCancel.isEnabled = pong.current.waitingTournamentToStartButtonCancel.isVisible = false;
@@ -130,15 +133,10 @@ export const	updateGUIVisibilityPlayerStates =
 export const	updateGUIValues =
 (
 	pong: React.RefObject<game.pongStruct>,
-	states: React.RefObject<game.states>,
 	lang: React.RefObject<game.lang>
 ): void =>
 {
-	if (!pong.current.guiTexture)
-	{
-		console.warn("guiTexture is not initialized !");
-		return;
-	}
+	if (!pong.current.guiTexture) return;
 	
 	// Process text elements with metadata
 	const allControls = pong.current.guiTexture.getDescendants();
@@ -147,29 +145,24 @@ export const	updateGUIValues =
 		if (control.metadata?.labelKey)
 		{
 			// Update TextBlocks directly
-			if (control instanceof baby.TextBlock)
-			{
+			if (control instanceof baby.TextBlock) 
 				control.text = game.getLabel(control.metadata.labelKey, lang.current);
-				// control.markAsDirty();
-			}
 			// Update Button labels (first child is typically the TextBlock)
-			else if (control instanceof baby.Button
-					&& control.children.length > 0
-					&& control.children[0] instanceof baby.TextBlock)
-			{
-				(control.children[0] as baby.TextBlock).text = game.getLabel(control.metadata.labelKey, lang.current);
-				// control.markAsDirty();
-			}
-		}
-		// Check for nested TextBlocks with metadata in other controls
-		else if (control instanceof baby.Button 
+			else if 
+			(
+				   control instanceof baby.Button
 				&& control.children.length > 0
 				&& control.children[0] instanceof baby.TextBlock
-				&& control.children[0].metadata?.labelKey)
-		{
-			(control.children[0] as baby.TextBlock).text = game.getLabel(control.children[0].metadata.labelKey, lang.current);
-			// control.markAsDirty();
+			) (control.children[0] as baby.TextBlock).text = game.getLabel(control.metadata.labelKey, lang.current);
 		}
+		// Check for nested TextBlocks with metadata in other controls
+		else if 
+		(
+			   control instanceof baby.Button 
+			&& control.children.length > 0
+			&& control.children[0] instanceof baby.TextBlock
+			&& control.children[0].metadata?.labelKey
+		) (control.children[0] as baby.TextBlock).text = game.getLabel(control.children[0].metadata.labelKey, lang.current);
 	}
 }
 
@@ -244,7 +237,7 @@ export const	updateGUIsWhenNeeded =
 	if (lastState.current !== states.current)
 	{
 		game.updateGUIVisibilityStates(pong, states.current);
-		game.updateGUIValues(pong, states, lang);
+		game.updateGUIValues(pong, lang);
 		lastState.current = states.current;
 	}
 	// Update GUI on game mode change
@@ -253,9 +246,10 @@ export const	updateGUIsWhenNeeded =
 		game.updateGUIVisibilityPlayerStates(pong, playerStates.current, gameModes.current);
 		lastPlayerState.current = playerStates.current;
 	}
+	// Update GUI on language change
 	if (lastLang.current !== lang.current)
 	{
-		game.updateGUIValues(pong, states, lang);
+		game.updateGUIValues(pong, lang);
 		lastLang.current = lang.current;
 	}
 }
