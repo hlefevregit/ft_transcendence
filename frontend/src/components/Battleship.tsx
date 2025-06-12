@@ -3,7 +3,7 @@ import * as BABYLON from "@babylonjs/core";
 import { Inspector } from "@babylonjs/inspector"
 import { GridMaterial } from '@babylonjs/materials'
 import '@/assets/BattleshipMesh'
-import BattleshipMesh from '@/assets/BattleshipMesh';
+import { BattleshipMesh, ShipMesh } from '@/assets/BattleshipMesh';
 
 type SceneCanvasProps = {
   engineOptions?: BABYLON.EngineOptions
@@ -25,7 +25,7 @@ type GameRefType = {
   host: PlayerInfo
   guest: PlayerInfo
   table: BABYLON.Mesh
-  camera: BABYLON.TargetCamera
+  camera: BABYLON.ArcRotateCamera
   light: BABYLON.HemisphericLight
   mats: {
     blue: BABYLON.StandardMaterial
@@ -67,7 +67,7 @@ const Battleship = () => {
     mats.red.diffuseColor = new BABYLON.Color3(1,0,0);
     mats.white.diffuseColor = new BABYLON.Color3(1,1,1);
     mats.grid.majorUnitFrequency = 5
-    mats.grid.gridRatio = 0.92
+    mats.grid.gridRatio = 0.9
     mats.grid.gridOffset.z += 0.3
 
     const host = {
@@ -83,8 +83,7 @@ const Battleship = () => {
       field: new Array(100)
     };
 
-    const camera = new BABYLON.TargetCamera("camera", new BABYLON.Vector3(0, 10, 11), scene, true);
-    camera.setTarget(camera.position.add(BABYLON.Vector3.Down()));
+    const camera = new BABYLON.ArcRotateCamera("camera", Math.PI/2, Math.PI/3, 25, guest.mesh.field.absolutePosition, scene, true);
     camera.attachControl(scene.getEngine().getRenderingCanvas(), true);
 
     const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0,1,0), scene);
@@ -102,8 +101,10 @@ const Battleship = () => {
       table: table,
       camera: camera,
       light: light,
-      mats: mats
+      mats: mats,
     };
+
+    scene.onKeyboardObservable.add((kbInfo) => ShipMesh.moveShip(kbInfo))
   }
 
   return (
