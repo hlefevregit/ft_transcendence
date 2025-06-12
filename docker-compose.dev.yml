@@ -1,69 +1,69 @@
 services:
-  vault:
-    image: hashicorp/vault:latest
-    restart: unless-stopped
-    cap_add:
-      - IPC_LOCK
-    environment:
-      VAULT_ADDR: "https://vault:8200"
-      VAULT_API_ADDR: "https://vault:8200"
-    volumes:
-      - vault_data:/vault/file
-      - ./vault/config:/vault/config
-      - ./vault/init:/vault/init
-      - ./backend/main/certs:/vault/certs:ro
-      - ./vault/secrets:/vault/secrets
-    networks:
-      - vault_network
-      - ft_network
-    command: vault server -config=/vault/config/vault.hcl
+  # vault:
+  #   image: hashicorp/vault:latest
+  #   restart: unless-stopped
+  #   cap_add:
+  #     - IPC_LOCK
+  #   environment:
+  #     VAULT_ADDR: "https://vault:8200"
+  #     VAULT_API_ADDR: "https://vault:8200"
+  #   volumes:
+  #     - vault_data:/vault/file
+  #     - ./vault/config:/vault/config
+  #     - ./vault/init:/vault/init
+  #     - ./backend/main/certs:/vault/certs:ro
+  #     - ./vault/secrets:/vault/secrets
+  #   networks:
+  #     - vault_network
+  #     - ft_network
+  #   command: vault server -config=/vault/config/vault.hcl
 
-  vault_init:
-    image: hashicorp/vault:latest
-    depends_on:
-      - vault
-    volumes:
-      - ./vault/init:/vault/init
-      - ./vault/secrets:/vault/secrets
-      - ./.env:/vault/secrets/.env
-    environment:
-      VAULT_ADDR: "https://vault:8200"
-      VAULT_SKIP_VERIFY: "true"
-    networks:
-      - ft_network
-    entrypoint: sh -c "apk add --no-cache curl bash && bash /vault/init/setup.sh"
+  # vault_init:
+  #   image: hashicorp/vault:latest
+  #   depends_on:
+  #     - vault
+  #   volumes:
+  #     - ./vault/init:/vault/init
+  #     - ./vault/secrets:/vault/secrets
+  #     - ./.env:/vault/secrets/.env
+  #   environment:
+  #     VAULT_ADDR: "https://vault:8200"
+  #     VAULT_SKIP_VERIFY: "true"
+  #   networks:
+  #     - ft_network
+  #   entrypoint: sh -c "apk add --no-cache curl bash && bash /vault/init/setup.sh"
 
-  watcher:
-    image: alpine
-    restart: unless-stopped
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - vault
-      - vault_init
-    entrypoint: >
-      sh -c "
-        apk add --no-cache docker-cli;
-        echo '👀 Watching for vault restarts...';
-        docker events --filter container=ft_transcendence-vault-1 --filter event=die --filter event=stop --filter event=restart |
-        while read -r event; do
-          echo '🔁 Vault restarted. Restarting vault_init...';
-          docker restart ft_transcendence-vault_init-1;
-        done
-      "
+  # watcher:
+  #   image: alpine
+  #   restart: unless-stopped
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   depends_on:
+  #     - vault
+  #     - vault_init
+  #   entrypoint: >
+  #     sh -c "
+  #       apk add --no-cache docker-cli;
+  #       echo '👀 Watching for vault restarts...';
+  #       docker events --filter container=ft_transcendence-vault-1 --filter event=die --filter event=stop --filter event=restart |
+  #       while read -r event; do
+  #         echo '🔁 Vault restarted. Restarting vault_init...';
+  #         docker restart ft_transcendence-vault_init-1;
+  #       done
+  #     "
 
-  vault_nginx:
-    image: nginx:latest
-    depends_on:
-      - vault
-    ports:
-      - "8200:8200"
-    volumes:
-      - ./backend/main/certs:/etc/nginx/certs:ro
-      - ./vault/config/nginx.conf:/etc/nginx/nginx.conf:ro
-    networks:
-      - vault_network
-    command: nginx -g 'daemon off;'
+  # vault_nginx:
+  #   image: nginx:latest
+  #   depends_on:
+  #     - vault
+  #   ports:
+  #     - "8200:8200"
+  #   volumes:
+  #     - ./backend/main/certs:/etc/nginx/certs:ro
+  #     - ./vault/config/nginx.conf:/etc/nginx/nginx.conf:ro
+  #   networks:
+  #     - vault_network
+  #   command: nginx -g 'daemon off;'
 
   backend:
     build:

@@ -5,6 +5,7 @@ import * as BABYLON from "@babylonjs/core";
 import BabylonScene from "@/components/BabylonScene";
 import PlayerSprite from "@/components/PlayerSprite";
 import "@/styles/Game1.css";
+import LiveChat from "@/components/LiveChat/LiveChat";
 
 export default function Game1() {
   const navigate = useNavigate();
@@ -80,12 +81,15 @@ export default function Game1() {
   };
 
   return (
-    <div className="city-scene">
-      <BabylonScene
-        backgroundUrl="/assets/4.jpg"
-        onSceneReady={handleSceneReady}
-        canvasClassName="game1-canvas"
-      />
-    </div>
+    <>
+      <LiveChat />
+      <div className="city-scene">
+        <BabylonScene
+          backgroundUrl="/assets/4.jpg"
+          onSceneReady={handleSceneReady}
+          canvasClassName="game1-canvas"
+        />
+      </div>
+    </>
   );
 }

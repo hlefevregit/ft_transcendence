@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as BABYLON from "@babylonjs/core";
 import BabylonScene from "@/components/BabylonScene";
 import PlayerSprite from "@/components/PlayerSprite";
+import LiveChat from "@/components/LiveChat/LiveChat";
 
 import SettingsProfile from "./SettingsProfile";
 import SettingsFriends from "./SettingsFriends";
@@ -50,9 +51,11 @@ export default function Settings() {
   };
 
   return (
-    <div className="settings-page">
-      <BabylonScene
-        backgroundUrl="/assets/3.jpg"
+    <>
+      <LiveChat />
+      <div className="settings-page">
+        <BabylonScene
+          backgroundUrl="/assets/3.jpg"
         onSceneReady={handleSceneReady}
         canvasClassName="settings-canvas"
       />
@@ -117,5 +120,6 @@ export default function Settings() {
         </div>
       </div>
     </div>
+  </>
   );
 }
