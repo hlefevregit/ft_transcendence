@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { handleEmailLogin, googleLogin, handle2FALogin } from '../services/authServices';
 import '@/styles/style.css';
+import { useTranslation } from 'react-i18next';
 
 const LoginForm: React.FC = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -108,7 +110,7 @@ const LoginForm: React.FC = () => {
       <div className="w-full max-w-3xl mx-auto">
         <div className="bg-white grid md:grid-cols-1 gap-12 w-full sm:p-8 p-6 shadow-md rounded-md overflow-hidden">
           <form className="w-full">
-            <h3 className="text-gray-800 text-xl mb-4 text-center">Sign In</h3>
+            <h3 className="text-gray-800 text-xl mb-4 text-center">{t('sign_in')}</h3>
             {/* General error */}
             {error && <p className="text-red-600 text-sm mb-4 text-center">{error}</p>}
 
@@ -118,7 +120,7 @@ const LoginForm: React.FC = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email address"
+                  placeholder={t('email_placeholder')}
                   required
                   className="bg-white border border-gray-300 w-full text-sm text-gray-800 pl-4 py-2.5 rounded-md outline-blue-500"
                 />
@@ -128,7 +130,7 @@ const LoginForm: React.FC = () => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password"
+                  placeholder={t('password_placeholder')}
                   required
                   className="bg-white border border-gray-300 w-full text-sm text-gray-800 pl-4 py-2.5 rounded-md outline-blue-500"
                 />
@@ -142,7 +144,7 @@ const LoginForm: React.FC = () => {
                 disabled={is2FAEnabled}
                 className="w-full py-2.5 px-4 text-sm rounded-md bg-blue-600 hover:bg-blue-700 text-white focus:outline-none disabled:opacity-50"
               >
-                Log In
+				{t('login_button')}
               </button>
             </div>
 
@@ -154,7 +156,7 @@ const LoginForm: React.FC = () => {
                     type="text"
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
-                    placeholder="Enter 2FA code"
+                    placeholder={t('2fa_placeholder')}
                     className="bg-white border border-gray-300 w-full text-sm text-gray-800 pl-4 py-2.5 rounded-md outline-blue-500"
                   />
                 </div>
@@ -164,7 +166,7 @@ const LoginForm: React.FC = () => {
                     onClick={handle2FACheck}
                     className="w-full py-2.5 px-4 text-sm rounded-md bg-green-600 hover:bg-green-700 text-white focus:outline-none"
                   >
-                    Verify 2FA
+					{t('verify_2fa_button')}
                   </button>
                 </div>
               </>
@@ -181,9 +183,9 @@ const LoginForm: React.FC = () => {
             </div>
 
             <p className="text-gray-800 text-sm mt-6 text-center">
-              Don't have an account?
+			  {t('no_account')}
               <Link to="/register" className="text-blue-600 font-semibold hover:underline ml-1">
-                Register here
+				{t('register_here')}
               </Link>
             </p>
           </form>
