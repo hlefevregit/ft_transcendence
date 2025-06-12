@@ -10,6 +10,8 @@ import {
 import "@/styles/SettingsFriends.css";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 
+import { useTranslation } from "react-i18next";
+
 interface User {
   id: number;
   pseudo: string;
@@ -31,6 +33,7 @@ export default function SettingsFriends() {
   // ──────────────────────────────────────────────
   // États locaux
   // ──────────────────────────────────────────────
+  const { t } = useTranslation();
   const [newFriendPseudo, setNewFriendPseudo] = useState<string>("");
   const [friends, setFriends] = useState<User[]>([]);
   const [sentRequests, setSentRequests] = useState<SentRequest[]>([]);
@@ -226,7 +229,7 @@ export default function SettingsFriends() {
         <div className="friend-input-row">
           <input
             type="text"
-            placeholder="Add friend"
+            placeholder={t('add_friend_placeholder')}
             value={newFriendPseudo}
             onChange={e => setNewFriendPseudo(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -246,7 +249,7 @@ export default function SettingsFriends() {
       {/* Confirmation de suppression */}
       {dialogVisible && selectedFriend && (
         <ConfirmationDialog
-          message={`Do you really want to remove ${selectedFriend.pseudo} ?`}
+		  message={t('confirm_remove_friend', { name: selectedFriend.pseudo })}
           onConfirm={handleConfirmRemove}
           onCancel={handleCancelRemove}
         />
@@ -256,13 +259,13 @@ export default function SettingsFriends() {
       <div className="scrollable-block">
         {/* Sent Requests */}
         <div className="dropdown-header" onClick={() => setSentOpen(o => !o)}>
-          <span>Sent Requests ({sentRequests.length})</span>
+          <span>{t('sent_friend_requests')} ({sentRequests.length})</span>
           <FaArrowDown className={sentOpen ? "open" : ""} />
         </div>
         <div className={`section-content ${sentOpen ? "open" : ""}`}>
           <ul className="dropdown-list">
             {sentRequests.length === 0 ? (
-              <li className="dropdown-item-empty">No sent requests</li>
+              <li className="dropdown-item-empty">{t('no_sent_requests')}</li>
             ) : (
               sentRequests.map(r => (
                 <li key={r.id} className="dropdown-item">
@@ -285,13 +288,13 @@ export default function SettingsFriends() {
 
         {/* Received Requests */}
         <div className="dropdown-header" onClick={() => setReceivedOpen(o => !o)}>
-          <span>Received Requests ({receivedRequests.length})</span>
+          <span>{t('received_friend_requests')} ({receivedRequests.length})</span>
           <FaArrowDown className={receivedOpen ? "open" : ""} />
         </div>
         <div className={`section-content ${receivedOpen ? "open" : ""}`}>
           <ul className="dropdown-list">
             {receivedRequests.length === 0 ? (
-              <li className="dropdown-item-empty">No received requests</li>
+              <li className="dropdown-item-empty">{t('no_received_requests')}</li>
             ) : (
               receivedRequests.map(r => (
                 <li key={r.id} className="dropdown-item">
@@ -323,13 +326,13 @@ export default function SettingsFriends() {
 
         {/* Friends List */}
         <div className="dropdown-header" onClick={() => setFriendsOpen(o => !o)}>
-          <span>Friends ({friends.length})</span>
+          <span>{t('friends_list')} ({friends.length})</span>
           <FaArrowDown className={friendsOpen ? "open" : ""} />
         </div>
         <div className={`section-content ${friendsOpen ? "open" : ""}`}>
           <ul className="dropdown-list">
             {friends.length === 0 ? (
-              <li className="dropdown-item-empty">No friends yet</li>
+              <li className="dropdown-item-empty">{t('no_friends')}</li>
             ) : (
               friends.map(f => (
                 <li key={f.id} className="dropdown-item">
@@ -338,7 +341,7 @@ export default function SettingsFriends() {
                     <div className="item-text-group">
                       <span className="item-pseudo">{f.pseudo}</span>
                       <span className="item-status">
-                        {f.status === "active" ? "online" : "offline"}
+                        {f.status === "active" ? t('status_online') : t('status_offline')}
                       </span>
                     </div>
                   </div>

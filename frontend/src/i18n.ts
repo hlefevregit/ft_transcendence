@@ -16,10 +16,6 @@ i18n
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
-  });
-
-// i18n.changeLanguage('en');
-
-console.log('i18n initialized with language detection and backend loading', i18n.language);
+});
 
 export default i18n;

@@ -155,8 +155,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { handleRegister, googleLogin } from '@/services/authServices';
 import '@/styles/style.css';
+import { useTranslation } from 'react-i18next';
 
 const RegisterForm: React.FC = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [pseudo, setPseudo] = useState('');
   const [email, setEmail] = useState('');
@@ -252,7 +254,7 @@ const RegisterForm: React.FC = () => {
       <div className="w-full max-w-3xl max-md:max-w-xl mx-auto">
         <div className="bg-white grid md:grid-cols-1 gap-12 w-full sm:p-8 p-6 shadow-md rounded-md overflow-hidden">
           <form className="w-full">
-            <h3 className="text-gray-800 text-xl mb-4">Register</h3>
+            <h3 className="text-gray-800 text-xl mb-4">{t('register')}</h3>
             {/* Affichage de l’erreur "générale" */}
             {errors.general && (
               <p className="text-red-600 text-sm mb-4">
@@ -262,7 +264,7 @@ const RegisterForm: React.FC = () => {
             <div className="space-y-4">
               <div>
                 <label htmlFor="reg-pseudo" className="text-gray-800 text-sm mb-2 block">
-                  Pseudo
+				  {t('username')}
                 </label>
                 <input
                   id="reg-pseudo"
@@ -270,14 +272,14 @@ const RegisterForm: React.FC = () => {
                   value={pseudo}
                   onChange={(e) => setPseudo(e.target.value)}
                   required
-                  placeholder="Enter pseudo"
+                  placeholder={t('username_placeholder')}
                   className="bg-white border border-gray-300 w-full text-sm text-gray-800 pl-4 py-2.5 rounded-md outline-blue-500"
                 />
                 {errors.pseudo && <p className="text-red-600 text-sm mt-1">{errors.pseudo}</p>}
               </div>
               <div>
                 <label htmlFor="reg-email" className="text-gray-800 text-sm mb-2 block">
-                  Email
+				  {t('email')}
                 </label>
                 <input
                   id="reg-email"
@@ -285,14 +287,14 @@ const RegisterForm: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  placeholder="Enter email"
+                  placeholder={t('email_placeholder')}
                   className="bg-white border border-gray-300 w-full text-sm text-gray-800 pl-4 py-2.5 rounded-md outline-blue-500"
                 />
                 {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>}
               </div>
               <div>
                 <label htmlFor="reg-password" className="text-gray-800 text-sm mb-2 block">
-                  Password
+				  {t('password')}
                 </label>
                 <input
                   id="reg-password"
@@ -300,7 +302,7 @@ const RegisterForm: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  placeholder="Enter password"
+                  placeholder={t('password_placeholder')}
                   className="bg-white border border-gray-300 w-full text-sm text-gray-800 pl-4 py-2.5 rounded-md outline-blue-500"
                 />
                 {errors.password && <p className="text-red-600 text-sm mt-1">{errors.password}</p>}
@@ -313,15 +315,15 @@ const RegisterForm: React.FC = () => {
                 disabled={loading}
                 className="w-full py-2.5 px-4 text-sm tracking-wider rounded-md bg-blue-600 hover:bg-blue-700 text-white focus:outline-none disabled:opacity-50"
               >
-                Create Account
+				{t('create_account_button')}
               </button>
             </div>
             <div className="flex items-center justify-between mt-4">
               <div id="google-login-btn"></div>
               <p className="text-gray-800 text-sm">
-                Already have an account?{' '}
+				{t('already_have_account')}{' '}
                 <Link to="/login" className="text-blue-600 font-semibold hover:underline ml-1">
-                  Login here
+				  {t('login_here_button')}
                 </Link>
               </p>
             </div>

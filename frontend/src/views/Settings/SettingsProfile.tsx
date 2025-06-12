@@ -9,6 +9,8 @@ import steveImg from '@/assets/steve.jpg';
 import ConfirmationDialog from '@/components/ConfirmationDialog';
 import '@/styles/SettingsProfile.css';
 
+import { useTranslation } from 'react-i18next';
+
 interface UserProfile {
   id: number;
   pseudo: string;
@@ -18,6 +20,7 @@ interface UserProfile {
 }
 
 export default function SettingsProfile() {
+  const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [user, setUser] = useState<UserProfile | null>(null);
@@ -331,7 +334,7 @@ export default function SettingsProfile() {
                 onClick={() => setIsEditingPseudo(true)}
                 type="button"
               >
-                {pseudo || 'Enter username'}
+				{ pseudo || t('username_placeholder')}
               </button>
             )}
           </div>
@@ -345,14 +348,14 @@ export default function SettingsProfile() {
             onClick={triggerFileSelect}
             type="button"
           >
-            Change Avatar
+			{t('change_avatar_button')}
           </button>
           <button
             className="delete-avatar-btn"
             onClick={() => setAvatarUrl(defaultAvatar)}
             type="button"
           >
-            Delete Avatar
+			{t('delete_avatar_button')}
           </button>
         </div>
         <input
@@ -370,7 +373,7 @@ export default function SettingsProfile() {
             disabled={!isDirty}
             type="button"
           >
-            Save
+			{t('save_button')}
           </button>
           <button
             className="reset-button"
@@ -400,7 +403,7 @@ export default function SettingsProfile() {
         {qrCodeUrl && (
           <div className="qr-section">
             <p className="qr-instruction">
-              Scan this QR code with your authentication app:
+			  {t('scan_qr_code_instruction')}
             </p>
             <img src={qrCodeUrl} alt="QR Code 2FA" className="qr-image" />
             <div className="qr-input-group">
@@ -415,7 +418,7 @@ export default function SettingsProfile() {
                 onClick={handleVerify2FA}
                 type="button"
               >
-                Verify
+				{t('verify_2fa_settings_button')}
               </button>
             </div>
           </div>
@@ -427,14 +430,14 @@ export default function SettingsProfile() {
       {/* Logout & Delete Account */}
       <div className="extra-actions">
         <button className="logout-button clickable" onClick={logout} type="button">
-          Logout
+		  {t('logout_button')}
         </button>
         <button
           className="delete-data-button clickable"
           onClick={deleteAccount}
           type="button"
         >
-          Delete My Account
+		  {t('delete_account_button')}
         </button>
       </div>
     </section>

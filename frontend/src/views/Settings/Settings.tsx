@@ -10,9 +10,12 @@ import SettingsHistory from "./SettingsHistory";
 
 import "@/styles/Settings.css";
 
+import { useTranslation } from "react-i18next";
+
 type Tab = "profile" | "friends" | "history";
 
 export default function Settings() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<Tab>("profile");
 
@@ -58,7 +61,7 @@ export default function Settings() {
       />
       <div className="settings-backdrop" />
       <div className="settings-container">
-        <h1 className="settings-title">USER INFORMATIONS</h1>
+        <h1 className="settings-title">{t('settings_title')}</h1>
 
         {/* ─────────── Onglets ─────────── */}
         <nav className="settings-tabs">
@@ -68,7 +71,7 @@ export default function Settings() {
             onClick={() => setActiveTab("profile")}
             type="button"
           >
-            Profile
+			{t('profile_menu')}
           </button>
 
           <button
@@ -77,7 +80,7 @@ export default function Settings() {
             onClick={() => setActiveTab("friends")}
             type="button"
           >
-            Friends
+			{t('friends_menu')}
           </button>
 
           <button
@@ -86,7 +89,7 @@ export default function Settings() {
             onClick={() => setActiveTab("history")}
             type="button"
           >
-            History
+			{t('history_menu')}
           </button>
 
           {/* ─── Barre de soulignement qui se déplace ─── */}
