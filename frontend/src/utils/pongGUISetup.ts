@@ -113,6 +113,8 @@ export const	updateGUIVisibilityPlayerStates =
 	switch (gameModes)
 	{
 		default:
+			pong.current.finishedGameBackButton.isEnabled = pong.current.finishedGameBackButton.isVisible = true;
+			pong.current.finishedGameReplayButton.isEnabled = pong.current.finishedGameReplayButton.isVisible = true;
 			break;
 		case game.gameModes.online:
 			pong.current.finishedGameBackButton.isEnabled = pong.current.finishedGameBackButton.isVisible = true;
