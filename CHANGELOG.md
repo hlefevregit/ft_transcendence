@@ -1,3 +1,11 @@
+## [1.2.1](https://github.com/hlefevregit/ft_transcendence/compare/v1.2.0...v1.2.1) (2025-06-12)
+
+
+### Bug Fixes
+
+* **FinishedGameGUI:** ldalmass: Added default case to show both back and replay button, this only applies for the local and ai game mode ([ecb011f](https://github.com/hlefevregit/ft_transcendence/commit/ecb011f129977d791d1d5fe4c932fedbc2e70c35))
+* **FinishedGameGUI:** ldalmass: Fixed The displaying of the button depending of the context ([e0f6899](https://github.com/hlefevregit/ft_transcendence/commit/e0f6899a26a0c215c40c9f039733a663669a70be))
+
 # [1.2.0](https://github.com/hlefevregit/ft_transcendence/compare/v1.1.0...v1.2.0) (2025-06-12)
 
 
