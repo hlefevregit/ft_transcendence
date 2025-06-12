@@ -34,6 +34,8 @@ class Match {
 			...state,
 		};
 
+		console.log(`Match ${this.matchId} state updated:`, this.lastState);
+
 		state.lastState = this.lastState;
 
 		this.broadcast(state);
@@ -42,6 +44,7 @@ class Match {
 	broadcast(payload: any) {
 		this.playerA?.send(JSON.stringify(payload));
 		this.playerB?.send(JSON.stringify(payload));
+		
 	}
 }
 
@@ -79,27 +82,6 @@ export class tournamentSession {
 	score1_final: number = 0;
 	score2_final: number = 0;
 
-	// lastStateGame1 = {
-	// 	paddle1Z: 0,
-	// 	paddle2Z: 0,
-	// 	ballPosition: { x: 0, y: 0, z: 0 },
-	// 	ballDirection: { x: 0, y: 0, z: 0 },
-	// 	ballSpeedModifier: 1,
-	// };
-	// lastStateGame2 = {
-	// 	paddle3Z: 0,
-	// 	paddle4Z: 0,
-	// 	ballPosition: { x: 0, y: 0, z: 0 },
-	// 	ballDirection: { x: 0, y: 0, z: 0 },
-	// 	ballSpeedModifier: 1,
-	// };
-	// lastStateFinal = {
-	// 	paddle1Z: 0,
-	// 	paddle2Z: 0,
-	// 	ballPosition: { x: 0, y: 0, z: 0 },
-	// 	ballDirection: { x: 0, y: 0, z: 0 },
-	// 	ballSpeedModifier: 1,
-	// };
 
 
 	game1: Match = new Match('game1');
@@ -130,7 +112,7 @@ export class tournamentSession {
 		this.player2 = socket;
 		this.player2Id = player2Id;
 		this.player2Pseudo = player2Pseudo;
-		new Match('game1', this.player1, this.player2);
+		this.game1 = new Match('game1', this.player1, this.player2);
 		// this.broadcast({ type: 'game_start' });
 	}
 
@@ -144,7 +126,7 @@ export class tournamentSession {
 		this.player4 = socket;
 		this.player4Id = player4Id;
 		this.player4Pseudo = player4Pseudo;
-		new Match('game2', this.player3 ?? undefined, this.player4 ?? undefined);
+		this.game2 = new Match('game2', this.player3 ?? undefined, this.player4 ?? undefined);
 	}
 
 	getPlayerId(socket: WebSocket): string | null {

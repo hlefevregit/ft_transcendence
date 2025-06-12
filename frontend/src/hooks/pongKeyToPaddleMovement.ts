@@ -171,7 +171,7 @@ export	const	doPaddleMovement = (pong: React.RefObject<game.pongStruct>, gamemod
 			}
 			break;
 
-		case game.gameModes.tournament:
+		case game.gameModes.tournament: 
 			if (pong.current.isHost || pong.current.isHost2) {
 				// 🎮 Host contrôle paddle1
 				if (pong.current.pressedKeys.has('arrowup')) {

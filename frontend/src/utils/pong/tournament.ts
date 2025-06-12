@@ -25,23 +25,21 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 		pong,
 		data,
 		isHost,
-		paddle1ZKey,
-		paddle2ZKey,
+
 		ballUpdate = true
 	}: {
 		pong: React.RefObject<game.pongStruct>,
 		data: any,
 		isHost: boolean,
-		paddle1ZKey: 'paddle1Z' | 'paddle3Z',
-		paddle2ZKey: 'paddle2Z' | 'paddle4Z',
+
 		ballUpdate?: boolean
 	}) {
 		// 🎯 Paddle interpolation
-		if (isHost && typeof data[paddle2ZKey] === 'number') {
-			pong.current.paddle2TargetZ = data[paddle2ZKey];
+		if (isHost && typeof data.paddle2Z === 'number') {
+			pong.current.paddle2TargetZ = data.paddle2Z;
 		}
-		if (!isHost && typeof data[paddle1ZKey] === 'number') {
-			pong.current.paddle1TargetZ = data[paddle1ZKey];
+		if (!isHost && typeof data.paddle1Z === 'number') {
+			pong.current.paddle1TargetZ = data.paddle1Z;
 		}
 
 		// 🎾 Ball update only if not host (host already moves it)
@@ -58,6 +56,9 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 		}
 	}
 
+	const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+
 
 	if (ws) {
 		ws.onopen = () => {
@@ -73,7 +74,7 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 		}
 
 		if (gameModes.current === game.gameModes.tournament) {
-			ws.onmessage = (event) => {
+			ws.onmessage = async (event) => {
 				const data = JSON.parse(event.data);
 				console.log("📬 Message reçu:", data);
 
@@ -84,7 +85,7 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 						pong.current.isHost = true;
 						const roomId = data.gameId;
 						pong.current.lastHostedRoomId = roomId;
-
+						pong.current.tournamentId = roomId;
 						const roomName = `${userNameRef.current || 'Anonymous'}'s room`;
 
 						console.log("🏠 Room name:", roomName, " Username = ", pong.current.username);
@@ -214,18 +215,19 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 					case 'state_update' : {
 						switch(data.matchId) {
 							case 'game1':
-								handleMatchUpdate({ pong, data, isHost: pong.current.isHost ?? false, paddle1ZKey: 'paddle1Z', paddle2ZKey: 'paddle2Z' });
+								handleMatchUpdate({ pong, data, isHost: pong.current.isHost ?? false });
 								break;
 							case 'game2':
-								handleMatchUpdate({ pong, data, isHost: pong.current.isHost2 ?? false, paddle1ZKey: 'paddle1Z', paddle2ZKey: 'paddle2Z' });
+								handleMatchUpdate({ pong, data, isHost: pong.current.isHost2 ?? false});
 								break;
 							case 'final':
 								const isFinalHost = pong.current.tournamentFinalist1 === userNameRef.current;
-								handleMatchUpdate({ pong, data, isHost: isFinalHost, paddle1ZKey: 'paddle1Z', paddle2ZKey: 'paddle2Z' });
+								handleMatchUpdate({ pong, data, isHost: isFinalHost });
 								break;
 							default:
 								console.warn('❓ matchId inconnu:', data.matchId);
 						}
+						break;
 					}
 
 
@@ -265,16 +267,45 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 
 
 
-					// case 'party_canceled': {
-					// 	console.log("🏠 Vous avez quitté la partie:", data.gameId);
+					case 'party_canceled': {
+						console.log("🏠 Vous avez quitté la partie:", data.gameId);
+						
+						pong.current.tournamentId = undefined;
+						pong.current.tournamentPlayer1Id = undefined;
+						pong.current.tournamentPlayer1Score = 0;
+						pong.current.tournamentPlayer2Id = undefined;
+						pong.current.tournamentPlayer2Score = 0;
+						pong.current.tournamentPlayer3Id = undefined;
+						pong.current.tournamentPlayer3Score = 0;
+						pong.current.tournamentPlayer4Id = undefined;
+						pong.current.tournamentPlayer4Score = 0;
+						pong.current.tournamentRound = 0;
+						pong.current.tournamentGame = 0;
+						pong.current.tournamentFinalist1 = undefined;
+						pong.current.tournamentFinalist2 = undefined;
+						pong.current.game1Finished = false;
+						pong.current.game2Finished = false;
+						pong.current.launched = false;
+
+
+						pong.current.isHost = false;
+						pong.current.isHost2 = false;
+
+
+
+
+
+						pong.current.tournamentFinalist1 = undefined;
+						pong.current.tournamentFinalist2 = undefined;
+
+
+
+						pong.current.party.clear();
+
 						
 
-					// 	pong.current.party.clear();
-					// 	states.current = game.states.party_canceled;
-						
-
-					// 	break;
-					// }
+						break;
+					}
 
 					case 'player_disconnected': {
 						console.log("⚠️ Un joueur a quitté la partie:", data.playerId);
@@ -489,15 +520,8 @@ export const handleTournamentLoop = (
 				const maxScore = Math.max(pong.current.player1Score, pong.current.player2Score);
 				if (maxScore >= pong.current.requiredPointsToWin)
 				{
+					console.log("🏁 Game 1 finished, max score reached:", maxScore);
 					states.current = game.states.game1_finished;
-					// console.log("🏁 Game finished, max score reached:", maxScore);
-					// socketRef.current.send(JSON.stringify({
-					// 	type: 'game_finished',
-					// 	player1Score: pong.current.player1Score,
-					// 	player2Score: pong.current.player2Score,
-					// 	reason: 'normal',
-					// }));
-					// return;
 				}
 
 				// 3. Interpolation position de l’adversaire
@@ -519,7 +543,8 @@ export const handleTournamentLoop = (
 				const myPaddleZ = myPaddle?.position.z ?? 0;
 				const lastZ = pong.current.lastSentPaddleZ ?? null;
 
-				// console.log("Current Z:", myPaddleZ, "Last sent Z:", lastZ);
+				console.log("Mypaddle is ", myPaddle, "isHost:", isHost);
+				console.log("Current Z:", myPaddleZ, "Last sent Z:", lastZ);
 
 
 				const paddleMoved = lastZ === null || Math.abs(myPaddleZ - lastZ) > 0.01;

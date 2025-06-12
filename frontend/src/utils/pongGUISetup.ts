@@ -1186,7 +1186,7 @@ export const instantiateBracketGUI = (pong: React.RefObject<game.pongStruct>,
 	{
 		if (gameModes.current !== game.gameModes.none) {
 			// ✅ Envoie le leave_room au serveur
-			if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN && !pong.current.isHost) {
+			if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
 				socketRef.current.send(JSON.stringify({
 					type: 'leave_room',
 					gameId: pong.current.tournamentId, // Assure-toi que tournamentId est bien set !

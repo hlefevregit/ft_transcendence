@@ -117,41 +117,6 @@ const	Pong: React.FC = () =>
 		console.log("GUI initialization complete");
 		
 
-		// const token = localStorage.getItem('authToken');
-		// const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-		// const wsUrl =
-		// 	gameModes.current === game.gameModes.tournament
-		// 		? `${wsProtocol}//${window.location.hostname}:4002/ws?token=${token || ''}`
-		// 		: `${wsProtocol}//${window.location.hostname}:4000/ws?token=${token || ''}`;
-		// console.log("🌐 Connecting WebSocket to:", wsUrl);
-		// const ws = new WebSocket(wsUrl);
-
-		// // Add event listeners for better debugging
-		// ws.addEventListener('open', () => {
-		// 	console.log("✅ WebSocket connected successfully");
-		// });
-		
-		// ws.addEventListener('error', (event) => {
-		// 	console.error("❌ WebSocket connection error:", event);
-		// });
-
-
-		// // Register WebSocket handlers for both online and tournament modes
-		// useWebSocketOnline(pong, socketRef, gameModes, states, lang, userNameRef, ws);
-		
-		// // Add tournament WebSocket integration
-		// import('@/utils/pong/tournament').then(tournamentModule => {
-		// 	tournamentModule.useTournamentWebSocket(
-		// 		pong, 
-		// 		socketRef, 
-		// 		gameModes, 
-		// 		states, 
-		// 		lang, 
-		// 		userNameRef, 
-		// 		ws
-		// 	);
-		// });
-		
 		
 
 		if (gameModes.current === game.gameModes.online)
@@ -202,27 +167,6 @@ const	Pong: React.FC = () =>
 			userNameRef.current = 'Player'; // fallback
 		});
 
-		// userId.then((name) => {
-		// 	if (name) {
-		// 		userNameRef.current = name;
-		// 		console.log("Username set to:", userNameRef.current);
-		// 	} else {
-		// 		console.warn("Username not found, using default 'Player'");
-		// 		userNameRef.current = 'Player';
-		// 	}
-		// }).catch((err) => {
-		// 	console.error("❌ Erreur lors de la récupération du nom d'utilisateur:", err);
-		// 	userNameRef.current = 'Player'; // Fallback to default name
-		// });
-
-		// if (!pong.current.scene) return;
-		// pong.current.scene.debugLayer.show
-		// ({
-		// 	embedMode: true,
-		// 	handleResize: true,
-		// 	overlay: true,
-		// });
-
 
 		// Game loop
 		if (!pong.current.engine) return;
@@ -266,7 +210,7 @@ const	Pong: React.FC = () =>
 				&& states.current !== game.states.hosting_waiting_players
 				)
 			) {
-				console.log("roomId:", pong.current.lastHostedRoomId);
+				// console.log("roomId:", pong.current.lastHostedRoomId);
 				const roomId = pong.current.lastHostedRoomId;
 				if (gameModes.current === game.gameModes.online && roomId !== 'none') {
 
@@ -281,26 +225,6 @@ const	Pong: React.FC = () =>
 						pong.current.rooms.delete(roomId);
 					}
 				}
-				else if (gameModes.current === game.gameModes.tournament && pong.current.isHost)
-				{
-					console.log("🏆 Tournament mode active, checking if host is leaving tournament room");
-					if (roomId && roomId !== 'none' && socketRef.current?.readyState === WebSocket.OPEN)
-					{
-						console.log("||||||||||||||||||||||||||||||| roomId:", roomId);
-						
-						console.log("👋 Host a quitté la salle d'attente, envoi de leave_room pour tournoi");
-						if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-							socketRef.current.send(JSON.stringify({
-								type: 'leave_room',
-								gameId: roomId,
-							}));
-						}
-						console.log("🗑️ Suppression de la room de tournoi:", roomId);
-						pong.current.lastHostedRoomId = 'none';
-						pong.current.party.delete(roomId);
-					}
-				}
-				lastHandledState.current = states.current;
 			}
 			if (gameModes.current === game.gameModes.online)
 			{

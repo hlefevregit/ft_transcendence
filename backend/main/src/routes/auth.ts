@@ -75,61 +75,6 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
       user: created,
     });
   });
-		const { email, name } = payload;
-		const existingUser = await fastify.prisma.user.findUnique({
-					where: { email },
-		});
-		
-		if (existingUser) {
-			return reply.send({ success: true, token: fastify.jwt.sign({
-				id: existingUser.id,
-				email: existingUser.email,
-				pseudo: existingUser.pseudo,
-				avatarUrl: existingUser.avatarUrl,
-				status: existingUser.status,
-				twoFAEnabled: existingUser.twoFAEnabled
-			}) });
-		}
-		
-		const newUser = await fastify.prisma.user.create({
-			data: {
-				email,
-				pseudo: name,
-				avatarUrl: "https://i1.sndcdn.com/artworks-RK9z0md6Fh0mkDYz-KAfiQg-t500x500.jpg", // Default avatar URL
-				status: 'Hello, I am using this app!', 
-				twoFAEnabled: false, // Default to false, can be updated later
-			},
-		});
-		
-
-		const token = fastify.jwt.sign({
-			id: newUser.id,
-			email: newUser.email,
-			pseudo: newUser.pseudo,
-			avatarUrl: newUser.avatarUrl,
-			status: newUser.status,
-			twoFAEnabled: newUser.twoFAEnabled
-		});
-		reply.send({
-			success: true,
-			token,
-			user: {
-				id: newUser.id,
-				email: newUser.email,
-				pseudo: newUser.pseudo,
-				avatarUrl: newUser.avatarUrl,
-				status: newUser.status,
-				twoFAEnabled: newUser.twoFAEnabled
-			} as {
-				id: number;
-				email: string;
-				pseudo: string;
-				avatarUrl?: string;
-				status?: string;
-				twoFAEnabled: boolean;
-			}
-		});
-	});
 
   // email/password login
   fastify.post('/api/auth/sign_in', async (request, reply) => {

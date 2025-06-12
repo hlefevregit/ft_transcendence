@@ -4,6 +4,8 @@ FROM node:20-slim AS builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
+# Force install specific Babylon.js dependencies
+RUN npm install @babylonjs/core @babylonjs/addons --save
 COPY . .
 RUN npm run build
 
