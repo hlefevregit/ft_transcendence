@@ -223,6 +223,8 @@ export type pongStruct =
 	bracketFinalPlayer1?: baby.StackPanel;
 	bracketFinalPlayer2?: baby.StackPanel;
 	bracketWinnerPlayer?: baby.StackPanel;
+	finishedGameBackButton?: baby.StackPanel;
+	finishedGameReplayButton?: baby.StackPanel;
 
 	// Engine and scene
 	guiTexture?: baby.AdvancedDynamicTexture;

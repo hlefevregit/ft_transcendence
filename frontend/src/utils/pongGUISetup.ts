@@ -47,17 +47,6 @@ export const initializeAllGUIScreens = (
 
 export const	updateGUIVisibilityStates = (pong: React.RefObject<game.pongStruct>, states: game.states): void =>
 {
-	// const	setUIState = (ui: any, stateToCheck: game.states): void =>
-	// {
-	// 	const newUI = ui instanceof baby.Rectangle
-	// 	if (newUI)
-	// 	{
-	// 		const bool: boolean = states === stateToCheck;
-	// 		ui.isEnabled = bool
-	// 		ui.isVisible = bool;
-	// 		// ui.notRenderable = !bool;
-	// 	}
-	// };
 	const setUIState = (ui: baby.Container | undefined, stateToCheck: game.states): void =>
 	{
         if (ui === undefined || !pong.current.guiTexture) return;
@@ -86,13 +75,20 @@ export const	updateGUIVisibilityStates = (pong: React.RefObject<game.pongStruct>
 	pong.current.guiTexture?.addControl(pong.current.debugGUI as baby.Container);
 }
 
-export const	updateGUIVisibilityPlayerStates = (pong: React.RefObject<game.pongStruct>, playerStates: game.playerStates): void =>
+export const	updateGUIVisibilityPlayerStates =
+(
+	pong: React.RefObject<game.pongStruct>,
+	playerStates: game.playerStates,
+	gameModes: game.gameModes,
+): void =>
 {
 	if
 	(
 		   !pong.current.waitingTournamentToStartButtonBack
 		|| !pong.current.waitingTournamentToStartButtonCancel
 		|| !pong.current.waitingTournamentToStartButtonPlay
+		|| !pong.current.finishedGameBackButton
+		|| !pong.current.finishedGameReplayButton
 	) return;
 	switch (playerStates)
 	{
@@ -114,12 +110,27 @@ export const	updateGUIVisibilityPlayerStates = (pong: React.RefObject<game.pongS
 			pong.current.waitingTournamentToStartButtonPlay.isEnabled = pong.current.waitingTournamentToStartButtonPlay.isVisible = false;
 			break;
 	}
+	switch (gameModes)
+	{
+		default:
+			break;
+		case game.gameModes.online:
+			pong.current.finishedGameBackButton.isEnabled = pong.current.finishedGameBackButton.isVisible = true;
+			pong.current.finishedGameReplayButton.isEnabled = pong.current.finishedGameReplayButton.isVisible = false;
+			break;
+		case game.gameModes.tournament:
+			pong.current.finishedGameBackButton.isEnabled = pong.current.finishedGameBackButton.isVisible = true;
+			pong.current.finishedGameReplayButton.isEnabled = pong.current.finishedGameReplayButton.isVisible = false;
+			break;
+	}
 }
 
-export const	updateGUIValues = (
+export const	updateGUIValues =
+(
 	pong: React.RefObject<game.pongStruct>,
 	states: React.RefObject<game.states>,
-	lang: React.RefObject<game.lang>): void =>
+	lang: React.RefObject<game.lang>
+): void =>
 {
 	if (!pong.current.guiTexture)
 	{
@@ -882,6 +893,7 @@ export const	instantiateFinishedGameGUI = (pong: React.RefObject<game.pongStruct
 		gameModes.current = game.gameModes.none;
 		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
 	}, "back");
+	pong.current.finishedGameBackButton = backButton;
 	const	replayButton = game.createDynamicButton("replayButton", () =>
 	{
 		game.resetBall(pong.current);
@@ -905,6 +917,7 @@ export const	instantiateFinishedGameGUI = (pong: React.RefObject<game.pongStruct
 				game.findComponentByName(pong, "replayButton").isEnabled = game.gameModes.online !== gameModes.current;
 				game.findComponentByName(pong, "replayButton").isVisible = game.gameModes.online !== gameModes.current;
 			});
+	pong.current.finishedGameReplayButton = replayButton;
 
 	// Add GUI components to the main menu
 	// The order of adding controls matters for the layout

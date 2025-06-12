@@ -109,7 +109,7 @@ const	Pong: React.FC = () =>
 		// Initialize all the GUI
 		game.initializeAllGUIScreens(pong, gameModes, states, playerState, lang, socketRef, navigate, setGameModeTrigger, lastHandledState);
 		game.updateGUIVisibilityStates(pong, states.current);
-		game.updateGUIVisibilityPlayerStates(pong, playerState.current);
+		game.updateGUIVisibilityPlayerStates(pong, playerState.current , gameModes.current);
 		game.updateGUIValues(pong, states, lang);
 		
 
@@ -307,6 +307,7 @@ const	Pong: React.FC = () =>
 		{
 			game.updateGUIValues(pong, states, lang);
 			game.updatePlayerNames(pong, gameModes);
+			game.updateGUIVisibilityPlayerStates(pong, playerState.current , gameModes.current);
 		}, 200);
 
 		// Handle resizing of the canvas
