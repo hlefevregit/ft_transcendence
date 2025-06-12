@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/hlefevregit/ft_transcendence/compare/v1.2.1...v1.2.2) (2025-06-12)
+
+
+### Bug Fixes
+
+* **Tournement:** Merge louis' gui fixes and hugo's tournament session ([f7174a5](https://github.com/hlefevregit/ft_transcendence/commit/f7174a5f888deb1e00f7bc0c6de9aa7c4ee9a164))
+
 ## [1.2.1](https://github.com/hlefevregit/ft_transcendence/compare/v1.2.0...v1.2.1) (2025-06-12)
 
 
