@@ -50,6 +50,7 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 				player2Id: session.player2Id,
 				player3Id: session.player3Id,
 				player4Id: session.player4Id,
+				points_to_win: session.points_to_win,
 			};
 			session.player1.send(JSON.stringify(message));
 			if (session.player2 && session.player2.readyState === WebSocket.OPEN) {
@@ -99,6 +100,7 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 						const session = new tournamentSession(gameId, ws, data.roomName || `${gameId}'s tournament`);
 						session.setPlayer1(ws, userID, data.username);
 						games.set(gameId, session);
+						session.points_to_win = data.points_to_win || 3; // Points to win can be set by the host
 						ws.send(JSON.stringify({ type: 'tournament_hosted', gameId, roomName: session.roomName }));
 						break;
 					}

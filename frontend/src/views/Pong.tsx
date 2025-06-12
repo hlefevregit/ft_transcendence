@@ -289,7 +289,7 @@ const	Pong: React.FC = () =>
 		const backgroundCalculations = setInterval(() =>
 		{
 			game.doPaddleMovement(pong, gameModes, states);
-			game.makeBallBounce(pong.current, states);
+			game.makeBallBounce(pong, states, gameModes);
 		}, 16.667);
 
 		// Update GUI values every 200ms

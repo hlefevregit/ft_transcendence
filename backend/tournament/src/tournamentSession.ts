@@ -83,6 +83,7 @@ export class tournamentSession {
 	score2_final: number = 0;
 
 
+	points_to_win: number = 0;
 
 	game1: Match = new Match('game1');
 	game2: Match = new Match('game2');
