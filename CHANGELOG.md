@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/hlefevregit/ft_transcendence/compare/v1.2.2...v1.3.0) (2025-06-12)
+
+
+### Features
+
+* **GRAND MÉNAGE DE PRINTEMPS:** ldalmass: Renamed existing files, created new one, moved functions around, GRAND MÉNAGE DE PRINTEMPS ([ad016af](https://github.com/hlefevregit/ft_transcendence/commit/ad016af34233e98d5b38de06c11736ce1c36c1a9))
+
 ## [1.2.2](https://github.com/hlefevregit/ft_transcendence/compare/v1.2.1...v1.2.2) (2025-06-12)
 
 
