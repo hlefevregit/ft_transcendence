@@ -1,0 +1,36 @@
+/* src/styles/LiveChat/ChatList.css */
+.chat-list {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  overflow-y: auto;
+}
+
+.chat-list__item {
+  font-size: 0.875rem;     /* pseudo légèrement plus grand */
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.25rem;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.chat-list__item:hover {
+  background-color: #e5e7eb;
+}
+
+.chat-list__trophies {
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.chat-list__empty {
+  font-size: 0.875rem;
+  color: #6b7280;
+  text-align: center;
+  margin-top: 1rem;
+}

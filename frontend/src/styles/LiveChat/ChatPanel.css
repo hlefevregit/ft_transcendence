@@ -1,0 +1,87 @@
+/* src/styles/LiveChat/ChatPanel.css */
+
+.chat-panel {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 50;
+  height: 55.125vh;
+  width: 12.6rem;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  display: flex;
+}
+
+.chat-panel__sidebar {
+  flex: 0 0 25%;
+  display: flex;
+  flex-direction: column;
+  background-color: #f9fafb;
+  border-right: 1px solid #e5e7eb;
+  padding: 0.5rem;
+  border-top-left-radius: 0.75rem;
+  border-bottom-left-radius: 0.75rem;
+}
+
+.chat-panel__search {
+  font-size: 0.875rem;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  outline: none;
+}
+
+.chat-panel__list {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+}
+
+.chat-panel__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  /* Coins arrondis à droite pour correspondre au parent */
+  border-top-right-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
+}
+
+.chat-panel__header {
+  display: flex;
+  align-items: center;
+  padding: 0.7rem 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.chat-panel__title {
+  flex: 1;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.chat-panel__close-button {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: #6B7280;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+.chat-panel__close-button:hover {
+  color: #000000;
+}
+
+.chat-panel__conversation {
+  flex: 1;
+  padding: 0.5rem;
+  overflow-y: auto;
+}
