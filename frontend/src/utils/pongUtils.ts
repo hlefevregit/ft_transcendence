@@ -182,6 +182,14 @@ export const	smoothStep = (start: number, end: number, alpha: number): number =>
 }
 
 let		time: number = 0;
+/**
+ * Smoothly transitions between two cameras over a specified duration
+ * @param {baby.FreeCamera | baby.FlyCamera} cameraA - Starting camera
+ * @param {baby.FreeCamera | baby.FlyCamera} cameraB - Target camera
+ * @param {number} duration - Transition duration in seconds
+ * @param {React.RefObject<game.pongStruct>} pong - Reference to the pong game structure
+ * @param {React.RefObject<game.states>} states - Reference to the current game state
+ * */
 export const	transitionToCamera = async (cameraA: baby.FreeCamera | baby.FlyCamera | undefined, cameraB: baby.FreeCamera | baby.FlyCamera | undefined, duration: number, pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>): Promise<void> =>
 {
 	console.log("Started transition");
@@ -214,7 +222,6 @@ export const	transitionToCamera = async (cameraA: baby.FreeCamera | baby.FlyCame
 		const	deltaTime = pong.current.engine?.getDeltaTime() ?? 0;
 		time += deltaTime;
 		await sleep(deltaTime);
-		// console.log(`Transition progress: ${Math.round((time / duration) * 100)}%`);
 	}
 	time = 0; // Reset time for next transition
 
@@ -222,6 +229,7 @@ export const	transitionToCamera = async (cameraA: baby.FreeCamera | baby.FlyCame
 	changeCamera(cameraB, pong);
 	states.current = lastState; // Restore previous state
 	console.log("Transition complete");
+	game.updateGUIVisibilityStates(pong, states.current);
 	return;
 }
 

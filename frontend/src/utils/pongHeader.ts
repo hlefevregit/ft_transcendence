@@ -199,23 +199,23 @@ export type pongStruct =
 
 	// GUI's bindings
 
-	mainMenuGUI?: baby.Container;
-	settingsGUI?: baby.Container;
-	arenaGUI?: baby.Container;
-	pongSettingsGUI?: baby.Container;
-	debugGUI?: baby.Container;
-	testGUI?: baby.Container;
-	waitingRoundStartGUI?: baby.Container;
-	waitingScreenGUI?: baby.Container;
-	countdownGUI?: baby.Container;
-	finishedGameGUI?: baby.Container;
-	hostOrJoinGUI?: baby.Container;
-	roomListGUI?: baby.Container;
+	mainMenuGUI?: baby.Rectangle;
+	settingsGUI?: baby.Rectangle;
+	arenaGUI?: baby.Rectangle;
+	pongSettingsGUI?: baby.Rectangle;
+	debugGUI?: baby.Rectangle;
+	testGUI?: baby.Rectangle;
+	waitingRoundStartGUI?: baby.Rectangle;
+	waitingScreenGUI?: baby.Rectangle;
+	countdownGUI?: baby.Rectangle;
+	finishedGameGUI?: baby.Rectangle;
+	hostOrJoinGUI?: baby.Rectangle;
+	roomListGUI?: baby.Rectangle;
 	roomListVerticalStackPanel?: baby.StackPanel;
 	roomListTournamentVerticalStackPanel?: baby.StackPanel;
-	waitingTournamentToStartGUI?: baby.Container;
-	bracketGUI?: baby.Container;
-	inputUsernameGUI?: baby.Container;
+	waitingTournamentToStartGUI?: baby.Rectangle;
+	bracketGUI?: baby.Rectangle;
+	inputUsernameGUI?: baby.Rectangle;
 
 	// Other components bindings
 	waitingTournamentToStartButtonBack?: baby.StackPanel;

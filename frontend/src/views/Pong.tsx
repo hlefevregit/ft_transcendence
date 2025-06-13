@@ -290,6 +290,7 @@ const	Pong: React.FC = () =>
 		{
 			game.updateGUIValues(pong, lang);
 			game.updatePlayerNames(pong, gameModes);
+			// game.updateGUIVisibilityStates(pong, state.current);
 			game.updateGUIVisibilityPlayerStates(pong, playerState.current , gameModes.current);
 		}, 200);
 
