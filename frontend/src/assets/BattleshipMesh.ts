@@ -1,12 +1,44 @@
 import { Mesh, MeshBuilder, Scene, Vector3, ActionManager, ActionEvent, ExecuteCodeAction,
-		KeyboardInfo, KeyboardEventTypes, StandardMaterial, TransformNode } from '@babylonjs/core'
+		IncrementValueAction, ValueCondition, KeyboardInfo, KeyboardEventTypes, EventState,
+		StandardMaterial, TransformNode, MeshCreationOptions } from '@babylonjs/core'
 import { GridMaterial } from '@babylonjs/materials'
 import 'https://cdn.babylonjs.com/earcut.min.js'
+
+class CellMesh extends TransformNode {
+	mesh: Mesh
+	private _i!: number
+	private _j!: number
+
+	constructor(name: string, i: number, j: number, scene: Scene) {
+		super("c" + i + j + "-" + name, scene, false);
+
+		this.mesh = MeshBuilder.CreateBox("c" + i + j + "-" + name, {size:0.8, depth:0.3});
+		this.mesh.parent = this;
+		this.i = i;
+		this.j = j;
+		this.position.z = -0.3;
+	}
+
+	get i() { return this._i }
+	set i(i: number) {
+		this._i = i;
+		this.position.x = i - 4.5;
+	}
+	
+	get j() { return this._j }
+	set j(j: number) {
+		this._j = j;
+		this.position.y = 4.75 - j;
+	}
+
+	ij() { return [this.i, this.j] }
+}
 
 export class ShipMesh extends TransformNode {
 	size: number
 	mesh: Mesh
 	static outlined: ShipMesh | null = null
+	static collisions: number = 0
 
 	private _i: number = 0
 	private _j: number = 0
@@ -56,7 +88,28 @@ export class ShipMesh extends TransformNode {
 		ShipMesh.outlined = this;
 	}
 
-	static moveShip(kbInfo: KeyboardInfo) {
+	addCollision(ships: ShipMesh[]) {
+		var actions = Array<IncrementValueAction>(2);
+		for (const other of ships) {
+			actions[0] = new IncrementValueAction(
+				{
+					trigger: ActionManager.OnIntersectionEnterTrigger,
+					parameter: other.mesh
+				},
+				ShipMesh, "collisions", 1
+			)
+			actions[1] = new IncrementValueAction(
+				{
+					trigger: ActionManager.OnIntersectionExitTrigger,
+					parameter: other.mesh
+				},
+				ShipMesh, "collisions", -1
+			)
+			actions.forEach((value) => {this.mesh.actionManager?.registerAction(value)}, this);
+		}
+	}
+
+	static moveShip(kbInfo: KeyboardInfo, validate: () => (void)) {
 		if (!ShipMesh.outlined || kbInfo.type !== KeyboardEventTypes.KEYDOWN)
 			return;
 		const ship = ShipMesh.outlined;
@@ -77,13 +130,14 @@ export class ShipMesh extends TransformNode {
 					ship.i += 1;
 				break;
 			case "Space":
-				if (ship.i + ship.size <= 10 || ship.j + ship.size <= 10)
+				if ((!ship.isRight && ship.i + ship.size <= 10) || (ship.isRight && ship.j + ship.size <= 10))
 					ship.isRight = !ship.isRight;
 				break;
 			case "Enter":
+				console.log("Enter: collisions=%d", ShipMesh.collisions)
+				if (ShipMesh.collisions == 0) validate();
 				break;
 		}
-		console.log(kbInfo.event.code + ": x=" + ship.position.x + " z=" + ship.position.z)
 	}
 }
 
@@ -92,11 +146,12 @@ export class BattleshipMesh extends TransformNode {
     pivot: Mesh
     screen: Mesh
     field: Mesh
-    cells: Mesh[] = []
+    cells: CellMesh[] = []
 	ships: ShipMesh[] = Array(5)
 	fieldNode: TransformNode
+	isPlaying: boolean = false
 
-    constructor(name: string, scene: Scene, onClick: (ij:number, evt:ActionEvent) => void, blue: StandardMaterial, grid: GridMaterial, position?: Vector3, rotation?: number) {
+    constructor(name: string, scene: Scene, onClick: (ij:number) => void, blue: StandardMaterial, grid: GridMaterial, position?: Vector3, rotation?: number) {
         super(name, scene, false);
 
 		// Cylinder pivot for the screen's rotating animation. Mostly aesthetic
@@ -109,20 +164,23 @@ export class BattleshipMesh extends TransformNode {
 		this.screen.position = new Vector3(0, 5.6, 0.3);
 
 		// Array of 'cells', small clickable meshes used by player to select where to attack next
+		const actionManager = new ActionManager(scene);
+		actionManager.registerAction(new ExecuteCodeAction(
+			ActionManager.OnPickTrigger,
+			(event) => {
+				const cell = (event.source as Mesh).parent as CellMesh;
+				const [i, j] = cell.ij();
+				if (this.isPlaying)
+					onClick(i*10 + j);
+			},
+			new ValueCondition(actionManager, this, "isPlaying", true)
+		));
         for (let i=0; i < 10; i++) {
             for (let j=0; j < 10; j++) {
-                const cell = MeshBuilder.CreateBox("cell" + i + j + "-" + name, {size:0.8, depth:0.3});
-				cell.material = blue;
+				const cell = new CellMesh(name, i, j, scene);
+				cell.mesh.material = blue;
                 cell.parent = this.screen;
-                cell.position = new Vector3(i-4.5, 4.75-j, -0.3);
-				cell.actionManager = new ActionManager(scene);
-				cell.actionManager.registerAction(new ExecuteCodeAction(
-					ActionManager.OnPickTrigger,
-					(event) => {
-						event.additionalData = name;
-						onClick(i*10 + j, event);
-					})
-				);
+				cell.mesh.actionManager = actionManager;
                 this.cells.push(cell);
             }
         }
@@ -159,30 +217,53 @@ export class BattleshipMesh extends TransformNode {
 		this.fieldNode.parent = this.field;
 		this.fieldNode.position = new Vector3(-4.05, 0.3, 3.754);
 
-		// const debug = [
-		// 	MeshBuilder.CreateSphere("top-left", {}, scene),
-		// 	MeshBuilder.CreateSphere("top-right", {}, scene),
-		// 	MeshBuilder.CreateSphere("center", {}, scene),
-		// 	MeshBuilder.CreateSphere("bottom-left", {}, scene),
-		// 	MeshBuilder.CreateSphere("bottom-right", {}, scene),
-		// ];
-		// for (const sphere of debug)
-		// 	sphere.parent = this.fieldNode;
-		// debug[0].position = new Vector3(0,0,0);
-		// debug[1].position = new Vector3(9*0.9,0,0);
-		// debug[2].position = new Vector3(4.5*0.9,0,-4.5*0.9);
-		// debug[3].position = new Vector3(0,0,-9*0.9);
-		// debug[4].position = new Vector3(9*0.9,0,-9*0.9);
-
-		this.ships[0] = new ShipMesh(name, 5, "carrier", scene, this.fieldNode, 3, 5);
-		this.ships[1] = new ShipMesh(name, 4, "bship", scene, this.fieldNode, 0, 0);
-		this.ships[2] = new ShipMesh(name, 3, "destro", scene, this.fieldNode, 7, 6);
-		this.ships[3] = new ShipMesh(name, 3, "sub", scene, this.fieldNode, 4, 1);
-		this.ships[4] = new ShipMesh(name, 2, "patrol", scene, this.fieldNode, 4, 6);
-
         if (position !== undefined)
             this.position.addInPlace(position);
         if (rotation !== undefined)
             this.rotation.y += rotation;
     }
+
+	shipSetup(endTurn: () => void) {
+		const scene = this.getScene();
+		const coords: number[][] = []
+
+		this.ships[0] = new ShipMesh(this.name, 5, "carrier", scene, this.fieldNode, 3, 5);
+		this.ships[1] = new ShipMesh(this.name, 4, "bship", scene, this.fieldNode, 0, 0);
+		this.ships[2] = new ShipMesh(this.name, 3, "destro", scene, this.fieldNode, 7, 6);
+		this.ships[3] = new ShipMesh(this.name, 3, "sub", scene, this.fieldNode, 4, 1);
+		this.ships[4] = new ShipMesh(this.name, 2, "patrol", scene, this.fieldNode, 4, 6);
+		for (let i=0; i < 4; i++) {
+			const others = this.ships.slice(i + 1);
+			this.ships[i].addCollision(others);
+		}
+		scene.onKeyboardObservable.add((kbInfo) => ShipMesh.moveShip(kbInfo, validate));
+		this.ships[1].onClick();
+
+		const validate = () => {
+			if (ShipMesh.outlined) ShipMesh.outlined.mesh.renderOutline = false;
+			ShipMesh.outlined = null;
+
+			scene.onKeyboardObservable.clear();
+			for (const ship of this.ships) {
+				ship.mesh.actionManager?.dispose();
+			}
+			endTurn();
+		}
+	}
+
+	shipCoords() {
+		const coordsArr: number[][] = []
+
+		for (const ship of this.ships) {
+			const coords = [];
+			const pos = ship.i * 10 + ship.j;
+			const inc = ship.isRight ? 10 : 1;
+
+			for (let n=0; n < ship.size; n++)
+				coords.push(pos + n*inc);
+			coordsArr.push(coords);
+		}
+
+		return coordsArr;
+	}
 }

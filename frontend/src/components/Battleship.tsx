@@ -16,14 +16,14 @@ type ShipType = "Carrier" | "Battleship" | "Destroyer" | "Submarine" | "Patrol"
 
 type PlayerInfo = {
   name: string
-  mesh: BattleshipMesh
-  ships: Map<string, number[]>
+  obj: BattleshipMesh
+  ships: number[][] | null
   field: number[]
 }
 
 type GameRefType = {
-  host: PlayerInfo
-  guest: PlayerInfo
+  playing: PlayerInfo
+  waiting: PlayerInfo
   table: BABYLON.Mesh
   camera: BABYLON.ArcRotateCamera
   light: BABYLON.HemisphericLight
@@ -42,20 +42,30 @@ const Battleship = () => {
   const hostName = "host";
   const guestName = "guest";
 
-  const onClick = (ij:number, evt:BABYLON.ActionEvent) => {
-    if (!gameRef.current)
+  const onClick = (ij:number) => {
+    console.log("[DEBUG] onCellClick called")
+    if (!gameRef.current || !gameRef.current.waiting.ships)
       return;
-    const playing: string = evt.additionalData;
-    const cell: BABYLON.Mesh = evt.source;
-    console.log(cell.name);
-    if (playing == hostName)
-      var info = gameRef.current.guest;
-    else
-      var info = gameRef.current.host;
+    const {playing: {obj}, waiting: {ships}, mats: mats} = gameRef.current;
+    const cell = obj.cells[ij];
+
+    cell.mesh.material = null;
+    for (const ship of ships) {
+      if (ship.includes(ij)) {
+        obj.cells[ij].mesh.material = mats.red;
+        break;
+      }
+    }
+    if (!cell.mesh.material)
+      cell.mesh.material = mats.white;
+
+    cell.mesh.actionManager = null;
+    endTurn();
   }
 
   const onSceneReady = (scene:BABYLON.Scene) => {
     Inspector.Show(scene, {overlay:true});
+    scene.actionManager = new BABYLON.ActionManager();
 
     const mats = {
       blue: new BABYLON.StandardMaterial("blue-mat", scene),
@@ -70,20 +80,20 @@ const Battleship = () => {
     mats.grid.gridRatio = 0.9
     mats.grid.gridOffset.z += 0.3
 
-    const host = {
+    const host: PlayerInfo = {
       name: hostName,
-      mesh: new BattleshipMesh(hostName, scene, onClick, mats.blue, mats.grid, new BABYLON.Vector3(0, -4, -5)),
-      ships: new Map(),
+      obj: new BattleshipMesh(hostName, scene, onClick, mats.blue, mats.grid, new BABYLON.Vector3(0, -4, -5)),
+      ships: null,
       field: new Array(100)
     };
     const guest = {
       name: guestName,
-      mesh: new BattleshipMesh(guestName, scene, onClick, mats.blue, mats.grid, new BABYLON.Vector3(0, -4, 5), Math.PI),
-      ships: new Map(),
+      obj: new BattleshipMesh(guestName, scene, onClick, mats.blue, mats.grid, new BABYLON.Vector3(0, -4, 5), Math.PI),
+      ships: null,
       field: new Array(100)
     };
 
-    const camera = new BABYLON.ArcRotateCamera("camera", Math.PI/2, Math.PI/3, 25, guest.mesh.field.absolutePosition, scene, true);
+    const camera = new BABYLON.ArcRotateCamera("camera", Math.PI/2, Math.PI/3, 25, BABYLON.Vector3.Zero(), scene, true);
     camera.attachControl(scene.getEngine().getRenderingCanvas(), true);
 
     const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0,1,0), scene);
@@ -92,24 +102,46 @@ const Battleship = () => {
     const table = BABYLON.MeshBuilder.CreateCylinder("table", {height:0.3, diameter:40});
     table.position.y = -5;
     table.material = mats.blue;
-    table.addChild(host.mesh);
-    table.addChild(guest.mesh);
+    table.addChild(host.obj);
+    table.addChild(guest.obj);
 
     gameRef.current = {
-      host: host,
-      guest: guest,
+      playing: host,
+      waiting: guest,
       table: table,
       camera: camera,
       light: light,
       mats: mats,
     };
 
-    scene.onKeyboardObservable.add((kbInfo) => ShipMesh.moveShip(kbInfo))
+    startTurn()
   }
 
-  return (
-      <SceneCanvas onSceneReady={onSceneReady}/>
-  );
+  const startTurn = () => {
+    if (!gameRef.current)
+      return;
+    const {playing: {obj:playObj, ships:playShips}, waiting: {obj: waitObj}} = gameRef.current;
+
+    if (!playShips) return playObj.shipSetup(endTurn);
+    playObj.isPlaying = true;
+    waitObj.isPlaying = false;
+  }
+
+  const endTurn = () => {
+    if (!gameRef.current)
+      return;
+    const {playing: playing, waiting: waiting} = gameRef.current;
+    const {obj: obj, ships: ships} = playing;
+
+    if (!ships)
+      gameRef.current.playing.ships = obj.shipCoords();
+
+    gameRef.current.waiting = playing;
+    gameRef.current.playing = waiting;
+    startTurn()
+  }
+
+  return <SceneCanvas onSceneReady={onSceneReady}/>
 };
 
 const SceneCanvas = ({ onRender, onSceneReady }: SceneCanvasProps) => {
