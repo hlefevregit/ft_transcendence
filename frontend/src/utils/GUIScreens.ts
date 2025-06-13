@@ -30,8 +30,8 @@ export const    instantiateMainMenuGUI =
 	const	mainMenuSettingsButton = game.createDynamicButton("mainMenuSettingsButton", () =>
 	{
 		states.current = game.states.settings;
-	}, "settings");
-	const	returnToMuseumButton = game.createDynamicButton("returnToMuseumButton", () => { navigate("/game1"); }, "returnToMuseumButton");
+	}, pong, "settings");
+	const	returnToMuseumButton = game.createDynamicButton("returnToMuseumButton", () => { navigate("/game1"); }, pong, "returnToMuseumButton");
 			(returnToMuseumButton.children[0] as baby.Button).onPointerEnterObservable.add(() => 
 			{
 				(returnToMuseumButton.children[0] as baby.Button).color = game.colorsScheme.dark1;
@@ -49,14 +49,14 @@ export const    instantiateMainMenuGUI =
 		gameModes.current = game.gameModes.local;
 		states.current = game.states.game_settings;
 		game.transitionToCamera(pong.current.scene.activeCamera as baby.FreeCamera, pong.current.pongSettingsCam, 1, pong, states);
-	}, "playLocally");
+	}, pong, "playLocally");
 	const	AIPong = game.createDynamicButton("AIPong", () =>
 	{
 		if (!pong.current.scene) return;
 		gameModes.current = game.gameModes.ai;
 		states.current = game.states.game_settings;
 		game.transitionToCamera(pong.current.scene.activeCamera as baby.FreeCamera, pong.current.pongSettingsCam, 1, pong, states);
-	}, "playAgainstAI");
+	}, pong, "playAgainstAI");
 	const	remotePong = game.createDynamicButton("remotePong", () =>
 	{
 		gameModes.current = game.gameModes.online;
@@ -64,7 +64,7 @@ export const    instantiateMainMenuGUI =
 		if (!pong.current.scene) return;
 		states.current = game.states.host_or_join;
 		states.current = game.states.host_or_join;
-	}, "playOnline");
+	}, pong, "playOnline");
 	const	tournamentPong = game.createDynamicButton("tournamentPong", () =>
 	{
 		gameModes.current = game.gameModes.tournament;
@@ -72,7 +72,7 @@ export const    instantiateMainMenuGUI =
 		if (!pong.current.scene) return;
 		states.current = game.states.host_or_join;
 		states.current = game.states.host_or_join;
-	}, "playTournament");
+	}, pong, "playTournament");
 
 
 	// Add GUI components to the main menu
@@ -122,7 +122,7 @@ export const    instantiateSettingsGUI =
 	const	backButton = game.createDynamicButton("settingsButton", () =>
 	{
 		states.current = game.states.main_menu;
-	}, "back");
+	}, pong, "back");
 	const	musicSlider = game.createSlider("musicSlider", 0, 100, 2, pong.current.musicVolume * 100, (value: number) =>
 	{
 		pong.current.musicVolume = value / 100;
@@ -144,7 +144,7 @@ export const    instantiateSettingsGUI =
 		lang.current = game.lang.english;
 		game.updateGUIValues(pong, lang);
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").text = lang.current;
-	});
+	}, pong);
 			(englishButton.children[0] as baby.Button).fontSize = 36;
 			(englishButton.children[0] as baby.Button).width = "100px";
 			(englishButton.children[0] as baby.Button).height = "100px";
@@ -154,7 +154,7 @@ export const    instantiateSettingsGUI =
 		lang.current = game.lang.french;
 		game.updateGUIValues(pong, lang);
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").text = lang.current;
-	});
+	}, pong);
 			(frenchButton.children[0] as baby.Button).width = "100px";
 			(frenchButton.children[0] as baby.Button).height = "100px";
 			(frenchButton.children[0] as baby.Button).fontSize = 36;
@@ -165,7 +165,7 @@ export const    instantiateSettingsGUI =
 		game.updateGUIValues(pong, lang);
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").text = lang.current;
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").markAsDirty();
-	});
+	}, pong);
 			(italianButton.children[0] as baby.Button).width = "100px";
 			(italianButton.children[0] as baby.Button).height = "100px";
 			(italianButton.children[0] as baby.Button).fontSize = 36;
@@ -176,7 +176,7 @@ export const    instantiateSettingsGUI =
 		game.updateGUIValues(pong, lang);
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").text = lang.current;
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").markAsDirty();
-	});
+	}, pong);
 			(brailButton.children[0] as baby.Button).width = "100px";
 			(brailButton.children[0] as baby.Button).height = "100px";
 			(brailButton.children[0] as baby.Button).fontSize = 36;
@@ -260,7 +260,7 @@ export const	instentiatePongSettingsGUI =
 				break;
 		}
 		playerStates.current = game.playerStates.none;
-	}, "back");
+	}, pong, "back");
 	const	pongSettingsPlayButton = game.createDynamicButton("pongSettingsPlayButton", () =>
 	{
 		switch (gameModes.current)
@@ -278,7 +278,7 @@ export const	instentiatePongSettingsGUI =
 				states.current = game.states.waiting_to_start;
 				break;
 		}
-	}, "play");
+	}, pong, "play");
 			(pongSettingsPlayButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
 			{
 				(pongSettingsPlayButton.children[0] as baby.Button).color = game.colorsScheme.dark1;
@@ -483,12 +483,12 @@ export const	instantiateDebugGUI =
 	{
 		states.current++;
 		game.findComponentByName(pong, "debugStatesValue").text = states.current.toString();
-	});
+	}, pong);
 	const	debugDecrementStatesButton = game.createButton("debugDecrementStateButton", "-", () =>
 	{
 		states.current--;
 		game.findComponentByName(pong, "debugStatesValue").text = states.current.toString();
-	});
+	}, pong);
 			(debugIncrementStateButton.children[0] as baby.Button).fontSize = 12;
 			(debugDecrementStatesButton.children[0] as baby.Button).fontSize = 12;
 			(debugIncrementStateButton.children[0] as baby.Button).cornerRadius = 10;
@@ -724,7 +724,7 @@ export const	instantiateFinishedGameGUI =
 		states.current = game.states.main_menu;
 		gameModes.current = game.gameModes.none;
 		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
-	}, "back");
+	}, pong, "back");
 	pong.current.finishedGameBackButton = backButton;
 	const	replayButton = game.createDynamicButton("replayButton", () =>
 	{
@@ -734,7 +734,7 @@ export const	instantiateFinishedGameGUI =
 		pong.current.player1Score = 0;
 		pong.current.player2Score = 0;
 		states.current = game.states.countdown;
-	}, "replay");
+	}, pong, "replay");
 			(replayButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
 			(replayButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
 			{
@@ -805,17 +805,17 @@ export const	instantiateHostOrJoinGUI =
 		playerStates.current = game.playerStates.isHost;
 		states.current = game.states.game_settings;
 		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.pongSettingsCam, 1, pong, states);
-	}, "host");
+	}, pong, "host");
 	const	joinButton = game.createDynamicButton("joinButton", () =>
 	{
 		states.current = game.states.room_list;
 		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.pongSettingsCam, 1, pong, states);
-	}, "join");
+	}, pong, "join");
 	const	hostOrJoinBackButton = game.createDynamicButton("hostOrJoinBackButton", () =>
 	{
 		states.current = game.states.main_menu;
 		gameModes.current = game.gameModes.none;
-	}, "back");
+	}, pong, "back");
 
 	// Add GUI components to the main menu
 	// The order of adding controls matters for the layout
@@ -855,7 +855,7 @@ export const	instantiateRoomListGUI =
 	{
 		states.current = game.states.host_or_join;
 		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
-	}, "back");
+	}, pong, "back");
 	let		roomListOnlineRoomList = game.refreshOnlineRoomsEntries(pong, states, gameModes);
 	let		roomListTournamentRoomList = game.refreshTournamentRoomsEntries(pong, states, gameModes);
 	const	roomListRefreshButton = game.createDynamicButton(
@@ -876,7 +876,7 @@ export const	instantiateRoomListGUI =
 			} else {
 			console.warn("❌ socketRef n'est pas prêt");
 			}
-		}, "refresh");
+		}, pong, "refresh");
 
 	// Add GUI components to the main menu
 	// The order of adding controls matters for the layout
@@ -918,7 +918,7 @@ export const	instantiateWaitingScreenGUI =
 	const	waitingScreenCancelButton = game.createDynamicButton("waitingScreenCancelButton", () => 
 	{
 		states.current = game.states.game_settings;
-	}, "cancel");
+	}, pong, "cancel");
 
 	// Add GUI components to the main menu
 	// The order of adding controls matters for the layout
@@ -968,18 +968,18 @@ export const	instantiateWaitingTournamentToStartGUI =
 	{
 		states.current = game.states.host_or_join;
 		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
-	}, "back");
+	}, pong, "back");
 	pong.current.waitingTournamentToStartButtonBack = waitingTournamentToStartButtonBack;
 	const	waitingTournamentToPlayButtonStart = game.createDynamicButton("waitingTournamentToPlayButtonStart", () =>
 	{
 		states.current = game.states.countdown;
 		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.arenaCam, 1, pong, states);
-	}, "play");
+	}, pong, "play");
 	pong.current.waitingTournamentToStartButtonPlay = waitingTournamentToPlayButtonStart;
 	const	waitingTournamentToStartButtonCancel = game.createDynamicButton("waitingTournamentToStartButtonCancel", () =>
 	{
 		states.current = game.states.game_settings;
-	}, "cancel");
+	}, pong, "cancel");
 	pong.current.waitingTournamentToStartButtonCancel = waitingTournamentToStartButtonCancel;
 
 	// Add GUI components to the main menu
@@ -1087,7 +1087,7 @@ export const instantiateBracketGUI =
 		states.current = game.states.main_menu;
 		gameModes.current = game.gameModes.none;
 		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
-	}, "abandon");
+	}, pong, "abandon");
 			(bracketAbandonButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
 			{
 				(bracketAbandonButton.children[0] as baby.Button).color = game.colorsScheme.dark1;
@@ -1228,7 +1228,7 @@ export const instantiateInputUsernameGUI =
 				game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.pongSettingsCam, 1, pong, states);
 			}
 		}
-	}, "continue");
+	}, pong, "continue");
 
 	// Add GUI components to the main menu
 	// The order of adding controls matters for the layout

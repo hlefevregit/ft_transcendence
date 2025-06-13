@@ -54,17 +54,7 @@ export const	updateGUIVisibilityStates =
 {
 	const setUIState = (ui: baby.Container | undefined, stateToCheck: game.states): void =>
 	{
-        if (ui === undefined )
-		{
-			console.error("UI undefined");
-			return;
-		}
-
-		if (!pong.current.guiTexture)
-		{
-			console.error("guiTexture undefined");
-			return;
-		}
+        if (ui === undefined || !pong.current.guiTexture) return;
         
         const	shouldShow: boolean = states === stateToCheck;
         const	isCurrentlyAdded: boolean = pong.current.guiTexture.getDescendants().includes(ui);

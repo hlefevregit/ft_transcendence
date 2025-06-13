@@ -21,7 +21,7 @@ const	Pong: React.FC = () =>
 	const	lang =				React.useRef<game.lang>(game.lang.english);
 	const	lastLang =			React.useRef<game.lang>(lang.current);
 	const	userNameRef =		React.useRef<string>(null as unknown as string);
-	const	audioRef =			React.useRef<HTMLAudioElement | null>(null);
+	const	musicRef =			React.useRef<HTMLAudioElement | null>(null);
 	const	socketRef =			React.useRef<WebSocket | null>(null);
 
 	// Hooks
@@ -74,10 +74,40 @@ const	Pong: React.FC = () =>
 
 	React.useEffect(() =>
 	{
+		// AUDIO
+		const createBeepSound = (pong: React.RefObject<game.pongStruct>) => 
+		{
+			let audioContext: AudioContext | null = null;
+			if (!audioContext) audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+			
+			const oscillator = audioContext.createOscillator();
+			const gainNode = audioContext.createGain();
+			
+			oscillator.connect(gainNode);
+			gainNode.connect(audioContext.destination);
+			
+			oscillator.frequency.value = 1000; // Frequency in Hz
+			oscillator.type = 'sine'; // Type of sound wave
+			
+			gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+			gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+			
+			oscillator.start(audioContext.currentTime);
+			oscillator.stop(audioContext.currentTime + 0.1);
+		};
+
+		// const playBeep = createBeepSound();
+		const playBeep = () =>
+		{
+			if (pong.current.isButtonHovered)
+				createBeepSound();
+			else console.debug("🎵 SFX not played: button not hovered");
+		}
+	
 		const audio = new Audio("/assets/vaporwave.mp3");
 		audio.loop = true;
 		audio.volume = 1; // Ajuste le volume
-		audioRef.current = audio;
+		musicRef.current = audio;
 		console.log("🎵 Musique de fond chargée");
 
 		const playAudio = () =>
@@ -87,6 +117,8 @@ const	Pong: React.FC = () =>
 		};
 
 		document.addEventListener("click", playAudio, { once: true });
+		document.addEventListener("click", playBeep, { once: false });
+
 
 		if (!canvasRef.current) return;
 		canvasRef.current.focus();

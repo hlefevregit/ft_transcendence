@@ -3,10 +3,13 @@ import React from 'react';
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
 
+
+
 export const	createButton =
 (buttonName: string,
 	buttonText: string,
-	functionToExecute: () => void
+	functionToExecute: () => void,
+	pong: React.RefObject<game.pongStruct>
 ): baby.StackPanel =>
 {
 	const	block = game.createDummyBlock();
@@ -19,15 +22,18 @@ export const	createButton =
 			button.thickness = 0;
 			button.cornerRadius = 20;
 			button.onPointerClickObservable.add(functionToExecute);
+			
 			button.onPointerEnterObservable.add(() =>
 			{
 				button.color = game.colorsScheme.auroraAccent1;
 				button.background = game.colorsScheme.light3;
+				pong.current.isButtonHovered = true;
 			});
 			button.onPointerOutObservable.add(() =>
 			{
 				button.color = game.colorsScheme.light3;
 				button.background = game.colorsScheme.dark1;
+				pong.current.isButtonHovered = false;
 			});
 
 	game.setPaddings(button, "10px");
@@ -250,6 +256,7 @@ export const createRoomPanel =
 	(
 		"roomPanelJoinButton",
 		join,
+		pong,
 		"join"
 	);
 
@@ -313,6 +320,7 @@ export const	createDynamicButton =
 (
 	buttonName: string,
 	functionToExecute: () => void,
+	pong: React.RefObject<game.pongStruct>,
 	labelKey?: game.labelKey
 ): baby.StackPanel =>
 {
@@ -338,12 +346,17 @@ export const	createDynamicButton =
 			{
 				button.color = game.colorsScheme.auroraAccent1;
 				button.background = game.colorsScheme.light3;
+				pong.current.isButtonHovered = true;
 			});
 			button.onPointerOutObservable.add(() =>
 			{
 				button.color = game.colorsScheme.light3;
 				button.background = game.colorsScheme.dark1;
+				pong.current.isButtonHovered = false;
 			});
+
+
+
 
 	game.setPaddings(button, "10px");
 	block.addControl(button);

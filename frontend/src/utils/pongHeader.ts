@@ -103,6 +103,9 @@ export type pongStruct =
 	skybox?: baby.Mesh;
 	PREDICT?: baby.Mesh;
 
+	// Audio
+	isButtonHovered?: boolean;
+
 	// Cameras
 	transitionCam?: baby.FreeCamera;
 	mainMenuCam?: baby.FreeCamera;
