@@ -1213,7 +1213,7 @@ export const instantiateInputUsernameGUI =
 		if (pong.current.username && pong.current.username.length > 0)
 		{
 			console.log("Last handled state:", lastHandledState.current);
-			if (lastHandledState.current === 3)
+			if (lastHandledState.current === game.states.game_settings)
 			{
 				console.log("Username set to:", pong.current.username);
 				playerStates.current = game.playerStates.isHost;

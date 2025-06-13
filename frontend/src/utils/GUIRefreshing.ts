@@ -66,6 +66,9 @@ export const	updateGUIVisibilityStates =
 	setUIState(pong.current.settingsGUI, game.states.settings);
 	setUIState(pong.current.pongSettingsGUI, game.states.game_settings);
 	setUIState(pong.current.arenaGUI, game.states.in_game);
+	setUIState(pong.current.arenaGUI, game.states.in_game1);
+	setUIState(pong.current.arenaGUI, game.states.in_game2);
+	setUIState(pong.current.arenaGUI, game.states.tournament_final);
 	setUIState(pong.current.countdownGUI, game.states.countdown);
 	setUIState(pong.current.finishedGameGUI, game.states.game_finished);
 	setUIState(pong.current.hostOrJoinGUI, game.states.host_or_join);

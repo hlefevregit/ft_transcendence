@@ -72,6 +72,8 @@ export class tournamentSession {
 
 	finalist1: WebSocket | null = null;
 	finalist2: WebSocket | null = null;
+	finalist1Id: string = 'finalist1';
+	finalist2Id: string = 'finalist2';
 
 	score1_game1: number = 0;
 	score2_game1: number = 0;
@@ -154,67 +156,7 @@ export class tournamentSession {
 			console.warn('Socket not found in session:', socket);
 		}
 	}
-	// handleGameUpdate(data: any) {
-	// 	const state: any = { type: 'state_update' };
 
-	// 	if (typeof data.paddle1Z === 'number') state.paddle1Z = data.paddle1Z;
-	// 	if (typeof data.paddle2Z === 'number') state.paddle2Z = data.paddle2Z;
-	// 	if (data.ballPosition) state.ballPosition = data.ballPosition;
-	// 	if (data.ballDirection) state.ballDirection = data.ballDirection;
-	// 	if (typeof data.ballSpeedModifier === 'number') state.ballSpeedModifier = data.ballSpeedModifier;
-
-	// 	this.lastState = {
-	// 		...this.lastState,
-	// 		...state,
-	// 	};
-
-	// 	state.lastState = this.lastState;
-	// 	this.broadcast(state);
-	// }
-
-	// hanfleGameUpdateGame1(data: any) {
-	// 	const state: any = { type: 'state_update_game1' };
-	// 	if (typeof data.paddle1Z === 'number') state.paddle1Z = data.paddle1Z;
-	// 	if (typeof data.paddle2Z === 'number') state.paddle2Z = data.paddle2Z;
-	// 	if (data.ballPosition) state.ballPosition = data.ballPosition;
-	// 	if (data.ballDirection) state.ballDirection = data.ballDirection;
-	// 	if (typeof data.ballSpeedModifier === 'number') state.ballSpeedModifier = data.ballSpeedModifier;
-	// 	this.lastStateGame1 = {
-	// 		...this.lastStateGame1,
-	// 		...state,
-	// 	};
-	// 	state.lastStateGame1 = this.lastStateGame1;
-	// 	this.broadCastGame1(state);
-	// }
-	// hanfleGameUpdateGame2(data: any) {
-	// 	const state: any = { type: 'state_update_game2' };
-	// 	if (typeof data.paddle3Z === 'number') state.paddle3Z = data.paddle3Z;
-	// 	if (typeof data.paddle4Z === 'number') state.paddle4Z = data.paddle4Z;
-	// 	if (data.ballPosition) state.ballPosition = data.ballPosition;
-	// 	if (data.ballDirection) state.ballDirection = data.ballDirection;
-	// 	if (typeof data.ballSpeedModifier === 'number') state.ballSpeedModifier = data.ballSpeedModifier;
-	// 	this.lastStateGame2 = {
-	// 		...this.lastStateGame2,
-	// 		...state,
-	// 	};
-	// 	state.lastStateGame2 = this.lastStateGame2;
-	// 	this.broadCastGame2(state);
-	// }
-
-	// handleFinalUpdate(data: any) {
-	// 	const state: any = { type: 'state_update_final' };
-	// 	if (typeof data.paddle1Z === 'number') state.paddle1Z = data.paddle1Z;
-	// 	if (typeof data.paddle2Z === 'number') state.paddle2Z = data.paddle2Z;
-	// 	if (data.ballPosition) state.ballPosition = data.ballPosition;
-	// 	if (data.ballDirection) state.ballDirection = data.ballDirection;
-	// 	if (typeof data.ballSpeedModifier === 'number') state.ballSpeedModifier = data.ballSpeedModifier;
-	// 	this.lastStateFinal = {
-	// 		...this.lastStateFinal,
-	// 		...state,
-	// 	};
-	// 	state.lastStateFinal = this.lastStateFinal;
-	// 	this.broadCastFinal(state);
-	// }
 
 	broadcast(payload: any) {
 		this.player1.send(JSON.stringify(payload));
@@ -239,6 +181,25 @@ export class tournamentSession {
 
 	hasSocket(socket: WebSocket): boolean {
 		return this.player1 === socket || this.player2 === socket || this.player3 === socket || this.player4 === socket;
+	}
+
+
+	getSocketById(playerId: string): WebSocket | null {
+		if (this.player1Id === playerId) return this.player1;
+		if (this.player2Id === playerId) return this.player2;
+		if (this.player3Id === playerId) return this.player3;
+		if (this.player4Id === playerId) return this.player4;
+		return null;
+	}
+
+	getIdBySocket(socket: WebSocket): string | null {
+		if (this.player1 === socket) return this.player1Id;
+		if (this.player2 === socket) return this.player2Id;
+		if (this.player3 === socket) return this.player3Id;
+		if (this.player4 === socket) return this.player4Id;
+		if (this.finalist1 === socket) return this.finalist1Id;
+		if (this.finalist2 === socket) return this.finalist2Id;
+		return null;
 	}
 
 }
