@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/hlefevregit/ft_transcendence/compare/v1.4.0...v1.4.1) (2025-06-13)
+
+
+### Bug Fixes
+
+* **fixed roomListGUI randomly not showing:** ldalmass ([c3578e6](https://github.com/hlefevregit/ft_transcendence/commit/c3578e6056b4997808ec3b206fb28beb157da4e6))
+
 # [1.4.0](https://github.com/hlefevregit/ft_transcendence/compare/v1.3.0...v1.4.0) (2025-06-13)
 
 

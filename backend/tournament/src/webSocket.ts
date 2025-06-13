@@ -187,6 +187,7 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 
 					case 'start_round1_game2' : {
 						const session = games.get(data.gameId);
+						console.log("🔍 Recherche de la session pour gameId:", data.gameId);
 						if (session && session.player3 && session.player4) {
 							const message = {
 								type: 'start_round1_game2',
@@ -225,6 +226,7 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 						const session = [...games.values()].find(s => s.hasSocket(ws));
 						if (session) {
 							const winner = data.winner || (session.player1 === ws ? session.player1Id : session.player2Id);
+							session.finalist1 = session.getSocketById(winner);
 							session.broadCastGame1({
 								type: 'game1_finished',
 								player1Id: session.player1Id,
@@ -243,6 +245,7 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 						const session = [...games.values()].find(s => s.hasSocket(ws));
 						if (session) {
 							const winner = data.winner || (session.player3 === ws ? session.player3Id : session.player4Id);
+							session.finalist2 = session.getSocketById(winner);
 							session.broadCastGame2({
 								type: 'game2_finished',
 								player3Id: session.player3Id,
@@ -253,6 +256,26 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 								winnerId: winner,
 								
 							});
+						}
+						break;
+					}
+
+					case 'waiting_to_start_final': {
+						const session = games.get(data.gameId);
+						if (!session) {
+							ws.send(JSON.stringify({ type: 'error', message: 'Game does not exist' }));
+							break;
+						}
+						if (session.finalist1 && session.finalist2) {
+							const finalist1Id = session.getIdBySocket(session.finalist1);
+							const finalist2Id = session.getIdBySocket(session.finalist2);
+							const message = {
+								type: 'waiting_to_start_final',
+								gameId: session.id,
+								player1: finalist1Id,
+								player2: finalist2Id,
+							};
+							session.broadCastFinal(message);
 						}
 						break;
 					}

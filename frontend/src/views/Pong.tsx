@@ -23,7 +23,7 @@ const	Pong: React.FC = () =>
 	const	userNameRef =		React.useRef<string>(null as unknown as string);
 	const	musicRef =			React.useRef<HTMLAudioElement | null>(null);
 	const	socketRef =			React.useRef<WebSocket | null>(null);
-
+	const	lastHandledState = React.useRef<game.states>(game.states.main_menu);
 	// Hooks
 	const	[gameModeTrigger, setGameModeTrigger] = React.useState<number>(0);
 	const	navigate = useNavigate();
@@ -126,7 +126,7 @@ const	Pong: React.FC = () =>
 		// Initialize babylon
 		game.setupBabylon(pong.current, canvasRef.current);
 		// Initialize all the GUI screens
-		game.initializeAllGUIScreens(pong, gameModes, state, playerState, lang, socketRef, navigate, setGameModeTrigger, lastState);
+		game.initializeAllGUIScreens(pong, gameModes, state, playerState, lang, socketRef, navigate, setGameModeTrigger, lastHandledState);
 		game.updateGUIVisibilityStates(pong, state.current);
 		game.updateGUIVisibilityPlayerStates(pong, playerState.current , gameModes.current);
 		game.updateGUIValues(pong, lang);
@@ -137,12 +137,12 @@ const	Pong: React.FC = () =>
 			(
 				   socketRef.current
 				&& socketRef.current.readyState === WebSocket.OPEN
-				&& lastState.current !== state.current
+				&& lastHandledState.current !== state.current
 			)
 			{
-				console.log("Last handled state:", lastState.current);
+				console.log("Last handled state:", lastHandledState.current);
 				console.log("Sending current state:", state.current);
-				lastState.current = state.current;
+				lastHandledState.current = state.current;
 			}
 		}
 		else game.manageLocalKeyboardInputs(pong.current);
@@ -245,7 +245,7 @@ const	Pong: React.FC = () =>
 			}
 			if (gameModes.current === game.gameModes.online)
 			{
-				useOnlineLoop(pong, socketRef, gameModes, state, userNameRef, lastState);
+				useOnlineLoop(pong, socketRef, gameModes, state, userNameRef, lastHandledState);
 			}
 			else if (gameModes.current === game.gameModes.tournament)
 			{
@@ -257,7 +257,7 @@ const	Pong: React.FC = () =>
 						gameModes,
 						state,
 						userNameRef,
-						lastState
+						lastHandledState,
 					);
 				});
 			}
