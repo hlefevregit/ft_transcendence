@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/hlefevregit/ft_transcendence/compare/v1.4.1...v1.5.0) (2025-06-13)
+
+
+### Features
+
+* **SFX on buttons:** ldalmass, music and sfx volume are not tied ([948f4db](https://github.com/hlefevregit/ft_transcendence/commit/948f4dbbbce473823f62e24912b0605951bd80e9))
+
 ## [1.4.1](https://github.com/hlefevregit/ft_transcendence/compare/v1.4.0...v1.4.1) (2025-06-13)
 
 
