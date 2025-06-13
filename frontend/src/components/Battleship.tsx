@@ -1,36 +1,33 @@
 import React, { useRef, useEffect } from 'react';
-import * as BABYLON from "@babylonjs/core";
+import { Engine, EngineOptions, Scene, SceneOptions, Mesh,
+         MeshBuilder, StandardMaterial, ArcRotateCamera,
+         HemisphericLight, Vector3, Color3, ActionManager } from "@babylonjs/core";
 import { Inspector } from "@babylonjs/inspector"
 import { GridMaterial } from '@babylonjs/materials'
-import '@/assets/BattleshipMesh'
-import { BattleshipMesh, ShipMesh } from '@/assets/BattleshipMesh';
+import BattleshipMesh from '@/assets/BattleshipMesh'
 
 type SceneCanvasProps = {
-  engineOptions?: BABYLON.EngineOptions
-  sceneOptions?: BABYLON.SceneOptions
-  onRender?: (scene: BABYLON.Scene) => void
-  onSceneReady: (scene: BABYLON.Scene) => void
+  engineOptions?: EngineOptions
+  sceneOptions?: SceneOptions
+  onRender?: (scene: Scene) => void
+  onSceneReady: (scene: Scene) => void
 }
 
-type ShipType = "Carrier" | "Battleship" | "Destroyer" | "Submarine" | "Patrol"
-
 type PlayerInfo = {
-  name: string
   obj: BattleshipMesh
   ships: number[][] | null
-  field: number[]
 }
 
 type GameRefType = {
   playing: PlayerInfo
   waiting: PlayerInfo
-  table: BABYLON.Mesh
-  camera: BABYLON.ArcRotateCamera
-  light: BABYLON.HemisphericLight
+  table: Mesh
+  camera: ArcRotateCamera
+  light: HemisphericLight
   mats: {
-    blue: BABYLON.StandardMaterial
-    red: BABYLON.StandardMaterial
-    white: BABYLON.StandardMaterial
+    blue: StandardMaterial
+    red: StandardMaterial
+    white: StandardMaterial
     grid: GridMaterial
   }
 }
@@ -63,43 +60,39 @@ const Battleship = () => {
     endTurn();
   }
 
-  const onSceneReady = (scene:BABYLON.Scene) => {
+  const onSceneReady = (scene:Scene) => {
     Inspector.Show(scene, {overlay:true});
-    scene.actionManager = new BABYLON.ActionManager();
+    scene.actionManager = new ActionManager();
 
     const mats = {
-      blue: new BABYLON.StandardMaterial("blue-mat", scene),
-      red: new BABYLON.StandardMaterial("red-mat", scene),
-      white: new BABYLON.StandardMaterial("white-mat", scene),
+      blue: new StandardMaterial("blue-mat", scene),
+      red: new StandardMaterial("red-mat", scene),
+      white: new StandardMaterial("white-mat", scene),
       grid: new GridMaterial("grid-mat", scene)
     }
-    mats.blue.diffuseColor = new BABYLON.Color3(0,0.27,1);
-    mats.red.diffuseColor = new BABYLON.Color3(1,0,0);
-    mats.white.diffuseColor = new BABYLON.Color3(1,1,1);
+    mats.blue.diffuseColor = new Color3(0,0.27,1);
+    mats.red.diffuseColor = new Color3(1,0,0);
+    mats.white.diffuseColor = new Color3(1,1,1);
     mats.grid.majorUnitFrequency = 5
     mats.grid.gridRatio = 0.9
     mats.grid.gridOffset.z += 0.3
 
     const host: PlayerInfo = {
-      name: hostName,
-      obj: new BattleshipMesh(hostName, scene, onClick, mats.blue, mats.grid, new BABYLON.Vector3(0, -4, -5)),
+      obj: new BattleshipMesh(hostName, scene, onClick, mats.blue, mats.grid, new Vector3(0, -4, -5)),
       ships: null,
-      field: new Array(100)
     };
     const guest = {
-      name: guestName,
-      obj: new BattleshipMesh(guestName, scene, onClick, mats.blue, mats.grid, new BABYLON.Vector3(0, -4, 5), Math.PI),
+      obj: new BattleshipMesh(guestName, scene, onClick, mats.blue, mats.grid, new Vector3(0, -4, 5), Math.PI),
       ships: null,
-      field: new Array(100)
     };
 
-    const camera = new BABYLON.ArcRotateCamera("camera", Math.PI/2, Math.PI/3, 25, BABYLON.Vector3.Zero(), scene, true);
+    const camera = new ArcRotateCamera("camera", Math.PI/2, Math.PI/3, 25, Vector3.Zero(), scene, true);
     camera.attachControl(scene.getEngine().getRenderingCanvas(), true);
 
-    const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0,1,0), scene);
+    const light = new HemisphericLight("light", new Vector3(0,1,0), scene);
     light.intensity = 0.7;
 
-    const table = BABYLON.MeshBuilder.CreateCylinder("table", {height:0.3, diameter:40});
+    const table = MeshBuilder.CreateCylinder("table", {height:0.3, diameter:40});
     table.position.y = -5;
     table.material = mats.blue;
     table.addChild(host.obj);
@@ -152,8 +145,8 @@ const SceneCanvas = ({ onRender, onSceneReady }: SceneCanvasProps) => {
 
     if (!canvas) return;
 
-    const engine = new BABYLON.Engine(canvas);
-    const scene = new BABYLON.Scene(engine);
+    const engine = new Engine(canvas);
+    const scene = new Scene(engine);
     if (scene.isReady())
       onSceneReady(scene);
     else

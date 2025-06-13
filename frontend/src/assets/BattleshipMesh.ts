@@ -1,6 +1,6 @@
-import { Mesh, MeshBuilder, Scene, Vector3, ActionManager, ActionEvent, ExecuteCodeAction,
-		IncrementValueAction, ValueCondition, KeyboardInfo, KeyboardEventTypes, EventState,
-		StandardMaterial, TransformNode, MeshCreationOptions } from '@babylonjs/core'
+import { Mesh, MeshBuilder, Scene, Vector3, ActionManager, ExecuteCodeAction,
+		IncrementValueAction, ValueCondition, KeyboardInfo, KeyboardEventTypes,
+		StandardMaterial, TransformNode } from '@babylonjs/core'
 import { GridMaterial } from '@babylonjs/materials'
 import 'https://cdn.babylonjs.com/earcut.min.js'
 
@@ -142,13 +142,12 @@ export class ShipMesh extends TransformNode {
 }
 
 // Custom mesh encapsulating one Battleship player interface
-export class BattleshipMesh extends TransformNode {
+class BattleshipMesh extends TransformNode {
     pivot: Mesh
     screen: Mesh
     field: Mesh
     cells: CellMesh[] = []
 	ships: ShipMesh[] = Array(5)
-	fieldNode: TransformNode
 	isPlaying: boolean = false
 
     constructor(name: string, scene: Scene, onClick: (ij:number) => void, blue: StandardMaterial, grid: GridMaterial, position?: Vector3, rotation?: number) {
@@ -187,7 +186,7 @@ export class BattleshipMesh extends TransformNode {
         this.screen.setParent(this.pivot);
         this.pivot.rotation.x += Math.PI/12
 
-		// Lower box, represents the player's own field. Might be used for ship placement (TBD)
+		// Lower box, represents the player's own field
         this.field = MeshBuilder.CreateBox("field-" + name, {width:10.2, height:0.7, depth:10.7}, scene);
         this.field.setParent(this);
         this.field.position.addInPlace(new Vector3(0, -0.2, -5.6));
@@ -213,10 +212,6 @@ export class BattleshipMesh extends TransformNode {
 		polygon.position.y += 0.5
 		polygon.position.z -= 0.3
 
-		this.fieldNode = new TransformNode("fieldnode-" + name, scene, true);
-		this.fieldNode.parent = this.field;
-		this.fieldNode.position = new Vector3(-4.05, 0.3, 3.754);
-
         if (position !== undefined)
             this.position.addInPlace(position);
         if (rotation !== undefined)
@@ -225,13 +220,15 @@ export class BattleshipMesh extends TransformNode {
 
 	shipSetup(endTurn: () => void) {
 		const scene = this.getScene();
-		const coords: number[][] = []
+		const fieldNode = new TransformNode("fieldnode-" + this.name, scene, true);
+		fieldNode.parent = this.field;
+		fieldNode.position = new Vector3(-4.05, 0.3, 3.754);
 
-		this.ships[0] = new ShipMesh(this.name, 5, "carrier", scene, this.fieldNode, 3, 5);
-		this.ships[1] = new ShipMesh(this.name, 4, "bship", scene, this.fieldNode, 0, 0);
-		this.ships[2] = new ShipMesh(this.name, 3, "destro", scene, this.fieldNode, 7, 6);
-		this.ships[3] = new ShipMesh(this.name, 3, "sub", scene, this.fieldNode, 4, 1);
-		this.ships[4] = new ShipMesh(this.name, 2, "patrol", scene, this.fieldNode, 4, 6);
+		this.ships[0] = new ShipMesh(this.name, 5, "carrier", scene, fieldNode, 3, 5);
+		this.ships[1] = new ShipMesh(this.name, 4, "bship", scene, fieldNode, 0, 0);
+		this.ships[2] = new ShipMesh(this.name, 3, "destro", scene, fieldNode, 7, 6);
+		this.ships[3] = new ShipMesh(this.name, 3, "sub", scene, fieldNode, 4, 1);
+		this.ships[4] = new ShipMesh(this.name, 2, "patrol", scene, fieldNode, 4, 6);
 		for (let i=0; i < 4; i++) {
 			const others = this.ships.slice(i + 1);
 			this.ships[i].addCollision(others);
@@ -267,3 +264,5 @@ export class BattleshipMesh extends TransformNode {
 		return coordsArr;
 	}
 }
+
+export default BattleshipMesh;
