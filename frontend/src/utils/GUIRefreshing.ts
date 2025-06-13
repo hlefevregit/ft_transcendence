@@ -19,7 +19,7 @@ export const initializeAllGUIScreens =
 	socketRef: React.RefObject<WebSocket | null>,
 	navigate: (path: string) => void,
 	setGameModeTrigger: React.Dispatch<React.SetStateAction<number>>,
-	lastHandledState: React.RefObject<game.states>
+	lastState: React.RefObject<game.states>
 ): void =>
 {
 	// Initialize the GUI texture
@@ -31,7 +31,7 @@ export const initializeAllGUIScreens =
 	console.log("initialized GUI screens...");
 	game.instantiateMainMenuGUI(pong, states, gameModes, navigate, setGameModeTrigger);
 	game.instantiateSettingsGUI(pong, states, lang);
-	game.instentiatePongSettingsGUI(pong, states, gameModes, playerStates, lastHandledState);
+	game.instentiatePongSettingsGUI(pong, states, gameModes, playerStates, lastState);
 	game.instantiateArenaGUI(pong);
 	game.instantiateCountdownGUI(pong);
 	game.instantiateFinishedGameGUI(pong, states, gameModes);
@@ -40,7 +40,7 @@ export const initializeAllGUIScreens =
 	game.instantiateWaitingScreenGUI(pong, states, gameModes);
 	game.instantiateWaitingTournamentToStartGUI(pong, states);
 	game.instantiateBracketGUI(pong, states, gameModes, socketRef);
-	game.instantiateInputUsernameGUI(pong, states, gameModes, playerStates, lastHandledState);
+	game.instantiateInputUsernameGUI(pong, states, gameModes, playerStates, lastState);
 	game.instantiateDebugGUI(pong, states, gameModes, playerStates, lang);
 	// etc.
 	console.log("complete initializing GUI screens");
@@ -54,7 +54,17 @@ export const	updateGUIVisibilityStates =
 {
 	const setUIState = (ui: baby.Container | undefined, stateToCheck: game.states): void =>
 	{
-        if (ui === undefined || !pong.current.guiTexture) return;
+        if (ui === undefined )
+		{
+			console.error("UI undefined");
+			return;
+		}
+
+		if (!pong.current.guiTexture)
+		{
+			console.error("guiTexture undefined");
+			return;
+		}
         
         const	shouldShow: boolean = states === stateToCheck;
         const	isCurrentlyAdded: boolean = pong.current.guiTexture.getDescendants().includes(ui);
@@ -81,6 +91,8 @@ export const	updateGUIVisibilityStates =
 
 	pong.current.guiTexture?.removeControl(pong.current.debugGUI as baby.Container);
 	pong.current.guiTexture?.addControl(pong.current.debugGUI as baby.Container);
+	console.log("Updated GUI visibility based on states:", states);
+	console.log("Current GUI texture children:", pong.current.guiTexture?.getDescendants().map(control => control.name));
 }
 
 export const	updateGUIVisibilityPlayerStates =
