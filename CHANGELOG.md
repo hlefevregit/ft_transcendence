@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/hlefevregit/ft_transcendence/compare/v1.3.0...v1.4.0) (2025-06-13)
+
+
+### Features
+
+* **GRAND MÉNAGE DE PRINTEMPS PART II:** ldalmass: more cleaning ([8bafb22](https://github.com/hlefevregit/ft_transcendence/commit/8bafb22a18ac569f11df7a6698da50de1c7abbca))
+
 # [1.3.0](https://github.com/hlefevregit/ft_transcendence/compare/v1.2.2...v1.3.0) (2025-06-12)
 
 
