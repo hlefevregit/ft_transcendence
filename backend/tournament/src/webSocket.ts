@@ -2,7 +2,7 @@ import { WebSocketServer, WebSocket } from 'ws';
 import { tournamentSession } from './tournamentSession';
 import crypto from 'crypto';
 import { FastifyInstance } from 'fastify';
-import type { Server } from 'http';
+import { get, type Server } from 'http';
 import jwt from 'jsonwebtoken';
 import { URL } from 'url';
 
@@ -11,22 +11,82 @@ const games = new Map<string, tournamentSession>();
 export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 	const wss = new WebSocketServer({ server, path: '/ws' });
 
+
+	async function handleJoinTournament(ws: WebSocket, data: any, userID: string) {
+		const session = games.get(data.gameId);
+
+		console.log("🔍 Recherche de la session pour gameId:", data.gameId);
+		if (session && session.player2 === null) {
+			console.log("🚪 Player 2 rejoint le tournoi");
+			session.setPlayer2(ws, userID, data.username);
+			ws.send(JSON.stringify({ type: 'joined_tournament', gameId: session.id, isHost2: false }));
+		}
+		else if (session && session.player3 === null) {
+			console.log("🚪 Player 3 rejoint le tournoi");
+			session.setPlayer3(ws, userID, data.username);
+			ws.send(JSON.stringify({ type: 'joined_tournament', gameId: session.id, isHost2: true}));
+		}
+		else if (session && session.player4 === null) {
+			console.log("🚪 Player 4 rejoint le tournoi");
+			session.setPlayer4(ws, userID, data.username);
+			const player4 = session.player4 as WebSocket | null;
+			ws.send(JSON.stringify({ type: 'joined_tournament', gameId: session.id , isHost2: false}));
+		}
+		else {
+			ws.send(JSON.stringify({ type: 'error', message: 'Game is full or does not exist' }));
+			return;
+		}
+		// if (session.player4 === null) {
+		// 	ws.send(JSON.stringify({ type: 'waiting_for_players', gameId: session.id }));
+		// }
+		if (session.player4 && session.player4.readyState === WebSocket.OPEN) {
+
+			await sleep(3000); // Attendre 3 secondes pour s'assurer que tous les joueurs sont connectés
+			console.log("🚀 Tous les joueurs sont prêts, lancement du tournoi");
+			const message = {
+				type: 'start_tournament',
+				gameId: session.id,
+				player1Id: session.player1Id,
+				player2Id: session.player2Id,
+				player3Id: session.player3Id,
+				player4Id: session.player4Id,
+				points_to_win: session.points_to_win,
+			};
+			session.player1.send(JSON.stringify(message));
+			if (session.player2 && session.player2.readyState === WebSocket.OPEN) {
+				session.player2.send(JSON.stringify(message));
+			}
+			if (session.player3 && session.player3.readyState === WebSocket.OPEN) {
+				session.player3.send(JSON.stringify(message));
+			}
+			if (session.player4 && session.player4.readyState === WebSocket.OPEN) {
+				session.player4.send(JSON.stringify(message));
+			}
+
+		}
+	}
+		
+
+	function sleep(ms: number): Promise<void> {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
 	wss.on('connection', (ws: WebSocket, req) => {
 		// 🔐 Extraction du token depuis l'URL
 		const url = new URL(req.url || '', `http://${req.headers.host}`);
 		const token = url.searchParams.get('token');
 
-		let username = 'anonymous';
+		let userID = 'anonymous';
 		if (token) {
 			try {
 				const payload: any = jwt.verify(token, 'supersecretkey');
-				username = payload.pseudo || 'unknown';
+				userID = payload.id || 'unknown';
 			} catch (err) {
 				console.error('❌ JWT invalide :', err);
 			}
 		}
 
-		console.log('🆕 New WebSocket client connected as:', username);
+		console.log('🆕 New WebSocket client connected as:', userID);
 
 		ws.on('message', async (message) => {
 			try {
@@ -34,64 +94,20 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 				console.log("📬 Message reçu tournoi:", data);
 
 				switch (data.type) {
+
 					case 'host_tournament': {
 						const gameId = crypto.randomUUID();
 						const session = new tournamentSession(gameId, ws, data.roomName || `${gameId}'s tournament`);
-						session.setPlayer1(ws, username);
+						session.setPlayer1(ws, userID, data.username);
 						games.set(gameId, session);
+						session.points_to_win = data.points_to_win || 3; // Points to win can be set by the host
 						ws.send(JSON.stringify({ type: 'tournament_hosted', gameId, roomName: session.roomName }));
 						break;
 					}
 					
 					case 'join_tournament': {
-						
-						const session = games.get(data.gameId);
-						console.log("🔍 Recherche de la session pour gameId:", data.gameId);
-						if (session && session.player2 === null) {
-							console.log("🚪 Player 2 rejoint le tournoi");
-							session.setPlayer2(ws, username);
-							ws.send(JSON.stringify({ type: 'joined_tournament', gameId: session.id, isHost2: false }));
-						}
-						else if (session && session.player3 === null) {
-							console.log("🚪 Player 3 rejoint le tournoi");
-							session.setPlayer3(ws, username);
-							ws.send(JSON.stringify({ type: 'joined_tournament', gameId: session.id, isHost2: true}));
-						}
-						else if (session && session.player4 === null) {
-							console.log("🚪 Player 4 rejoint le tournoi");
-							session.setPlayer4(ws, username);
-							const player4 = session.player4 as WebSocket | null;
-							ws.send(JSON.stringify({ type: 'joined_tournament', gameId: session.id , isHost2: false}));
-						}
-						else {
-							ws.send(JSON.stringify({ type: 'error', message: 'Game is full or does not exist' }));
-							return;
-						}
-						// if (session.player4 === null) {
-						// 	ws.send(JSON.stringify({ type: 'waiting_for_players', gameId: session.id }));
-						// }
-						if (session.player4 && session.player4.readyState === WebSocket.OPEN) {
-							console.log("🚀 Tous les joueurs sont prêts, lancement du tournoi");
-							const message = {
-								type: 'start_tournament',
-								gameId: session.id,
-								player1Id: session.player1Id,
-								player2Id: session.player2Id,
-								player3Id: session.player3Id,
-								player4Id: session.player4Id,
-							};
-							session.player1.send(JSON.stringify(message));
-							if (session.player2 && session.player2.readyState === WebSocket.OPEN) {
-								session.player2.send(JSON.stringify(message));
-							}
-							if (session.player3 && session.player3.readyState === WebSocket.OPEN) {
-								session.player3.send(JSON.stringify(message));
-							}
-							if (session.player4 && session.player4.readyState === WebSocket.OPEN) {
-								session.player4.send(JSON.stringify(message));
-							}
-
-						}
+						console.log("🚪 Client demande de rejoindre le tournoi, username = ", data.username);
+						handleJoinTournament(ws, data, userID);
 						
 						break;
 
@@ -112,29 +128,11 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 						break;
 					}
 
-					case 'start_round1_game1' : {
-						const session = games.get(data.gameId);
-						if (session && session.player1 && session.player2) {
-							const message = {
-								type: 'start_round1_game1',
-								gameId: session.id,
-								player1Id: session.player1Id,
-								player2Id: session.player2Id,
-							};
-							session.player1.send(JSON.stringify(message));
-							if (session.player2 && session.player2.readyState === WebSocket.OPEN) {
-								session.player2.send(JSON.stringify(message));
-							}
-						}
-						else {
-							ws.send(JSON.stringify({ type: 'error', message: 'Game is not ready or does not exist' }));
-						}
-						break;
-					}
-
+					
 					case 'leave_tournament': {
 						console.log("🚪 Client demande de quitter le tournoi");
-
+						
+						
 						if (!data.gameId) {
 							ws.send(JSON.stringify({ type: 'error', message: 'Game ID is required to leave a tournament' }));
 							break;
@@ -165,9 +163,31 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 						}
 						break;
 					}
+					
+					case 'start_round1_game1' : {
+						const session = games.get(data.gameId);
+						console.log("🔍 Recherche de la session pour gameId:", data.gameId);
+						if (session && session.player1 && session.player2) {
+							const message = {
+								type: 'start_round1_game1',
+								gameId: session.id,
+								player1Id: session.player1Id,
+								player2Id: session.player2Id,
+							};
+							session.player1.send(JSON.stringify(message));
+							if (session.player2 && session.player2.readyState === WebSocket.OPEN) {
+								session.player2.send(JSON.stringify(message));
+							}
+						}
+						else {
+							ws.send(JSON.stringify({ type: 'error', message: 'Game is not ready or does not exist' }));
+						}
+						break;
+					}
 
 					case 'start_round1_game2' : {
 						const session = games.get(data.gameId);
+						console.log("🔍 Recherche de la session pour gameId:", data.gameId);
 						if (session && session.player3 && session.player4) {
 							const message = {
 								type: 'start_round1_game2',
@@ -187,14 +207,18 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 					}
 
 					case 'game1_update': {
-						const session = [...games.values()].find(s => s.hasSocket(ws));
-						session?.hanfleGameUpdateGame1(data);
+						console.log("🔄 Mise à jour du jeu 1");
+						const session = games.get(data.gameId);
+						console.log("Game ID:", data.gameId);
+						session?.game1.updateState(data);
 						break;
 					}
 					
 					case 'game2_update': {
-						const session = [...games.values()].find(s => s.hasSocket(ws));
-						session?.hanfleGameUpdateGame2(data);
+						console.log("🔄 Mise à jour du jeu 2");
+						const session = games.get(data.gameId);
+						console.log("🔄 Mise à jour du jeu 2 pour la session:", session?.id);
+						session?.game2.updateState(data);
 						break;
 					}
 
@@ -202,6 +226,7 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 						const session = [...games.values()].find(s => s.hasSocket(ws));
 						if (session) {
 							const winner = data.winner || (session.player1 === ws ? session.player1Id : session.player2Id);
+							session.finalist1 = session.getSocketById(winner);
 							session.broadCastGame1({
 								type: 'game1_finished',
 								player1Id: session.player1Id,
@@ -220,6 +245,7 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 						const session = [...games.values()].find(s => s.hasSocket(ws));
 						if (session) {
 							const winner = data.winner || (session.player3 === ws ? session.player3Id : session.player4Id);
+							session.finalist2 = session.getSocketById(winner);
 							session.broadCastGame2({
 								type: 'game2_finished',
 								player3Id: session.player3Id,
@@ -230,6 +256,26 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 								winnerId: winner,
 								
 							});
+						}
+						break;
+					}
+
+					case 'waiting_to_start_final': {
+						const session = games.get(data.gameId);
+						if (!session) {
+							ws.send(JSON.stringify({ type: 'error', message: 'Game does not exist' }));
+							break;
+						}
+						if (session.finalist1 && session.finalist2) {
+							const finalist1Id = session.getIdBySocket(session.finalist1);
+							const finalist2Id = session.getIdBySocket(session.finalist2);
+							const message = {
+								type: 'waiting_to_start_final',
+								gameId: session.id,
+								player1: finalist1Id,
+								player2: finalist2Id,
+							};
+							session.broadCastFinal(message);
 						}
 						break;
 					}
@@ -255,8 +301,12 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 					}
 
 					case 'final_update': {
-						const session = [...games.values()].find(s => s.hasSocket(ws));
-						session?.handleFinalUpdate(data);
+						const session = games.get(data.gameId);
+						if (session) {
+							session.final.updateState(data);
+						} else {
+							ws.send(JSON.stringify({ type: 'error', message: 'Game is not ready or does not exist' }));
+						}
 						break;
 					}
 
@@ -300,7 +350,8 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 									player2Id: session.player2Id,
 									player1Score: session.score1_game1,
 									player2Score: session.score2_game1,
-									reason: 'forfeit'
+									reason: 'forfeit',
+									gameId: data.gameId,
 								});
 								games.delete(data.gameId);
 								
