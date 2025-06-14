@@ -1,3 +1,15 @@
+# [1.6.0](https://github.com/hlefevregit/ft_transcendence/compare/v1.5.0...v1.6.0) (2025-06-14)
+
+
+### Bug Fixes
+
+* **battleship:** jdemers : unused code cleanup ([db82c4e](https://github.com/hlefevregit/ft_transcendence/commit/db82c4eb53e2a6fbabe0d41790554f380f905f5a))
+
+
+### Features
+
+* **battleship:** jdemers : functional game loop implemented ([b332c30](https://github.com/hlefevregit/ft_transcendence/commit/b332c3069f4e8d0350b63d03da6cc5ccd0966ad1))
+
 # [1.5.0](https://github.com/hlefevregit/ft_transcendence/compare/v1.4.1...v1.5.0) (2025-06-13)
 
 
