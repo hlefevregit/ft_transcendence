@@ -44,6 +44,7 @@ export default defineConfig({
     allowedHosts: [
       'localhost',
       'c2r10p2',
+	  'c1r8p1'
     ],
     watch: {
       usePolling: true,
