@@ -12,6 +12,9 @@
   border-radius: 0.75rem !important;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   display: flex;
+
+  /* Permettre au popover de déborder */
+  overflow: visible !important;
 }
 
 .chat-panel__sidebar {
@@ -23,6 +26,8 @@
   padding: 0.5rem;
   border-top-left-radius: 0.75rem;
   border-bottom-left-radius: 0.75rem;
+
+  overflow: visible !important;
 }
 
 .chat-panel__search {
@@ -40,6 +45,8 @@
   overflow-y: auto;
   background-color: #ffffff;
   border-radius: 0.5rem;
+
+  overflow: visible !important;
 }
 
 .chat-panel__content {
@@ -47,9 +54,10 @@
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
-  /* Coins arrondis à droite pour correspondre au parent */
   border-top-right-radius: 0.75rem;
   border-bottom-right-radius: 0.75rem;
+
+  overflow: visible !important;
 }
 
 .chat-panel__header {
@@ -84,4 +92,6 @@
   flex: 1;
   padding: 0.5rem;
   overflow-y: auto;
+
+  overflow: visible !important;
 }
