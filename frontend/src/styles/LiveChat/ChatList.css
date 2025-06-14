@@ -1,13 +1,15 @@
 /* src/styles/LiveChat/ChatList.css */
+
 .chat-list {
   display: flex;
   flex-direction: column;
   padding: 0.5rem;
   overflow-y: auto;
+  overflow-x: visible !important;
 }
 
 .chat-list__item {
-  font-size: 0.875rem;     /* pseudo légèrement plus grand */
+  font-size: 0.875rem;
   padding: 0.5rem 0.75rem;
   margin-bottom: 0.25rem;
   border-radius: 0.5rem;
@@ -17,6 +19,10 @@
   justify-content: space-between;
   align-items: center;
   transition: background-color 0.2s;
+
+  position: relative;
+  overflow: visible !important;
+  z-index: 100;
 }
 
 .chat-list__item:hover {
