@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { MeshBuilder, StandardMaterial, ArcRotateCamera, HemisphericLight,
          Vector3, Color3, ActionManager, Engine, Scene, GlowLayer } from "@babylonjs/core";
 import { Inspector } from "@babylonjs/inspector"
-import 'https://cdn.babylonjs.com/gui/babylon.gui.js'
+// import 'https://cdn.babylonjs.com/gui/babylon.gui.js'
 import { GridMaterial } from '@babylonjs/materials'
 import { BattleshipMesh } from '@/assets/BattleshipMesh'
 import { SceneCanvasProps, PlayerInfo, GameRefType, MatsRef } from '@/libs/battleshipTypes'
