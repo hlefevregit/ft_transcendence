@@ -1,38 +1,10 @@
 import React, { useRef, useEffect } from 'react';
-import { Engine, EngineOptions, Scene, SceneOptions, Mesh,
-         MeshBuilder, StandardMaterial, ArcRotateCamera,
-         HemisphericLight, Vector3, Color3, ActionManager } from "@babylonjs/core";
+import { MeshBuilder, StandardMaterial, ArcRotateCamera, HemisphericLight,
+         Vector3, Color3, ActionManager, Engine, Scene } from "@babylonjs/core";
 import { Inspector } from "@babylonjs/inspector"
 import { GridMaterial } from '@babylonjs/materials'
-import BattleshipMesh from '@/assets/BattleshipMesh'
-
-type SceneCanvasProps = {
-  engineOptions?: EngineOptions
-  sceneOptions?: SceneOptions
-  onRender?: (scene: Scene) => void
-  onSceneReady: (scene: Scene) => void
-}
-
-type PlayerInfo = {
-  obj: BattleshipMesh
-  ships: number[][] | null
-}
-
-type GameRefType = {
-  playing: PlayerInfo
-  waiting: PlayerInfo
-  table: Mesh
-  camera: ArcRotateCamera
-  light: HemisphericLight
-  mats: {
-    blue: StandardMaterial
-    red: StandardMaterial
-    white: StandardMaterial
-    grid: GridMaterial
-  }
-}
-
-// #############################################################################
+import { BattleshipMesh } from '@/assets/BattleshipMesh'
+import { SceneCanvasProps, PlayerInfo, GameRefType } from '@/libs/battleshipTypes'
 
 const Battleship = () => {
   const gameRef = useRef<GameRefType|null>(null);
@@ -40,23 +12,27 @@ const Battleship = () => {
   const guestName = "guest";
 
   const onClick = (ij:number) => {
-    console.log("[DEBUG] onCellClick called")
     if (!gameRef.current || !gameRef.current.waiting.ships)
       return;
     const {playing: {obj}, waiting: {ships}, mats: mats} = gameRef.current;
     const cell = obj.cells[ij];
 
-    cell.mesh.material = null;
-    for (const ship of ships) {
-      if (ship.includes(ij)) {
-        obj.cells[ij].mesh.material = mats.red;
+    cell.material = null;
+    for (const [ship, m] of ships) {
+      if (ship.has(ij)) {
+        ship.delete(ij);
+        obj.cells[ij].material = mats.red;
+
+        if (ship.size == 0) {
+          ships.delete([ship, m]);
+        }
         break;
       }
     }
-    if (!cell.mesh.material)
-      cell.mesh.material = mats.white;
+    if (!cell.material)
+      cell.material = mats.white;
 
-    cell.mesh.actionManager = null;
+    cell.actionManager = null;
     endTurn();
   }
 

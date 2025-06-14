@@ -3,8 +3,39 @@ import { Mesh, MeshBuilder, Scene, Vector3, ActionManager, ExecuteCodeAction,
 		StandardMaterial, TransformNode } from '@babylonjs/core'
 import { GridMaterial } from '@babylonjs/materials'
 import 'https://cdn.babylonjs.com/earcut.min.js'
+import { ShipTup } from '@/libs/battleshipTypes'
 
-class CellMesh extends TransformNode {
+class CellMesh extends Mesh {
+	private _i!: number
+	private _j!: number
+
+	constructor(name: string, i: number, j: number, parent: TransformNode) {
+		name = "c" + i + j + "-" + name;
+		const blueprint = MeshBuilder.CreateBox("tmp", {size:0.8, depth:0.3});
+		super(name, null, parent, blueprint);
+		blueprint.dispose();
+
+		this.i = i;
+		this.j = j;
+		this.position.z = -0.3;
+	}
+
+	get i() { return this._i }
+	set i(i: number) {
+		this._i = i;
+		this.position.x = i - 4.5;
+	}
+	
+	get j() { return this._j }
+	set j(j: number) {
+		this._j = j;
+		this.position.y = 4.75 - j;
+	}
+
+	ij() { return [this.i, this.j] }
+}
+
+class temp extends TransformNode {
 	mesh: Mesh
 	private _i!: number
 	private _j!: number
@@ -34,7 +65,7 @@ class CellMesh extends TransformNode {
 	ij() { return [this.i, this.j] }
 }
 
-export class ShipMesh extends TransformNode {
+class ShipMesh extends TransformNode {
 	size: number
 	mesh: Mesh
 	static outlined: ShipMesh | null = null
@@ -134,7 +165,6 @@ export class ShipMesh extends TransformNode {
 					ship.isRight = !ship.isRight;
 				break;
 			case "Enter":
-				console.log("Enter: collisions=%d", ShipMesh.collisions)
 				if (ShipMesh.collisions == 0) validate();
 				break;
 		}
@@ -142,7 +172,7 @@ export class ShipMesh extends TransformNode {
 }
 
 // Custom mesh encapsulating one Battleship player interface
-class BattleshipMesh extends TransformNode {
+export class BattleshipMesh extends TransformNode {
     pivot: Mesh
     screen: Mesh
     field: Mesh
@@ -167,7 +197,7 @@ class BattleshipMesh extends TransformNode {
 		actionManager.registerAction(new ExecuteCodeAction(
 			ActionManager.OnPickTrigger,
 			(event) => {
-				const cell = (event.source as Mesh).parent as CellMesh;
+				const cell = event.source as CellMesh;
 				const [i, j] = cell.ij();
 				if (this.isPlaying)
 					onClick(i*10 + j);
@@ -176,10 +206,10 @@ class BattleshipMesh extends TransformNode {
 		));
         for (let i=0; i < 10; i++) {
             for (let j=0; j < 10; j++) {
-				const cell = new CellMesh(name, i, j, scene);
-				cell.mesh.material = blue;
-                cell.parent = this.screen;
-				cell.mesh.actionManager = actionManager;
+				const cell = new CellMesh(name, i, j, this.screen);
+				cell.material = blue;
+                // cell.parent = this.screen;
+				cell.actionManager = actionManager;
                 this.cells.push(cell);
             }
         }
@@ -249,20 +279,18 @@ class BattleshipMesh extends TransformNode {
 	}
 
 	shipCoords() {
-		const coordsArr: number[][] = []
+		const coordsSet = new Set<ShipTup>()
 
-		for (const ship of this.ships) {
-			const coords = [];
+		for (const [m, ship] of this.ships.entries()) {
+			const coords: ShipTup = [new Set<number>(), m];
 			const pos = ship.i * 10 + ship.j;
 			const inc = ship.isRight ? 10 : 1;
 
 			for (let n=0; n < ship.size; n++)
-				coords.push(pos + n*inc);
-			coordsArr.push(coords);
+				coords[0].add(pos + n*inc);
+			coordsSet.add(coords);
 		}
 
-		return coordsArr;
+		return coordsSet;
 	}
 }
-
-export default BattleshipMesh;
