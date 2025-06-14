@@ -1,9 +1,9 @@
-import { Mesh, MeshBuilder, Scene, Vector3, ActionManager, ExecuteCodeAction,
-		IncrementValueAction, ValueCondition, KeyboardInfo, KeyboardEventTypes,
-		StandardMaterial, TransformNode } from '@babylonjs/core'
+import { Mesh, MeshBuilder, Scene, Vector3, ActionManager, ExecuteCodeAction, IncrementValueAction,
+		 ValueCondition, KeyboardInfo, KeyboardEventTypes, TransformNode, 
+		 StandardMaterial} from '@babylonjs/core'
 import { GridMaterial } from '@babylonjs/materials'
 import 'https://cdn.babylonjs.com/earcut.min.js'
-import { ShipTup } from '@/libs/battleshipTypes'
+import { ShipTup, MatsRef } from '@/libs/battleshipTypes'
 
 class CellMesh extends Mesh {
 	private _i!: number
@@ -87,7 +87,6 @@ class ShipMesh extends TransformNode {
 		this.mesh.rotation.z = Math.PI/2
 
 		this.parent = parent;
-		// this.position = new Vector3(i * 0.9, 0, -j * 0.9)
 
 		this.mesh.actionManager = new ActionManager(scene);
 		const action = new ExecuteCodeAction(ActionManager.OnPickTrigger, () => this.onClick());
@@ -180,7 +179,7 @@ export class BattleshipMesh extends TransformNode {
 	ships: ShipMesh[] = Array(5)
 	isPlaying: boolean = false
 
-    constructor(name: string, scene: Scene, onClick: (ij:number) => void, blue: StandardMaterial, grid: GridMaterial, position?: Vector3, rotation?: number) {
+    constructor(name: string, scene: Scene, onClick: (ij:number) => void, mats: MatsRef, grid: GridMaterial, position?: Vector3, rotation?: number) {
         super(name, scene, false);
 
 		// Cylinder pivot for the screen's rotating animation. Mostly aesthetic
@@ -207,8 +206,7 @@ export class BattleshipMesh extends TransformNode {
         for (let i=0; i < 10; i++) {
             for (let j=0; j < 10; j++) {
 				const cell = new CellMesh(name, i, j, this.screen);
-				cell.material = blue;
-                // cell.parent = this.screen;
+				cell.material = mats.blue;
 				cell.actionManager = actionManager;
                 this.cells.push(cell);
             }
@@ -293,4 +291,9 @@ export class BattleshipMesh extends TransformNode {
 
 		return coordsSet;
 	}
+
+	sinkShip(n: number, red:StandardMaterial) {
+
+	}
+
 }

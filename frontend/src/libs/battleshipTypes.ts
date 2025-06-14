@@ -1,5 +1,5 @@
 import { EngineOptions, SceneOptions, Scene, Mesh, ArcRotateCamera,
-		 HemisphericLight, StandardMaterial } from '@babylonjs/core'
+		 HemisphericLight, StandardMaterial, GlowLayer } from '@babylonjs/core'
 import { GridMaterial } from '@babylonjs/materials'
 import { BattleshipMesh } from '@/assets/BattleshipMesh'
 
@@ -17,16 +17,20 @@ export type PlayerInfo = {
   ships: Set<ShipTup> | null
 }
 
+export interface MatsRef {
+	blue: StandardMaterial
+	red: StandardMaterial
+	white: StandardMaterial
+	grid: GridMaterial
+    indic: StandardMaterial
+}
+
 export type GameRefType = {
   playing: PlayerInfo
   waiting: PlayerInfo
   table: Mesh
   camera: ArcRotateCamera
   light: HemisphericLight
-  mats: {
-    blue: StandardMaterial
-    red: StandardMaterial
-    white: StandardMaterial
-    grid: GridMaterial
-  }
+  mats: MatsRef
+  glow: GlowLayer
 }
