@@ -1,0 +1,112 @@
+/* src/styles/LiveChat/UserProfileCard.css */
+
+.user-profile-card {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 16rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
+.user-profile-card.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.user-profile-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.25rem 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.user-profile-card__pseudo {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #111827;
+}
+
+.user-profile-card__block-btn {
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  color: #ef4444;
+  cursor: pointer;
+}
+.user-profile-card__block-btn:hover {
+  color: #dc2626;
+}
+
+.user-profile-card__body {
+  display: flex;               /* row layout */
+  flex-direction: row;
+  padding: 0.25rem;
+}
+
+/* Matches section on left (75%) */
+.user-profile-card__matches {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.25rem;
+}
+
+/* Each match line */
+.match-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 1.2rem;
+  background: none;            /* no box */
+}
+
+/* Separator: fixed width */
+.match-separator {
+  width: 4rem;                 /* fixed—adjust as needed */
+  height: 2px;
+}
+
+/* Separator color by result */
+.win-card .match-separator    { background-color: #10b981; }
+.loss-card .match-separator   { background-color: #ef4444; }
+.draw-card .match-separator   { background-color: #e5e7eb; }
+
+.player-score,
+.opponent-score {
+  font-size: 0.75rem;
+  color: #111827;
+}
+
+/* Trophies section on right (25%) */
+.user-profile-card__trophies {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid #e5e7eb;
+  padding-left: 0.5rem;
+}
+
+.user-profile-card__trophies .stat-label {
+  font-size: 1rem;
+  color: #f59e0b;              /* trophy text in yellow */
+  margin-bottom: 0.25rem;
+}
+
+.user-profile-card__trophies .trophy-icon {
+  font-size: 2rem;             /* icon larger than text */
+  color: #f59e0b;
+}
