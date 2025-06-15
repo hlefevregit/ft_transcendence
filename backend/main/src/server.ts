@@ -17,6 +17,7 @@ import { setupFriendRoutes } from './routes/friends';
 import metricsPlugin from 'fastify-metrics';
 import { setup2FARoutes } from './routes/2fa';
 import { setupPongRoutes } from './routes/pong';
+import { setupMessageRoutes } from './routes/message';
 
 
 
@@ -44,7 +45,6 @@ const start = async () => {
     setupCors(fastify);
     setupJwt(fastify);
     setupWebsocket(fastify);
-    setupStaticFiles(fastify);
     fastify.register(prismaPlugin);
     await fastify.register(setupUserRoutes as any);
     
@@ -55,7 +55,9 @@ const start = async () => {
     await fastify.register(setupFriendRoutes as any);
     await fastify.register(setup2FARoutes as any);
     await fastify.register(setupPongRoutes as any); // Assurez-vous que cette fonction est définie dans votre code
-    
+    await fastify.register(setupMessageRoutes as any);
+
+    setupStaticFiles(fastify);
     await fastify.ready(); // ✅ après tous les .register()
     console.log(fastify.printRoutes());
     
