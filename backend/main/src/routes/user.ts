@@ -144,7 +144,7 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
     }
   )
 
-    // ─── GET /api/user/history ───
+  // ─── GET /api/user/history ───
   fastify.get(
     '/api/user/history',
     { preValidation: [fastify.authenticate] },
@@ -182,9 +182,9 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
       const matches = await Promise.all(
         games.map(async (g) => {
           const isP1 = g.player1Id === myPseudo;
-          const userScore     = isP1 ? g.player1Score   : g.player2Score;
-          const opponentScore = isP1 ? g.player2Score   : g.player1Score;
-          const opponentPseudo= isP1 ? g.player2Id      : g.player1Id;
+          const userScore = isP1 ? g.player1Score : g.player2Score;
+          const opponentScore = isP1 ? g.player2Score : g.player1Score;
+          const opponentPseudo = isP1 ? g.player2Id : g.player1Id;
 
           // avatar de l'adversaire
           const oppUser = await fastify.prisma.user.findUnique({
@@ -193,7 +193,7 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
           });
 
           // déterminer résultat d'après winnerId, pas le score
-          let result: 'win'|'loss'|'draw';
+          let result: 'win' | 'loss' | 'draw';
           if (g.winnerId === myPseudo) {
             result = 'win';
             wins++;
@@ -206,10 +206,10 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
 
           // formater la date jj/MM/yy
           const d = g.createdAt;
-          const day   = String(d.getDate()).padStart(2, '0');
+          const day = String(d.getDate()).padStart(2, '0');
           const month = String(d.getMonth() + 1).padStart(2, '0');
-          const year  = String(d.getFullYear()).slice(-2);
-          const date  = `${day}/${month}/${year}`;
+          const year = String(d.getFullYear()).slice(-2);
+          const date = `${day}/${month}/${year}`;
 
           return {
             id: g.id,
@@ -237,4 +237,72 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
       });
     }
   );
+
+  fastify.get(
+    '/api/users/:pseudo/history',
+    { preValidation: [fastify.authenticate] },
+    async (req, reply) => {
+      const targetPseudo = (req.params as any).pseudo as string;
+      // 1) Récupérer le pseudo / avatar du target
+      const target = await fastify.prisma.user.findUnique({
+        where: { pseudo: targetPseudo },
+        select: { id: true },
+      });
+      if (!target) {
+        return reply.status(404).send({ message: 'User not found' });
+      }
+      // 2) Récupérer les parties
+      const games = await fastify.prisma.gameResult.findMany({
+        where: {
+          OR: [{ player1Id: targetPseudo }, { player2Id: targetPseudo }],
+        },
+        orderBy: { createdAt: 'desc' },
+      });
+      // 3) Transformer en “history”
+      const history = await Promise.all(
+        games.map(async g => {
+          const isP1 = g.player1Id === targetPseudo;
+          const userScore = isP1 ? g.player1Score : g.player2Score;
+          const opponentScore = isP1 ? g.player2Score : g.player1Score;
+          const opponentPseudo = isP1 ? g.player2Id : g.player1Id;
+          // result
+          let result: 'win' | 'loss' | 'draw';
+          if (g.winnerId === targetPseudo) result = 'win';
+          else if (g.winnerId === opponentPseudo) result = 'loss';
+          else result = 'draw';
+          return {
+            id: g.id,
+            userScore,
+            opponentScore,
+            result,
+            date: g.createdAt.toISOString(), // ou formatte comme tu veux
+          };
+        })
+      );
+      return reply.send({ matches: history });
+    }
+  );
+
+  fastify.get(
+    '/api/users/:pseudo',
+    { preValidation: [fastify.authenticate] },
+    async (req, reply) => {
+      const pseudo = (req.params as any).pseudo as string
+
+      const u = await fastify.prisma.user.findUnique({
+        where: { pseudo },
+        select: { id: true, pseudo: true },
+      })
+
+      if (!u) {
+        return reply.status(404).send({ message: 'Utilisateur introuvable' })
+      }
+
+      return reply.send({
+        id: u.id,
+        username: u.pseudo,
+        trophies: 0,
+      })
+    }
+  )
 }
