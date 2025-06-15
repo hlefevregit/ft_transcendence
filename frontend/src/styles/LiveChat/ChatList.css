@@ -40,3 +40,12 @@
   text-align: center;
   margin-top: 1rem;
 }
+
+.chat-list__unread {
+  background-color: #ef4444;
+  color: white;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  padding: 0 0.4rem;
+  margin-left: auto;
+}

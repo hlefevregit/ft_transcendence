@@ -2,23 +2,45 @@
 import { useState, KeyboardEvent } from 'react'
 import ChatList from './ChatList'
 import Conversation from './Conversation'
-import { ChatUser } from '../../types'
+import type { ChatUser } from '../../types'
+import { getUserByPseudo } from './api'
 import '../../styles/LiveChat/ChatPanel.css'
 
 interface ChatPanelProps {
+  contacts: ChatUser[]
+  onSelect: (user: ChatUser) => void
   onClose: () => void
 }
 
-export default function ChatPanel({ onClose }: ChatPanelProps) {
+export default function ChatPanel({
+  contacts,
+  onSelect,
+  onClose,
+}: ChatPanelProps) {
+  // utilisateur actuellement en cours de discussion
   const [selectedUser, setSelectedUser] = useState<ChatUser | null>(null)
+  // valeur tapée dans le champ
+  const [searchText, setSearchText] = useState('')
+  // message d'erreur à afficher si pseudo introuvable
+  const [error, setError] = useState('')
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      const name = e.currentTarget.value.trim()
-      if (name) {
-        setSelectedUser({ id: 0, username: name, trophies: 0 })
-        e.currentTarget.value = ''
-      }
+  const handleSelect = (user: ChatUser) => {
+    onSelect(user)
+    setSelectedUser(user)
+    setError('')
+  }
+
+  const handleKeyDown = async (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== 'Enter') return
+    const pseudo = searchText.trim()
+    if (!pseudo) return
+
+    try {
+      const user = await getUserByPseudo(pseudo)
+      handleSelect(user)
+      setSearchText('')  // on ne vide l'input qu'en cas de succès
+    } catch {
+      setError("Utilisateur introuvable")
     }
   }
 
@@ -27,11 +49,23 @@ export default function ChatPanel({ onClose }: ChatPanelProps) {
       <div className="chat-panel__sidebar">
         <input
           type="text"
-          placeholder="New message to..."
+          placeholder="Nouveau message à..."
           className="chat-panel__search"
+          value={searchText}
+          onChange={e => {
+            setSearchText(e.target.value)
+            setError('')
+          }}
           onKeyDown={handleKeyDown}
         />
-        <ChatList className="chat-panel__list" onSelect={setSelectedUser} />
+        {error && (
+          <p className="chat-panel__error">{error}</p>
+        )}
+        <ChatList
+          contacts={contacts}
+          onSelect={handleSelect}
+          className="chat-panel__list"
+        />
       </div>
 
       <div className="chat-panel__content">
@@ -39,13 +73,13 @@ export default function ChatPanel({ onClose }: ChatPanelProps) {
           <span className="chat-panel__title">
             {selectedUser ? selectedUser.username : ''}
           </span>
-            <button
+          <button
             onClick={onClose}
             className="chat-panel__close-button"
-            aria-label="Close chat"
-            >
+            aria-label="Fermer le chat"
+          >
             ✕
-            </button>
+          </button>
         </div>
 
         <Conversation
