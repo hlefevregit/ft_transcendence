@@ -11,7 +11,7 @@ export interface Message {
   content: string
   senderId: number
   receiverId: number
-  createdAt: string
+  createdAt: number
 }
 
 export interface Invitation {

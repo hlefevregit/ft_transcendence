@@ -1,23 +1,36 @@
 // src/components/LiveChat/ChatLauncher.tsx
 import { useState } from 'react'
-import ChatPanel from './ChatPanel'
 import { MdMessage } from 'react-icons/md'
+import ChatPanel from './ChatPanel'
+import type { ChatUser } from '../../types'        // ← ajouté
 import '../../styles/LiveChat/ChatLauncher.css'
+import { useChatStore } from './ChatContext'
 
 export default function ChatLauncher() {
   const [open, setOpen] = useState(false)
+  const { recentContacts, setRecentContacts } = useChatStore()
+
+  const handleSelect = (user: ChatUser) => {
+    if (!recentContacts.find(u => u.id === user.id)) {
+      setRecentContacts([...recentContacts, user])
+    }
+    setOpen(true)
+  }
 
   return (
     <>
-      {/* Affiche le panneau si open=true */}
-      {open && <ChatPanel onClose={() => setOpen(false)} />}
-
-      {/* Bouton fixe bas-gauche pour ouvrir (disparu quand open=true) */}
+      {open && (
+        <ChatPanel
+          contacts={recentContacts}
+          onSelect={handleSelect}
+          onClose={() => setOpen(false)}
+        />
+      )}
       {!open && (
         <button
           onClick={() => setOpen(true)}
           className="chat-launcher-button"
-          aria-label="Open chat"
+          aria-label="Ouvrir le chat"
         >
           <MdMessage size={24} />
         </button>

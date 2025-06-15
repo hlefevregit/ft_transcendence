@@ -1,11 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-// import './styles/style.css'; // ton style custom
-import './index.css'; // tailwind etc.
+// src/main.tsx
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+import './index.css'
+import { ChatProvider } from './components/LiveChat/ChatContext'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-);
+    <ChatProvider>
+      <App />
+    </ChatProvider>
+  </React.StrictMode>
+)

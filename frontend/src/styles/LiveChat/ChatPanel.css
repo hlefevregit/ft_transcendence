@@ -95,3 +95,10 @@
 
   overflow: visible !important;
 }
+
+
+.chat-panel__error {
+  color: #ef4444;      /* rouge pour l’erreur */
+  font-size: 0.875rem; /* text-sm */
+  margin: 0.25rem 0 0.5rem 0;
+}
