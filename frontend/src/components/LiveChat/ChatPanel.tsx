@@ -4,28 +4,29 @@ import ChatList from './ChatList'
 import Conversation from './Conversation'
 import type { ChatUser } from '../../types'
 import { getUserByPseudo } from './api'
+import { useChatStore } from './ChatContext'
 import '../../styles/LiveChat/ChatPanel.css'
 
 interface ChatPanelProps {
-  contacts: ChatUser[]
-  onSelect: (user: ChatUser) => void
   onClose: () => void
 }
 
-export default function ChatPanel({
-  contacts,
-  onSelect,
-  onClose,
-}: ChatPanelProps) {
-  // utilisateur actuellement en cours de discussion
-  const [selectedUser, setSelectedUser] = useState<ChatUser | null>(null)
-  // valeur tapée dans le champ
+export default function ChatPanel({ onClose }: ChatPanelProps) {
+  const {
+    recentContacts,
+    setRecentContacts,
+    selectedUser,
+    setSelectedUser,
+  } = useChatStore()
+
   const [searchText, setSearchText] = useState('')
-  // message d'erreur à afficher si pseudo introuvable
   const [error, setError] = useState('')
 
   const handleSelect = (user: ChatUser) => {
-    onSelect(user)
+    // si nouveau contact, on l'ajoute à recentContacts
+    if (!recentContacts.find(u => u.id === user.id)) {
+      setRecentContacts([...recentContacts, user])
+    }
     setSelectedUser(user)
     setError('')
   }
@@ -38,9 +39,9 @@ export default function ChatPanel({
     try {
       const user = await getUserByPseudo(pseudo)
       handleSelect(user)
-      setSearchText('')  // on ne vide l'input qu'en cas de succès
+      setSearchText('')
     } catch {
-      setError("Utilisateur introuvable")
+      setError('Utilisateur introuvable')
     }
   }
 
@@ -58,11 +59,9 @@ export default function ChatPanel({
           }}
           onKeyDown={handleKeyDown}
         />
-        {error && (
-          <p className="chat-panel__error">{error}</p>
-        )}
+        {error && <p className="chat-panel__error">{error}</p>}
         <ChatList
-          contacts={contacts}
+          contacts={recentContacts}
           onSelect={handleSelect}
           className="chat-panel__list"
         />
@@ -71,7 +70,7 @@ export default function ChatPanel({
       <div className="chat-panel__content">
         <div className="chat-panel__header">
           <span className="chat-panel__title">
-            {selectedUser ? selectedUser.username : ''}
+            {selectedUser?.username || ''}
           </span>
           <button
             onClick={onClose}
@@ -82,11 +81,7 @@ export default function ChatPanel({
           </button>
         </div>
 
-        <Conversation
-          user={selectedUser}
-          meId={1}
-          className="chat-panel__conversation"
-        />
+        <Conversation className="chat-panel__conversation" />
       </div>
     </div>
   )

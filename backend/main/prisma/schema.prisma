@@ -30,6 +30,12 @@ model User {
   // Friend requests
   sentRequests     FriendRequest[] @relation("SentRequests")
   receivedRequests FriendRequest[] @relation("ReceivedRequests")
+
+  // Messages
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+  blockedUsers Block[] @relation("BlockedUsers")
+  blockedBy    Block[] @relation("BlockedBy")
 }
 
 model FriendRequest {
@@ -54,4 +60,40 @@ model GameResult {
   player1Score Int
   player2Score Int
   createdAt    DateTime @default(now())
+}
+
+
+model Block {
+  id         Int      @id @default(autoincrement())
+  blocker    User     @relation("BlockedUsers", fields: [blockerId], references: [id])
+  blockerId  Int
+  blocked    User     @relation("BlockedBy",    fields: [blockedId],  references: [id])
+  blockedId  Int
+  createdAt  DateTime @default(now())
+
+  @@unique([blockerId, blockedId])
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  from       User     @relation("SentMessages",     fields: [fromId], references: [id])
+  fromId     Int
+  to         User     @relation("ReceivedMessages", fields: [toId],   references: [id])
+  toId       Int
+  content    String
+  createdAt  DateTime @default(now())
+
+  @@index([fromId])
+  @@index([toId])
+}
+
+model ConversationState {
+  readerId     Int
+  otherId      Int
+  lastReadId   Int      @default(0)
+  updatedAt    DateTime @updatedAt
+
+  @@id([readerId, otherId])
+  @@index([readerId])
+  @@index([otherId])
 }
