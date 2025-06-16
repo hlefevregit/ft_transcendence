@@ -1,4 +1,4 @@
-// src/contexts/ChatContext.tsx
+// src/components/LiveChat/ChatContext.tsx
 import React, {
   createContext,
   useContext,
@@ -11,11 +11,11 @@ import type { ChatUser, Message } from '../../types'
 import { getMessagesWith } from './api'
 
 interface ChatStore {
-  // panel
+  // panneau ouvert ou fermé
   open: boolean
   setOpen: (b: boolean) => void
 
-  // conversation courante
+  // conversation en cours
   selectedUser: ChatUser | null
   setSelectedUser: (u: ChatUser | null) => void
 
@@ -27,10 +27,13 @@ interface ChatStore {
   messages: Record<number, Message[]>
   setMessagesFor: (userId: number, ms: Message[]) => void
 
-  // compteurs unread
+  // compteurs de non-lus
   unreadCounts: Record<number, number>
   incrementUnread: (userId: number) => void
   resetUnread: (userId: number) => void
+
+  // vider tout au logout/login
+  clearStore: () => void
 }
 
 const ChatContext = createContext<ChatStore | undefined>(undefined)
@@ -38,39 +41,45 @@ const ChatContext = createContext<ChatStore | undefined>(undefined)
 export function ChatProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<ChatUser | null>(null)
+
   const [recentContacts, setRecentContacts] = useState<ChatUser[]>(() => {
     try {
-      return JSON.parse(localStorage.getItem('recentContacts')! ) as ChatUser[]
+      return JSON.parse(localStorage.getItem('recentContacts') || '[]')
     } catch {
       return []
     }
   })
+
   const [messages, setMessages] = useState<Record<number, Message[]>>(() => {
     try {
-      return JSON.parse(localStorage.getItem('chatMessages')!) as Record<
-        number,
-        Message[]
-      >
+      return JSON.parse(localStorage.getItem('chatMessages') || '{}')
     } catch {
       return {}
     }
   })
-  const [unreadCounts, setUnreadCounts] = useState<Record<number, number>>({})
 
-  // Persister recentContacts & messages & unreadCounts
-  useEffect(
-    () => localStorage.setItem('recentContacts', JSON.stringify(recentContacts)),
-    [recentContacts]
-  )
-  useEffect(
-    () => localStorage.setItem('chatMessages', JSON.stringify(messages)),
-    [messages]
-  )
-  useEffect(
-    () => localStorage.setItem('unreadCounts', JSON.stringify(unreadCounts)),
-    [unreadCounts]
+  const [unreadCounts, setUnreadCounts] = useState<Record<number, number>>(
+    () => {
+      try {
+        return JSON.parse(localStorage.getItem('unreadCounts') || '{}')
+      } catch {
+        return {}
+      }
+    }
   )
 
+  // persist to localStorage
+  useEffect(() => {
+    localStorage.setItem('recentContacts', JSON.stringify(recentContacts))
+  }, [recentContacts])
+  useEffect(() => {
+    localStorage.setItem('chatMessages', JSON.stringify(messages))
+  }, [messages])
+  useEffect(() => {
+    localStorage.setItem('unreadCounts', JSON.stringify(unreadCounts))
+  }, [unreadCounts])
+
+  // helpers
   const setMessagesFor = (userId: number, ms: Message[]) => {
     setMessages(prev => ({ ...prev, [userId]: ms }))
   }
@@ -84,17 +93,37 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     setUnreadCounts(prev => ({ ...prev, [userId]: 0 }))
   }
 
-  // Auto-ouverture : dès qu'un unreadCount passe >0
+  const clearStore = () => {
+    localStorage.removeItem('recentContacts')
+    localStorage.removeItem('chatMessages')
+    localStorage.removeItem('unreadCounts')
+    setRecentContacts([])
+    setMessages({})
+    setUnreadCounts({})
+    setSelectedUser(null)
+    setOpen(false)
+  }
+
+  // clear on login/logout (token change)
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'authToken') clearStore()
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [])
+
+  // ouvre automatiquement sur un message non-lu
   useEffect(() => {
     if (!open) {
-      for (const [uid, cnt] of Object.entries(unreadCounts)) {
+      for (const [uidStr, cnt] of Object.entries(unreadCounts)) {
+        const uid = Number(uidStr)
         if (cnt > 0) {
-          const id = Number(uid)
-          const user = recentContacts.find(u => u.id === id)
-          if (user) {
-            setSelectedUser(user)
+          const u = recentContacts.find(u => u.id === uid)
+          if (u) {
+            setSelectedUser(u)
             setOpen(true)
-            resetUnread(id)
+            resetUnread(uid)
           }
           break
         }
@@ -102,19 +131,14 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     }
   }, [unreadCounts, open, recentContacts])
 
-  // Polling global pour capter tous les messages entrants
-  // On garde un sinceId par contact en ref
+  // polling par contact
   const sinceRef = useRef<Record<number, number>>({})
-
   useEffect(() => {
-    // on poll pour chaque contact récent
     const timers: Record<number, number> = {}
-    for (const user of recentContacts) {
-      const uid = user.id
-      // initial since
+    for (const u of recentContacts) {
+      const uid = u.id
       sinceRef.current[uid] = sinceRef.current[uid] || 0
 
-      // setup polling
       timers[uid] = window.setInterval(async () => {
         try {
           const { messages: batch, lastId } = await getMessagesWith(
@@ -122,15 +146,11 @@ export function ChatProvider({ children }: { children: ReactNode }) {
             sinceRef.current[uid]
           )
           if (batch.length > 0) {
-            // ajoute toujours aux messages
             setMessages(prev => ({
               ...prev,
               [uid]: [...(prev[uid] || []), ...batch],
             }))
-            // si c'est pour la conv ouverte, on ne marque pas unread
-            if (open && selectedUser?.id === uid) {
-              // nothing, on lit direct
-            } else {
+            if (!(open && selectedUser?.id === uid)) {
               incrementUnread(uid)
             }
             sinceRef.current[uid] = lastId
@@ -138,10 +158,9 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         } catch (err) {
           console.error('Polling error for', uid, err)
         }
-      }, 10_000)
+      }, 10000)
     }
     return () => {
-      // cleanup tous les timers
       Object.values(timers).forEach(clearInterval)
     }
   }, [recentContacts, open, selectedUser])
@@ -160,6 +179,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         unreadCounts,
         incrementUnread,
         resetUnread,
+        clearStore,
       }}
     >
       {children}

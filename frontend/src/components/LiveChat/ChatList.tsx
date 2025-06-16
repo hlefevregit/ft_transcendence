@@ -2,6 +2,7 @@
 import { useState, useRef } from 'react'
 import type { ChatUser } from '../../types'
 import { useChatStore } from './ChatContext'
+import { UserProfileCard } from './UserProfileCard'
 import '../../styles/LiveChat/ChatList.css'
 
 interface ChatListProps {
@@ -29,6 +30,11 @@ export default function ChatList({
     }
   }
 
+  const closeProfile = () => {
+    cancelHover()
+    setProfileUser(null)
+  }
+
   return (
     <div className={`chat-list ${className}`}>
       {contacts.length === 0 ? (
@@ -41,10 +47,7 @@ export default function ChatList({
             onClick={() => onSelect(user)}
             onDoubleClick={() => setProfileUser(user)}
             onMouseEnter={() => startHover(user)}
-            onMouseLeave={() => {
-              cancelHover()
-              setProfileUser(null)
-            }}
+            onMouseLeave={closeProfile}
             style={{ position: 'relative', overflow: 'visible' }}
           >
             <span>{user.username}</span>
@@ -53,9 +56,15 @@ export default function ChatList({
                 {unreadCounts[user.id]}
               </span>
             )}
+            {profileUser?.id === user.id && (
+              <UserProfileCard
+                user={user}
+                onClose={closeProfile}
+              />
+            )}
           </div>
         ))
       )}
     </div>
-)
+  )
 }

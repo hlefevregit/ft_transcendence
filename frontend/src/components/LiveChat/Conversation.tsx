@@ -2,23 +2,23 @@
 import { useRef, useEffect } from 'react'
 import ChatInput from './ChatInput'
 import { useConversationMessages } from '../../hooks/useConversationMessages'
+import { useChatStore } from './ChatContext'
 import type { ChatUser } from '../../types'
 import '../../styles/LiveChat/Conversation.css'
+import { getCurrentUser } from './api'
+
 
 interface ConversationProps {
-  user: ChatUser | null
-  meId: number
   className?: string
 }
 
-export default function Conversation({
-  user,
-  meId,
-  className = '',
-}: ConversationProps) {
+export default function Conversation({ className = '' }: ConversationProps) {
+  const { selectedUser } = useChatStore()
+  const { id: meId } = getCurrentUser()
+
   const { messages, sendMessage } = useConversationMessages(
-    user?.id ?? null,
-    10_000,
+    selectedUser?.id ?? null,
+    1000,
     meId
   )
 
@@ -31,7 +31,7 @@ export default function Conversation({
   return (
     <div className={`chat-conversation ${className}`}>
       <div className="chat-conversation__messages" ref={containerRef}>
-        {!user ? (
+        {!selectedUser ? (
           <p className="chat-conversation__placeholder">
             Sélectionnez un contact
           </p>
@@ -54,7 +54,7 @@ export default function Conversation({
           ))
         )}
       </div>
-      <ChatInput onSend={sendMessage} disabled={!user} />
+      <ChatInput onSend={sendMessage} disabled={!selectedUser} />
     </div>
   )
 }
