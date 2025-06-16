@@ -1,4 +1,3 @@
-// src/components/LiveChat/api.ts
 import type { ChatUser, Message as DomainMessage } from '../../types'
 
 const TOKEN_KEY = 'authToken'
@@ -36,6 +35,11 @@ export async function getMessagesWith(
     `/api/messages?with=${userId}&sinceId=${sinceId}`,
     { headers: { Authorization: `Bearer ${getAuthToken()}` } }
   )
+
+  // si blocage : on renvoie un batch vide silencieusement
+  if (resp.status === 403) {
+    return { messages: [], lastId: sinceId }
+  }
   if (!resp.ok) throw new Error(await resp.text())
 
   const { lastId, messages: apiMsgs } = (await resp.json()) as {
@@ -57,7 +61,7 @@ export async function getMessagesWith(
 export async function sendMessageTo(
   userId: number,
   text: string
-): Promise<DomainMessage> {
+): Promise<DomainMessage | null> {
   const resp = await fetch('/api/messages', {
     method: 'POST',
     headers: {
@@ -66,6 +70,11 @@ export async function sendMessageTo(
     },
     body: JSON.stringify({ to: userId, content: text }),
   })
+
+  // si blocage : on ne renvoie rien et on n'affiche pas d’erreur
+  if (resp.status === 403) {
+    return null
+  }
   if (!resp.ok) throw new Error(await resp.text())
 
   const m = (await resp.json()) as APIMessage
@@ -76,6 +85,23 @@ export async function sendMessageTo(
     content: m.content,
     createdAt: m.createdAt,
   }
+}
+
+// ——— Blocage / Déblocage ———
+export async function blockUser(userId: number): Promise<void> {
+  const resp = await fetch(`/api/users/${userId}/block`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${getAuthToken()}` },
+  })
+  if (!resp.ok) throw new Error(await resp.text())
+}
+
+export async function unblockUser(userId: number): Promise<void> {
+  const resp = await fetch(`/api/users/${userId}/block`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${getAuthToken()}` },
+  })
+  if (!resp.ok) throw new Error(await resp.text())
 }
 
 // ——— Historique de parties ———
@@ -102,4 +128,50 @@ export async function getUserByPseudo(pseudo: string): Promise<ChatUser> {
   })
   if (!resp.ok) throw new Error(await resp.text())
   return (await resp.json()) as ChatUser
+}
+
+// ——— Marquer comme lu ———
+export async function markAsRead(
+  otherId: number,
+  lastReadId: number
+): Promise<void> {
+  const resp = await fetch(`/api/conversations/${otherId}/read`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAuthToken()}`,
+    },
+    body: JSON.stringify({ lastReadId }),
+  })
+  if (!resp.ok) throw new Error(await resp.text())
+}
+
+// ——— Récupérer tous les compteurs de non-lus ———
+export async function getUnreadCounts(): Promise<Record<number, number>> {
+  const resp = await fetch('/api/conversations/unreadCounts', {
+    headers: { Authorization: `Bearer ${getAuthToken()}` },
+  })
+  if (!resp.ok) throw new Error(await resp.text())
+  const { unreadCounts } = await resp.json() as {
+    unreadCounts: Record<number, number>
+  }
+  return unreadCounts
+}
+
+// ——— Récupérer la liste des IDs bloqués par un user ———
+export async function getBlockedUsers(userId: number): Promise<number[]> {
+  const resp = await fetch(`/api/users/${userId}/blocked`, {
+    headers: { Authorization: `Bearer ${getAuthToken()}` },
+  })
+  if (!resp.ok) throw new Error(await resp.text())
+  const { blockedUsers } = (await resp.json()) as { blockedUsers: number[] }
+  return blockedUsers
+}
+
+export function getCurrentUser(): { id: number } {
+  const token = localStorage.getItem('authToken')
+  if (!token) throw new Error('No auth token')
+  const [, payloadBase64] = token.split('.')
+  const payload = JSON.parse(atob(payloadBase64))
+  return { id: Number(payload.sub) }  // ou payload.userId selon ce que vous encodez
 }

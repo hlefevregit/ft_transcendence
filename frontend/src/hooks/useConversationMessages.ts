@@ -1,62 +1,117 @@
 // src/hooks/useConversationMessages.ts
-import { useEffect, useRef } from 'react'
-import { getMessagesWith, sendMessageTo } from '../components/LiveChat/api'
+import { useState, useEffect, useRef } from 'react'
+import {
+  getMessagesWith,
+  sendMessageTo,
+  markAsRead,
+} from '../components/LiveChat/api'
 import { useChatStore } from '../components/LiveChat/ChatContext'
-import type { Message } from '../types'
+import type { Message as DomainMessage, ChatUser } from '../types'
+
+/**
+ * On enrichit DomainMessage d’un champ senderPseudo
+ * et on déduplique via seenIds
+ */
+export interface MessageWithSender extends DomainMessage {
+  senderPseudo: string
+}
 
 export function useConversationMessages(
-  userId: number | null,
+  otherId: number | null,
   pollIntervalMs: number,
   meId: number
 ): {
-  messages: Message[]
+  messages: MessageWithSender[]
   sendMessage: (text: string) => Promise<void>
 } {
-  const { messages, setMessagesFor } = useChatStore()
-  const sinceRef = useRef<Record<number, number>>({})
+  const { recentContacts, resetUnread } = useChatStore()
+  const [messages, setMessages] = useState<MessageWithSender[]>([])
+  const seenIds = useRef<Set<number>>(new Set())
 
   useEffect(() => {
-    if (userId === null) return
+    if (otherId === null) return
     let active = true
-    const uid = userId
+    let since = 0
 
-    // 1) chargement initial
-    getMessagesWith(uid, 0).then(({ messages: all, lastId }) => {
-      if (!active) return
-      setMessagesFor(uid, all)
-      sinceRef.current[uid] = lastId
+    // reset state à chaque conversation
+    seenIds.current.clear()
+    setMessages([])
+
+    const enrich = (m: DomainMessage): MessageWithSender => ({
+      ...m,
+      senderPseudo:
+        m.senderId === meId
+          ? 'Moi'
+          : recentContacts.find((u: ChatUser) => u.id === m.senderId)
+              ?.username ?? 'Inconnu',
     })
 
-    // 2) polling
-    const id = setInterval(() => {
-      const since = sinceRef.current[uid] ?? 0
-      getMessagesWith(uid, since)
-        .then(({ messages: batch, lastId }) => {
-          if (!active || batch.length === 0) return
-          // on n’ajoute que ceux de l’autre
-          const others = batch.filter(m => m.senderId !== meId)
-          if (others.length) {
-            setMessagesFor(uid, [...(messages[uid] || []), ...others])
-          }
-          sinceRef.current[uid] = lastId
-        })
-        .catch(console.error)
-    }, pollIntervalMs)
+    const addBatch = (batch: DomainMessage[]) => {
+      const nouveaux = batch
+        .filter(m => !seenIds.current.has(m.id))
+        .map(enrich)
+      if (nouveaux.length === 0) return
+      nouveaux.forEach(m => seenIds.current.add(m.id))
+      setMessages(prev => [...prev, ...nouveaux])
+    }
+
+    const poll = async () => {
+      if (!active) return
+      try {
+        const { messages: batch, lastId } = await getMessagesWith(
+          otherId,
+          since
+        )
+        since = lastId
+        const others = batch.filter(m => m.senderId !== meId)
+        addBatch(others)
+        if (others.length) {
+          await markAsRead(otherId, lastId)
+          resetUnread(otherId)
+        }
+      } catch (err) {
+        console.error('Polling error', err)
+      } finally {
+        if (active) setTimeout(poll, pollIntervalMs)
+      }
+    }
+
+    ;(async () => {
+      try {
+        const { messages: initBatch, lastId } = await getMessagesWith(
+          otherId,
+          0
+        )
+        since = lastId
+        addBatch(initBatch.filter(m => m.senderId !== meId))
+        await markAsRead(otherId, lastId)
+        resetUnread(otherId)
+      } catch (err) {
+        console.error('Initial fetch error', err)
+      }
+      poll()
+    })()
 
     return () => {
       active = false
-      clearInterval(id)
     }
-  }, [userId, pollIntervalMs, meId, messages, setMessagesFor])
+  }, [otherId, meId, pollIntervalMs, recentContacts, resetUnread])
 
   const sendMessage = async (text: string) => {
-    if (userId === null) return
-    const msg = await sendMessageTo(userId, text)
-    setMessagesFor(userId, [...(messages[userId] || []), msg])
+    if (otherId === null) return
+    const m = await sendMessageTo(otherId, text)
+    if (!m) return
+    if (!seenIds.current.has(m.id)) {
+      seenIds.current.add(m.id)
+      setMessages(prev => [
+        ...prev,
+        {
+          ...m,
+          senderPseudo: 'Moi',
+        },
+      ])
+    }
   }
 
-  return {
-    messages: userId !== null ? messages[userId] || [] : [],
-    sendMessage,
-  }
+  return { messages, sendMessage }
 }
