@@ -96,7 +96,7 @@ export const	setupBabylon = async (pong: game.pongStruct, canvasRef: any): Promi
 	
 	// Enable ambient occlusion
 	sceneInstance.createDefaultEnvironment();
-	const ssaoRenderingPipeline = new baby.SSAORenderingPipeline("ssao", sceneInstance, 1.0);
+	const ssaoRenderingPipeline = new baby.SSAORenderingPipeline("ssao", sceneInstance,1);
 	ssaoRenderingPipeline.scene.setRenderingOrder(0, null, null, null);
 	sceneInstance.postProcessRenderPipelineManager.attachCamerasToRenderPipeline("ssao", sceneInstance.cameras);
 	

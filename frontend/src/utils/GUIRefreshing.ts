@@ -52,23 +52,24 @@ export const	updateGUIVisibilityStates =
 	states: game.states
 ): void =>
 {
-	const setUIState = (ui: baby.Container | undefined, stateToCheck: game.states): void =>
+	const setUIState =
+	(
+		ui: baby.Container | undefined,
+		statesToCheck: game.states | game.states[]
+	): void =>
 	{
-        if (ui === undefined || !pong.current.guiTexture) return;
-        
-        const	shouldShow: boolean = states === stateToCheck;
-        const	isCurrentlyAdded: boolean = pong.current.guiTexture.getDescendants().includes(ui);
-        
-        if		(shouldShow && !isCurrentlyAdded) pong.current.guiTexture.addControl(ui);
-        else if	(!shouldShow && isCurrentlyAdded) pong.current.guiTexture.removeControl(ui);
-    }
+		if (ui === undefined || !pong.current.guiTexture) return;
+
+		const	statesArray = Array.isArray(statesToCheck) ? statesToCheck : [statesToCheck];
+		const	shouldShow: boolean = statesArray.includes(states);
+		const	isCurrentlyAdded: boolean = pong.current.guiTexture.getDescendants().includes(ui);
+
+		if		(shouldShow && !isCurrentlyAdded) pong.current.guiTexture.addControl(ui);
+		else if	(!shouldShow && isCurrentlyAdded) pong.current.guiTexture.removeControl(ui);
+	}
 	setUIState(pong.current.mainMenuGUI, game.states.main_menu);
 	setUIState(pong.current.settingsGUI, game.states.settings);
 	setUIState(pong.current.pongSettingsGUI, game.states.game_settings);
-	setUIState(pong.current.arenaGUI, game.states.in_game);
-	setUIState(pong.current.arenaGUI, game.states.in_game1);
-	setUIState(pong.current.arenaGUI, game.states.in_game2);
-	setUIState(pong.current.arenaGUI, game.states.tournament_final);
 	setUIState(pong.current.countdownGUI, game.states.countdown);
 	setUIState(pong.current.finishedGameGUI, game.states.game_finished);
 	setUIState(pong.current.hostOrJoinGUI, game.states.host_or_join);
@@ -78,6 +79,14 @@ export const	updateGUIVisibilityStates =
 	setUIState(pong.current.waitingScreenGUI, game.states.hosting_waiting_players);
 	setUIState(pong.current.bracketGUI, game.states.tournament_bracket_preview);
 	setUIState(pong.current.inputUsernameGUI, game.states.input_username);
+
+	setUIState(pong.current.arenaGUI,
+	[
+		game.states.in_game,
+		game.states.in_game1,
+		game.states.in_game2,
+		game.states.tournament_final
+	]);
 
 	pong.current.guiTexture?.removeControl(pong.current.debugGUI as baby.Container);
 	pong.current.guiTexture?.addControl(pong.current.debugGUI as baby.Container);

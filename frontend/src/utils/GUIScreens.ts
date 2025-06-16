@@ -616,6 +616,12 @@ export const	instantiateCountdownGUI = (pong: React.RefObject<game.pongStruct>):
 	pong.current.countdownGUI = countdownGUI;
 }
 
+// ****************************************************************************** //
+//                                                                                //
+//                                  ARENAGUI                                      //
+//                                                                                //
+// ****************************************************************************** //
+
 export const	instantiateArenaGUI = (pong: React.RefObject<game.pongStruct>): void =>
 {
 	// Canvas that will be used for the GUI
