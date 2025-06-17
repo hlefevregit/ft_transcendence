@@ -10,7 +10,7 @@ on:
     branches:
       - main
       - battleship
-      - Tournament
+      - LiveChat
   workflow_dispatch:
 
 jobs:
@@ -20,7 +20,7 @@ jobs:
     if: |
       github.ref == 'refs/heads/main' ||
       github.ref == 'refs/heads/battleship' ||
-      github.ref == 'refs/heads/Tournament' ||
+      github.ref == 'refs/heads/LiveChat' ||
       github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout code
@@ -59,7 +59,7 @@ jobs:
         run: |
           if [[ "${{ github.ref_name }}" == "main" || \
                 "${{ github.ref_name }}" == "battleship" || \
-                "${{ github.ref_name }}" == "Tournament" ]]; then
+                "${{ github.ref_name }}" == "LiveChat" ]]; then
             npx semantic-release
             git describe --exact-match --tags HEAD > version || true
           fi
