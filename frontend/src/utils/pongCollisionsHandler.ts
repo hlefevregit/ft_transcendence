@@ -63,7 +63,7 @@ export const	makeBallBounce =
 			else if (pong.current.isInGame2)
 				states.current = game.states.in_game2;
 			else if (pong.current.isFinal)
-				states.current = game.states.tournament_final;
+				states.current = game.states.in_final;
 		}
 		else
 			states.current = game.states.in_game;

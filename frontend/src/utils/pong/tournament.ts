@@ -241,7 +241,6 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 						pong.current.tournamentRound = 2;
 						pong.current.tournamentGame = 2;
 						pong.current.tournamentFinalist1 = winner;
-						alert(`Winner of game 1: ${winner}`);
 						states.current = game.states.waiting_to_start_final;
 						break;
 					}
@@ -255,29 +254,36 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 						pong.current.tournamentRound = 2;
 						pong.current.tournamentGame = 2;
 						pong.current.tournamentFinalist2 = winner;
-						alert(`Winner of game 2: ${winner}`);
 						states.current = game.states.waiting_to_start_final;
 						break;
 					}
 
-					case 'waiting_to_start_final': {
-						if (data.player1) {
-							pong.current.tournamentFinalist1 = data.player1Id;
-							pong.current.game1Finished = true;
-						}
-						if (data.player2) {
-							pong.current.tournamentFinalist2 = data.player2Id;
-							pong.current.game2Finished = true;
-						}
+					case 'waiting_for_opponent': {
+						console.log("🏠 En attente de l'adversaire pour le tournoi:", data.gameId);
 						break;
 
 					}
 
-					case 'start_final': {
+					case 'start_final_match': {
 						console.log("🏆 Démarrage de la finale pour le tournoi:", data.gameId);
 						pong.current.tournamentFinalist1 = data.player1Id;
 						pong.current.tournamentFinalist2 = data.player2Id;
+						pong.current.isFinal = true;
 						states.current = game.states.tournament_final;
+						break;
+					}
+
+					case 'final_finished': {
+						console.log("🏁 Finale terminée, scores:", data.player1Score, data.player2Score);
+						pong.current.tournamenFinalScore1 = data.player1Score;
+						pong.current.tournamenFinalScore2 = data.player2Score;
+						const winner = data.player1Score > data.player2Score ? pong.current.tournamentFinalist1 : pong.current.tournamentFinalist2;
+						alert(`Winner of the final: ${winner}`);
+						pong.current.isFinal = false;
+						// SEND TO DB
+						pong.current.tournamentFinalist1 = undefined;
+						pong.current.tournamentFinalist2 = undefined;
+						states.current = game.states.main_menu;
 						break;
 					}
 
@@ -560,8 +566,8 @@ export const handleTournamentLoop = (
 				const myPaddleZ = myPaddle?.position.z ?? 0;
 				const lastZ = pong.current.lastSentPaddleZ ?? null;
 
-				console.log("Mypaddle is ", myPaddle, "isHost:", isHost);
-				console.log("Current Z:", myPaddleZ, "Last sent Z:", lastZ);
+				// console.log("Mypaddle is ", myPaddle, "isHost:", isHost);
+				// console.log("Current Z:", myPaddleZ, "Last sent Z:", lastZ);
 
 
 				const paddleMoved = lastZ === null || Math.abs(myPaddleZ - lastZ) > 0.01;
@@ -739,34 +745,79 @@ export const handleTournamentLoop = (
 		}
 
 		case game.states.waiting_to_start_final: {
-			console.log("Status of game1Finished:", pong.current.game1Finished);
-			console.log("Status of game2Finished:", pong.current.game2Finished);
+			// console.log("Status of game1Finished:", pong.current.game1Finished);
+			// console.log("Status of game2Finished:", pong.current.game2Finished);
+
 			if (pong.current.game1Finished && pong.current.game2Finished) {
-				console.log("🏆 Les deux jeux sont terminés, en attente du début de la finale");
-				if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-					socketRef.current.send(JSON.stringify({
-						type: 'start_final',
-						gameId: pong.current.tournamentId,
-						player1Id: pong.current.tournamentFinalist1,
-						player2Id: pong.current.tournamentFinalist2,
-					}));
-					pong.current.isFinal = true;
+				console.log("🏆 Les deux jeux sont terminés, on demande le début de la finale");
+				if (!pong.current.startFinalSent) {
+					if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+						socketRef.current.send(JSON.stringify({
+							type: 'start_final',
+							gameId: pong.current.tournamentId,
+							player1Id: pong.current.tournamentFinalist1,
+							player2Id: pong.current.tournamentFinalist2,
+						}));
+						pong.current.isFinal = true;
+						pong.current.startFinalSent = true; // ✅ Ne plus renvoyer
+					}
+				}
+			} else {
+				if (!pong.current.waitingFinalSent) {
+					if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+						socketRef.current.send(JSON.stringify({
+							type: 'waiting_to_start_final',
+							gameId: pong.current.tournamentId,
+						}));
+						console.log("🏆 En attente de la fin des jeux pour démarrer la finale");
+						pong.current.waitingFinalSent = true; // ✅ Ne plus renvoyer en boucle
+					}
 				}
 			}
-			else {
-				if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-					socketRef.current.send(JSON.stringify({
-						type: 'waiting_to_start_final',
-						gameId: pong.current.tournamentId,
-						
-					}));
-					console.log("🏆 En attente de la fin des jeux pour démarrer la finale");
-				}
-				break;
-			}
+			break;
 		}
 
+
 		case game.states.tournament_final: {
+			if (pong.current.isFinal) {
+				console.log("🏆 Démarrage de la finale pour le tournoi:", pong.current.tournamentId);
+				pong.current.tournamentFinalist1 = pong.current.tournamentFinalist1 || userNameRef.current;
+				pong.current.tournamentFinalist2 = pong.current.tournamentFinalist2 || userNameRef.current;
+				pong.current.tournamenFinalScore1 = 0;
+				pong.current.tournamenFinalScore2 = 0;
+				pong.current.player1Score = 0;
+				pong.current.player2Score = 0;
+				
+				game.resetPaddlesPosition(pong.current);
+				game.resetBall(pong.current);
+				game.setBallDirectionRandom(pong.current);
+				game.fitCameraToArena(pong.current);
+				states.current = game.states.in_final_countdown;
+				game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.arenaCam, 1, pong, states);
+			}
+			break;
+
+		}
+
+		case game.states.in_final_countdown: {
+
+			if (pong.current.engine) {
+				pong.current.countdown -= pong.current.engine.getDeltaTime() / 1000;
+			}
+			// console.log(" USERNAME REF:", userNameRef.current);
+			
+			if (pong.current.countdown <= 0)
+			{
+				pong.current.countdown = 4;
+				console.log("🏆 Démarrage de la finale en cours");
+				states.current = game.states.in_final;
+
+				// console.log("🏆 Démarrage du jeu après le compte à rebours");
+			}
+			break;
+		}
+
+		case game.states.in_final: {
 			const now = Date.now();
 			const timeSinceLastUpdate = now - (pong.current.lastUpdateSetAt || 0);
 
@@ -777,19 +828,13 @@ export const handleTournamentLoop = (
 				game.doPaddleMovement(pong, gameModes, states);
 
 				// 2. Score check
+				console.log("MAX SCORE IN FINAL:", pong.current.requiredPointsToWin);
 				const maxScore = Math.max(pong.current.player1Score, pong.current.player2Score);
-				if (maxScore >= pong.current.requiredPointsToWin)
-				{
+				if (maxScore >= pong.current.requiredPointsToWin) {
+					console.log("🏁 Finale terminée, max score atteint, player 1 = ", pong.current.tournamenFinalScore1, "player 2 = ", pong.current.tournamenFinalScore2);
 					states.current = game.states.tournament_final_game_finished;
-					// console.log("🏁 Game finished, max score reached:", maxScore);
-					// socketRef.current.send(JSON.stringify({
-					// 	type: 'game_finished',
-					// 	player1Score: pong.current.player1Score,
-					// 	player2Score: pong.current.player2Score,
-					// 	reason: 'normal',
-					// }));
-					// return;
 				}
+
 
 				// 3. Interpolation position de l’adversaire
 				const smoothFactor = 0.9;
@@ -865,8 +910,10 @@ export const handleTournamentLoop = (
 				console.log("🏁 Finale terminée, envoi des scores...");
 				socketRef.current.send(JSON.stringify({
 					type: 'final_finished',
+					gameId: pong.current.tournamentId,
 					player1Score: pong.current.tournamenFinalScore1,
 					player2Score: pong.current.tournamenFinalScore2,
+					winner: (pong.current.tournamenFinalScore1 ?? 0) > (pong.current.tournamenFinalScore2 ?? 0) ? pong.current.tournamentFinalist1 : pong.current.tournamentFinalist2,
 					reason: 'normal',
 				}));
 			}

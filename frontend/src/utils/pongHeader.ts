@@ -90,6 +90,8 @@ export enum states
 	game2_finished,
 	waiting_to_start_final,
 	tournament_final,
+	in_final,
+	in_final_countdown,
 	tournament_final_game_finished,
 	party_canceled,
 	disconnecting,
@@ -178,8 +180,8 @@ export type pongStruct =
 	isHost?: boolean;
 	isHost2?: boolean;
 	launched?: boolean;	// Used to know if the tournament has been launched
-	
-
+	waitingFinalSent?: boolean;	// Used to know if the waiting final has been sent to the server
+	startFinalSent?: boolean;	// Used to know if the start final has been sent to the server
 	isInGame1?: boolean;	// Used to know if the player is in game 1 of the tournament
 	isInGame2?: boolean;	// Used to know if the player is in game 2 of the tournament
 	isFinal?: boolean;	// Used to know if the player is in the final of the tournament
@@ -277,6 +279,10 @@ export function initPongStruct(): pongStruct
 		// Tournament game management initialized
 		game1Finished: false,
 		game2Finished: false,
+
+		waitingFinalSent: false,	// Used to know if the waiting final has been sent to the server
+		startFinalSent: false,
+		
 
 		rooms: new Map<string, any>(),
 		party: new Map<string, any>(),
