@@ -107,11 +107,8 @@ export	const	doPaddleMovement =
 			break;
 
 		case game.gameModes.tournament: 
-			console.log("In tournament mode");
-			console.log("Key pressed : ", pong.current.pressedKeys);
 			if (pong.current.isHost || pong.current.isHost2)
 			{
-				console.log("Host contrôle paddle1");
 				// 🎮 Host contrôle paddle1
 				if (pong.current.pressedKeys.has('arrowup'))
 					pong.current.paddle1.position.z = movePaddleUpOnline(pong, pong.current.paddle1);
@@ -120,7 +117,6 @@ export	const	doPaddleMovement =
 			}
 			else
 			{
-				console.log("Client contrôle paddle2");
 				// 🧑‍💻 Client contrôle paddle2
 				if (pong.current.pressedKeys.has('w'))
 					pong.current.paddle2.position.z = movePaddleUpOnline(pong, pong.current.paddle2);

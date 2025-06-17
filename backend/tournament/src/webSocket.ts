@@ -227,6 +227,7 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 						if (session) {
 							const winner = data.winner || (session.player1 === ws ? session.player1Id : session.player2Id);
 							session.finalist1 = session.getSocketById(winner);
+							session.initializeFinalMatch();
 							session.broadCastGame1({
 								type: 'game1_finished',
 								player1Id: session.player1Id,
@@ -246,6 +247,7 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 						if (session) {
 							const winner = data.winner || (session.player3 === ws ? session.player3Id : session.player4Id);
 							session.finalist2 = session.getSocketById(winner);
+							session.initializeFinalMatch();
 							session.broadCastGame2({
 								type: 'game2_finished',
 								player3Id: session.player3Id,
@@ -266,17 +268,34 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 							ws.send(JSON.stringify({ type: 'error', message: 'Game does not exist' }));
 							break;
 						}
-						if (session.finalist1 && session.finalist2) {
-							const finalist1Id = session.getIdBySocket(session.finalist1);
-							const finalist2Id = session.getIdBySocket(session.finalist2);
-							const message = {
-								type: 'waiting_to_start_final',
-								gameId: session.id,
-								player1: finalist1Id,
-								player2: finalist2Id,
-							};
-							session.broadCastFinal(message);
+
+						// Marque ce socket comme prêt
+						if (ws === session.finalist1) {
+							session.finalist1Ready = true;
+						} else if (ws === session.finalist2) {
+							session.finalist2Ready = true;
 						}
+
+						// Envoie un état d'attente si un seul joueur est prêt
+						if (!session.finalist1Ready || !session.finalist2Ready) {
+							const message = { type: 'waiting_for_opponent', role: 'finalist' };
+							ws.send(JSON.stringify(message));
+							break;
+						}
+
+						session.initializeFinalMatch();
+						await sleep(3000);
+						// Si les deux finalistes sont prêts, on lance la finale
+						const startMessage = {
+							type: 'start_final_match',
+							gameId: session.id,
+							player1Id: session.finalist1 ? session.getIdBySocket(session.finalist1) : null,
+							player2Id: session.finalist2 ? session.getIdBySocket(session.finalist2) : null,
+						};
+
+						const json = JSON.stringify(startMessage);
+						session.finalist1?.send(json);
+						session.finalist2?.send(json);
 						break;
 					}
 
@@ -284,14 +303,14 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 						const session = games.get(data.gameId);
 						if (session)
 						{
-							data.player1Id = session.finalist1;
-							data.player2Id = session.finalist2;
+							await sleep(3000);
 							const message = {
-								type: 'start_final',
+								type: 'start_final_match',
 								gameId: session.id,
-								player1Id: session.finalist1,
-								player2Id: session.finalist2,
+								player1Id: session.finalist1 ? session.getIdBySocket(session.finalist1) : null,
+								player2Id: session.finalist2 ? session.getIdBySocket(session.finalist2) : null,
 							};
+							session.initializeFinalMatch();
 							session.broadCastFinal(message);
 						}
 						else {
@@ -302,7 +321,9 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 
 					case 'final_update': {
 						const session = games.get(data.gameId);
+						console.log("🔄 Mise à jour de la finale pour la session:", session?.id);
 						if (session) {
+							console.log("🔄 Finale mise à jour avec les données:", data);
 							session.final.updateState(data);
 						} else {
 							ws.send(JSON.stringify({ type: 'error', message: 'Game is not ready or does not exist' }));
@@ -313,18 +334,32 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 					case 'final_finished': {
 						const session = [...games.values()].find(s => s.hasSocket(ws));
 						if (session) {
-							const winner = data.winner || (session.finalist1 === ws ? session.finalist1 : session.finalist2);
+							// Scores à utiliser (selon ce que le front t’envoie — ou les stocker dans session)
+							const score1 = session.score1_final ?? 0;
+							const score2 = session.score2_final ?? 0;
+
+
+							let winnerId: string | null = null;
+							if (score1 > score2 && session.finalist1) winnerId = session.getIdBySocket(session.finalist1);
+							else if (score2 > score1 && session.finalist2) winnerId = session.getIdBySocket(session.finalist2);
+
 							session.broadCastFinal({
 								type: 'final_finished',
-								player1Id: session.finalist1,
-								player2Id: session.finalist2,
-								reason: 'normal',
-								winnerId: winner,
+								player1Id: session.finalist1 ? session.getIdBySocket(session.finalist1) : null,
+								player2Id: session.finalist2 ? session.getIdBySocket(session.finalist2) : null,
+								reason: data.reason || 'normal',
+								player1Score: score1,
+								player2Score: score2,
+								winnerId: winnerId,
 							});
+
+							console.log("🏁 Finale terminée, gagnant:", winnerId);
+
 							games.delete(session.id);
 						}
 						break;
 					}
+
 					case 'room_list': {
 						const roomList = [...games.entries()].map(([id, session]) => ({
 							gameId: id,

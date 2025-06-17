@@ -72,14 +72,20 @@ export const	updateGUIVisibilityStates =
 	setUIState(pong.current.mainMenuGUI, game.states.main_menu);
 	setUIState(pong.current.settingsGUI, game.states.settings);
 	setUIState(pong.current.pongSettingsGUI, game.states.game_settings);
-	setUIState(pong.current.countdownGUI, game.states.countdown);
+	setUIState(pong.current.countdownGUI, [
+		game.states.countdown,
+		game.states.in_final_countdown,
+	]);
 	setUIState(pong.current.finishedGameGUI, game.states.game_finished);
 	setUIState(pong.current.hostOrJoinGUI, game.states.host_or_join);
 	setUIState(pong.current.roomListGUI, game.states.room_list);
 	setUIState(pong.current.waitingRoundStartGUI, game.states.waiting_to_start);
 	setUIState(pong.current.waitingTournamentToStartGUI, game.states.waiting_tournament_to_start);
 	setUIState(pong.current.waitingScreenGUI, game.states.hosting_waiting_players);
-	setUIState(pong.current.bracketGUI, game.states.tournament_bracket_preview);
+	setUIState(pong.current.bracketGUI, [
+		game.states.tournament_bracket_preview,
+		game.states.waiting_to_start,
+	]);
 	setUIState(pong.current.inputUsernameGUI, game.states.input_username);
 
 	setUIState(pong.current.arenaGUI,
@@ -87,7 +93,7 @@ export const	updateGUIVisibilityStates =
 		game.states.in_game,
 		game.states.in_game1,
 		game.states.in_game2,
-		game.states.tournament_final
+		game.states.in_final,
 	]);
 
 	pong.current.guiTexture?.removeControl(pong.current.debugGUI as baby.Container);

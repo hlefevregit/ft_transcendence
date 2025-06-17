@@ -1,12 +1,11 @@
-import { match } from 'assert';
 import WebSocket from 'ws';
 
-
-class Match {
+export class Match {
+	matchId: 'game1' | 'game2' | 'final';
 	playerA: WebSocket | null = null;
 	playerB: WebSocket | null = null;
-	scoreA: number = 0;
-	scoreB: number = 0;
+	session: tournamentSession;
+
 	lastState: any = {
 		paddle1Z: 0,
 		paddle2Z: 0,
@@ -15,7 +14,9 @@ class Match {
 		ballSpeedModifier: 1,
 	};
 
-	constructor(public matchId: 'game1' | 'game2' | 'final', playerA?: WebSocket, playerB?: WebSocket) {
+	constructor(matchId: 'game1' | 'game2' | 'final', session: tournamentSession, playerA?: WebSocket, playerB?: WebSocket) {
+		this.matchId = matchId;
+		this.session = session;
 		if (playerA) this.playerA = playerA;
 		if (playerB) this.playerB = playerB;
 	}
@@ -25,7 +26,21 @@ class Match {
 
 		if (typeof data.paddle1Z === 'number') state.paddle1Z = data.paddle1Z;
 		if (typeof data.paddle2Z === 'number') state.paddle2Z = data.paddle2Z;
-		if (data.ballPosition) state.ballPosition = data.ballPosition;
+		if (data.ballPosition) {
+			state.ballPosition = data.ballPosition;
+
+			// 🎯 Logique de score uniquement pour la finale
+			if (this.matchId === 'final') {
+				const limitX = 8; // Limite à adapter à la taille réelle de ton terrain
+				if (data.ballPosition.x < -limitX) {
+					this.session.score2_final += 1;
+					console.log(`🏓 Point pour Finalist 2! Score: ${this.session.score1_final} - ${this.session.score2_final}`);
+				} else if (data.ballPosition.x > limitX) {
+					this.session.score1_final += 1;
+					console.log(`🏓 Point pour Finalist 1! Score: ${this.session.score1_final} - ${this.session.score2_final}`);
+				}
+			}
+		}
 		if (data.ballDirection) state.ballDirection = data.ballDirection;
 		if (typeof data.ballSpeedModifier === 'number') state.ballSpeedModifier = data.ballSpeedModifier;
 
@@ -34,9 +49,8 @@ class Match {
 			...state,
 		};
 
-		console.log(`Match ${this.matchId} state updated:`, this.lastState);
-
 		state.lastState = this.lastState;
+		console.log(`✅ Match ${this.matchId} state updated:`, this.lastState);
 
 		this.broadcast(state);
 	}
@@ -44,9 +58,9 @@ class Match {
 	broadcast(payload: any) {
 		this.playerA?.send(JSON.stringify(payload));
 		this.playerB?.send(JSON.stringify(payload));
-		
 	}
 }
+
 
 
 export class tournamentSession {
@@ -75,6 +89,10 @@ export class tournamentSession {
 	finalist1Id: string = 'finalist1';
 	finalist2Id: string = 'finalist2';
 
+
+	finalist1Ready: boolean = false;
+	finalist2Ready: boolean = false;
+
 	score1_game1: number = 0;
 	score2_game1: number = 0;
 
@@ -87,9 +105,9 @@ export class tournamentSession {
 
 	points_to_win: number = 0;
 
-	game1: Match = new Match('game1');
-	game2: Match = new Match('game2');
-	final: Match = new Match('final');
+	game1: Match = new Match('game1', this);
+	game2: Match = new Match('game2', this);
+	final: Match = new Match('final', this);
 
 
 	reported: boolean = false;
@@ -99,9 +117,9 @@ export class tournamentSession {
 		this.player1 = socket;
 		this.roomName = roomName;
 
-		this.game1 = new Match('game1');
-		this.game2 = new Match('game2');
-		this.final = new Match('final');
+		this.game1 = new Match('game1', this);
+		this.game2 = new Match('game2', this);
+		this.final = new Match('final', this);
 	}
 
 
@@ -115,7 +133,7 @@ export class tournamentSession {
 		this.player2 = socket;
 		this.player2Id = player2Id;
 		this.player2Pseudo = player2Pseudo;
-		this.game1 = new Match('game1', this.player1, this.player2);
+		this.game1 = new Match('game1', this, this.player1, this.player2);
 		// this.broadcast({ type: 'game_start' });
 	}
 
@@ -129,7 +147,7 @@ export class tournamentSession {
 		this.player4 = socket;
 		this.player4Id = player4Id;
 		this.player4Pseudo = player4Pseudo;
-		this.game2 = new Match('game2', this.player3 ?? undefined, this.player4 ?? undefined);
+		this.game2 = new Match('game2', this, this.player3 ?? undefined, this.player4 ?? undefined);
 	}
 
 	getPlayerId(socket: WebSocket): string | null {
@@ -200,6 +218,13 @@ export class tournamentSession {
 		if (this.finalist1 === socket) return this.finalist1Id;
 		if (this.finalist2 === socket) return this.finalist2Id;
 		return null;
+	}
+
+	initializeFinalMatch() {
+		if (this.finalist1 && this.finalist2) {
+			this.final = new Match('final', this, this.finalist1, this.finalist2);
+			console.log("✅ Finale initialisée avec", this.getIdBySocket(this.finalist1), "et", this.getIdBySocket(this.finalist2));
+		}
 	}
 
 }
