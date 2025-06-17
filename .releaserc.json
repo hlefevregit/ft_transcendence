@@ -8,8 +8,8 @@
       "channel": "battleship"
     },
     {
-      "name": "Tournament",
-      "channel": "Tournament"
+      "name": "LiveChat",
+      "channel": "LiveChat"
     },
     {
       "name": "feature/ci-cd-integration",
