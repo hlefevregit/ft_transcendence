@@ -4,12 +4,12 @@ on:
   push:
     branches:
       - main
-      - battleship
+      - LiveChat
       - Tournament
   pull_request:
     branches:
       - main
-      - battleship
+      - Tournament
       - LiveChat
   workflow_dispatch:
 
@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       github.ref == 'refs/heads/main' ||
-      github.ref == 'refs/heads/battleship' ||
+      github.ref == 'refs/heads/Tournament' ||
       github.ref == 'refs/heads/LiveChat' ||
       github.event_name == 'workflow_dispatch'
     steps:
@@ -53,12 +53,12 @@ jobs:
             echo "❌ GH_TOKEN is missing!"
           fi
 
-      - name: Run semantic-release (main / battleship / Tournament)
+      - name: Run semantic-release (main / LiveChat / Tournament)
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           if [[ "${{ github.ref_name }}" == "main" || \
-                "${{ github.ref_name }}" == "battleship" || \
+                "${{ github.ref_name }}" == "Tournament" || \
                 "${{ github.ref_name }}" == "LiveChat" ]]; then
             npx semantic-release
             git describe --exact-match --tags HEAD > version || true
