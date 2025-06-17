@@ -4,8 +4,8 @@
   "branches": [
     "main",
     {
-      "name": "battleship",
-      "channel": "battleship"
+      "name": "Tournament",
+      "channel": "Tournament"
     },
     {
       "name": "LiveChat",
@@ -16,7 +16,7 @@
       "prerelease": "ci-cd-integration"
     }
   ],
-  "tagFormat": "v${version}",
+  "tagFormat": "${version}",
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
