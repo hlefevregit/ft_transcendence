@@ -1,3 +1,15 @@
+# [1.6.0](https://github.com/hlefevregit/ft_transcendence/compare/v1.5.0...1.6.0) (2025-06-17)
+
+
+### Bug Fixes
+
+* **GUI not displaying on multiple states:** ldalmass ([a6ea0c6](https://github.com/hlefevregit/ft_transcendence/commit/a6ea0c65681a9f976824f1137c2c079a39ee8a50))
+
+
+### Features
+
+* **Tournament:** hulefevr: Tournament done until final, this feature will be stopped for now until local tournament is finished ([acc8cbb](https://github.com/hlefevregit/ft_transcendence/commit/acc8cbbf132eeaa660fa5296eb5855d0f1954c28))
+
 # [1.6.0](https://github.com/hlefevregit/ft_transcendence/compare/v1.5.0...v1.6.0) (2025-06-17)
 
 
