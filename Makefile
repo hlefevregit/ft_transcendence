@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ldalmass <ldalmass@student.42.fr>          +#+  +:+       +#+         #
+#    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/06/12 14:56:23 by ldalmass         ###   ########.fr        #
+#    Updated: 2025/06/17 16:05:11 by hulefevr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -123,8 +123,8 @@ rebuild:
 		exit 1; \
 	fi
 	@echo "🔨 Rebuilding container: $(name)"
-	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) build --no-cache $(name)
-	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up -d $(name)
+	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) build --no-cache $(name)
+	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) up -d $(name)
 
 log:
 	@if [ -z "$(name)" ]; then \
@@ -132,4 +132,4 @@ log:
 		exit 1; \
 	fi
 	@echo "📜 Displaying logs for container: $(name)"
-	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) logs -f $(name)
+	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) logs -f $(name)

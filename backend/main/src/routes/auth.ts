@@ -36,7 +36,12 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
         id: existingUser.id,
         email: existingUser.email,
         pseudo: existingUser.pseudo,
-        twoFAEnabled: existingUser.twoFAEnabled,
+        twoFAEnabled: existingUser.twoFAEnabled as boolean,
+      } as {
+        id: number;
+        email: string;
+        pseudo: string;
+        twoFAEnabled: boolean;
       });
       return reply.send({ success: true, token, user: existingUser });
     }
@@ -66,7 +71,6 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
       id: created.id,
       email: created.email,
       pseudo: created.pseudo,
-      twoFAEnabled: created.twoFAEnabled,
     });
 
     return reply.send({
@@ -89,7 +93,6 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
       id: user.id,
       email: user.email,
       pseudo: user.pseudo,
-      twoFAEnabled: user.twoFAEnabled,
     });
 
     return reply.send({ success: true, token, user });

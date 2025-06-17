@@ -38,6 +38,7 @@
   "devDependencies": {
     "@fastify/jwt": "^9.1.0",
     "@types/bcrypt": "^5.0.2",
+    "@types/fastify-jwt": "^0.4.3",
     "@types/node": "^22.15.29",
     "@types/ws": "^8.5.14",
     "nodemon": "^3.1.9",
