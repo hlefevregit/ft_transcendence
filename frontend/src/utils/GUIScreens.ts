@@ -105,7 +105,9 @@ export const    instantiateSettingsGUI =
 (
 	pong: React.RefObject<game.pongStruct>,
 	states: React.RefObject<game.states>,
-	lang: React.RefObject<game.lang>
+	lang: React.RefObject<game.lang>,
+	musicRef?: React.RefObject<HTMLAudioElement | null>,
+	audioRef?: React.RefObject<HTMLAudioElement | null>,
 ): void =>
 {
 	// Canvas that will be used for the GUI
@@ -123,14 +125,22 @@ export const    instantiateSettingsGUI =
 	{
 		states.current = game.states.main_menu;
 	}, pong, "back");
-	const	musicSlider = game.createSlider("musicSlider", 0, 100, 2, pong.current.musicVolume * 100, (value: number) =>
+	const	musicSlider = game.createSlider("musicSlider", 0, 1, 0.02, pong.current.musicVolume, (value: number) =>
 	{
-		pong.current.musicVolume = value / 100;
+		pong.current.musicVolume = value;
+		if (musicRef && musicRef.current)
+		{
+			console.debug("IL FÉ TARPING CHAUD");
+			musicRef.current.volume = value;
+		}
+		console.log("music volume: ", pong.current.musicVolume);
 		game.findComponentByName(pong, "musicSliderTextValue").text = pong.current.musicVolume.toFixed(2);
 	});
-	const	soundSlider = game.createSlider("soundSlider", 0, 100, 2, pong.current.soundVolume * 100, (value: number) =>
+	const	soundSlider = game.createSlider("soundSlider", 0, 1, 0.02, pong.current.soundVolume, (value: number) =>
 	{
-		pong.current.soundVolume = value / 100;
+		pong.current.soundVolume = value;
+		if (audioRef && audioRef.current) audioRef.current.volume = value;
+		console.log("sound volume: ", pong.current.musicVolume);
 		game.findComponentByName(pong, "soundSliderTextValue").text = pong.current.soundVolume.toFixed(2);
 	});
 	const	musicSliderText = game.createDynamicText("musicSliderText", "settingsMusic");

@@ -19,7 +19,9 @@ export const initializeAllGUIScreens =
 	socketRef: React.RefObject<WebSocket | null>,
 	navigate: (path: string) => void,
 	setGameModeTrigger: React.Dispatch<React.SetStateAction<number>>,
-	lastState: React.RefObject<game.states>
+	lastState: React.RefObject<game.states>,
+	musicRef: React.RefObject<HTMLAudioElement | null>,
+	audioRef: React.RefObject<HTMLAudioElement | null>,
 ): void =>
 {
 	// Initialize the GUI texture
@@ -30,7 +32,7 @@ export const initializeAllGUIScreens =
 	// Initialize all the GUI screens
 	console.log("initialized GUI screens...");
 	game.instantiateMainMenuGUI(pong, states, gameModes, navigate, setGameModeTrigger);
-	game.instantiateSettingsGUI(pong, states, lang);
+	game.instantiateSettingsGUI(pong, states, lang, musicRef, audioRef);
 	game.instentiatePongSettingsGUI(pong, states, gameModes, playerStates, lastState);
 	game.instantiateArenaGUI(pong);
 	game.instantiateCountdownGUI(pong);

@@ -22,6 +22,7 @@ const	Pong: React.FC = () =>
 	const	lastLang =			React.useRef<game.lang>(lang.current);
 	const	userNameRef =		React.useRef<string>(null as unknown as string);
 	const	musicRef =			React.useRef<HTMLAudioElement | null>(null);
+	const	audioRef =			React.useRef<HTMLAudioElement | null>(null);
 	const	socketRef =			React.useRef<WebSocket | null>(null);
 	const	lastHandledState = React.useRef<game.states>(game.states.main_menu);
 	// Hooks
@@ -74,50 +75,7 @@ const	Pong: React.FC = () =>
 
 	React.useEffect(() =>
 	{
-		// AUDIO
-		const createBeepSound = (pong: React.RefObject<game.pongStruct>) => 
-		{
-			let audioContext: AudioContext | null = null;
-			if (!audioContext) audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-			
-			const oscillator = audioContext.createOscillator();
-			const gainNode = audioContext.createGain();
-			
-			oscillator.connect(gainNode);
-			gainNode.connect(audioContext.destination);
-			
-			oscillator.frequency.value = 1000; // Frequency in Hz
-			oscillator.type = 'sine'; // Type of sound wave
-			
-			gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-			gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-			
-			oscillator.start(audioContext.currentTime);
-			oscillator.stop(audioContext.currentTime + 0.1);
-		};
-
-		// const playBeep = createBeepSound();
-		const playBeep = () =>
-		{
-			if (pong.current.isButtonHovered)
-				createBeepSound();
-			else console.debug("🎵 SFX not played: button not hovered");
-		}
-	
-		const audio = new Audio("/assets/vaporwave.mp3");
-		audio.loop = true;
-		audio.volume = 1; // Ajuste le volume
-		musicRef.current = audio;
-		console.log("🎵 Musique de fond chargée");
-
-		const playAudio = () =>
-		{
-			console.log("🎵 Tentative de lecture de la musique de fond");
-			audio.play().catch((e) => { console.warn("🎵 Autoplay bloqué : interaction utilisateur requise."); });
-		};
-
-		document.addEventListener("click", playAudio, { once: true });
-		document.addEventListener("click", playBeep, { once: false });
+		
 
 
 		if (!canvasRef.current) return;
@@ -126,7 +84,20 @@ const	Pong: React.FC = () =>
 		// Initialize babylon
 		game.setupBabylon(pong.current, canvasRef.current);
 		// Initialize all the GUI screens
-		game.initializeAllGUIScreens(pong, gameModes, state, playerState, lang, socketRef, navigate, setGameModeTrigger, lastHandledState);
+		game.initializeAllGUIScreens
+		(
+			pong,
+			gameModes,
+			state,
+			playerState,
+			lang,
+			socketRef,
+			navigate,
+			setGameModeTrigger,
+			lastHandledState,
+			musicRef,
+			audioRef,
+		);
 		game.updateGUIVisibilityStates(pong, state.current);
 		game.updateGUIVisibilityPlayerStates(pong, playerState.current , gameModes.current);
 		game.updateGUIValues(pong, lang);
@@ -337,6 +308,7 @@ const	Pong: React.FC = () =>
 		
 		return () =>
 		{
+			// clearInterval(updateMusicVolume);
 			clearInterval(backgroundCalculations);
 			clearInterval(updateGUIsValuesWhenNeeded);
 			if (!pong.current.engine) return;
@@ -348,7 +320,11 @@ const	Pong: React.FC = () =>
 	return (
 		<div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0 }}>
 			<canvas ref={canvasRef} style={{ width: '100%', height: '100%' }} />
-			<BackgroundMusic/>
+			<BackgroundMusic
+				pongRef={pong}
+				musicRef={musicRef}
+				audioRef={audioRef}
+			/>
 		</div>
 	);
 };
