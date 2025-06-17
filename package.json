@@ -3,5 +3,5 @@
   "devDependencies": {
     "semantic-release": "^24.2.5"
   },
-  "version": "1.0.1"
+  "version": "1.6.0"
 }

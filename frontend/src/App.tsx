@@ -7,6 +7,7 @@ import Game1 from './views/Game1';
 import Settings from './views/Settings/Settings';
 import Pong from './views/Pong';
 import RequireAuth from './components/RequireAuth';
+import YouAreAnIdiot404 from './components/NotFound';
 
 const App: React.FC = () => {
   return (
@@ -16,23 +17,16 @@ const App: React.FC = () => {
         <Route path="/" element={<CityScene />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
+        <Route path="/pong" element={<Pong />} />
+        <Route path="/game1" element={<Game1 />} />
 
         {/* Routes protégées */}
         <Route element={<RequireAuth />}>
-          <Route path="/game1" element={<Game1 />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="/pong" element={<Pong />} />
         </Route>
 
         {/* Fallback */}
-        <Route
-          path="*"
-          element={
-            <div className="min-h-screen flex items-center justify-center text-white">
-              Page Not Found
-            </div>
-          }
-        />
+        <Route path="*" element={<YouAreAnIdiot404 />} />
       </Routes>
     </BrowserRouter>
   );

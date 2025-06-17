@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
+#    By: ldalmass <ldalmass@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/06/09 10:45:42 by hulefevr         ###   ########.fr        #
+#    Updated: 2025/06/12 14:56:23 by ldalmass         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -114,7 +114,7 @@ reset-db:
 	@echo "🗑️  Suppression de la base SQLite..."
 	rm -f ./backend/dev.db
 	@echo "🔄 Réinitialisation de la base avec Prisma..."
-	cd backend && npx prisma migrate reset --force
+	cd backend/main && npx prisma migrate reset --force
 	@echo "✅ Base de données réinitialisée."
 
 rebuild:
