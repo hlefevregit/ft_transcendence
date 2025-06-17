@@ -170,14 +170,13 @@ const RegisterForm: React.FC = () => {
   const validate = () => {
     const newErrors: { pseudo?: string; email?: string; password?: string } = {};
     if (!/^[A-Za-z0-9_]{1,16}$/.test(pseudo.trim())) {
-      newErrors.pseudo = 'Pseudo must be 1 to 16 characters (letters, numbers, underscore).';
+      newErrors.pseudo = t('username_format_error');
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      newErrors.email = 'Invalid email format.';
+      newErrors.email = t('email_format_error');
     }
     if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}/.test(password)) {
-      newErrors.password =
-        'Password must have at least 8 characters, including one uppercase, one lowercase, one number, and one special character.';
+      newErrors.password = t('password_format_error');
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -196,7 +195,7 @@ const RegisterForm: React.FC = () => {
         navigate('/game1');
       } else {
         // mapper le message renvoyé sur le bon champ
-        const msg = res.message || 'Registration failed.';
+        const msg = res.message || t('registration_error');
         const fieldErrors: typeof errors = {};
         if (/email/i.test(msg)) fieldErrors.email = msg;
         else if (/pseudo/i.test(msg)) fieldErrors.pseudo = msg;
@@ -205,7 +204,7 @@ const RegisterForm: React.FC = () => {
         setErrors(fieldErrors);
       }
     } catch {
-      setErrors({ general: 'An error occurred during registration.' });
+      setErrors({ general: t('registration_error') });
     } finally {
       setLoading(false);
     }
@@ -220,11 +219,11 @@ const RegisterForm: React.FC = () => {
         localStorage.setItem('authToken', res.token);
         navigate('/game1');
       } else {
-        setErrors(e => ({ ...e, general: res.message || 'Google login failed.' }));
+        setErrors(e => ({ ...e, general: res.message || t('google_auth_error') }));
       }
     } catch (err) {
       console.error('Google login error:', err);
-      setErrors(e => ({ ...e, general: 'Google login error.' }));
+      setErrors(e => ({ ...e, general: t('google_auth_error') }));
     }
   };
 

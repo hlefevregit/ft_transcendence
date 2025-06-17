@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import i18next from 'i18next'
 
 export const useWebSocket = () => {
   useEffect(() => {
@@ -6,7 +7,7 @@ export const useWebSocket = () => {
 
     socket.addEventListener('open', () => {
       console.log('Connexion WebSocket établie');
-      socket.send('Hello serveur!');
+      socket.send(i18next.t('hello_world'));
     });
 
     socket.addEventListener('message', (event) => {

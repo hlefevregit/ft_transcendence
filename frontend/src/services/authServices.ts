@@ -1,3 +1,5 @@
+import i18next from 'i18next'
+
 export const handleEmailLogin = async (email: string, password: string) => {
   try {
     const response = await fetch('/api/auth/sign_in', {
@@ -12,7 +14,7 @@ export const handleEmailLogin = async (email: string, password: string) => {
     if (!response.ok || !data.success) {
       return {
         success: false,
-        message: data.message || 'Login failed.',
+        message: data.message || i18next.t('api_login_error'),
       };
     }
 
@@ -23,11 +25,11 @@ export const handleEmailLogin = async (email: string, password: string) => {
     };
   } catch (err) {
     console.error("❌ Login fetch error:", err);
-    return { success: false, message: 'Login request failed.' };
+    return { success: false, message: i18next.t('api_login_error') };
   }
 };
 
-  
+
   export const handleRegister = async (name: string, email: string, password: string) => {
     const response = await fetch('/api/register', {
         method: 'POST',
@@ -36,7 +38,7 @@ export const handleEmailLogin = async (email: string, password: string) => {
     });
     return response.json();
   };
-  
+
   export const googleLogin = async (idToken: string) => {
     const response = await fetch('/api/auth/google', {
         method: 'POST',
@@ -50,7 +52,7 @@ export const handleEmailLogin = async (email: string, password: string) => {
 export const handle2FALogin = async (totp: string) => {
   const token = localStorage.getItem('authToken');
   if (!token) {
-    throw new Error('No authentication token found');
+    throw new Error(i18next.t('api_no_auth_token_error'));
   }
   const res = await fetch('/api/2fa/verify', {
     method: 'POST',

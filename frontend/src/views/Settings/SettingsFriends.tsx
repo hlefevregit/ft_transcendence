@@ -71,7 +71,7 @@ export default function SettingsFriends() {
         headers,
         credentials: "include",
       });
-      if (!resFriends.ok) throw new Error("Échec récupération amis");
+      if (!resFriends.ok) throw new Error(t('friends_fetch_error'));
       const { friends: friendsList } = await resFriends.json();
       setFriends(friendsList);
 
@@ -81,7 +81,7 @@ export default function SettingsFriends() {
         headers,
         credentials: "include",
       });
-      if (!resSent.ok) throw new Error("Échec récupération demandes envoyées");
+      if (!resSent.ok) throw new Error(t('requests_sent_fetch_error'));
       const sent = await resSent.json();
       setSentRequests(sent);
 
@@ -91,12 +91,12 @@ export default function SettingsFriends() {
         headers,
         credentials: "include",
       });
-      if (!resReceived.ok) throw new Error("Échec récupération demandes reçues");
+      if (!resReceived.ok) throw new Error(t('requests_received_fetch_error'));
       const received = await resReceived.json();
       setReceivedRequests(received);
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "Erreur lors du chargement");
+      setError(err.message || t('generic_fetch_error'));
     }
   };
 
@@ -121,13 +121,13 @@ export default function SettingsFriends() {
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.message || "Échec envoi demande");
+        throw new Error(data.message || t('request_send_error'));
       }
       setNewFriendPseudo("");
       fetchFriendsData();
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "Erreur lors de l'envoi");
+      setError(err.message || t('generic_send_error'));
     }
   };
 
@@ -146,11 +146,11 @@ export default function SettingsFriends() {
         headers: getAuthHeader(),
         credentials: "include",
       });
-      if (!res.ok) throw new Error("Échec annulation");
+      if (!res.ok) throw new Error(t('request_cancel_error'));
       fetchFriendsData();
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "Erreur annulation");
+      setError(err.message || t('generic_cancel_error'));
     }
   };
 
@@ -162,11 +162,11 @@ export default function SettingsFriends() {
         headers: getAuthHeader(),
         credentials: "include",
       });
-      if (!res.ok) throw new Error("Échec acceptation");
+      if (!res.ok) throw new Error(t('request_accept_error'));
       fetchFriendsData();
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "Erreur acceptation");
+      setError(err.message || t('generic_accept_error'));
     }
   };
 
@@ -178,11 +178,11 @@ export default function SettingsFriends() {
         headers: getAuthHeader(),
         credentials: "include",
       });
-      if (!res.ok) throw new Error("Échec refus");
+      if (!res.ok) throw new Error(t('request_decline_error'));
       fetchFriendsData();
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "Erreur refus");
+      setError(err.message || t('generic_decline_error'));
     }
   };
 
@@ -194,11 +194,11 @@ export default function SettingsFriends() {
         headers: getAuthHeader(),
         credentials: "include",
       });
-      if (!res.ok) throw new Error("Échec suppression");
+      if (!res.ok) throw new Error(t('suppression_error'));
       fetchFriendsData();
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "Erreur suppression");
+      setError(err.message || t('suppression_error'));
     }
   };
 

@@ -19,7 +19,7 @@ const LoginForm: React.FC = () => {
     const trimmedEmail = email.trim();
     // Security: block deleted_ accounts
     if (trimmedEmail.startsWith('deleted_')) {
-      setError('Email non autorisé');
+      setError(t('email_error'));
       return;
     }
     try {
@@ -29,15 +29,15 @@ const LoginForm: React.FC = () => {
         if (res.user.twoFAEnabled) {
           setIs2FAEnabled(true);
           localStorage.setItem('pendingUserId', String(res.user.id));
-          setError('2FA enabled, please enter your code.');
+          setError(t('2fa_waiting_code_error'));
           return;
         }
         navigate('/game1');
       } else {
-        setError(res.message || 'Invalid credentials');
+        setError(res.message || t('login_error'));
       }
     } catch {
-      setError('Login failed. Please try again.');
+      setError(t('login_error'));
     }
   };
 
@@ -51,10 +51,10 @@ const LoginForm: React.FC = () => {
         localStorage.removeItem('pendingUserId');
         navigate('/game1');
       } else {
-        setError('Invalid 2FA code');
+        setError(t('2fa_error'));
       }
     } catch {
-      setError('2FA verification failed.');
+      setError(t('2fa_failed_error'));
     }
   };
 
@@ -66,22 +66,22 @@ const LoginForm: React.FC = () => {
       if (res.success) {
         // Security: block deleted_ accounts
         if (res.user.email.startsWith('deleted_')) {
-          setError('Email non autorisé');
+          setError(t('email_error'));
           return;
         }
         localStorage.setItem('authToken', res.token);
         if (res.user.twoFAEnabled) {
           setIs2FAEnabled(true);
           localStorage.setItem('pendingUserId', String(res.user.id));
-          setError('2FA enabled, please enter your code.');
+          setError(t('2fa_waiting_code_error'));
           return;
         }
         navigate('/game1');
       } else {
-        setError(res.message || 'Google login failed');
+        setError(res.message || t('google_auth_error'));
       }
     } catch {
-      setError('Google login error.');
+      setError(t('google_auth_error'));
     }
   };
 

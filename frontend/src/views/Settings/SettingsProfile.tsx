@@ -69,7 +69,7 @@ export default function SettingsProfile() {
         setTwoFAEnabled(data.twoFAEnabled);
         setInitial({ pseudo: data.pseudo, avatarUrl: av, status: data.status });
       } catch {
-        setError('Unable to load profile.');
+        setError(t('profile_fetch_error'));
       }
     })();
   }, []);
@@ -79,7 +79,7 @@ export default function SettingsProfile() {
     const file = e.target.files?.[0];
     if (!file) return;
     if (!['image/jpeg', 'image/png'].includes(file.type)) {
-      setError('Invalid avatar format');
+      setError(t('invalid_image_format_error'));
       return;
     }
     setError('');
@@ -107,7 +107,7 @@ export default function SettingsProfile() {
   const handleSave = async () => {
     setError('');
     if (pseudo.length > 16) {
-      setError('Username too long');
+      setError(t('username_format_error'));
       return;
     }
     try {
@@ -134,7 +134,7 @@ export default function SettingsProfile() {
       setStatus(updated.status);
       setInitial({ pseudo: updated.pseudo, avatarUrl: av, status: updated.status });
     } catch (err: any) {
-      setError(err.message || 'Failed to update profile.');
+      setError(err.message || t('profile_fetch_error'));
     }
   };
 
@@ -159,7 +159,7 @@ export default function SettingsProfile() {
       setInitial(i => i && ({ ...i, status: next }));
     } catch {
       setStatus(user.status);
-      setError('Failed to update status.');
+      setError(t('status_update_error'));
     }
   };
 
@@ -179,16 +179,16 @@ export default function SettingsProfile() {
           body: JSON.stringify({ userId: user?.id }),
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Enable 2FA failed');
+        if (!res.ok) throw new Error(data.error || t('2fa_enable_error'));
         setQrCodeUrl(data.qrCode);
       } catch (err: any) {
-        setError(err.message || 'Error enabling 2FA');
+        setError(err.message || t('2fa_enable_error'));
       }
     } else if (!twoFAEnabled && qrCodeUrl) {
       setQrCodeUrl(null);
     } else {
       setDialog({
-        message: 'Disable 2FA?',
+        message: t('disable_2fa_confirmation'),
         onConfirm: async () => {
           setDialog(null);
           try {
@@ -202,7 +202,7 @@ export default function SettingsProfile() {
               },
               body: JSON.stringify({ userId: user?.id }),
             });
-            if (!res.ok) throw new Error('Disable 2FA failed');
+            if (!res.ok) throw new Error(t('2fa_disable_error'));
             const pr = await fetch('/api/me', {
               headers: { Authorization: `Bearer ${token}` },
               credentials: 'include',
@@ -211,7 +211,7 @@ export default function SettingsProfile() {
             setTwoFAEnabled(upd.twoFAEnabled);
             setQrCodeUrl(null);
           } catch {
-            setError('Failed to disable 2FA.');
+            setError(t('2fa_disable_error'));
           }
         },
       });
@@ -232,7 +232,7 @@ export default function SettingsProfile() {
         body: JSON.stringify({ token: totp }),
       });
       if (!res.ok) {
-        setError('Invalid 2FA code.');
+        setError(t('2fa_error'));
         return;
       }
       setQrCodeUrl(null);
@@ -244,7 +244,7 @@ export default function SettingsProfile() {
       const upd: UserProfile = await pr.json();
       setTwoFAEnabled(upd.twoFAEnabled);
     } catch {
-      setError('Failed to verify 2FA');
+      setError(t('2fa_failed_error'));
     }
   };
 
@@ -275,8 +275,7 @@ export default function SettingsProfile() {
   };
   const deleteAccount = () => {
     setDialog({
-      message:
-        'Are you sure you want to delete your account? Your personal information will be permanently removed.',
+      message: t('delete_account_confirmation'),
       onConfirm: async () => {
         setDialog(null);
         try {
@@ -290,7 +289,7 @@ export default function SettingsProfile() {
           if (!res.ok) throw new Error();
           window.location.href = '/';
         } catch {
-          setError('Failed to delete account.');
+          setError(t('delete_account_error'));
         }
       },
     });
