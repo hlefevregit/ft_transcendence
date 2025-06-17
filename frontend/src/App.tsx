@@ -6,6 +6,7 @@ import RegisterForm from './views/RegisterForm';
 import Game1 from './views/Game1';
 import Settings from './views/Settings/Settings';
 import Pong from './views/Pong';
+import BlackJack from './views/BlackJack';
 import RequireAuth from './components/RequireAuth';
 import YouAreAnIdiot404 from './components/NotFound';
 
@@ -18,6 +19,7 @@ const App: React.FC = () => {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/pong" element={<Pong />} />
+        <Route path="/blackjack" element={<BlackJack />} />
         <Route path="/game1" element={<Game1 />} />
 
         {/* Routes protégées */}
