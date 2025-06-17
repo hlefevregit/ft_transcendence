@@ -1,5 +1,3 @@
-import i18next from 'i18next'
-
 export const handleEmailLogin = async (email: string, password: string) => {
   try {
     const response = await fetch('/api/auth/sign_in', {
@@ -14,7 +12,7 @@ export const handleEmailLogin = async (email: string, password: string) => {
     if (!response.ok || !data.success) {
       return {
         success: false,
-        message: data.message || i18next.t('api_login_error'),
+        message: data.message || 'Login failed.',
       };
     }
 
@@ -25,7 +23,7 @@ export const handleEmailLogin = async (email: string, password: string) => {
     };
   } catch (err) {
     console.error("❌ Login fetch error:", err);
-    return { success: false, message: i18next.t('api_login_error') };
+    return { success: false, message: 'Login request failed.' };
   }
 };
 
@@ -52,7 +50,7 @@ export const handleEmailLogin = async (email: string, password: string) => {
 export const handle2FALogin = async (totp: string) => {
   const token = localStorage.getItem('authToken');
   if (!token) {
-    throw new Error(i18next.t('api_no_auth_token_error'));
+    throw new Error('No authentication token found');
   }
   const res = await fetch('/api/2fa/verify', {
     method: 'POST',
