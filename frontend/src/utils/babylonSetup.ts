@@ -3,10 +3,41 @@ import React from 'react';
 
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
+import * as bj from '@/libs/bjLibs';
 
-import mapUrl from '@/assets/transcendence_map.gltf?url';
+import pongMapUrl from '@/assets/transcendence_map.gltf?url';
+import bjMapUrl from '@/assets/blackjack_map.gltf?url';
 
-export const	setupBabylon = async (pong: game.pongStruct, canvasRef: any): Promise<void> =>
+export const	setupBabylonBJ = async (bj: bj.bjStruct, canvasRef: any): Promise<void> =>
+{
+	const	engineInstance = new baby.Engine(canvasRef, true);
+	const	sceneInstance = new baby.Scene(engineInstance);
+	bj.engine = engineInstance;
+	bj.scene = sceneInstance;
+
+	new baby.HemisphericLight("light", new baby.Vector3(1, 1, 0), sceneInstance);
+
+	const	skyboxMesh = baby.MeshBuilder.CreateBox("skyBox", { size: 1000 }, sceneInstance);
+	bj.skybox = skyboxMesh;
+	
+	const	cameraInstance = new baby.FreeCamera("camera", new baby.Vector3(0.0, 0.0, 0.0), sceneInstance);
+	cameraInstance.setTarget(baby.Vector3.Zero());
+	cameraInstance.inputs.clear();
+	cameraInstance.rotation = new baby.Vector3(0, 0, 0);
+	bj.camera = cameraInstance;
+	bj.scene.activeCamera = cameraInstance;
+	
+	// Enable ambient occlusion
+	sceneInstance.createDefaultEnvironment();
+	const ssaoRenderingPipeline = new baby.SSAORenderingPipeline("ssao", sceneInstance,1);
+	ssaoRenderingPipeline.scene.setRenderingOrder(0, null, null, null);
+	sceneInstance.postProcessRenderPipelineManager.attachCamerasToRenderPipeline("ssao", sceneInstance.cameras);
+	
+	// Set rendering groups so GUI renders after post-processing
+    sceneInstance.setRenderingAutoClearDepthStencil(1, false); // Don't clear depth for rendering group 1
+}
+
+export const	setupBabylonPong = async (pong: game.pongStruct, canvasRef: any): Promise<void> =>
 {
 	const	engineInstance = new baby.Engine(canvasRef, true);
 	const	sceneInstance = new baby.Scene(engineInstance);
@@ -118,7 +149,7 @@ export const	importMap = async (scene: baby.Scene) =>
 		// Use proper parameters for ImportMeshAsync
 		const result = await baby.ImportMeshAsync
 		(
-			mapUrl, // URL from Vite import
+			pongMapUrl, // URL from Vite import
 			scene, // Scene to load into
 		);
 		
