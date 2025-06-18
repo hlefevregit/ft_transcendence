@@ -86,7 +86,13 @@ export const	updateGUIVisibilityStates =
 		game.states.tournament_bracket_preview,
 		game.states.waiting_to_start,
 	]);
-	setUIState(pong.current.inputUsernameGUI, game.states.input_username);
+	setUIState(pong.current.inputUsernameGUI, 
+	[
+		game.states.input_username1,
+		game.states.input_username2,
+		game.states.input_username3,
+		game.states.input_username4
+	]);
 
 	setUIState(pong.current.arenaGUI,
 	[

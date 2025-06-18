@@ -63,15 +63,13 @@ export const    instantiateMainMenuGUI =
 		setGameModeTrigger((prev: number) => prev + 1);
 		if (!pong.current.scene) return;
 		states.current = game.states.host_or_join;
-		states.current = game.states.host_or_join;
 	}, pong, "playOnline");
 	const	tournamentPong = game.createDynamicButton("tournamentPong", () =>
 	{
 		gameModes.current = game.gameModes.tournament;
 		setGameModeTrigger((prev: number) => prev + 1);
 		if (!pong.current.scene) return;
-		states.current = game.states.host_or_join;
-		states.current = game.states.host_or_join;
+		states.current = game.states.input_username1;
 	}, pong, "playTournament");
 
 
