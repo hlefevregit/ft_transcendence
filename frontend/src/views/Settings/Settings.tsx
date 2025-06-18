@@ -34,7 +34,7 @@ export default function Settings() {
         },
         leftBoundary: -250,
         rightBoundary: 250,
-        onGoLeftBeyond: () => navigate("/game1"),
+        onGoLeftBeyond: () => navigate("/game2"),
         onGoRightBeyond: () => { },
       });
     },

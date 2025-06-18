@@ -75,7 +75,7 @@ export default function Game1() {
       leftBoundary: -250,
       rightBoundary: 250,
       onGoLeftBeyond: () => navigate("/"),
-      onGoRightBeyond: () => navigate("/settings"),
+      onGoRightBeyond: () => navigate("/game2"),
     });
   };
 
