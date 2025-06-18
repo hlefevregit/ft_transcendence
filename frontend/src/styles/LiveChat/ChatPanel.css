@@ -12,9 +12,6 @@
   border-radius: 0.75rem !important;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   display: flex;
-
-  /* Permettre au popover de déborder */
-  overflow: visible !important;
 }
 
 .chat-panel__sidebar {
@@ -57,7 +54,7 @@
   border-top-right-radius: 0.75rem;
   border-bottom-right-radius: 0.75rem;
 
-  overflow: visible !important;
+  overflow: visible;
 }
 
 .chat-panel__header {
@@ -90,10 +87,10 @@
 
 .chat-panel__conversation {
   flex: 1;
+  display: flex;
+  flex-direction: column;
   padding: 0.5rem;
-  overflow-y: auto;
-
-  overflow: visible !important;
+  overflow: hidden;
 }
 
 
