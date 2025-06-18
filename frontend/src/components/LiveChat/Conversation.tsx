@@ -7,26 +7,41 @@ import type { ChatUser } from '../../types'
 import '../../styles/LiveChat/Conversation.css'
 import { getCurrentUser } from './api'
 
-
-interface ConversationProps {
-  className?: string
-}
-
-export default function Conversation({ className = '' }: ConversationProps) {
-  const { selectedUser } = useChatStore()
+export default function Conversation({ className = '' }) {
+  const { open, selectedUser } = useChatStore()
   const { id: meId } = getCurrentUser()
 
-  const { messages, sendMessage } = useConversationMessages(
+  const {
+    messages,
+    sendMessage,
+    refresh,        // ← on récupère la fonction
+  } = useConversationMessages(
     selectedUser?.id ?? null,
     1000,
     meId
   )
 
   const containerRef = useRef<HTMLDivElement>(null)
+
+  // Scroll automatique
   useEffect(() => {
     const el = containerRef.current
     if (el) el.scrollTop = el.scrollHeight
   }, [messages])
+
+  // 1) refresh à l’ouverture du panneau
+  useEffect(() => {
+    if (open && selectedUser) {
+      refresh()
+    }
+  }, [open, selectedUser])
+
+  // 2) refresh à chaque changement de conversation
+  useEffect(() => {
+    if (selectedUser) {
+      refresh()
+    }
+  }, [selectedUser])
 
   return (
     <div className={`chat-conversation ${className}`}>

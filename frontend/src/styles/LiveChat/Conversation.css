@@ -4,13 +4,15 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #ffffff;
+  background-color: white;
 }
 
 .chat-conversation__messages {
   flex: 1;
   padding: 0.5rem;
   overflow-y: auto;
+  /* Bloque tout débordement horizontal */
+  overflow-x: hidden;
 }
 
 .chat-conversation__messages::-webkit-scrollbar {
@@ -30,13 +32,18 @@
 /* Bulle générique */
 .chat-conversation__message {
   margin: 0.25rem 0;
-  padding: 0.5rem 0.75rem;   /* moins d’espace latéral */
-  border-radius: 1rem;       /* arrondi modéré */
-  max-width: 60%;            /* champ max à 60% */
-  width: fit-content;
-  word-wrap: break-word;
+  padding: 0.5rem 0.75rem;
+  border-radius: 1rem;
+  max-width: 60%;
+  /* On passe de fit-content à auto pour ne pas élargir la bulle */
+  width: auto;
   font-size: 0.75rem;
   line-height: 1.2;
+
+  /* Forcer les retours à la ligne à l’intérieur des mots trop longs */
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
 }
 
 /* Bulles reçues : alignées à gauche */
