@@ -204,7 +204,7 @@ export async function setupMessageRoutes(fastify: CustomFastifyInstance) {
     }
   )
 
-  fastify.patch(
+  fastify.post(
     '/api/conversations/:otherId/read',
     { preValidation: [fastify.authenticate] },
     async (
@@ -218,7 +218,6 @@ export async function setupMessageRoutes(fastify: CustomFastifyInstance) {
       const otherId = Number(req.params.otherId)
       const { lastReadId } = req.body
 
-      // Upsert ConversationState
       await fastify.prisma.conversationState.upsert({
         where: { readerId_otherId: { readerId, otherId } },
         create: { readerId, otherId, lastReadId },
@@ -228,6 +227,7 @@ export async function setupMessageRoutes(fastify: CustomFastifyInstance) {
       return reply.status(204).send()
     }
   )
+
 
   // — GET /api/conversations/unreadCounts — renvoyer les compteurs de non-lus
   fastify.get(
