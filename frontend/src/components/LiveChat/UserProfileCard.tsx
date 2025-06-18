@@ -1,7 +1,5 @@
-// src/components/LiveChat/UserProfileCard.tsx
 import { FC, useEffect, useState } from 'react'
 import { ChatUser } from '../../types'
-import { MdEmojiEvents } from 'react-icons/md'
 import {
   getUserHistory,
   blockUser,
@@ -25,13 +23,12 @@ export const UserProfileCard: FC<UserProfileCardProps> = ({
   const [isBlocked, setIsBlocked] = useState(false)
   const [blockLoading, setBlockLoading] = useState(false)
 
-  const meId = 1  // Remplacez par l'ID de l'utilisateur courant si vous avez un contexte d'auth
+  const meId = 1 // Remplacez par l'ID réel de l'utilisateur courant
 
   useEffect(() => {
     let active = true
     setLoading(true)
 
-    // On lance en parallèle la récupération de l'historique et de l'état de blocage
     Promise.all([
       getUserHistory(user.username),
       getBlockedUsers(meId),
@@ -93,29 +90,28 @@ export const UserProfileCard: FC<UserProfileCardProps> = ({
           <p className="user-profile-card__loading">Chargement…</p>
         ) : (
           <div className="user-profile-card__matches">
-            {history.map(m => (
-              <div
-                key={m.id}
-                className={`match-card ${
-                  m.result === 'win'
-                    ? 'win-card'
-                    : m.result === 'loss'
-                    ? 'loss-card'
-                    : 'draw-card'
-                }`}
-              >
-                <span className="player-score">{m.userScore}</span>
-                <div className="match-separator" />
-                <span className="opponent-score">{m.opponentScore}</span>
-              </div>
-            ))}
+            {history.length === 0 ? (
+              <p className="no-history">This user has no match history yet.</p>
+            ) : (
+              history.map(m => (
+                <div
+                  key={m.id}
+                  className={`match-card ${
+                    m.result === 'win'
+                      ? 'win-card'
+                      : m.result === 'loss'
+                      ? 'loss-card'
+                      : 'draw-card'
+                  }`}
+                >
+                  <span className="player-score">{m.userScore}</span>
+                  <div className="match-separator" />
+                  <span className="opponent-score">{m.opponentScore}</span>
+                </div>
+              ))
+            )}
           </div>
         )}
-
-        <div className="user-profile-card__trophies">
-          <span className="stat-label">{user.trophies}</span>
-          <MdEmojiEvents className="trophy-icon" />
-        </div>
       </div>
     </div>
   )
