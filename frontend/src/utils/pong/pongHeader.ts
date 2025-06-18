@@ -85,10 +85,10 @@ export enum states
 	tournament_round_1_game_2,
 	in_game1,
 	in_game2,
-	input_username1,
-	input_username2,
-	input_username3,
-	input_username4,
+	input_username_1,
+	input_username_2,
+	input_username_3,
+	input_username_4,
 	game1_finished,
 	game2_finished,
 	waiting_to_start_final,
@@ -149,7 +149,10 @@ export type pongStruct =
 	player1Score: number;
 	player2Score: number;
 
-	username?:string;
+	username_1?:string;
+	username_2?:string;
+	username_3?:string;
+	username_4?:string;
 	
 	// Tournament-specific properties
 	tournamentPlayerCount: number;
@@ -224,6 +227,11 @@ export type pongStruct =
 	waitingTournamentToStartGUI?: baby.Rectangle;
 	bracketGUI?: baby.Rectangle;
 	inputUsernameGUI?: baby.Rectangle;
+
+	inputUsernameTextBox1?: baby.StackPanel;
+	inputUsernameTextBox2?: baby.StackPanel;
+	inputUsernameTextBox3?: baby.StackPanel;
+	inputUsernameTextBox4?: baby.StackPanel;
 
 	// Other components bindings
 	waitingTournamentToStartButtonBack?: baby.StackPanel;
@@ -305,8 +313,10 @@ export const	label =
 	join: ["Join ⬇", "Rejoindre ⬇", "Unisciti ⬇", "⠨⠚⠕⠊⠝ ⬇"],
 	host: ["Host 🏠︎", "Héberger 🏠︎", "Hosta 🏠︎", "⠨⠓⠕⠎⠞ 🏠︎"],
 	refresh: ["Refresh ⟳", "Rafraîchir ⟳", "Aggiorna ⟳", "⠨⠗⠑⠋⠗⠑⠎⠓ ⟳"],
-	cancel: ["Cancel ×", "Annuler ×", "Annulla ×", "⠨⠉⠁⠝⠉⠑⠇ ×"],
 	continue: ["Continue ▸", "Continuer ▸", "Continua ▸", "⠨⠉⠕⠝⠞⠊⠝⠥⠑ ▸"],
+	cancel: ["Cancel ×", "Annuler ×", "Annulla ×", "⠨⠉⠁⠝⠉⠑⠇ ×"],
+	next: ["Next ▸", "Suivant ▸", "Avanti ▸", "⠨⠝⠑⠭⠞ ▸"],
+	previous: ["Previous ◂", "Précédent ◂", "Precedente ◂", "⠨⠏⠗⠑⠧⠊⠕⠥⠎ ◂"],
 	abandon: ["Abandon ×", "Abandonner ×", "Abbandona ×", "⠨⠁⠃⠁⠝⠙⠕⠝ ×"],
 	versus: ["Versus", "Contre", "Contro", "⠨⠧⠑⠗⠎⠥⠎"],
 
@@ -372,6 +382,8 @@ export const	label =
 	bracketRound1: ["First round", "Premier tour", "Primo turno", "⠨⠋⠊⠗⠎⠞"],
 	bracketRound2: ["Finals", "Finales", "Finali", "⠨⠋⠊⠝⠁⠇⠎"],
 	bracketRound3: ["Winner", "Gagnant", "Vincitore", "⠨⠺⠊⠝⠝⠑⠗"],
+
+	// Username Input
 	inputUsernameTitle: ["Enter your username", "Entrez votre nom d'utilisateur", "Inserisci il tuo nome utente", "⠨⠑⠝⠞⠑⠗ ⠽⠕⠥⠗ ⠥⠎⠑⠗⠝⠁⠍⠑"],
 	
 } as const;

@@ -2,6 +2,7 @@ import React from 'react';
 
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
+import { stat } from 'fs';
 
 // ****************************************************************************** //
 //                                                                                //
@@ -69,7 +70,7 @@ export const    instantiateMainMenuGUI =
 		gameModes.current = game.gameModes.tournament;
 		setGameModeTrigger((prev: number) => prev + 1);
 		if (!pong.current.scene) return;
-		states.current = game.states.input_username1;
+		states.current = game.states.input_username_1;
 	}, pong, "playTournament");
 
 
@@ -276,12 +277,12 @@ export const	instentiatePongSettingsGUI =
 			case game.gameModes.online:
 				states.current = game.states.hosting_waiting_players;
 				break;
-			case game.gameModes.tournament:
-				lastHandledState.current = states.current;
-				console.log("[SETTINGS] Last handled state set to:", lastHandledState.current);
-				states.current = game.states.input_username;
-				console.log("🚀🚀🚀 switching to waiting_tournament_to_start 🚀🚀🚀");
-				break;
+			// case game.gameModes.tournament:
+			// 	lastHandledState.current = states.current;
+			// 	console.log("[SETTINGS] Last handled state set to:", lastHandledState.current);
+			// 	states.current = game.states.input_username;
+			// 	console.log("🚀🚀🚀 switching to waiting_tournament_to_start 🚀🚀🚀");
+			// 	break;
 			default:
 				states.current = game.states.waiting_to_start;
 				break;
@@ -1044,7 +1045,8 @@ export const instantiateBracketGUI =
 	const	bracketVerticalStackPanel1 = game.createVerticalStackPanel("bracketVerticalStackPanel1", 10);
 	const	bracketVerticalStackPanel2 = game.createVerticalStackPanel("bracketVerticalStackPanel2", 10);
 	const	bracketVerticalStackPanel3 = game.createVerticalStackPanel("bracketVerticalStackPanel3", 10);
-	const	bracketHorizontalStackPanel = game.createHorizontalStackPanel("bracketHorizontalStackPanel", 0);
+	const	bracketHorizontalStackPanel1 = game.createHorizontalStackPanel("bracketHorizontalStackPanel1", 0);
+	const	bracketHorizontalStackPanel2 = game.createHorizontalStackPanel("bracketHorizontalStackPanel2", 0);
 	
 	const	bracketLines1 = game.createBracketLines("bracketLines1");
 	const	bracketLines2 = game.createBracketLines2("bracketLines2");
@@ -1083,6 +1085,37 @@ export const instantiateBracketGUI =
 	// Winner card
 	const	winnerPlayer = game.createCard("winnerPlayer", "Winner Player");
 	
+	// Play button
+	const	bracketPlayButton = game.createDynamicButton("bracketPlayButton", () =>
+	{
+		if (gameModes.current !== game.gameModes.none) {
+			// ✅ Envoie le leave_room au serveur
+			if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN)
+			{
+				socketRef.current.send
+				(
+					JSON.stringify({
+					type: 'leave_room',
+					gameId: pong.current.tournamentId, // Assure-toi que tournamentId est bien set !
+				}));
+			}
+		}
+		states.current = game.states.main_menu;
+		gameModes.current = game.gameModes.none;
+		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
+	}, pong, "play");
+			(bracketPlayButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
+			{
+				(bracketPlayButton.children[0] as baby.Button).color = game.colorsScheme.dark1;
+				(bracketPlayButton.children[0] as baby.Button).background = game.colorsScheme.auroraAccent4;
+			});
+			(bracketPlayButton.children[0] as baby.Button).onPointerOutObservable.add(() =>
+			{
+				(bracketPlayButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
+				(bracketPlayButton.children[0] as baby.Button).background = game.colorsScheme.dark1;
+			});
+			(bracketPlayButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
+
 	// Abandon button
 	const	bracketAbandonButton = game.createDynamicButton("bracketAbandonButton", () =>
 	{
@@ -1155,12 +1188,12 @@ export const instantiateBracketGUI =
 	bracketVerticalStackPanel.addControl(bracketTitle);
 	
 	// Triple column bracket layout
-	bracketVerticalStackPanel.addControl(bracketHorizontalStackPanel);
-	bracketHorizontalStackPanel.addControl(bracketVerticalStackPanel1);
-	bracketHorizontalStackPanel.addControl(bracketLines1);
-	bracketHorizontalStackPanel.addControl(bracketVerticalStackPanel2);
-	bracketHorizontalStackPanel.addControl(bracketLines2);
-	bracketHorizontalStackPanel.addControl(bracketVerticalStackPanel3);
+	bracketVerticalStackPanel.addControl(bracketHorizontalStackPanel1);
+	bracketHorizontalStackPanel1.addControl(bracketVerticalStackPanel1);
+	bracketHorizontalStackPanel1.addControl(bracketLines1);
+	bracketHorizontalStackPanel1.addControl(bracketVerticalStackPanel2);
+	bracketHorizontalStackPanel1.addControl(bracketLines2);
+	bracketHorizontalStackPanel1.addControl(bracketVerticalStackPanel3);
 	
 	// First bracket entry - Player 1 vs Player 2
 	bracketVerticalStackPanel1.addControl(bracketRound1Text);
@@ -1187,7 +1220,9 @@ export const instantiateBracketGUI =
 	bracketVerticalStackPanel3.addControl(winnerPlayer);
 	
 	// Add the abandon button
-	bracketVerticalStackPanel.addControl(bracketAbandonButton);
+	bracketHorizontalStackPanel2.addControl(bracketAbandonButton);
+	bracketHorizontalStackPanel2.addControl(bracketPlayButton);
+	bracketVerticalStackPanel.addControl(bracketHorizontalStackPanel2);
 	
 	// Add GUI to the GUI texture
 	pong.current.bracketGUI = bracketGUI;
@@ -1214,41 +1249,97 @@ export const instantiateInputUsernameGUI =
 	// All GUI components needed
 	const	inputUsernameContainer = game.createAdaptiveContainer("inputUsernameContainer", "300px", "300px");
 	const	inputUsernameVerticalStackPanel = game.createVerticalStackPanel("inputUsernameVerticalStackPanel");
+	const	inputUsernameHorizontalStackPanel = game.createHorizontalStackPanel("inputUsernameHorizontalStackPanel", 0);
 	const	inputUsernameTitle = game.createDynamicTitle("inputUsernameTitle", "inputUsernameTitle");
-	const	inputUsernameTextBox = game.createInputText("inputUsernameTextBox", "Tabarnak69", (value: string) =>
+	const	inputUsernameTextBox1 = game.createInputText("inputUsernameTextBox1", "Tabarnak69", (value: string) =>
 	{
 		tmp = value;
 		tmp = tmp.trim();
 		if (tmp.length == 0) tmp = "Tabarnak69";
 	});
-	const	inputUsernameButton = game.createDynamicButton("inputUsernameButton", () =>
+	pong.current.inputUsernameTextBox1 = inputUsernameTextBox1;
+	const	inputUsernameTextBox2 = game.createInputText("inputUsernameTextBox2", "HOMERU", (value: string) =>
 	{
-		pong.current.username = tmp as string;
-		if (pong.current.username && pong.current.username.length > 0)
-		{
-			console.log("Last handled state:", lastHandledState.current);
-			if (lastHandledState.current === game.states.game_settings)
-			{
-				console.log("Username set to:", pong.current.username);
-				playerStates.current = game.playerStates.isHost;
+		tmp = value;
+		tmp = tmp.trim();
+		if (tmp.length == 0) tmp = "HOMERU";
+	});
+	pong.current.inputUsernameTextBox2 = inputUsernameTextBox2;
+	const	inputUsernameTextBox3 = game.createInputText("inputUsernameTextBox3", "SteveLePoisson", (value: string) =>
+	{
+		tmp = value;
+		tmp = tmp.trim();
+		if (tmp.length == 0) tmp = "SteveLePoisson";
+	});
+	pong.current.inputUsernameTextBox3 = inputUsernameTextBox3;
+	const	inputUsernameTextBox4 = game.createInputText("inputUsernameTextBox4", "Anyme023", (value: string) =>
+	{
+		tmp = value;
+		tmp = tmp.trim();
+		if (tmp.length == 0) tmp = "Anyme023";
+	});
+	pong.current.inputUsernameTextBox4 = inputUsernameTextBox4;
 
-				states.current = game.states.hosting_waiting_players;
-				game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.pongSettingsCam, 1, pong, states);
-			}
-			else
-			{
-				playerStates.current = game.playerStates.isPlayer;
-				states.current = game.states.tournament_bracket_preview;
-				game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.pongSettingsCam, 1, pong, states);
-			}
+	const	inputUsernameBackButton = game.createDynamicButton("inputUsernameBackButton", () =>
+	{
+		switch (states.current)
+		{
+			default:
+				states.current = game.states.main_menu;
+				gameModes.current = game.gameModes.none;
+				break;
+			case game.states.input_username_1:
+				states.current = game.states.main_menu;
+				break;
+			case game.states.input_username_2:
+				states.current = game.states.input_username_1;
+				break;
+			case game.states.input_username_3:
+				states.current = game.states.input_username_2;
+				break;
+			case game.states.input_username_4:
+				states.current = game.states.input_username_3;
+				break;
 		}
-	}, pong, "continue");
+	}, pong, "previous");
+
+	const	inputUsernameNextButton = game.createDynamicButton("inputUsernameNextButton", () =>
+	{
+		switch (states.current)
+		{
+			default:
+				break;
+			case game.states.input_username_1:
+				pong.current.username_1 = tmp as string;
+				states.current = game.states.input_username_2;
+				break;
+			case game.states.input_username_2:
+				pong.current.username_2 = tmp as string;
+				states.current = game.states.input_username_3;
+				break;
+			case game.states.input_username_3:
+				pong.current.username_3 = tmp as string;
+				states.current = game.states.input_username_4;
+				break;
+			case game.states.input_username_4:
+				pong.current.username_4 = tmp as string;
+				states.current = game.states.tournament_bracket_preview;
+				break;
+		}
+	}, pong, "next");
 
 	// Add GUI components to the main menu
 	// The order of adding controls matters for the layout
 	inputUsernameVerticalStackPanel.addControl(inputUsernameTitle);
-	inputUsernameVerticalStackPanel.addControl(inputUsernameTextBox);
-	inputUsernameVerticalStackPanel.addControl(inputUsernameButton);
+	inputUsernameVerticalStackPanel.addControl(inputUsernameTextBox1);
+	inputUsernameVerticalStackPanel.addControl(inputUsernameTextBox2);
+	inputUsernameVerticalStackPanel.addControl(inputUsernameTextBox3);
+	inputUsernameVerticalStackPanel.addControl(inputUsernameTextBox4);
+	inputUsernameHorizontalStackPanel.addControl(inputUsernameBackButton);
+	inputUsernameHorizontalStackPanel.addControl(inputUsernameNextButton);
+
+	inputUsernameVerticalStackPanel.addControl(inputUsernameHorizontalStackPanel);
+	inputUsernameVerticalStackPanel.addControl(game.createSpacer(0, 16)); // Add some space at the bottom
 	inputUsernameContainer.addControl(inputUsernameVerticalStackPanel);
 	inputUsernameGUI.addControl(inputUsernameContainer);
 
