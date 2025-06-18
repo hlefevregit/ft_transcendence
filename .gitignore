@@ -12,3 +12,4 @@ vault/data
 vault/secrets
 backend/main/certs/*
 backend/main/logs/*
+backend/main/logs/*
