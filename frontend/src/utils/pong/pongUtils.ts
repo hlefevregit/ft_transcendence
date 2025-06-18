@@ -229,7 +229,7 @@ export const	transitionToCamera = async (cameraA: baby.FreeCamera | baby.FlyCame
 	changeCamera(cameraB, pong);
 	states.current = lastState; // Restore previous state
 	console.log("Transition complete");
-	game.updateGUIVisibilityStates(pong, states.current);
+	game.updateScreensVisibilityStates(pong, states.current);
 	return;
 }
 

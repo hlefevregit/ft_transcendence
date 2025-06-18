@@ -48,64 +48,83 @@ export const initializeAllGUIScreens =
 	console.log("complete initializing GUI screens");
 }
 
-export const	updateGUIVisibilityStates =
+export const updateComponentControls =
+(
+	ui: baby.Container | baby.StackPanel | undefined,
+	statesToCheck: game.states | game.states[],
+	pong: React.RefObject<game.pongStruct>,
+	states: game.states
+): void =>
+{
+	if (ui === undefined || !pong.current.guiTexture) return;
+
+	const	statesArray = Array.isArray(statesToCheck) ? statesToCheck : [statesToCheck];
+	const	shouldShow: boolean = statesArray.includes(states);
+	const	isCurrentlyAdded: boolean = pong.current.guiTexture.getDescendants().includes(ui);
+
+	if		(shouldShow && !isCurrentlyAdded) pong.current.guiTexture.addControl(ui);
+	else if	(!shouldShow && isCurrentlyAdded) pong.current.guiTexture.removeControl(ui);
+}
+
+export const updateComponentVisibility =
+(
+	ui: baby.Container | baby.StackPanel | undefined,
+	statesToCheck: game.states | game.states[],
+	states: game.states
+): void =>
+{
+	if (ui === undefined) return;
+
+	const	statesArray = Array.isArray(statesToCheck) ? statesToCheck : [statesToCheck];
+	const	shouldShow: boolean = statesArray.includes(states);
+
+	ui.isVisible = ui.isEnabled = shouldShow;
+}
+
+export const	updateScreensVisibilityStates =
 (
 	pong: React.RefObject<game.pongStruct>,
 	states: game.states
 ): void =>
 {
-	const setUIState =
-	(
-		ui: baby.Container | undefined,
-		statesToCheck: game.states | game.states[]
-	): void =>
-	{
-		if (ui === undefined || !pong.current.guiTexture) return;
+	game.updateComponentControls(pong.current.mainMenuGUI, game.states.main_menu, pong, states);
+	game.updateComponentControls(pong.current.settingsGUI, game.states.settings, pong, states);
+	game.updateComponentControls(pong.current.pongSettingsGUI, game.states.game_settings, pong, states);
+	game.updateComponentControls(pong.current.finishedGameGUI, game.states.game_finished, pong, states);
+	game.updateComponentControls(pong.current.hostOrJoinGUI, game.states.host_or_join, pong, states);
+	game.updateComponentControls(pong.current.roomListGUI, game.states.room_list, pong, states);
+	game.updateComponentControls(pong.current.waitingRoundStartGUI, game.states.waiting_to_start, pong, states);
+	game.updateComponentControls(pong.current.waitingTournamentToStartGUI, game.states.waiting_tournament_to_start, pong, states);
+	game.updateComponentControls(pong.current.waitingScreenGUI, game.states.hosting_waiting_players, pong, states);
 
-		const	statesArray = Array.isArray(statesToCheck) ? statesToCheck : [statesToCheck];
-		const	shouldShow: boolean = statesArray.includes(states);
-		const	isCurrentlyAdded: boolean = pong.current.guiTexture.getDescendants().includes(ui);
-
-		if		(shouldShow && !isCurrentlyAdded) pong.current.guiTexture.addControl(ui);
-		else if	(!shouldShow && isCurrentlyAdded) pong.current.guiTexture.removeControl(ui);
-	}
-	setUIState(pong.current.mainMenuGUI, game.states.main_menu);
-	setUIState(pong.current.settingsGUI, game.states.settings);
-	setUIState(pong.current.pongSettingsGUI, game.states.game_settings);
-	setUIState(pong.current.countdownGUI, [
+	game.updateComponentControls(pong.current.countdownGUI,
+	[
 		game.states.countdown,
 		game.states.in_final_countdown,
-	]);
-	setUIState(pong.current.finishedGameGUI, game.states.game_finished);
-	setUIState(pong.current.hostOrJoinGUI, game.states.host_or_join);
-	setUIState(pong.current.roomListGUI, game.states.room_list);
-	setUIState(pong.current.waitingRoundStartGUI, game.states.waiting_to_start);
-	setUIState(pong.current.waitingTournamentToStartGUI, game.states.waiting_tournament_to_start);
-	setUIState(pong.current.waitingScreenGUI, game.states.hosting_waiting_players);
-	setUIState(pong.current.bracketGUI, [
+	], pong, states);
+	game.updateComponentControls(pong.current.bracketGUI,
+	[
 		game.states.tournament_bracket_preview,
 		game.states.waiting_to_start,
-	]);
-	setUIState(pong.current.inputUsernameGUI, 
+	], pong, states);
+	game.updateComponentControls(pong.current.inputUsernameGUI, 
 	[
-		game.states.input_username1,
-		game.states.input_username2,
-		game.states.input_username3,
-		game.states.input_username4
-	]);
-
-	setUIState(pong.current.arenaGUI,
+		game.states.input_username_1,
+		game.states.input_username_2,
+		game.states.input_username_3,
+		game.states.input_username_4
+	], pong, states);
+	game.updateComponentControls(pong.current.arenaGUI,
 	[
 		game.states.in_game,
 		game.states.in_game1,
 		game.states.in_game2,
 		game.states.in_final,
-	]);
+	], pong, states);
 
 	pong.current.guiTexture?.removeControl(pong.current.debugGUI as baby.Container);
 	pong.current.guiTexture?.addControl(pong.current.debugGUI as baby.Container);
 	console.log("Updated GUI visibility based on states:", states);
-	console.log("Current GUI texture children:", pong.current.guiTexture?.getDescendants().map(control => control.name));
 }
 
 export const	updateGUIVisibilityPlayerStates =
@@ -211,6 +230,14 @@ export const	updatePlayerNames = (pong: React.RefObject<game.pongStruct>, gameMo
 	}
 }
 
+export const	updateInputUsername = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>): void =>
+{
+	game.updateComponentVisibility(pong.current.inputUsernameTextBox1, game.states.input_username_1, states.current)
+	game.updateComponentVisibility(pong.current.inputUsernameTextBox2, game.states.input_username_2, states.current)
+	game.updateComponentVisibility(pong.current.inputUsernameTextBox3, game.states.input_username_3, states.current)
+	game.updateComponentVisibility(pong.current.inputUsernameTextBox4, game.states.input_username_4, states.current)
+}
+
 export const	refreshOnlineRoomsEntries = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>): baby.StackPanel =>
 {
 	if (!pong.current.rooms)
@@ -264,7 +291,8 @@ export const	updateGUIsWhenNeeded =
 	// Update GUI on state change
 	if (lastState.current !== states.current)
 	{
-		game.updateGUIVisibilityStates(pong, states.current);
+		game.updateInputUsername(pong, states);
+		game.updateScreensVisibilityStates(pong, states.current);
 		game.updateGUIValues(pong, lang);
 		lastState.current = states.current;
 	}
