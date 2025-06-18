@@ -136,7 +136,7 @@ export async function markAsRead(
   lastReadId: number
 ): Promise<void> {
   const resp = await fetch(`/api/conversations/${otherId}/read`, {
-    method: 'PATCH',
+    method: 'POST',                           // ← Utilisation de POST
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${getAuthToken()}`,
@@ -145,6 +145,7 @@ export async function markAsRead(
   })
   if (!resp.ok) throw new Error(await resp.text())
 }
+
 
 // ——— Récupérer tous les compteurs de non-lus ———
 export async function getUnreadCounts(): Promise<Record<number, number>> {
@@ -173,5 +174,5 @@ export function getCurrentUser(): { id: number } {
   if (!token) throw new Error('No auth token')
   const [, payloadBase64] = token.split('.')
   const payload = JSON.parse(atob(payloadBase64))
-  return { id: Number(payload.sub) }  // ou payload.userId selon ce que vous encodez
+  return { id: Number(payload.id) }  // ou payload.userId selon ce que vous encodez
 }
