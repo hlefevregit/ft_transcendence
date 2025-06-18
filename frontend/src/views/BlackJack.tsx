@@ -28,9 +28,22 @@ const	BlackJack: React.FC = () =>
 		bj.updateGUIVisibilityStates(bjRef, state.current);
 		bj.updateGUIValues(bjRef, language);
 
+		// Game loop - 60 times per second 
 		bjRef.current.engine?.runRenderLoop(() =>
 		{
 			bj.updateGUIsWhenNeeded(bjRef, state, language, lastState, lastLanguage);
+
+			switch (state.current)
+			{
+				default:
+					break;
+				case bj.bjStates.main_menu:
+					// Que faire dans le menu principal ?
+					break;
+				case bj.bjStates.settings:
+					// Que faire dans les paramètres ?
+					break;
+			}
 			if (bjRef.current.scene) bjRef.current.scene.render();
 		});
 	});
