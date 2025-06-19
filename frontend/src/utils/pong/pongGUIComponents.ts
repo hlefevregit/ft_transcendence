@@ -596,6 +596,12 @@ export const	createInputText =
 				if (value.length > 0) onChange(value);
 				else onChange("Unnamed");
 			});
+			input.onDirtyObservable.add(() =>
+			{
+				const	value = input.text.trim();
+				if (value.length > 0) onChange(value);
+				else onChange("Unnamed");
+			});
 
 	// Add background first, then input on top
 	container.addControl(background);

@@ -1254,6 +1254,7 @@ export const instantiateInputUsernameGUI =
 		tmp = value;
 		tmp = tmp.trim();
 		if (tmp.length == 0) tmp = "Tabarnak69";
+		pong.current.tournamentPlayer1Name = tmp;
 	});
 	pong.current.inputUsernameTextBox1 = inputUsernameTextBox1;
 	const	inputUsernameTextBox2 = game.createInputText("inputUsernameTextBox2", "HOMERU", (value: string) =>
@@ -1261,6 +1262,7 @@ export const instantiateInputUsernameGUI =
 		tmp = value;
 		tmp = tmp.trim();
 		if (tmp.length == 0) tmp = "HOMERU";
+		pong.current.tournamentPlayer2Name = tmp;
 	});
 	pong.current.inputUsernameTextBox2 = inputUsernameTextBox2;
 	const	inputUsernameTextBox3 = game.createInputText("inputUsernameTextBox3", "SteveLePoisson", (value: string) =>
@@ -1268,6 +1270,7 @@ export const instantiateInputUsernameGUI =
 		tmp = value;
 		tmp = tmp.trim();
 		if (tmp.length == 0) tmp = "SteveLePoisson";
+		pong.current.tournamentPlayer3Name = tmp;
 	});
 	pong.current.inputUsernameTextBox3 = inputUsernameTextBox3;
 	const	inputUsernameTextBox4 = game.createInputText("inputUsernameTextBox4", "Anyme023", (value: string) =>
@@ -1275,6 +1278,7 @@ export const instantiateInputUsernameGUI =
 		tmp = value;
 		tmp = tmp.trim();
 		if (tmp.length == 0) tmp = "Anyme023";
+		pong.current.tournamentPlayer4Name = tmp;
 	});
 	pong.current.inputUsernameTextBox4 = inputUsernameTextBox4;
 
