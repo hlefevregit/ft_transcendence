@@ -7,11 +7,14 @@ import * as bj from '@/libs/bjLibs';
 const	BlackJack: React.FC = () =>
 {
 	const	bjRef = React.useRef<bj.bjStruct>(bj.initBJStruct());
-	const	state = React.useRef<bj.bjStates>(bj.bjStates.main_menu);
-	const	lastState = React.useRef<bj.bjStates>(state.current);
+	const	state = React.useRef<bj.States>(bj.States.main_menu);
+	const	gameState = React.useRef<bj.GameState>(bj.GameState.waiting);
+	const	lastState = React.useRef<bj.States>(state.current);
 	const	language = React.useRef<bj.language>(bj.language.english);
 	const	lastLanguage = React.useRef<bj.language>(language.current);
 	const	canvasRef = React.useRef<HTMLCanvasElement | null>(null);
+
+	const setState = (newState: bj.States) => { state.current = newState; };
 
 	const	navigate = useNavigate();
 	React.useEffect(() =>
@@ -28,7 +31,7 @@ const	BlackJack: React.FC = () =>
 		bj.updateGUIVisibilityStates(bjRef, state.current);
 		bj.updateGUIValues(bjRef, language);
 
-		// Game loop - 60 times per second 
+		// Game loop - 60 times per second
 		bjRef.current.engine?.runRenderLoop(() =>
 		{
 			bj.updateGUIsWhenNeeded(bjRef, state, language, lastState, lastLanguage);
@@ -37,15 +40,20 @@ const	BlackJack: React.FC = () =>
 			{
 				default:
 					break;
-				case bj.bjStates.main_menu:
+				case bj.States.main_menu:
 					// Que faire dans le menu principal ?
 					break;
-				case bj.bjStates.settings:
+				case bj.States.settings:
 					// Que faire dans les paramètres ?
+					break;
+				case bj.States.in_game:
+					if (bjRef.current.playerMoney <= 0 && GameState.current === bj.GameState.waiting)
+						state.current = bj.States.game_over;
 					break;
 			}
 			if (bjRef.current.scene) bjRef.current.scene.render();
 		});
+		bj.PlayGame(bjRef, gameState, setState);
 	});
 	return (
 		<div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0 }}>

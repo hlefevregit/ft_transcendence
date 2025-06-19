@@ -12,17 +12,17 @@ export const	instantiateGUI = (pong: React.RefObject<bj.bjStruct>): void =>
 export const initializeAllGUIScreens =
 (
 	pong: React.RefObject<bj.bjStruct>,
-	states: React.RefObject<bj.bjStates>,
+	states: React.RefObject<bj.States>,
 	lang: React.RefObject<bj.language>,
 	navigate: (path: string) => void,
-	lastState: React.RefObject<bj.bjStates>,
+	lastState: React.RefObject<bj.States>,
 ): void =>
 {
 	// Initialize the GUI texture
 	console.log("initialized GUI texture...");
 	bj.instantiateGUI(pong);
 	console.log("complete initializing GUI texture");
-	
+
 	// Initialize all the GUI screens
 	console.log("initialized GUI screens...");
 	bj.instantiateMainMenuGUI(pong, states, navigate);
@@ -36,13 +36,13 @@ export const initializeAllGUIScreens =
 export const	updateGUIVisibilityStates =
 (
 	bjRef: React.RefObject<bj.bjStruct>,
-	states: bj.bjStates
+	states: bj.States
 ): void =>
 {
 	const setUIState =
 	(
 		ui: baby.Container | undefined,
-		statesToCheck: bj.bjStates | bj.bjStates[]
+		statesToCheck: bj.States | bj.States[]
 	): void =>
 	{
 		if (ui === undefined || !bjRef.current.guiTexture) return;
@@ -54,9 +54,9 @@ export const	updateGUIVisibilityStates =
 		if		(shouldShow && !isCurrentlyAdded) bjRef.current.guiTexture.addControl(ui);
 		else if	(!shouldShow && isCurrentlyAdded) bjRef.current.guiTexture.removeControl(ui);
 	}
-	setUIState(bjRef.current.mainMenuGUI, bj.bjStates.main_menu);
-	setUIState(bjRef.current.settingsGUI, bj.bjStates.settings);
-	setUIState(bjRef.current.arenaGUI,bj.bjStates.in_game);
+	setUIState(bjRef.current.mainMenuGUI, bj.States.main_menu);
+	setUIState(bjRef.current.settingsGUI, bj.States.settings);
+	setUIState(bjRef.current.arenaGUI,bj.States.in_game);
 
 	bjRef.current.guiTexture?.removeControl(bjRef.current.debugGUI as baby.Container);
 	bjRef.current.guiTexture?.addControl(bjRef.current.debugGUI as baby.Container);
@@ -79,7 +79,7 @@ export const	updateGUIValues =
 ): void =>
 {
 	if (!bjRef.current.guiTexture) return;
-	
+
 	// Process text elements with metadata
 	const allControls = bjRef.current.guiTexture.getDescendants();
 	for (const control of allControls)
@@ -87,10 +87,10 @@ export const	updateGUIValues =
 		if (control.metadata?.labelKey)
 		{
 			// Update TextBlocks directly
-			if (control instanceof baby.TextBlock) 
+			if (control instanceof baby.TextBlock)
 				control.text = bj.getLabel(control.metadata.labelKey, lang.current);
 			// Update Button labels (first child is typically the TextBlock)
-			else if 
+			else if
 			(
 				   control instanceof baby.Button
 				&& control.children.length > 0
@@ -98,9 +98,9 @@ export const	updateGUIValues =
 			) (control.children[0] as baby.TextBlock).text = bj.getLabel(control.metadata.labelKey, lang.current);
 		}
 		// Check for nested TextBlocks with metadata in other controls
-		else if 
+		else if
 		(
-			   control instanceof baby.Button 
+			   control instanceof baby.Button
 			&& control.children.length > 0
 			&& control.children[0] instanceof baby.TextBlock
 			&& control.children[0].metadata?.labelKey
@@ -125,7 +125,7 @@ export const	updateGUIValues =
 // 	}
 // }
 
-// export const	refreshOnlineRoomsEntries = (pong: React.RefObject<bj.bjStruct>, states: React.RefObject<bj.bjStates>, gameModes: React.RefObject<bj.gameModes>): baby.StackPanel =>
+// export const	refreshOnlineRoomsEntries = (pong: React.RefObject<bj.bjStruct>, states: React.RefObject<bj.States>, gameModes: React.RefObject<bj.gameModes>): baby.StackPanel =>
 // {
 // 	if (!pong.current.rooms)
 // 	{
@@ -144,7 +144,7 @@ export const	updateGUIValues =
 // 	return roomsOnlineVerticalPanel;
 // }
 
-// export const	refreshTournamentRoomsEntries = (pong: React.RefObject<bj.bjStruct>, states: React.RefObject<bj.bjStates>, gameModes: React.RefObject<bj.gameModes>): baby.StackPanel =>
+// export const	refreshTournamentRoomsEntries = (pong: React.RefObject<bj.bjStruct>, states: React.RefObject<bj.States>, gameModes: React.RefObject<bj.gameModes>): baby.StackPanel =>
 // {
 // 	if (!pong.current.party)
 // 	{
@@ -166,9 +166,9 @@ export const	updateGUIValues =
 export const	updateGUIsWhenNeeded =
 (
 	pong: React.RefObject<bj.bjStruct>,
-	states: React.RefObject<bj.bjStates>,
+	states: React.RefObject<bj.States>,
 	lang: React.RefObject<bj.language>,
-	lastState: React.RefObject<bj.bjStates>,
+	lastState: React.RefObject<bj.States>,
 	lastLang: React.RefObject<bj.language>
 ): void =>
 {

@@ -9,10 +9,10 @@ import * as bj from '@/libs/bjLibs';
 //                                                                                //
 // ****************************************************************************** //
 
-export const    instantiateMainMenuGUI = 
+export const    instantiateMainMenuGUI =
 (
 	bjRef: React.RefObject<bj.bjStruct>,
-	states: React.RefObject<bj.bjStates>,
+	states: React.RefObject<bj.States>,
 	navigate: (path: string) => void,
 ): void =>
 {
@@ -24,15 +24,15 @@ export const    instantiateMainMenuGUI =
 	const	mainMenuDynamicTitle = bj.createDynamicTitle("mainMenuDynamicTitle", "mainMenuTitle");
 	const	mainMenuSettingsButton = bj.createDynamicButton("mainMenuSettingsButton", () =>
 	{
-		states.current = bj.bjStates.settings;
+		states.current = bj.States.settings;
 	}, bjRef, "settings");
 	const	returnToMuseumButton = bj.createDynamicButton("returnToMuseumButton", () => { navigate("/game2"); }, bjRef, "returnToMuseumButton");
-			(returnToMuseumButton.children[0] as baby.Button).onPointerEnterObservable.add(() => 
+			(returnToMuseumButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
 			{
 				(returnToMuseumButton.children[0] as baby.Button).color = bj.colorsScheme.dark1;
 				(returnToMuseumButton.children[0] as baby.Button).background = bj.colorsScheme.auroraAccent1;
 			});
-			(returnToMuseumButton.children[0] as baby.Button).onPointerOutObservable.add(() => 
+			(returnToMuseumButton.children[0] as baby.Button).onPointerOutObservable.add(() =>
 			{
 				(returnToMuseumButton.children[0] as baby.Button).color = bj.colorsScheme.auroraAccent1;
 				(returnToMuseumButton.children[0] as baby.Button).background = bj.colorsScheme.dark1;
@@ -68,7 +68,7 @@ export const    instantiateMainMenuGUI =
 export const    instantiateSettingsGUI =
 (
 	bjRef: React.RefObject<bj.bjStruct>,
-	states: React.RefObject<bj.bjStates>,
+	states: React.RefObject<bj.States>,
 	lang: React.RefObject<bj.language>,
 ): void =>
 {
@@ -83,7 +83,7 @@ export const    instantiateSettingsGUI =
 	const	settingsMenuTitle = bj.createDynamicTitle("settingsMenuTitle", "settings");
 	const	backButton = bj.createDynamicButton("settingsButton", () =>
 	{
-		states.current = bj.bjStates.main_menu;
+		states.current = bj.States.main_menu;
 	}, bjRef, "back");
 
 	// Language selection buttons
@@ -134,7 +134,7 @@ export const    instantiateSettingsGUI =
 	settingsGUI.addControl(settingsContainer);
 	settingsContainer.addControl(settingsPanel);
 	settingsPanel.addControl(settingsMenuTitle);
-	
+
 	// language selection panels
 	settingsPanel.addControl(settingsLanguagePanel1);
 	settingsPanel.addControl(settingsLanguagePanel2);
@@ -142,7 +142,7 @@ export const    instantiateSettingsGUI =
 	settingsLanguagePanel1.addControl(frenchButton);
 	settingsLanguagePanel2.addControl(italianButton);
 	settingsLanguagePanel2.addControl(brailButton);
-	
+
 	// Back button
 	settingsPanel.addControl(backButton);
 	// Add the screen to the GUI texture
@@ -158,7 +158,7 @@ export const    instantiateSettingsGUI =
 export const	instantiateDebugGUI =
 (
 	bjRef: React.RefObject<bj.bjStruct>,
-	states: React.RefObject<bj.bjStates>,
+	states: React.RefObject<bj.States>,
 	lang: React.RefObject<bj.language>
 ): void =>
 {
@@ -188,7 +188,7 @@ export const	instantiateDebugGUI =
 			(debugStatesTextName.children[0] as baby.TextBlock).fontSize = 12;
 			(debugStatesTextName.children[0] as baby.TextBlock).onTextChangedObservable.add(() =>
 			{
-				bj.findComponentByName(bjRef, "debugStatesTextName").text = Object.keys(bj.bjStates).find(key => bj.bjStates[key as keyof typeof bj.bjStates] === states.current);
+				bj.findComponentByName(bjRef, "debugStatesTextName").text = Object.keys(bj.States).find(key => bj.States[key as keyof typeof bj.States] === states.current);
 			});
 	const	debugStatesValue = bj.createDynamicText("debugStatesValue");
 			(debugStatesValue.children[0] as baby.TextBlock).fontSize = 12;
@@ -243,15 +243,15 @@ export const	instantiateDebugGUI =
 	debugVerticalStackPanel.clearControls();
 	debugGUI.addControl(debugContainer);
 	debugContainer.addControl(debugVerticalStackPanel);
-	
+
 	// debugVerticalStackPanel ordering
 	debugVerticalStackPanel.addControl(debugTitle);
 	debugVerticalStackPanel.addControl(debugFrameratePanel);
-	
+
 	// debugFrameratePanel ordering
 	debugFrameratePanel.addControl(debugFramerateText);
 	debugFrameratePanel.addControl(debugFramerateValue);
-	
+
 	// debugButtonPanel ordering
 	debugVerticalStackPanel.addControl(debugStatesText);
 	debugVerticalStackPanel.addControl(debugStatesTextName);
