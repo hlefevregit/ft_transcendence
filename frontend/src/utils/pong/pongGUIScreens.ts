@@ -1088,21 +1088,13 @@ export const instantiateBracketGUI =
 	// Play button
 	const	bracketPlayButton = game.createDynamicButton("bracketPlayButton", () =>
 	{
-		if (gameModes.current !== game.gameModes.none) {
-			// ✅ Envoie le leave_room au serveur
-			if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN)
-			{
-				socketRef.current.send
-				(
-					JSON.stringify({
-					type: 'leave_room',
-					gameId: pong.current.tournamentId, // Assure-toi que tournamentId est bien set !
-				}));
-			}
+		if (gameModes.current !== game.gameModes.tournament)
+		{
+			console.warn("❌ Cannot start the game, not in tournament mode");
+			return;
 		}
-		states.current = game.states.main_menu;
-		gameModes.current = game.gameModes.none;
-		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
+		states.current = game.states.waiting_to_start;
+		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.arenaCam, 1, pong, states);
 	}, pong, "play");
 			(bracketPlayButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
 			{
@@ -1176,6 +1168,12 @@ export const instantiateBracketGUI =
 	// const	finalPlayer1Container = pong.current.bracketFinalPlayer1.children[0] as baby.Container;
 	// const	finalPlayer1Rectangle = finalPlayer1Container.children[0] as baby.Rectangle;
 	// 		finalPlayer1Rectangle.color = game.colorsScheme.auroraAccent3;
+
+	// const	finalPlayer1Container = pong.current.bracketFinalPlayer1.children[0] as baby.Container;
+	// const	finalPlayer1Stack = finalPlayer1Container.children[1] as baby.StackPanel;
+	// const	finalPlayer1Label = finalPlayer1Stack.children[0] as baby.TextBlock;
+	// 	finalPlayer1Label.text = "caca";
+	//  game.colorsScheme.auroraAccent3;
 	
 	// // approche plus rapide mais se reset à un changement de menu, il faudra donc resend l'info depuis le serveur (chose qu'on ne fera pas mdr)
 	// // Alors ca marche pas parceque dans ma situation, cette GUI n'est pas affichée au lancement du jeu, mais seulement quand cette UI est actuellement affichée
