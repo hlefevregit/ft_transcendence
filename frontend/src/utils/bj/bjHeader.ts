@@ -18,13 +18,13 @@ export enum	colorsScheme
 	dark2 = "#3b4252",
 	dark3 = "#434c5e",
 	dark4 = "#4c566a",	// lightest
-	
+
 	// Light theme
 	light1 = "#d8dee9",	// darkest
 	light2 = "#e5e9f0",
 	light3 = "#eceff4",	// lightest
-	
-	
+
+
 	// Accent colors - Frost
 	frostAccent1 = "#5e81ac",	// turquoise
 	frostAccent2 = "#81a1c1",	// light blue
@@ -40,13 +40,18 @@ export enum	colorsScheme
 
 }
 
-export enum bjStates
+export enum States
 {
 	main_menu,
 	settings,
 	in_game,
-	player,
-	croupier,
+	game_over,
+}
+
+export enum GameState
+{
+	in_hand,
+	waiting,
 }
 
 export type bjStruct =
@@ -58,10 +63,10 @@ export type bjStruct =
 
 	// Cameras
 	camera?: baby.FreeCamera;
-	
-	// Pong objects
+
+	// BlackJack objects
 	card?: baby.Mesh;
-	jeton?: baby.Mesh;
+	chips?: baby.Mesh;
 
 	// Variables
 	playerMoney: number;
@@ -76,7 +81,7 @@ export type bjStruct =
 	guiTexture?: baby.AdvancedDynamicTexture;
 };
 
-export function initBJStruct(): bjStruct 
+export function initBJStruct(): bjStruct
 {
 	return {
 		playerMoney: 1000, // Starting money for the player
