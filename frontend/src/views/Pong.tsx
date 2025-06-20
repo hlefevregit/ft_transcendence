@@ -40,10 +40,7 @@ const	Pong: React.FC = () =>
 			const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 			const wsProtocol = isLocalhost ? 'ws:' : (window.location.protocol === 'https:' ? 'wss:' : 'ws:');
 
-			const wsUrl =
-				gameModes.current === game.gameModes.tournament
-					? `${wsProtocol}//${window.location.hostname}:4002/ws?token=${token || ''}`
-					: `${wsProtocol}//${window.location.hostname}:4000/ws?token=${token || ''}`;
+			const wsUrl =`${wsProtocol}//${window.location.hostname}:4000/ws?token=${token || ''}`;
 
 			console.log("🌐 Connecting WebSocket to:", wsUrl);
 			const ws = new WebSocket(wsUrl);
@@ -58,18 +55,18 @@ const	Pong: React.FC = () =>
 
 			useWebSocketOnline(pong, socketRef, gameModes, state, lang, userNameRef, ws);
 
-			import('@/utils/pong/tournament').then(tournamentModule => {
-				tournamentModule.useTournamentWebSocket(
-					pong,
-					socketRef,
-					gameModes,
-					state,
-					lang,
-					userNameRef,
-					ws,
-					lastState,
-				);
-			});
+			// import('@/utils/pong/tournament').then(tournamentModule => {
+			// 	tournamentModule.useTournamentWebSocket(
+			// 		pong,
+			// 		socketRef,
+			// 		gameModes,
+			// 		state,
+			// 		lang,
+			// 		userNameRef,
+			// 		ws,
+			// 		lastState,
+			// 	);
+			// });
 		}
 	}, [gameModeTrigger]);
 
@@ -218,20 +215,20 @@ const	Pong: React.FC = () =>
 			{
 				useOnlineLoop(pong, socketRef, gameModes, state, userNameRef, lastHandledState);
 			}
-			else if (gameModes.current === game.gameModes.tournament)
-			{
-				// Handle tournament gameplay loop
-				import('@/utils/pong/tournament').then(tournamentModule => {
-					tournamentModule.handleTournamentLoop(
-						pong,
-						socketRef,
-						gameModes,
-						state,
-						userNameRef,
-						lastHandledState,
-					);
-				});
-			}
+			// else if (gameModes.current === game.gameModes.tournament)
+			// {
+			// 	// Handle tournament gameplay loop
+			// 	import('@/utils/pong/tournament').then(tournamentModule => {
+			// 		tournamentModule.handleTournamentLoop(
+			// 			pong,
+			// 			socketRef,
+			// 			gameModes,
+			// 			state,
+			// 			userNameRef,
+			// 			lastHandledState,
+			// 		);
+			// 	});
+			// }
 			else 
 			{
 				switch (state.current)
