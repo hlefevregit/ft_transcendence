@@ -103,14 +103,14 @@ services:
     networks:
       - ft_network
     
-  tournament:
-    build:
-      context: ./backend/tournament
-      dockerfile: Dockerfile.dev
-    ports:
-      - "4002:4002"
-    networks:
-      - ft_network
+  # tournament:
+  #   build:
+  #     context: ./backend/tournament
+  #     dockerfile: Dockerfile.dev
+  #   ports:
+  #     - "4002:4002"
+  #   networks:
+  #     - ft_network
 
   frontend:
     build:
