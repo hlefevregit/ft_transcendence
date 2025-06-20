@@ -8,38 +8,34 @@ import * as bjLib from '@/libs/bjLibs';
 import pongMapUrl from '@/assets/transcendence_map.gltf?url';
 import bjMapUrl from '@/assets/blackjack_map.gltf?url';
 
-export const	setupBabylonBJ = async (bj: bjLib.bjStruct, canvasRef: any): Promise<void> =>
+export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<void> =>
 {
 	const	engineInstance = new baby.Engine(canvasRef, true);
 	const	sceneInstance = new baby.Scene(engineInstance);
-	bj.engine = engineInstance;
-	bj.scene = sceneInstance;
+	BJ.engine = engineInstance;
+	BJ.scene = sceneInstance;
 
 	new baby.HemisphericLight("light", new baby.Vector3(1, 1, 0), sceneInstance);
 
 	const	skyboxMesh = baby.MeshBuilder.CreateBox("skyBox", { size: 1000 }, sceneInstance);
-	bj.skybox = skyboxMesh;
+	BJ.skybox = skyboxMesh;
 
-	const	cameraInstance = new baby.FreeCamera("camera", new baby.Vector3(0.0, 0.0, 0.0), sceneInstance);
+	const	cameraInstance = new baby.FreeCamera("mainMenuCam", new baby.Vector3(0, 3, 7), sceneInstance);
 	cameraInstance.setTarget(baby.Vector3.Zero());
 	cameraInstance.inputs.clear();
-	cameraInstance.rotation = new baby.Vector3(0, 0, 0);
-	bj.camera = cameraInstance;
-	bj.scene.activeCamera = cameraInstance;
+	cameraInstance.rotation = new baby.Vector3(0, Math.PI / -1.001, 0);
+	BJ.mainMenuCam = cameraInstance;
+	BJ.scene.activeCamera = cameraInstance;
 
 	try
 	{
-		const meshes = await importMap(bj.scene, bjMapUrl);
-		if (meshes && meshes.length > 0)
-		{
-			bj.map = meshes[0];
-			bj.map.scaling = new baby.Vector3(2, 2, 2);
-		}
+		const meshes = await game.importMap(BJ.scene, bjMapUrl);
+		if (meshes && meshes.length > 0) BJ.map = meshes[0];
 		else console.warn("Failed to load map");
+		// if (BJ.map) BJ.map.scaling = new baby.Vector3(25, 25, -25);
 	}
 	catch (error) { console.error("Error while loading map:", error); }
 
-	// Enable ambient occlusion
 	sceneInstance.createDefaultEnvironment();
 	const ssaoRenderingPipeline = new baby.SSAORenderingPipeline("ssao", sceneInstance,1);
 	ssaoRenderingPipeline.scene.setRenderingOrder(0, null, null, null);
@@ -48,6 +44,7 @@ export const	setupBabylonBJ = async (bj: bjLib.bjStruct, canvasRef: any): Promis
 	// Set rendering groups so GUI renders after post-processing
     sceneInstance.setRenderingAutoClearDepthStencil(1, false); // Don't clear depth for rendering group 1
 }
+
 
 export const	setupBabylonPong = async (pong: game.pongStruct, canvasRef: any): Promise<void> =>
 {
