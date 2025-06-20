@@ -19,6 +19,9 @@ const	BlackJack: React.FC = () =>
 	const	navigate = useNavigate();
 	React.useEffect(() =>
 	{
+		if (!canvasRef.current) return;
+		canvasRef.current.focus();
+
 		game.setupBabylonBJ(bjRef.current, canvasRef.current);
 		bj.initializeAllGUIScreens
 		(
@@ -32,7 +35,7 @@ const	BlackJack: React.FC = () =>
 		bj.updateGUIValues(bjRef, language);
 
 		// Game loop - 60 times per second
-		bjRef.current.engine?.runRenderLoop(() =>
+		bjRef.current.engine.runRenderLoop(() =>
 		{
 			bj.updateGUIsWhenNeeded(bjRef, state, language, lastState, lastLanguage);
 
@@ -47,14 +50,24 @@ const	BlackJack: React.FC = () =>
 					// Que faire dans les paramètres ?
 					break;
 				case bj.States.in_game:
-					if (bjRef.current.playerMoney <= 0 && GameState.current === bj.GameState.waiting)
-						state.current = bj.States.game_over;
+					// if (bjRef.current.playerMoney <= 0 && GameState.current === bj.GameState.waiting)
+					// 	state.current = bj.States.game_over;
 					break;
 			}
 			if (bjRef.current.scene) bjRef.current.scene.render();
 		});
 		bj.PlayGame(bjRef, gameState, setState);
+
+		// Handle resizing of the canvas
+		const	handleResize = game.debounce(() =>
+		{
+				if (!bjRef.current.engine) return;
+				bjRef.current.engine.resize();
+			}, 50);
+		window.addEventListener('resize', handleResize);
+
 	});
+
 	return (
 		<div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0 }}>
 			<canvas ref={canvasRef} style={{ width: '100%', height: '100%' }} />

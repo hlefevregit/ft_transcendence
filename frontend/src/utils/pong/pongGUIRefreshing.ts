@@ -28,7 +28,7 @@ export const initializeAllGUIScreens =
 	console.log("initialized GUI texture...");
 	game.instantiateGUI(pong);
 	console.log("complete initializing GUI texture");
-	
+
 	// Initialize all the GUI screens
 	console.log("initialized GUI screens...");
 	game.instantiateMainMenuGUI(pong, states, gameModes, navigate, setGameModeTrigger);
@@ -107,7 +107,7 @@ export const	updateScreensVisibilityStates =
 		game.states.tournament_bracket_preview,
 		game.states.waiting_to_start,
 	], pong, states);
-	game.updateComponentControls(pong.current.inputUsernameGUI, 
+	game.updateComponentControls(pong.current.inputUsernameGUI,
 	[
 		game.states.input_username_1,
 		game.states.input_username_2,
@@ -184,7 +184,7 @@ export const	updateGUIValues =
 ): void =>
 {
 	if (!pong.current.guiTexture) return;
-	
+
 	// Process text elements with metadata
 	const allControls = pong.current.guiTexture.getDescendants();
 	for (const control of allControls)
@@ -192,10 +192,10 @@ export const	updateGUIValues =
 		if (control.metadata?.labelKey)
 		{
 			// Update TextBlocks directly
-			if (control instanceof baby.TextBlock) 
+			if (control instanceof baby.TextBlock)
 				control.text = game.getLabel(control.metadata.labelKey, lang.current);
 			// Update Button labels (first child is typically the TextBlock)
-			else if 
+			else if
 			(
 				   control instanceof baby.Button
 				&& control.children.length > 0
@@ -203,9 +203,9 @@ export const	updateGUIValues =
 			) (control.children[0] as baby.TextBlock).text = game.getLabel(control.metadata.labelKey, lang.current);
 		}
 		// Check for nested TextBlocks with metadata in other controls
-		else if 
+		else if
 		(
-			   control instanceof baby.Button 
+			   control instanceof baby.Button
 			&& control.children.length > 0
 			&& control.children[0] instanceof baby.TextBlock
 			&& control.children[0].metadata?.labelKey
@@ -288,6 +288,8 @@ export const	updateGUIsWhenNeeded =
 	lastLang: React.RefObject<game.lang>
 ): void =>
 {
+	if (states.current > game.states.disconnecting) states.current = game.states.main_menu; // Roll over to main menu if past disconnecting
+	else if (states.current < game.states.main_menu) states.current = game.states.disconnecting; // Roll over to disconnecting if before main menu
 	// Update GUI on state change
 	if (lastState.current !== states.current)
 	{

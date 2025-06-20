@@ -63,6 +63,7 @@ export type bjStruct =
 
 	// Cameras
 	camera?: baby.FreeCamera;
+	map?: baby.AbstractMesh;
 
 	// BlackJack objects
 	card?: baby.Mesh;
