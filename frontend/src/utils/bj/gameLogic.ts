@@ -4,7 +4,6 @@ import * as game from '@/libs/bjLibs';
 
 export const PlayGame = (
   bjRef: React.RefObject<game.bjStruct>,
-  gameState: React.RefObject<game.GameState>,
   updateState: (newState: game.States) => void
 ): void => {
   const playerMoney = bjRef.current?.playerMoney || 0;
@@ -15,10 +14,10 @@ export const PlayGame = (
 
   // Logic to handle card dealing, betting, win/loss resolution etc.
   // Example pseudo-logic
-  if (gameState.current === game.GameState.waiting) {
+  if (bjRef.current.gameState === game.GameState.waiting) {
     dealInitialCards(bjRef); // You'll implement this
-    gameState.current = game.GameState.in_hand;
-  } else if (gameState.current === game.GameState.in_hand) {
+    bjRef.current.gameState = game.GameState.in_hand;
+  } else if (bjRef.current.gameState === game.GameState.in_hand) {
     // Wait for player input
   }
 };

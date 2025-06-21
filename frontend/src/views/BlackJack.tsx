@@ -14,8 +14,6 @@ const	BlackJack: React.FC = () =>
 	const	lastLanguage = React.useRef<bj.language>(language.current);
 	const	canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 
-	const setState = (newState: bj.States) => { state.current = newState; };
-
 	const	navigate = useNavigate();
 	React.useEffect(() =>
 	{
@@ -56,7 +54,6 @@ const	BlackJack: React.FC = () =>
 			}
 			if (bjRef.current.scene) bjRef.current.scene.render();
 		});
-		bj.PlayGame(bjRef, gameState, setState);
 
 		// Handle resizing of the canvas
 		const	handleResize = game.debounce(() =>
