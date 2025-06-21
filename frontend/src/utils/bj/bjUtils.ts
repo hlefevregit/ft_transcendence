@@ -111,6 +111,8 @@ export const	quaternionToEulerAngles = (x: number, y: number, z: number, w: numb
     return quaternion.toEulerAngles();
 }
 
+export 	const	setState = (newState: bj.States) => { state.current = newState; };
+
 export const	changeCamera = (newCamera: baby.Camera | undefined, bjRef: React.RefObject<bj.bjStruct>): void =>
 {
 	if (!bjRef.current.scene || newCamera === undefined) return;
@@ -143,7 +145,7 @@ export const	sleep = (ms: number): Promise<void> =>
 const lerp = (start: number, end: number, alpha: number): number => {
     // Clamp alpha to 0-1 range
     alpha = Math.max(0, Math.min(1, alpha));
-    
+
     // Linear interpolation formula: start + (end - start) * alpha
     return start + (end - start) * alpha;
 }
@@ -151,7 +153,7 @@ const lerp = (start: number, end: number, alpha: number): number => {
 /**
  * Applies a smooth step interpolation between two Vector3 values
  * @param {baby.Vector3} start - Starting vector
- * @param {baby.Vector3} end - Target vector 
+ * @param {baby.Vector3} end - Target vector
  * @param {number} alpha - Interpolation factor (0-1)
  * @returns {baby.Vector3} Smoothly interpolated vector
  */
@@ -159,10 +161,10 @@ const	smoothStepVector3 = (start: baby.Vector3, end: baby.Vector3, alpha: number
 {
 	// Clamp alpha to 0-1 range
 	alpha = Math.max(0, Math.min(1, alpha));
-	
+
 	// Apply smoothStep function: 3x^2 - 2x^3
 	alpha = alpha * alpha * (3 - 2 * alpha);
-	
+
 	// Use Babylon's built-in lerp with our smoothed alpha
 	return baby.Vector3.Lerp(start, end, alpha);
 }
@@ -171,10 +173,10 @@ const	smoothStep = (start: number, end: number, alpha: number): number =>
 {
 	// Clamp alpha to 0-1 range
 	alpha = Math.max(0, Math.min(1, alpha));
-	
+
 	// Apply smoothStep function: 3x^2 - 2x^3
 	alpha = alpha * alpha * (3 - 2 * alpha);
-	
+
 	// Use our built-in lerp with our smoothed alpha
 	return lerp(start, end, alpha);
 }
@@ -204,7 +206,7 @@ let		time: number = 0;
 // 	if (bjRef.current.scene?.activeCamera?.name !== bjRef.current.transitionCam?.name)
 // 		changeCamera(bjRef.current.transitionCam, bjRef);
 // 	forceRender(bjRef.current);
-	
+
 // 	// Animation loop
 // 	while (time <= duration)
 // 	{

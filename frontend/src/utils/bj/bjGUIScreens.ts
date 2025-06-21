@@ -41,6 +41,10 @@ export const    instantiateMainMenuGUI =
 	const	mainMenuPlay = bj.createDynamicButton("mainMenuPlay", () =>
 	{
 		if (!bjRef.current.scene) return;
+		states.current = bj.States.in_game;
+		bjRef.current.gameState = bj.GameState.waiting;
+		bj.PlayGame(bjRef, bj.setState);
+
 	}, bjRef, "play");
 
 	// Add GUI components to the main menu

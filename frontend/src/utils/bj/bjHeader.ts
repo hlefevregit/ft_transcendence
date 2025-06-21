@@ -80,6 +80,9 @@ export type bjStruct =
 
 	// Textures
 	guiTexture?: baby.AdvancedDynamicTexture;
+
+	// Game state
+	gameState?: GameState;
 };
 
 export function initBJStruct(): bjStruct
