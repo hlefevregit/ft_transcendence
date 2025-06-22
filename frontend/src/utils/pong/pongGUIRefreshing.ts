@@ -66,7 +66,7 @@ export const updateComponentControls =
 	else if	(!shouldShow && isCurrentlyAdded) pong.current.guiTexture.removeControl(ui);
 }
 
-export const updateComponentVisibility =
+export const updateComponentVisibilityBasedOnStates =
 (
 	ui: baby.Container | baby.StackPanel | undefined,
 	statesToCheck: game.states | game.states[],
@@ -77,6 +77,36 @@ export const updateComponentVisibility =
 
 	const	statesArray = Array.isArray(statesToCheck) ? statesToCheck : [statesToCheck];
 	const	shouldShow: boolean = statesArray.includes(states);
+
+	ui.isVisible = ui.isEnabled = shouldShow;
+}
+
+export const updateComponentVisibilityBasedOnGameMode =
+(
+	ui: baby.Container | baby.StackPanel | undefined,
+	statesToCheck: game.gameModes | game.gameModes[],
+	activeGameMode: game.gameModes
+): void =>
+{
+	if (ui === undefined) return;
+
+	const	statesArray = Array.isArray(statesToCheck) ? statesToCheck : [statesToCheck];
+	const	shouldShow: boolean = statesArray.includes(activeGameMode);
+
+	ui.isVisible = ui.isEnabled = shouldShow;
+}
+
+export const updateComponentVisibilityBasedOnTournamentStates =
+(
+	ui: baby.Container | baby.StackPanel | undefined,
+	statesToCheck: game.tournamentStates | game.tournamentStates[],
+	tournamentState: game.tournamentStates
+): void =>
+{
+	if (ui === undefined) return;
+
+	const	statesArray = Array.isArray(statesToCheck) ? statesToCheck : [statesToCheck];
+	const	shouldShow: boolean = statesArray.includes(tournamentState);
 
 	ui.isVisible = ui.isEnabled = shouldShow;
 }
@@ -105,7 +135,7 @@ export const	updateScreensVisibilityStates =
 	game.updateComponentControls(pong.current.bracketGUI,
 	[
 		game.states.tournament_bracket_preview,
-		game.states.waiting_to_start,
+		// game.states.waiting_to_start,
 	], pong, states);
 	game.updateComponentControls(pong.current.inputUsernameGUI,
 	[
@@ -117,9 +147,9 @@ export const	updateScreensVisibilityStates =
 	game.updateComponentControls(pong.current.arenaGUI,
 	[
 		game.states.in_game,
-		game.states.in_game1,
-		game.states.in_game2,
-		game.states.in_final,
+		// game.states.in_game1,
+		// game.states.in_game2,
+		// game.states.in_final,
 	], pong, states);
 
 	pong.current.guiTexture?.removeControl(pong.current.debugGUI as baby.Container);
@@ -141,6 +171,7 @@ export const	updateGUIVisibilityPlayerStates =
 		|| !pong.current.waitingTournamentToStartButtonPlay
 		|| !pong.current.finishedGameBackButton
 		|| !pong.current.finishedGameReplayButton
+		|| !pong.current.finishedGameContinueButton
 	) return;
 	switch (playerStates)
 	{
@@ -165,14 +196,17 @@ export const	updateGUIVisibilityPlayerStates =
 		default:
 			pong.current.finishedGameBackButton.isEnabled = pong.current.finishedGameBackButton.isVisible = true;
 			pong.current.finishedGameReplayButton.isEnabled = pong.current.finishedGameReplayButton.isVisible = true;
+			pong.current.finishedGameContinueButton.isEnabled = pong.current.finishedGameContinueButton.isVisible = false;
 			break;
 		case game.gameModes.online:
-			pong.current.finishedGameBackButton.isEnabled = pong.current.finishedGameBackButton.isVisible = true;
-			pong.current.finishedGameReplayButton.isEnabled = pong.current.finishedGameReplayButton.isVisible = false;
+				pong.current.finishedGameBackButton.isEnabled = pong.current.finishedGameBackButton.isVisible = true;
+				pong.current.finishedGameReplayButton.isEnabled = pong.current.finishedGameReplayButton.isVisible = false;
+				pong.current.finishedGameContinueButton.isEnabled = pong.current.finishedGameContinueButton.isVisible = false;
 			break;
 		case game.gameModes.tournament:
-			pong.current.finishedGameBackButton.isEnabled = pong.current.finishedGameBackButton.isVisible = true;
+			pong.current.finishedGameBackButton.isEnabled = pong.current.finishedGameBackButton.isVisible = false;
 			pong.current.finishedGameReplayButton.isEnabled = pong.current.finishedGameReplayButton.isVisible = false;
+			pong.current.finishedGameContinueButton.isEnabled = pong.current.finishedGameContinueButton.isVisible = true;
 			break;
 	}
 }
@@ -262,10 +296,10 @@ export const	updateBracketGUI = (pong: React.RefObject<game.pongStruct>, states:
 
 export const	updateInputUsername = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>): void =>
 {
-	game.updateComponentVisibility(pong.current.inputUsernameTextBox1, game.states.input_username_1, states.current)
-	game.updateComponentVisibility(pong.current.inputUsernameTextBox2, game.states.input_username_2, states.current)
-	game.updateComponentVisibility(pong.current.inputUsernameTextBox3, game.states.input_username_3, states.current)
-	game.updateComponentVisibility(pong.current.inputUsernameTextBox4, game.states.input_username_4, states.current)
+	game.updateComponentVisibilityBasedOnStates(pong.current.inputUsernameTextBox1, game.states.input_username_1, states.current)
+	game.updateComponentVisibilityBasedOnStates(pong.current.inputUsernameTextBox2, game.states.input_username_2, states.current)
+	game.updateComponentVisibilityBasedOnStates(pong.current.inputUsernameTextBox3, game.states.input_username_3, states.current)
+	game.updateComponentVisibilityBasedOnStates(pong.current.inputUsernameTextBox4, game.states.input_username_4, states.current)
 }
 
 export const	refreshOnlineRoomsEntries = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>): baby.StackPanel =>

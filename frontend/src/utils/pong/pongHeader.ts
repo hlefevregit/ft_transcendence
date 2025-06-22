@@ -44,6 +44,18 @@ export enum	colorsScheme
 
 }
 
+export enum	tournamentStates
+{
+	none,
+	waiting_game_1,
+	waiting_game_2,
+	waiting_game_3,
+	game_1,
+	game_2,
+	game_3,
+	finished,
+}
+
 export enum playerStates
 {
 	none,
@@ -188,12 +200,21 @@ export type pongStruct =
 	launched?: boolean;	// Used to know if the tournament has been launched
 	waitingFinalSent?: boolean;	// Used to know if the waiting final has been sent to the server
 	startFinalSent?: boolean;	// Used to know if the start final has been sent to the server
-	isInGame1?: boolean;	// Used to know if the player is in game 1 of the tournament
-	isInGame2?: boolean;	// Used to know if the player is in game 2 of the tournament
-	isFinal?: boolean;	// Used to know if the player is in the final of the tournament
+	// isInGame1?: boolean;	// Used to know if the player is in game 1 of the tournament
+	// isInGame2?: boolean;	// Used to know if the player is in game 2 of the tournament
+	// isFinal?: boolean;	// Used to know if the player is in the final of the tournament
+	tournamentState: tournamentStates;
+
+	tournamentGame1WinnedByPlayer1?: boolean;
+	tournamentGame1WinnedByPlayer2?: boolean;
+
+	tournamentGame2WinnedByPlayer1?: boolean;
+	tournamentGame2WinnedByPlayer2?: boolean;
+
+	tournamentGame3WinnedByPlayer1?: boolean;
+	tournamentGame3WinnedByPlayer2?: boolean;
+
 	// Room management
-
-
 	rooms: Map<string, any>;
 	party: Map<string, any>;
 	lastRoomJoined?: string;
@@ -246,6 +267,7 @@ export type pongStruct =
 	bracketWinnerPlayer?: baby.StackPanel;
 	finishedGameBackButton?: baby.StackPanel;
 	finishedGameReplayButton?: baby.StackPanel;
+	finishedGameContinueButton?: baby.StackPanel;
 
 	// Engine and scene
 	guiTexture?: baby.AdvancedDynamicTexture;
@@ -301,6 +323,8 @@ export function initPongStruct(): pongStruct
 
 		musicVolume: 1,
 		soundVolume: 1,
+
+		tournamentState: tournamentStates.none,
 	};
 }
 
@@ -319,6 +343,7 @@ export const	label =
 	previous: ["Previous ◂", "Précédent ◂", "Precedente ◂", "⠨⠏⠗⠑⠧⠊⠕⠥⠎ ◂"],
 	abandon: ["Abandon ×", "Abandonner ×", "Abbandona ×", "⠨⠁⠃⠁⠝⠙⠕⠝ ×"],
 	versus: ["Versus", "Contre", "Contro", "⠨⠧⠑⠗⠎⠥⠎"],
+	finish: ["Finish", "Terminer", "Finire", "⠨⠋⠊⠝⠊⠎⠓"],
 
 
 	// Main menu

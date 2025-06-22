@@ -147,6 +147,16 @@ const	Pong: React.FC = () =>
 			userNameRef.current = 'Player'; // fallback
 		});
 
+		// show inspector
+		// if (pong.current.scene)
+		// {
+		// 	pong.current.scene.debugLayer.show
+		// 	({
+		// 		showExplorer: true,
+		// 		showInspector: true,
+		// 		embedMode: true,
+		// 	});
+		// }
 
 		// Game loop
 		if (!pong.current.engine) return;
@@ -162,55 +172,55 @@ const	Pong: React.FC = () =>
 				|| !pong.current.ball
 			) return;
 
-			if
-			(
-				(
-					   lastState.current === game.states.hosting_waiting_players
-					&& state.current !== game.states.hosting_waiting_players
-					&& state.current !== game.states.in_game 
-					&& state.current !== game.states.game_finished
-					&& state.current !== game.states.countdown
-					&& state.current !== game.states.tournament_bracket_preview
-					&& state.current !== game.states.in_transition
-					&& state.current !== game.states.not_found
-					&& state.current !== game.states.launch_games
-					&& state.current !== game.states.waiting_to_start
-				)
-				||
-				(
-					   lastState.current === game.states.tournament_bracket_preview
-					&& state.current !== game.states.tournament_bracket_preview
-					&& state.current !== game.states.in_game
-					&& state.current !== game.states.game_finished
-					&& state.current !== game.states.countdown
-					&& state.current !== game.states.in_transition
-					&& state.current !== game.states.not_found
-					&& state.current !== game.states.launch_games
-					&& state.current !== game.states.tournament_round_1_game_1
-					&& state.current !== game.states.tournament_round_1_game_2
-					&& state.current !== game.states.in_game1
-					&& state.current !== game.states.in_game2
-					&& state.current !== game.states.waiting_to_start
-					&& state.current !== game.states.hosting_waiting_players
-				)
-			)
-			{
-				// console.log("roomId:", pong.current.lastHostedRoomId);
-				const roomId = pong.current.lastHostedRoomId;
-				if (gameModes.current === game.gameModes.online && roomId !== 'none') {
+			// if
+			// (
+			// 	(
+			// 		   lastState.current === game.states.hosting_waiting_players
+			// 		&& state.current !== game.states.hosting_waiting_players
+			// 		&& state.current !== game.states.in_game 
+			// 		&& state.current !== game.states.game_finished
+			// 		&& state.current !== game.states.countdown
+			// 		&& state.current !== game.states.tournament_bracket_preview
+			// 		&& state.current !== game.states.in_transition
+			// 		&& state.current !== game.states.not_found
+			// 		&& state.current !== game.states.launch_games
+			// 		&& state.current !== game.states.waiting_to_start
+			// 	)
+			// 	||
+			// 	(
+			// 		   lastState.current === game.states.tournament_bracket_preview
+			// 		&& state.current !== game.states.tournament_bracket_preview
+			// 		&& state.current !== game.states.in_game
+			// 		&& state.current !== game.states.game_finished
+			// 		&& state.current !== game.states.countdown
+			// 		&& state.current !== game.states.in_transition
+			// 		&& state.current !== game.states.not_found
+			// 		&& state.current !== game.states.launch_games
+			// 		&& state.current !== game.states.tournament_round_1_game_1
+			// 		&& state.current !== game.states.tournament_round_1_game_2
+			// 		&& state.current !== game.states.in_game1
+			// 		&& state.current !== game.states.in_game2
+			// 		&& state.current !== game.states.waiting_to_start
+			// 		&& state.current !== game.states.hosting_waiting_players
+			// 	)
+			// )
+			// {
+			// 	// console.log("roomId:", pong.current.lastHostedRoomId);
+			// 	const roomId = pong.current.lastHostedRoomId;
+			// 	if (gameModes.current === game.gameModes.online && roomId !== 'none') {
 
-					if (roomId && socketRef.current?.readyState === WebSocket.OPEN) {
-						console.log("👋 Host a quitté la salle d'attente, envoi de leave_room pour", roomId);
-						socketRef.current.send(JSON.stringify({
-							type: 'leave_room',
-							gameId: roomId,
-						}));
-						console.log("🗑️ Suppression de la room:", roomId);
-						pong.current.lastHostedRoomId = 'none';
-						pong.current.rooms.delete(roomId);
-					}
-				}
-			}
+			// 		if (roomId && socketRef.current?.readyState === WebSocket.OPEN) {
+			// 			console.log("👋 Host a quitté la salle d'attente, envoi de leave_room pour", roomId);
+			// 			socketRef.current.send(JSON.stringify({
+			// 				type: 'leave_room',
+			// 				gameId: roomId,
+			// 			}));
+			// 			console.log("🗑️ Suppression de la room:", roomId);
+			// 			pong.current.lastHostedRoomId = 'none';
+			// 			pong.current.rooms.delete(roomId);
+			// 		}
+			// 	}
+			// }
 			if (gameModes.current === game.gameModes.online)
 			{
 				useOnlineLoop(pong, socketRef, gameModes, state, userNameRef, lastHandledState);
@@ -270,6 +280,15 @@ const	Pong: React.FC = () =>
 						game.fitCameraToArena(pong.current);
 						pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
 						pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;
+						break;
+
+					case game.states.game_finished:
+						if (pong.current.tournamentState === game.tournamentStates.game_1)
+							pong.current.tournamentState = game.tournamentStates.waiting_game_2;
+						if (pong.current.tournamentState === game.tournamentStates.game_2)
+							pong.current.tournamentState = game.tournamentStates.waiting_game_3;
+						if (pong.current.tournamentState === game.tournamentStates.game_3)
+							pong.current.tournamentState = game.tournamentStates.finished;
 						break;
 				}
 			}
