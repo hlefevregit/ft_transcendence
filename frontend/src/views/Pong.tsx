@@ -72,7 +72,7 @@ const	Pong: React.FC = () =>
 
 	React.useEffect(() =>
 	{
-		
+
 
 
 		if (!canvasRef.current) return;
@@ -98,7 +98,7 @@ const	Pong: React.FC = () =>
 		game.updateScreensVisibilityStates(pong, state.current);
 		game.updateGUIVisibilityPlayerStates(pong, playerState.current , gameModes.current);
 		game.updateGUIValues(pong, lang);
-		
+
 		if (gameModes.current === game.gameModes.online)
 		{
 			if
@@ -177,7 +177,7 @@ const	Pong: React.FC = () =>
 			// 	(
 			// 		   lastState.current === game.states.hosting_waiting_players
 			// 		&& state.current !== game.states.hosting_waiting_players
-			// 		&& state.current !== game.states.in_game 
+			// 		&& state.current !== game.states.in_game
 			// 		&& state.current !== game.states.game_finished
 			// 		&& state.current !== game.states.countdown
 			// 		&& state.current !== game.states.tournament_bracket_preview
@@ -239,7 +239,7 @@ const	Pong: React.FC = () =>
 			// 		);
 			// 	});
 			// }
-			else 
+			else
 			{
 				switch (state.current)
 				{
@@ -252,7 +252,7 @@ const	Pong: React.FC = () =>
 						if (pong.current.scene.activeCamera !== pong.current.notFoundCam)
 							game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.notFoundCam, 1, pong, state);
 						break;
-	
+
 					case game.states.countdown:
 						pong.current.countdown -= pong.current.engine.getDeltaTime() / 1000;
 						if (pong.current.countdown <= 0)
@@ -261,7 +261,7 @@ const	Pong: React.FC = () =>
 							state.current = game.states.in_game;
 						}
 						break;
-						
+
 					case game.states.waiting_to_start:
 						pong.current.player1Score = 0;
 						pong.current.player2Score = 0;
@@ -272,7 +272,7 @@ const	Pong: React.FC = () =>
 						state.current = game.states.countdown;
 						game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.arenaCam, 1, pong, state);
 						break;
-	
+
 					case game.states.in_game:
 						const	maxScore = Math.max(pong.current.player1Score, pong.current.player2Score);
 						if (maxScore >= pong.current.requiredPointsToWin)
@@ -321,7 +321,7 @@ const	Pong: React.FC = () =>
 		}, 50);
 
 		window.addEventListener('resize', handleResize);
-		
+
 		return () =>
 		{
 			// clearInterval(updateMusicVolume);
