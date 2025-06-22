@@ -259,7 +259,7 @@ export const	instentiatePongSettingsGUI =
 				game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
 				break;
 			case game.gameModes.tournament:
-				states.current = game.states.host_or_join;
+				states.current = game.states.input_username_4;
 				game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
 				break;
 			default:
@@ -272,21 +272,9 @@ export const	instentiatePongSettingsGUI =
 	}, pong, "back");
 	const	pongSettingsPlayButton = game.createDynamicButton("pongSettingsPlayButton", () =>
 	{
-		switch (gameModes.current)
-		{
-			case game.gameModes.online:
-				states.current = game.states.hosting_waiting_players;
-				break;
-			// case game.gameModes.tournament:
-			// 	lastHandledState.current = states.current;
-			// 	console.log("[SETTINGS] Last handled state set to:", lastHandledState.current);
-			// 	states.current = game.states.input_username;
-			// 	console.log("🚀🚀🚀 switching to waiting_tournament_to_start 🚀🚀🚀");
-			// 	break;
-			default:
-				states.current = game.states.waiting_to_start;
-				break;
-		}
+		if (gameModes.current === game.gameModes.online) states.current = game.states.hosting_waiting_players;
+		else if (gameModes.current === game.gameModes.tournament) states.current = game.states.tournament_bracket_preview;
+		else states.current = game.states.waiting_to_start;
 	}, pong, "play");
 			(pongSettingsPlayButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
 			{
@@ -734,14 +722,14 @@ export const	instantiateFinishedGameGUI =
 				const loserScore = Math.min(pong.current.player1Score, pong.current.player2Score);
 				game.findComponentByName(pong, "finishedGameLoserScore").text = loserScore.toString();
 			});
-	const	backButton = game.createDynamicButton("backButton", () =>
+	const	finishedGameBackButton = game.createDynamicButton("finishedGameBackButton", () =>
 	{
 		states.current = game.states.main_menu;
 		gameModes.current = game.gameModes.none;
 		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
 	}, pong, "back");
-	pong.current.finishedGameBackButton = backButton;
-	const	replayButton = game.createDynamicButton("replayButton", () =>
+	pong.current.finishedGameBackButton = finishedGameBackButton;
+	const	finishedGameReplayButton = game.createDynamicButton("finishedGameReplayButton", () =>
 	{
 		game.resetBall(pong.current);
 		game.resetPaddlesPosition(pong.current);
@@ -750,23 +738,45 @@ export const	instantiateFinishedGameGUI =
 		pong.current.player2Score = 0;
 		states.current = game.states.countdown;
 	}, pong, "replay");
-			(replayButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
-			(replayButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
+			(finishedGameReplayButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
+			(finishedGameReplayButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
 			{
-				(replayButton.children[0] as baby.Button).color = game.colorsScheme.dark1;
-				(replayButton.children[0] as baby.Button).background = game.colorsScheme.auroraAccent4;
+				(finishedGameReplayButton.children[0] as baby.Button).color = game.colorsScheme.dark1;
+				(finishedGameReplayButton.children[0] as baby.Button).background = game.colorsScheme.auroraAccent4;
 			});
-			(replayButton.children[0] as baby.Button).onPointerOutObservable.add(() =>
+			(finishedGameReplayButton.children[0] as baby.Button).onPointerOutObservable.add(() =>
 			{
-				(replayButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
-				(replayButton.children[0] as baby.Button).background = game.colorsScheme.dark1;
+				(finishedGameReplayButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
+				(finishedGameReplayButton.children[0] as baby.Button).background = game.colorsScheme.dark1;
 			});
-			(replayButton.children[0] as baby.Button).onDirtyObservable.add(() =>
+			(finishedGameReplayButton.children[0] as baby.Button).onDirtyObservable.add(() =>
 			{
-				game.findComponentByName(pong, "replayButton").isEnabled = game.gameModes.online !== gameModes.current;
-				game.findComponentByName(pong, "replayButton").isVisible = game.gameModes.online !== gameModes.current;
+				game.findComponentByName(pong, "finishedGameReplayButton").isEnabled = game.gameModes.online !== gameModes.current;
+				game.findComponentByName(pong, "finishedGameReplayButton").isVisible = game.gameModes.online !== gameModes.current;
 			});
-	pong.current.finishedGameReplayButton = replayButton;
+	pong.current.finishedGameReplayButton = finishedGameReplayButton;
+	const	finishedGameContinueButton = game.createDynamicButton("finishedGameContinueButton", () =>
+	{
+		states.current = game.states.tournament_bracket_preview;
+		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.pongSettingsCam, 1, pong, states);
+	}, pong, "continue");
+			(finishedGameContinueButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
+			(finishedGameContinueButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
+			{
+				(finishedGameContinueButton.children[0] as baby.Button).color = game.colorsScheme.dark1;
+				(finishedGameContinueButton.children[0] as baby.Button).background = game.colorsScheme.auroraAccent4;
+			});
+			(finishedGameContinueButton.children[0] as baby.Button).onPointerOutObservable.add(() =>
+			{
+				(finishedGameContinueButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
+				(finishedGameContinueButton.children[0] as baby.Button).background = game.colorsScheme.dark1;
+			});
+			(finishedGameContinueButton.children[0] as baby.Button).onDirtyObservable.add(() =>
+			{
+				game.findComponentByName(pong, "finishedGameContinueButton").isEnabled = game.gameModes.online !== gameModes.current;
+				game.findComponentByName(pong, "finishedGameContinueButton").isVisible = game.gameModes.online !== gameModes.current;
+			});
+	pong.current.finishedGameContinueButton = finishedGameContinueButton;
 
 	// Add GUI components to the main menu
 	// The order of adding controls matters for the layout
@@ -785,8 +795,9 @@ export const	instantiateFinishedGameGUI =
 	finishedGameHorizontalStackPanel2.addControl(scoredText2);
 	finishedGameHorizontalStackPanel2.addControl(finishedGameLoserScore);
 
-	finishedGameHorizontalStackPanel3.addControl(backButton);
-	finishedGameHorizontalStackPanel3.addControl(replayButton);
+	finishedGameHorizontalStackPanel3.addControl(finishedGameBackButton);
+	finishedGameHorizontalStackPanel3.addControl(finishedGameReplayButton);
+	finishedGameHorizontalStackPanel3.addControl(finishedGameContinueButton);
 	finishedGameContainer.addControl(finishedGameVerticalStackPanel);
 	finishedGameGUI.addControl(finishedGameContainer);
 
@@ -1138,6 +1149,37 @@ export const instantiateBracketGUI =
 				(bracketAbandonButton.children[0] as baby.Button).background = game.colorsScheme.dark1;
 			});
 			(bracketAbandonButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent1;
+
+	// Finish button
+	const	bracketFinishButton = game.createDynamicButton("bracketFinishButton", () =>
+	{
+		if (gameModes.current !== game.gameModes.none) {
+			// ✅ Envoie le leave_room au serveur
+			if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN)
+			{
+				socketRef.current.send
+				(
+					JSON.stringify({
+					type: 'leave_room',
+					gameId: pong.current.tournamentId, // Assure-toi que tournamentId est bien set !
+				}));
+			}
+		}
+		states.current = game.states.main_menu;
+		gameModes.current = game.gameModes.none;
+		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
+	}, pong, "finish");
+			(bracketFinishButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
+			{
+				(bracketFinishButton.children[0] as baby.Button).color = game.colorsScheme.dark1;
+				(bracketFinishButton.children[0] as baby.Button).background = game.colorsScheme.auroraAccent4;
+			});
+			(bracketFinishButton.children[0] as baby.Button).onPointerOutObservable.add(() =>
+			{
+				(bracketFinishButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
+				(bracketFinishButton.children[0] as baby.Button).background = game.colorsScheme.dark1;
+			});
+			(bracketFinishButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
 	
 	// Store references for updating later
 	pong.current.bracketPlayer1 = bracketPlayer1Card;
@@ -1325,7 +1367,8 @@ export const instantiateInputUsernameGUI =
 				break;
 			case game.states.input_username_4:
 				pong.current.username_4 = tmp as string;
-				states.current = game.states.tournament_bracket_preview;
+				states.current = game.states.game_settings;
+				game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.pongSettingsCam, 1, pong, states);
 				break;
 		}
 	}, pong, "next");
