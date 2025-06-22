@@ -165,7 +165,7 @@ export const	updateGUIValues =
 
 export const	updateGUIsWhenNeeded =
 (
-	pong: React.RefObject<bj.bjStruct>,
+	bjRef: React.RefObject<bj.bjStruct>,
 	states: React.RefObject<bj.States>,
 	lang: React.RefObject<bj.language>,
 	lastState: React.RefObject<bj.States>,
@@ -177,14 +177,40 @@ export const	updateGUIsWhenNeeded =
 	// Update GUI on state change
 	if (lastState.current !== states.current)
 	{
-		bj.updateGUIVisibilityStates(pong, states.current);
-		bj.updateGUIValues(pong, lang);
+		bj.updateGUIVisibilityStates(bjRef, states.current);
+		bj.updateGUIValues(bjRef, lang);
+		bj.updateActionsVisibility(bjRef, bjRef.current.gameState!);
 		lastState.current = states.current;
 	}
 	// Update GUI on language change
 	if (lastLang.current !== lang.current)
 	{
-		bj.updateGUIValues(pong, lang);
+		bj.updateGUIValues(bjRef, lang);
 		lastLang.current = lang.current;
 	}
+}
+
+export const updateComponentVisibilityBasedOnStates =
+(
+	ui: baby.Container | baby.StackPanel | undefined,
+	statesToCheck: bj.States | bj.States[],
+	activeState: bj.States
+): void =>
+{
+	if (ui === undefined) return;
+
+	const	statesArray = Array.isArray(statesToCheck) ? statesToCheck : [statesToCheck];
+	const	shouldShow: boolean = statesArray.includes(activeState);
+
+	ui.isVisible = ui.isEnabled = shouldShow;
+}
+
+export const	updateActionsVisibility =
+(
+	bjRef: React.RefObject<bj.bjStruct>,
+	gameState: bj.GameState,
+): void =>
+{
+	if (bjRef.current.canDouble) bjRef.current.doubleButton!.isVisible = bjRef.current.doubleButton!.isEnabled = bjRef.current.canDouble;
+	if (bjRef.current.canSplit) bjRef.current.splitButton!.isVisible = bjRef.current.splitButton!.isEnabled = bjRef.current.canSplit;
 }

@@ -71,12 +71,17 @@ export type bjStruct =
 
 	// Variables
 	playerMoney: number;
+	splitButton?: baby.StackPanel;
+	canSplit?: boolean;
+	doubleButton?: baby.StackPanel;
+	canDouble?: boolean;
 
 	// GUIs
 	mainMenuGUI?: baby.Rectangle;
 	settingsGUI?: baby.Rectangle;
 	arenaGUI?: baby.Rectangle;
 	debugGUI?: baby.Rectangle;
+	actionGUI?: baby.Rectangle;
 
 	// Textures
 	guiTexture?: baby.AdvancedDynamicTexture;
@@ -107,6 +112,13 @@ export const	translations =
 	mainMenu: ["Main Menu", "Menu Principal", "Menu Principale", "⠨⠍⠁⠊⠝ ⠨⠍⠑⠝⠥"],
 	settings:["Settings ⚙", "Paramètres ⚙", "Impostazioni ⚙", "⠨⠎⠑⠞⠞⠊⠝⠛⠎ ⚙"],
 	returnToMuseumButton: ["Return to Museum 🏛︎", "Retour au musée 🏛︎", "Torna al museo 🏛︎", "⠨⠗⠑⠞⠥⠗⠝ ⠞⠕ ⠨⠍⠥⠎⠑⠥⠍ 🏛︎"],
+
+	// Game
+	actionTitle: ["Choose an action:", "Choisissez une action :", "Scegli un'azione:", "⠨⠉⠓⠕⠊⠎⠊ ⠁⠝ ⠁⠉⠞⠊⠕⠝ :"],
+	stand: ["Stand", "Rester", "Stare", "⠨⠎⠞⠁⠝⠙"],
+	split: ["Split", "Diviser", "Dividi", "⠨⠎⠉⠊⠝⠙⠑⠗"],
+	doubleDown: ["Double Down", "Doubler", "Raddoppia", "⠨⠙⠕⠥⠃⠇⠑ ⠙⠕⠺⠝"],
+	hit: ["Hit", "Prendre", "Prendi", "⠨⠓⠊⠞"],
 } as const;
 
 export type	labelKey = keyof typeof translations;

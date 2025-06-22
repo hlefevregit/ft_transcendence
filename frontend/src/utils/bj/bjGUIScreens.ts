@@ -2,6 +2,7 @@ import React from 'react';
 
 import * as baby from '@/libs/babylonLibs';
 import * as bj from '@/libs/bjLibs';
+import { split } from 'postcss/lib/list';
 
 // ****************************************************************************** //
 //                                                                                //
@@ -274,6 +275,68 @@ export const	instantiateDebugGUI =
 	bjRef.current.debugGUI = debugGUI;
 	bjRef.current.guiTexture?.addControl(debugGUI);
 }
+
+// ****************************************************************************** //
+//                                                                                //
+//                                 ACTION GUI                                     //
+//                                                                                //
+// ****************************************************************************** //
+
+export const instantiateActionGUI =
+(
+	bjRef: React.RefObject<bj.bjStruct>,
+	states: React.RefObject<bj.States>,
+): void =>
+{
+	// Canvas that will be used for the GUI
+	const	actionGUI = bj.createScreen("actionGUI", "top");
+
+	// All GUI components needed
+	const	actionContainer = bj.createAdaptiveContainer("actionContainer");
+	const	actionVerticalStackPanel = bj.createVerticalStackPanel("actionVerticalStackPanel");
+	const	actionHorizontalStackPanel = bj.createVerticalStackPanel("actionHorizontalStackPanel");
+	const	actionTitle = bj.createDynamicTitle("actionTitle", "actionTitle");
+
+	const	standButton = bj.createDynamicButton("standButton", () =>
+	{
+		states.current = bj.States.in_game;
+		console.log("STAND")
+	}, bjRef, "stand");
+	const	doubleButton = bj.createDynamicButton("doubleButton", () =>
+	{
+		states.current = bj.States.in_game;
+		console.log("DOUBLE")
+	}, bjRef, "doubleDown");
+	const	hitButton = bj.createDynamicButton("hitButton", () =>
+	{
+		states.current = bj.States.in_game;
+		console.log("HIT")
+	}, bjRef, "hit");
+	const	splitButton = bj.createDynamicButton("splitButton", () =>
+	{
+		states.current = bj.States.in_game;
+		console.log("SPLIT")
+	}, bjRef, "split");
+			
+	bjRef.current.splitButton = splitButton;
+	bjRef.current.doubleButton = doubleButton;
+
+	// Add GUI components to the action GUI
+	actionVerticalStackPanel.addControl(actionTitle);
+
+	actionHorizontalStackPanel.addControl(splitButton);
+	actionHorizontalStackPanel.addControl(doubleButton);
+
+	actionHorizontalStackPanel.addControl(hitButton);
+	actionHorizontalStackPanel.addControl(standButton);
+
+	actionContainer.addControl(actionVerticalStackPanel);
+	actionGUI.addControl(actionContainer);
+
+	// Add the screen to the GUI texture
+	bjRef.current.actionGUI = actionGUI;
+}
+
 
 // ****************************************************************************** //
 //                                                                                //
