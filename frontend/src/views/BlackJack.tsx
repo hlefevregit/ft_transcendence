@@ -32,6 +32,13 @@ const	BlackJack: React.FC = () =>
 		bj.updateGUIVisibilityStates(bjRef, state.current);
 		bj.updateGUIValues(bjRef, language);
 
+		// Enable the inspector for debugging
+		// bjRef.current.scene.debugLayer.show({
+		// 	showExplorer: true,
+		// 	showInspector: true,
+		// 	embedMode: true,
+		// });
+
 		// Game loop - 60 times per second
 		bjRef.current.engine.runRenderLoop(() =>
 		{

@@ -7,6 +7,7 @@ import * as bjLib from '@/libs/bjLibs';
 
 import pongMapUrl from '@/assets/transcendence_map.gltf?url';
 import bjMapUrl from '@/assets/blackjack_map.gltf?url';
+import cardUrl from '@/assets/models/card/Card.gltf?url';
 
 export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<void> =>
 {
@@ -21,18 +22,26 @@ export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<v
 	BJ.skybox = skyboxMesh;
 
 	const	cameraInstance = new baby.FreeCamera("mainMenuCam", new baby.Vector3(0, 3, 7), sceneInstance);
-	cameraInstance.setTarget(baby.Vector3.Zero());
+	// const	cameraInstance = new baby.FreeCamera("mainMenuCam", new baby.Vector3(0, 0, 0), sceneInstance); // Testing
 	cameraInstance.inputs.clear();
-	cameraInstance.rotation = new baby.Vector3(0, Math.PI / -1.001, 0);
+	cameraInstance.rotation = new baby.Vector3(0, Math.PI / 1.001, 0);
 	BJ.mainMenuCam = cameraInstance;
 	BJ.scene.activeCamera = cameraInstance;
 
 	try
 	{
-		const meshes = await game.importMap(BJ.scene, bjMapUrl);
-		if (meshes && meshes.length > 0) BJ.map = meshes[0];
+		const modelMeshes = await importGLTF(BJ.scene, cardUrl);
+		if (modelMeshes && modelMeshes.length > 0) BJ.card = modelMeshes[0];
+		else console.warn("Failed to load card model");
+		if (BJ.card) BJ.card.position = new baby.Vector3(10, 10, 10);
+	}
+	catch (error) { console.error("Error while loading card model:", error); }
+	try
+	{
+		const mapMeshes = await importGLTF(BJ.scene, bjMapUrl);
+		if (mapMeshes && mapMeshes.length > 0) BJ.map = mapMeshes[0];
 		else console.warn("Failed to load map");
-		// if (BJ.map) BJ.map.scaling = new baby.Vector3(25, 25, -25);
+		if (BJ.map) BJ.map.scaling = new baby.Vector3(25, 25, -25);
 	}
 	catch (error) { console.error("Error while loading map:", error); }
 
@@ -44,7 +53,6 @@ export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<v
 	// Set rendering groups so GUI renders after post-processing
     sceneInstance.setRenderingAutoClearDepthStencil(1, false); // Don't clear depth for rendering group 1
 }
-
 
 export const	setupBabylonPong = async (pong: game.pongStruct, canvasRef: any): Promise<void> =>
 {
@@ -105,7 +113,7 @@ export const	setupBabylonPong = async (pong: game.pongStruct, canvasRef: any): P
 
 	try
 	{
-		const meshes = await game.importMap(pong.scene, pongMapUrl);
+		const meshes = await importGLTF(pong.scene, pongMapUrl);
 		if (meshes && meshes.length > 0) pong.map = meshes[0];
 		else console.warn("Failed to load map");
 	}
@@ -144,17 +152,16 @@ export const	setupBabylonPong = async (pong: game.pongStruct, canvasRef: any): P
     sceneInstance.setRenderingAutoClearDepthStencil(1, false); // Don't clear depth for rendering group 1
 }
 
-export const importMap = async (scene: baby.Scene, mapUrl: string) => {
+export const importGLTF = async (scene: baby.Scene, modelUrl: string) => {
   try {
     if (scene.isDisposed) {
-      console.error("Scene is disposed before loading model");
+      console.error("Scene was disposed before loading model");
       return null;
     }
 
-    // Extract root URL and filename
-    const lastSlashIndex = mapUrl.lastIndexOf('/');
-    const rootUrl = mapUrl.substring(0, lastSlashIndex + 1);
-    const sceneFileName = mapUrl.substring(lastSlashIndex + 1);
+    const lastSlashIndex = modelUrl.lastIndexOf('/');
+    const rootUrl = modelUrl.substring(0, lastSlashIndex + 1);
+    const sceneFileName = modelUrl.substring(lastSlashIndex + 1);
 
     const result = await baby.SceneLoader.ImportMeshAsync(
       null,
@@ -174,7 +181,7 @@ export const importMap = async (scene: baby.Scene, mapUrl: string) => {
 
     return result.meshes;
   } catch (error) {
-    console.error("Error loading map model:", error);
+    console.error("Error loading model:", error);
     return null;
   }
 };
