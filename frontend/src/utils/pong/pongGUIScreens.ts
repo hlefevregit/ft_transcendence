@@ -273,7 +273,11 @@ export const	instentiatePongSettingsGUI =
 	const	pongSettingsPlayButton = game.createDynamicButton("pongSettingsPlayButton", () =>
 	{
 		if (gameModes.current === game.gameModes.online) states.current = game.states.hosting_waiting_players;
-		else if (gameModes.current === game.gameModes.tournament) states.current = game.states.tournament_bracket_preview;
+		else if (gameModes.current === game.gameModes.tournament)
+			{
+				states.current = game.states.tournament_bracket_preview;
+				pong.current.tournamentState = game.tournamentStates.waiting_game_1;
+			}
 		else states.current = game.states.waiting_to_start;
 	}, pong, "play");
 			(pongSettingsPlayButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
@@ -539,6 +543,17 @@ export const	instantiateDebugGUI =
 				Object.keys(game.playerStates).find(key => game.playerStates[key as keyof typeof game.playerStates] === playerStates.current);
 			});
 
+	// active tournament state
+	const	debugActiveTournamentText = game.createText("debugActiveTournamentText", "Active Tournament:");
+			(debugActiveTournamentText.children[0] as baby.TextBlock).fontSize = 12;
+	const	debugActiveTournamentTextValue = game.createDynamicText("debugActiveTournamentTextValue");
+			(debugActiveTournamentTextValue.children[0] as baby.TextBlock).fontSize = 12;
+			(debugActiveTournamentTextValue.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
+			{
+				game.findComponentByName(pong, "debugActiveTournamentTextValue").text =
+				Object.keys(game.tournamentStates).find(key => game.tournamentStates[key as keyof typeof game.tournamentStates] === pong.current.tournamentState);
+			});
+
 
 	// Add GUI components to the debug GUI
 	// The order of adding controls matters for the layout
@@ -573,6 +588,9 @@ export const	instantiateDebugGUI =
 
 	debugVerticalStackPanel.addControl(debugActivePlayerStateText);
 	debugVerticalStackPanel.addControl(debugActivePlayerStateTextValue);
+
+	debugVerticalStackPanel.addControl(debugActiveTournamentText);
+	debugVerticalStackPanel.addControl(debugActiveTournamentTextValue);
 
 	// Add the screen to the GUI texture
 	pong.current.debugGUI = debugGUI;
@@ -1090,8 +1108,8 @@ export const instantiateBracketGUI =
 	const	bracketPlayer4Card = game.createCard("bracketPlayer4Card", "Player 4");
 	
 	// Finals cards
-	const	finalPlayer1 = game.createCard("finalPlayer1", "Final Player 1");
-	const	finalPlayer2 = game.createCard("finalPlayer2", "Final Player 2");
+	const	finalPlayer1Card = game.createCard("finalPlayer1Card", "Final Player 1");
+	const	finalPlayer2Card = game.createCard("finalPlayer2Card", "Final Player 2");
 	
 	// Winner card
 	const	winnerPlayer = game.createCard("winnerPlayer", "Winner Player");
@@ -1103,6 +1121,18 @@ export const instantiateBracketGUI =
 		{
 			console.warn("❌ Cannot start the game, not in tournament mode");
 			return;
+		}
+		switch (pong.current.tournamentState)
+		{
+			case game.tournamentStates.waiting_game_1:
+				pong.current.tournamentState = game.tournamentStates.game_1;
+				break;
+			case game.tournamentStates.waiting_game_2:
+				pong.current.tournamentState = game.tournamentStates.game_2;
+				break;
+			case game.tournamentStates.waiting_game_3:
+				pong.current.tournamentState = game.tournamentStates.game_3;
+				break;
 		}
 		states.current = game.states.waiting_to_start;
 		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.arenaCam, 1, pong, states);
@@ -1136,6 +1166,7 @@ export const instantiateBracketGUI =
 		}
 		states.current = game.states.main_menu;
 		gameModes.current = game.gameModes.none;
+		pong.current.tournamentState = game.tournamentStates.none;
 		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
 	}, pong, "abandon");
 			(bracketAbandonButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
@@ -1153,20 +1184,21 @@ export const instantiateBracketGUI =
 	// Finish button
 	const	bracketFinishButton = game.createDynamicButton("bracketFinishButton", () =>
 	{
-		if (gameModes.current !== game.gameModes.none) {
-			// ✅ Envoie le leave_room au serveur
-			if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN)
-			{
-				socketRef.current.send
-				(
-					JSON.stringify({
-					type: 'leave_room',
-					gameId: pong.current.tournamentId, // Assure-toi que tournamentId est bien set !
-				}));
-			}
-		}
+		// if (gameModes.current !== game.gameModes.none) {
+		// 	// ✅ Envoie le leave_room au serveur
+		// 	if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN)
+		// 	{
+		// 		socketRef.current.send
+		// 		(
+		// 			JSON.stringify({
+		// 			type: 'leave_room',
+		// 			gameId: pong.current.tournamentId, // Assure-toi que tournamentId est bien set !
+		// 		}));
+		// 	}
+		// }
 		states.current = game.states.main_menu;
 		gameModes.current = game.gameModes.none;
+		pong.current.tournamentState = game.tournamentStates.none;
 		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
 	}, pong, "finish");
 			(bracketFinishButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
@@ -1186,8 +1218,8 @@ export const instantiateBracketGUI =
 	pong.current.bracketPlayer2 = bracketPlayer2Card;
 	pong.current.bracketPlayer3 = bracketPlayer3Card;
 	pong.current.bracketPlayer4 = bracketPlayer4Card;
-	pong.current.bracketFinalPlayer1 = finalPlayer1;
-	pong.current.bracketFinalPlayer2 = finalPlayer2;
+	pong.current.bracketFinalPlayer1 = finalPlayer1Card;
+	pong.current.bracketFinalPlayer2 = finalPlayer2Card;
 	pong.current.bracketWinnerPlayer = winnerPlayer;
 	
 	// // Style the player cards
@@ -1251,9 +1283,9 @@ export const instantiateBracketGUI =
 	
 	// Finals
 	bracketVerticalStackPanel2.addControl(bracketRound2Text);
-	bracketVerticalStackPanel2.addControl(finalPlayer1);
+	bracketVerticalStackPanel2.addControl(finalPlayer1Card);
 	bracketVerticalStackPanel2.addControl(versusText3);
-	bracketVerticalStackPanel2.addControl(finalPlayer2);
+	bracketVerticalStackPanel2.addControl(finalPlayer2Card);
 	
 	// Winner
 	bracketVerticalStackPanel3.addControl(bracketRound3Text);
@@ -1262,6 +1294,7 @@ export const instantiateBracketGUI =
 	// Add the abandon button
 	bracketHorizontalStackPanel2.addControl(bracketAbandonButton);
 	bracketHorizontalStackPanel2.addControl(bracketPlayButton);
+	bracketHorizontalStackPanel2.addControl(bracketFinishButton);
 	bracketVerticalStackPanel.addControl(bracketHorizontalStackPanel2);
 	
 	// Add GUI to the GUI texture
