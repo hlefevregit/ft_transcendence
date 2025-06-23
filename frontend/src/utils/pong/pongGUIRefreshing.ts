@@ -264,12 +264,16 @@ export const	updatePlayerNames = (pong: React.RefObject<game.pongStruct>, gameMo
 	}
 }
 
-const getPlayerLabel = (bracketPlayer: any): baby.TextBlock | null => {
-    try {
-        return bracketPlayer?.children?.[0]?.children?.[1]?.children?.[0] as baby.TextBlock;
-    } catch {
-        return null;
-    }
+const getPlayerCardLabel = (bracketPlayer: any): baby.TextBlock | null =>
+{
+	try { return bracketPlayer?.children?.[0]?.children?.[1]?.children?.[0] as baby.TextBlock; }
+	catch { return null; }
+}
+
+const getPlayerCardOutlineColor = (bracketPlayer: any): baby.Rectangle | null =>
+{
+	try { return bracketPlayer?.children?.[0]?.children?.[0]?.children?.[0] as baby.Rectangle; }
+	catch { return null; }
 }
 
 export const	updateBracketGUI = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>): void =>
@@ -283,14 +287,42 @@ export const	updateBracketGUI = (pong: React.RefObject<game.pongStruct>, states:
 	) return;
 	if (states.current === game.states.tournament_bracket_preview)
 	{
-		const	bracketPlayer1 = getPlayerLabel(pong.current.bracketPlayer1)
-		const	bracketPlayer2 = getPlayerLabel(pong.current.bracketPlayer2)
-		const	bracketPlayer3 = getPlayerLabel(pong.current.bracketPlayer3)
-		const	bracketPlayer4 = getPlayerLabel(pong.current.bracketPlayer4)
+		// Update Aliases
+		const	bracketPlayer1 = getPlayerCardLabel(pong.current.bracketPlayer1)
+		const	bracketPlayer2 = getPlayerCardLabel(pong.current.bracketPlayer2)
+		const	bracketPlayer3 = getPlayerCardLabel(pong.current.bracketPlayer3)
+		const	bracketPlayer4 = getPlayerCardLabel(pong.current.bracketPlayer4)
 		if (bracketPlayer1) bracketPlayer1.text = pong.current.tournamentPlayer1Name || "caca 1";
 		if (bracketPlayer2) bracketPlayer2.text = pong.current.tournamentPlayer2Name || "caca 2";
 		if (bracketPlayer3) bracketPlayer3.text = pong.current.tournamentPlayer3Name || "caca 3";
 		if (bracketPlayer4) bracketPlayer4.text = pong.current.tournamentPlayer4Name || "caca 4";
+
+		// First Match
+		if (pong.current.tournamentState === game.tournamentStates.waiting_game_1)
+		{
+			const	player1Outline = game.findComponentByName(pong, "bracketPlayer1CardBackground");
+			const	player2Outline = game.findComponentByName(pong, "bracketPlayer2CardBackground");
+					player1Outline.color = game.colorsScheme.auroraAccent3;
+					player2Outline.color = game.colorsScheme.auroraAccent3;
+		}
+
+		// Second Match
+		if (pong.current.tournamentState === game.tournamentStates.waiting_game_2)
+		{
+			const	player3Outline = game.findComponentByName(pong, "bracketPlayer3CardBackground");
+			const	player4Outline = game.findComponentByName(pong, "bracketPlayer4CardBackground");
+					player3Outline.color = game.colorsScheme.auroraAccent3;
+					player4Outline.color = game.colorsScheme.auroraAccent3;
+		}
+
+		// Third Match
+		if (pong.current.tournamentState === game.tournamentStates.waiting_game_3)
+		{
+			const	finalPlayer1CardOutline = game.findComponentByName(pong, "finalPlayer1CardBackground");
+			const	finalPlayer2CardOutline = game.findComponentByName(pong, "finalPlayer2CardBackground");
+					finalPlayer1CardOutline.color = game.colorsScheme.auroraAccent3;
+					finalPlayer2CardOutline.color = game.colorsScheme.auroraAccent3;
+		}
 	}
 }
 

@@ -283,12 +283,40 @@ const	Pong: React.FC = () =>
 						break;
 
 					case game.states.game_finished:
-						if (pong.current.tournamentState === game.tournamentStates.game_1)
-							pong.current.tournamentState = game.tournamentStates.waiting_game_2;
-						if (pong.current.tournamentState === game.tournamentStates.game_2)
-							pong.current.tournamentState = game.tournamentStates.waiting_game_3;
-						if (pong.current.tournamentState === game.tournamentStates.game_3)
-							pong.current.tournamentState = game.tournamentStates.finished;
+						switch (pong.current.tournamentState)
+						{
+							// Finished first game
+							case game.tournamentStates.game_1:
+								pong.current.tournamentState = game.tournamentStates.waiting_game_2;
+								pong.current.game1Finished = true;
+								pong.current.tournamentPlayer1Score = pong.current.player1Score;
+								pong.current.tournamentPlayer2Score = pong.current.player2Score;
+								pong.current.tournamentFinalist1 =
+									(pong.current.player1Score > pong.current.player2Score)
+									? pong.current.tournamentPlayer1Name
+									: pong.current.tournamentPlayer2Name;
+								break;
+							// Finished second game
+							case game.tournamentStates.game_2:
+								pong.current.tournamentState = game.tournamentStates.waiting_game_3;
+								pong.current.game2Finished = true;
+								pong.current.tournamentPlayer3Score = pong.current.player1Score;
+								pong.current.tournamentPlayer4Score = pong.current.player2Score;
+								pong.current.tournamentFinalist2 =
+									(pong.current.player1Score > pong.current.player2Score)
+									? pong.current.tournamentPlayer3Name
+									: pong.current.tournamentPlayer4Name;
+								break;
+							// Finished final game
+							case game.tournamentStates.game_3:
+								pong.current.game3Finished = true;
+								pong.current.tournamenFinalScore1 = pong.current.player1Score;
+								pong.current.tournamenFinalScore2 = pong.current.player2Score;
+								pong.current.tournamentState = game.tournamentStates.finished;
+								break;
+							default:
+								break;
+						}
 						break;
 				}
 			}
