@@ -21,9 +21,9 @@ export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<v
 	const	skyboxMesh = baby.MeshBuilder.CreateBox("skyBox", { size: 1000 }, sceneInstance);
 	BJ.skybox = skyboxMesh;
 
-	const	cameraInstance = new baby.FreeCamera("mainMenuCam", new baby.Vector3(0, 3, 7), sceneInstance);
+	const	cameraInstance = new baby.FreeCamera("mainMenuCam", new baby.Vector3(0, 5, 7), sceneInstance);
 	cameraInstance.inputs.clear();
-	cameraInstance.rotation = new baby.Vector3(0, Math.PI / 1.001, 0);
+	cameraInstance.rotation = new baby.Vector3(0.6, Math.PI / 1.001, 0);
 	BJ.mainMenuCam = cameraInstance;
 	BJ.scene.activeCamera = cameraInstance;
 
@@ -32,6 +32,8 @@ export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<v
 		const modelMeshes = await importGLTF(sceneInstance, cardUrl);
 		if (modelMeshes && modelMeshes.length > 0) BJ.card = modelMeshes[0];
 		else console.warn("Failed to load card model");
+		if (BJ.card) BJ.card.scaling = new baby.Vector3(50, 50, 50);
+		BJ.card.position = new baby.Vector3(0, 2, 4.5);
 	}
 	catch (error) { console.error("Error while loading card model:", error); }
 	try

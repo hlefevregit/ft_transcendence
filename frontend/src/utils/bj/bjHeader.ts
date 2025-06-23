@@ -70,7 +70,8 @@ export type bjStruct =
 	chips?: baby.Mesh;
 
 	// Variables
-	playerMoney: number;
+	player1Money: number;
+	player2Money: number;
 
 	// GUIs
 	mainMenuGUI?: baby.Rectangle;
@@ -88,7 +89,8 @@ export type bjStruct =
 export function initBJStruct(): bjStruct
 {
 	return {
-		playerMoney: 1000, // Starting money for the player
+		player1Money: 1000, // Starting money for player 1
+		player2Money: 1000, // Starting money for player 2
 	};
 }
 
