@@ -166,43 +166,42 @@ export type pongStruct =
 	username_3?:string;
 	username_4?:string;
 	
-	// Tournament-specific properties
-	tournamentPlayerCount: number;
-	tournamentPlayerNames: string[];
-	tournamentPlayerScores: number[];
-	
 	// Tournament game management
 	tournamentId?: string;
 	tournamentRound?: number;
 	tournamentGame?: number;
 	playerNameLeft?: string;
 	playerNameRight?: string;
-	tournamentPlayer1Id?: string;
-	tournamentPlayer2Id?: string;
-	tournamentPlayer3Id?: string;
-	tournamentPlayer4Id?: string;
+	// tournamentPlayer1Id?: string;
+	// tournamentPlayer2Id?: string;
+	// tournamentPlayer3Id?: string;
+	// tournamentPlayer4Id?: string;
+
 	tournamentPlayer1Name?: string;
 	tournamentPlayer2Name?: string;
 	tournamentPlayer3Name?: string;
 	tournamentPlayer4Name?: string;
+
 	tournamentPlayer1Score?: number;
 	tournamentPlayer2Score?: number;
 	tournamentPlayer3Score?: number;
 	tournamentPlayer4Score?: number;
+
 	tournamentFinalist1?: string;
 	tournamentFinalist2?: string;
+
 	tournamenFinalScore1?: number;
 	tournamenFinalScore2?: number;
-	game1Finished?: boolean;
-	game2Finished?: boolean;
-	isHost?: boolean;
-	isHost2?: boolean;
-	launched?: boolean;	// Used to know if the tournament has been launched
-	waitingFinalSent?: boolean;	// Used to know if the waiting final has been sent to the server
-	startFinalSent?: boolean;	// Used to know if the start final has been sent to the server
-	// isInGame1?: boolean;	// Used to know if the player is in game 1 of the tournament
-	// isInGame2?: boolean;	// Used to know if the player is in game 2 of the tournament
-	// isFinal?: boolean;	// Used to know if the player is in the final of the tournament
+
+	game1Finished: boolean;
+	game2Finished: boolean;
+	game3Finished: boolean;
+
+	// isHost?: boolean;
+	// isHost2?: boolean;
+	// launched?: boolean;	// Used to know if the tournament has been launched
+	// waitingFinalSent?: boolean;	// Used to know if the waiting final has been sent to the server
+	// startFinalSent?: boolean;	// Used to know if the start final has been sent to the server
 	tournamentState: tournamentStates;
 
 	tournamentGame1WinnedByPlayer1?: boolean;
@@ -229,8 +228,7 @@ export type pongStruct =
 	
 	lastUpdateSetAt?: number;	// Used to avoid sending too many updates to the server
 
-	// GUI's bindings
-
+	// GUI's references
 	mainMenuGUI?: baby.Rectangle;
 	settingsGUI?: baby.Rectangle;
 	arenaGUI?: baby.Rectangle;
@@ -305,26 +303,22 @@ export function initPongStruct(): pongStruct
 		player1Score: 0,
 		player2Score: 0,
 
-		tournamentPlayerCount: 3,
-		tournamentPlayerNames: [],
-		tournamentPlayerScores: [],
-		
-		// Tournament game management initialized
+		// Tournament
 		game1Finished: false,
 		game2Finished: false,
+		game3Finished: false,
+		tournamentState: tournamentStates.none,
 
-		waitingFinalSent: false,	// Used to know if the waiting final has been sent to the server
-		startFinalSent: false,
+		// waitingFinalSent: false,
+		// startFinalSent: false,
 		
 
 		rooms: new Map<string, any>(),
 		party: new Map<string, any>(),
-		launched: false,
+		// launched: false,
 
 		musicVolume: 1,
 		soundVolume: 1,
-
-		tournamentState: tournamentStates.none,
 	};
 }
 
