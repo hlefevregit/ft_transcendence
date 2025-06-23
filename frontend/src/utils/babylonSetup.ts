@@ -32,8 +32,9 @@ export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<v
 		const modelMeshes = await importGLTF(sceneInstance, cardUrl);
 		if (modelMeshes && modelMeshes.length > 0) BJ.card = modelMeshes[0];
 		else console.warn("Failed to load card model");
-		if (BJ.card) BJ.card.scaling = new baby.Vector3(50, 50, 50);
-		BJ.card.position = new baby.Vector3(0, 2, 4.5);
+		if (BJ.card) BJ.card.scaling = new baby.Vector3(-3.5, 3.5, 3.5);
+		BJ.card.position = new baby.Vector3(0, 2, 3);
+		BJ.card.rotation = new baby.Vector3(0, 0, 0);
 	}
 	catch (error) { console.error("Error while loading card model:", error); }
 	try
