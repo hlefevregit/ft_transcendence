@@ -71,8 +71,6 @@ services:
     build:
       context: ${PWD}/backend/main
       dockerfile: Dockerfile.dev
-    ports:
-      - "3000:3000"
     volumes:
       - backend_data:${PWD}/backend/main
       - ./backend/main/certs:/app/certs:ro
@@ -109,11 +107,9 @@ services:
     build:
       context: ./backend/2FA-service
       dockerfile: Dockerfile.dev
-    ports:
-      - "4001:4001"
     networks:
       - ft_network
-    
+
   # tournament:
   #   build:
   #     context: ./backend/tournament
@@ -127,8 +123,6 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
-    expose:
-      - "5173:5173"
     volumes:
       - ./frontend:/app
       - ./frontend/public:/app/public
@@ -355,4 +349,5 @@ volumes:
 
 networks:
   ft_network:
+    driver: bridge
   vault_network:

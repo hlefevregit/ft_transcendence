@@ -33,15 +33,15 @@ const	BlackJack: React.FC = () =>
 		bj.updateGUIValues(bjRef, language);
 
 		// Enable the inspector for debugging
-		if (bjRef.current.scene)
-		{
-			bjRef.current.scene.debugLayer.show
-			({
-				showExplorer: true,
-				showInspector: true,
-				embedMode: true,
-			});
-		}
+		// if (bjRef.current.scene)
+		// {
+		// 	bjRef.current.scene.debugLayer.show
+		// 	({
+		// 		showExplorer: true,
+		// 		showInspector: true,
+		// 		embedMode: true,
+		// 	});
+		// }
 
 		// Game loop - 60 times per second
 		bjRef.current.engine.runRenderLoop(() =>
