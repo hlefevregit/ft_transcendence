@@ -1221,6 +1221,9 @@ export const instantiateBracketGUI =
 	pong.current.bracketFinalPlayer1 = finalPlayer1Card;
 	pong.current.bracketFinalPlayer2 = finalPlayer2Card;
 	pong.current.bracketWinnerPlayer = winnerPlayer;
+	pong.current.bracketPlayButton = bracketPlayButton;
+	pong.current.bracketAbandonButton = bracketAbandonButton;
+	pong.current.bracketFinishButton = bracketFinishButton;
 	
 	// // Style the player cards
 	// const	bracketPlayer1Container = pong.current.bracketPlayer1.children[0] as baby.Container;

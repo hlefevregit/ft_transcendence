@@ -266,6 +266,9 @@ export type pongStruct =
 	finishedGameBackButton?: baby.StackPanel;
 	finishedGameReplayButton?: baby.StackPanel;
 	finishedGameContinueButton?: baby.StackPanel;
+	bracketPlayButton?: baby.StackPanel;
+	bracketAbandonButton?: baby.StackPanel;
+	bracketFinishButton?: baby.StackPanel;
 
 	// Engine and scene
 	guiTexture?: baby.AdvancedDynamicTexture;
