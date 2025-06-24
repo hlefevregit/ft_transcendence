@@ -278,8 +278,7 @@ const	Pong: React.FC = () =>
 						if (maxScore >= pong.current.requiredPointsToWin)
 							state.current = game.states.game_finished;
 						game.fitCameraToArena(pong.current);
-						pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
-						pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;
+						
 						break;
 
 					case game.states.game_finished:
@@ -328,6 +327,11 @@ const	Pong: React.FC = () =>
 		// Handle movement in the background
 		const backgroundCalculations = setInterval(() =>
 		{
+			if (pong.current.ball && state.current === game.states.in_game)
+			{
+				pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
+				pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;
+			}
 			game.doPaddleMovement(pong, gameModes, state);
 			game.makeBallBounce(pong, state, gameModes);
 		}, 16.667);
