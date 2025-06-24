@@ -243,33 +243,44 @@ export const	updateGUIValues =
 	}
 }
 
-export const	updatePlayerNames = (pong: React.RefObject<game.pongStruct>, gameModes: React.RefObject<game.gameModes>): void =>
+export const	updatePlayerNames = (pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>, gameModes: React.RefObject<game.gameModes>): void =>
 {
-	if (gameModes.current === game.gameModes.tournament)
+	const player1Name = game.findComponentByName(pong, "player1ScoreText");
+	const player2Name = game.findComponentByName(pong, "player2ScoreText");
+	const winnerName = game.findComponentByName(pong, "finishedGameWinnerPlayer");
+	const looserName = game.findComponentByName(pong, "finishedGameLooserPlayer");
+	// if (!player1Name || !player2Name || !winnerName || !looserName) return;
+
+	if (gameModes.current === game.gameModes.tournament && player1Name && player2Name)
 	{
-		const player1Name = game.findComponentByName(pong, "player1ScoreText");
-		const player2Name = game.findComponentByName(pong, "player2ScoreText");
 		// if (!player1Name || !player2Name) return;
 		switch (pong.current.tournamentState)
 		{
 			case game.tournamentStates.game_1:
-				player1Name.text = pong.current.tournamentPlayer1Name;
-				player2Name.text = pong.current.tournamentPlayer2Name;
+				player1Name.text = pong.current.tournamentPlayer1Name + ":";
+				player2Name.text = pong.current.tournamentPlayer2Name + ":";
 				break;
 			case game.tournamentStates.game_2:
 				if (player1Name && player2Name)
 				{
-				player1Name.text = pong.current.tournamentPlayer1Name;
-				player2Name.text = pong.current.tournamentPlayer2Name;
+				player1Name.text = pong.current.tournamentPlayer3Name + ":";
+				player2Name.text = pong.current.tournamentPlayer4Name + ":";
 				}
 				break;
-			case game.tournamentStates.game_1:
-				player1Name.text = pong.current.tournamentPlayer1Name;
-				player2Name.text = pong.current.tournamentPlayer2Name;
+			case game.tournamentStates.game_3:
+				player1Name.text = pong.current.tournamentFinalist1 + ":";
+				player2Name.text = pong.current.tournamentFinalist2 + ":";
 				break;
 		}
 	}
-	
+
+	if (states.current === game.states.game_finished && winnerName && looserName && player1Name && player2Name)
+	{
+		winnerName.text	= (pong.current.player1Score > pong.current.player2Score ? player1Name.text : player2Name.text)
+		looserName.text	= (pong.current.player1Score < pong.current.player2Score ? player1Name.text : player2Name.text)
+		console.debug("🔨🔨🔨🔨🔨🔨Updated player names in finished game GUI:", winnerName.text, looserName.text);
+	}
+	return;
 }
 
 const getPlayerCardLabel = (bracketPlayer: any): baby.TextBlock | null =>
@@ -295,19 +306,27 @@ export const	updateBracketGUI = (pong: React.RefObject<game.pongStruct>, states:
 	) return;
 	if (states.current === game.states.tournament_bracket_preview)
 	{
-		// Update Aliases
+		// Update Bracket Aliases
 		const	bracketPlayer1 = getPlayerCardLabel(pong.current.bracketPlayer1)
 		const	bracketPlayer2 = getPlayerCardLabel(pong.current.bracketPlayer2)
 		const	bracketPlayer3 = getPlayerCardLabel(pong.current.bracketPlayer3)
 		const	bracketPlayer4 = getPlayerCardLabel(pong.current.bracketPlayer4)
-		if (bracketPlayer1) bracketPlayer1.text = pong.current.tournamentPlayer1Name || "caca 1";
-		if (bracketPlayer2) bracketPlayer2.text = pong.current.tournamentPlayer2Name || "caca 2";
-		if (bracketPlayer3) bracketPlayer3.text = pong.current.tournamentPlayer3Name || "caca 3";
-		if (bracketPlayer4) bracketPlayer4.text = pong.current.tournamentPlayer4Name || "caca 4";
+		const	bracketFinalist1 = getPlayerCardLabel(pong.current.bracketFinalPlayer1)
+		const	bracketFinalist2 = getPlayerCardLabel(pong.current.bracketFinalPlayer2)
+		const	bracketWinner = getPlayerCardLabel(pong.current.bracketWinnerPlayer)
+
+		if (bracketPlayer1 && pong.current.tournamentPlayer1Name) bracketPlayer1.text = pong.current.tournamentPlayer1Name;
+		if (bracketPlayer2 && pong.current.tournamentPlayer2Name) bracketPlayer2.text = pong.current.tournamentPlayer2Name;
+		if (bracketPlayer3 && pong.current.tournamentPlayer3Name) bracketPlayer3.text = pong.current.tournamentPlayer3Name;
+		if (bracketPlayer4 && pong.current.tournamentPlayer4Name) bracketPlayer4.text = pong.current.tournamentPlayer4Name;
+		if (bracketFinalist1 && pong.current.tournamentFinalist1) bracketFinalist1.text = pong.current.tournamentFinalist1;
+		if (bracketFinalist2 && pong.current.tournamentFinalist2) bracketFinalist2.text = pong.current.tournamentFinalist2;
+		if (bracketWinner && pong.current.tournamentWinner) bracketWinner.text = pong.current.tournamentWinner;
 
 		// First Match
 		if (pong.current.tournamentState === game.tournamentStates.waiting_game_1)
 		{
+			// Next Match
 			const	player1Outline = game.findComponentByName(pong, "bracketPlayer1CardBackground");
 			const	player2Outline = game.findComponentByName(pong, "bracketPlayer2CardBackground");
 					player1Outline.color = game.colorsScheme.auroraAccent3;
@@ -321,10 +340,17 @@ export const	updateBracketGUI = (pong: React.RefObject<game.pongStruct>, states:
 		// Second Match
 		if (pong.current.tournamentState === game.tournamentStates.waiting_game_2)
 		{
+			// Next Match
 			const	player3Outline = game.findComponentByName(pong, "bracketPlayer3CardBackground");
 			const	player4Outline = game.findComponentByName(pong, "bracketPlayer4CardBackground");
 					player3Outline.color = game.colorsScheme.auroraAccent3;
 					player4Outline.color = game.colorsScheme.auroraAccent3;
+
+			// Win/Lose outline
+			const	player1Outline = game.findComponentByName(pong, "bracketPlayer1CardBackground");
+			const	player2Outline = game.findComponentByName(pong, "bracketPlayer2CardBackground");
+					player1Outline.color = (pong.current.player1Score < pong.current.player2Score ? game.colorsScheme.auroraAccent1 : game.colorsScheme.auroraAccent4);
+					player2Outline.color = (pong.current.player1Score > pong.current.player2Score ? game.colorsScheme.auroraAccent1 : game.colorsScheme.auroraAccent4);
 
 			pong.current.bracketPlayButton!.isEnabled = pong.current.bracketPlayButton!.isVisible = true;
 			pong.current.bracketAbandonButton!.isEnabled = pong.current.bracketAbandonButton!.isVisible = true;
@@ -334,10 +360,17 @@ export const	updateBracketGUI = (pong: React.RefObject<game.pongStruct>, states:
 		// Third Match
 		if (pong.current.tournamentState === game.tournamentStates.waiting_game_3)
 		{
+			// Next Match
 			const	finalPlayer1CardOutline = game.findComponentByName(pong, "finalPlayer1CardBackground");
 			const	finalPlayer2CardOutline = game.findComponentByName(pong, "finalPlayer2CardBackground");
 					finalPlayer1CardOutline.color = game.colorsScheme.auroraAccent3;
 					finalPlayer2CardOutline.color = game.colorsScheme.auroraAccent3;
+
+			// Win/Lose outline
+			const	player3Outline = game.findComponentByName(pong, "bracketPlayer3CardBackground");
+			const	player4Outline = game.findComponentByName(pong, "bracketPlayer4CardBackground");
+					player3Outline.color = (pong.current.player1Score < pong.current.player2Score ? game.colorsScheme.auroraAccent1 : game.colorsScheme.auroraAccent4);
+					player4Outline.color = (pong.current.player1Score > pong.current.player2Score ? game.colorsScheme.auroraAccent1 : game.colorsScheme.auroraAccent4);
 
 			pong.current.bracketPlayButton!.isEnabled = pong.current.bracketPlayButton!.isVisible = true;
 			pong.current.bracketAbandonButton!.isEnabled = pong.current.bracketAbandonButton!.isVisible = true;
@@ -350,6 +383,15 @@ export const	updateBracketGUI = (pong: React.RefObject<game.pongStruct>, states:
 			pong.current.bracketPlayButton!.isEnabled = pong.current.bracketPlayButton!.isVisible = false;
 			pong.current.bracketAbandonButton!.isEnabled = pong.current.bracketAbandonButton!.isVisible = false;
 			pong.current.bracketFinishButton!.isEnabled = pong.current.bracketFinishButton!.isVisible = true;
+
+			// Win/Lose outline
+			const	finalPlayer1CardOutline = game.findComponentByName(pong, "finalPlayer1CardBackground");
+			const	finalPlayer2CardOutline = game.findComponentByName(pong, "finalPlayer2CardBackground");
+					finalPlayer1CardOutline.color = (pong.current.player1Score < pong.current.player2Score ? game.colorsScheme.auroraAccent1 : game.colorsScheme.auroraAccent4);
+					finalPlayer2CardOutline.color = (pong.current.player1Score > pong.current.player2Score ? game.colorsScheme.auroraAccent1 : game.colorsScheme.auroraAccent4);
+
+			const	winnerCardOutline = game.findComponentByName(pong, "winnerPlayerBackground");
+					winnerCardOutline.color = game.colorsScheme.auroraAccent5;
 		}
 	}
 }
@@ -421,7 +463,7 @@ export const	updateGUIsWhenNeeded =
 		game.updateScreensVisibilityStates(pong, states.current);
 		game.updateGUIValues(pong, lang);
 		game.updateBracketGUI(pong, states);
-		game.updatePlayerNames(pong, gameModes);
+		game.updatePlayerNames(pong, states, gameModes);
 		lastState.current = states.current;
 	}
 	// Update GUI on game mode change

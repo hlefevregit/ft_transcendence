@@ -274,10 +274,10 @@ export const	instentiatePongSettingsGUI =
 	{
 		if (gameModes.current === game.gameModes.online) states.current = game.states.hosting_waiting_players;
 		else if (gameModes.current === game.gameModes.tournament)
-			{
-				states.current = game.states.tournament_bracket_preview;
-				pong.current.tournamentState = game.tournamentStates.waiting_game_1;
-			}
+		{
+			states.current = game.states.tournament_bracket_preview;
+			pong.current.tournamentState = game.tournamentStates.waiting_game_1;
+		}
 		else states.current = game.states.waiting_to_start;
 	}, pong, "play");
 			(pongSettingsPlayButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
@@ -459,7 +459,8 @@ export const	instantiateDebugGUI =
 	const	debugFrameratePanel = game.createHorizontalStackPanel("debugFrameratePanel", 0);
 	const	debugFramerateText = game.createText("debugFrameRateText", "FPS: ");
 	const	debugFramerateValue = game.createDynamicText("debugFrameRateValue");
-			(debugFramerateValue.children[0] as baby.TextBlock).onTextChangedObservable.add(() =>
+			// (debugFramerateValue.children[0] as baby.TextBlock).onTextChangedObservable.add(() =>
+			(debugFramerateValue.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
 			{
 				let value: string = "NA";
 				if (pong.current.engine) value = pong.current.engine.getFps().toFixed(0);
@@ -613,8 +614,9 @@ export const	instantiateCountdownGUI = (pong: React.RefObject<game.pongStruct>):
 	const	waitingRoundStartVerticalStackPanel = game.createVerticalStackPanel("waitingRoundStartVerticalStackPanel");
 	const	waitingRoundStartTitle = game.createDynamicTitle("waitingRoundStartTitle", "startingIn");
 	// const	countdown = game.createDynamicText("countdown", () => Math.trunc(pong.current.countdown), pong);
-	const	countdown = game.createDynamicText("countdown");
+	const	countdown = game.createText("countdown", "countdown");
 			(countdown.children[0] as baby.TextBlock).fontSize = 48;
+			// (countdown.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
 			(countdown.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
 			{
 				game.findComponentByName(pong, "countdown").text = Math.trunc(pong.current.countdown).toString();
@@ -724,6 +726,14 @@ export const	instantiateFinishedGameGUI =
 	const	finishedGameWinnerText = game.createDynamicText("finishedGameWinnerText", "winner");
 			(finishedGameWinnerText.children[0] as baby.TextBlock).color = game.colorsScheme.auroraAccent4;
 	const	finishedGameWinnerPlayer = game.createDynamicText("finishedGameWinnerPlayer", (pong.current.player1Score > pong.current.player2Score ? "resultPlayer1" : "resultPlayer2"));
+			finishedGameWinnerPlayer.onDirtyObservable.add(() =>
+			{
+				if (gameModes.current === game.gameModes.tournament && pong.current.playerNameLeft && pong.current.playerNameRight)
+				{
+					const winner = pong.current.player1Score > pong.current.player2Score ? pong.current.playerNameLeft : pong.current.playerNameRight;
+					game.findComponentByName(pong, "finishedGameWinnerPlayer").text = winner;
+				}
+			});
 
 	const	finishedGameWinnerScore = game.createDynamicText("finishedGameWinnerScore");
 			(finishedGameWinnerScore.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
@@ -731,14 +741,23 @@ export const	instantiateFinishedGameGUI =
 				const winnerScore = Math.max(pong.current.player1Score, pong.current.player2Score);
 				game.findComponentByName(pong, "finishedGameWinnerScore").text = winnerScore.toString();
 			});
-	const	finishedGameLoserText = game.createDynamicText("finishedGameLoserText", "looser");
-			(finishedGameLoserText.children[0] as baby.TextBlock).color = game.colorsScheme.auroraAccent1;
-	const	finishedGameLoserPlayer = game.createDynamicText("finishedGameLoserPlayer", (pong.current.player1Score < pong.current.player2Score ? "resultPlayer2" : "resultPlayer1"));
-	const	finishedGameLoserScore = game.createDynamicText("finishedGameLoserScore");
-			(finishedGameLoserScore.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
+	const	finishedGameLooserText = game.createDynamicText("finishedGameLooserText", "looser");
+			(finishedGameLooserText.children[0] as baby.TextBlock).color = game.colorsScheme.auroraAccent1;
+	const	finishedGameLooserPlayer = game.createDynamicText("finishedGameLooserPlayer", (pong.current.player1Score < pong.current.player2Score ? "resultPlayer2" : "resultPlayer1"));
+			finishedGameLooserPlayer.onDirtyObservable.add(() =>
+			{
+				if (gameModes.current === game.gameModes.tournament && pong.current.playerNameLeft && pong.current.playerNameRight)
+				{
+					const winner = pong.current.player1Score < pong.current.player2Score ? pong.current.playerNameLeft : pong.current.playerNameRight;
+					game.findComponentByName(pong, "finishedGameLooserPlayer").text = winner;
+				}
+			});
+
+	const	finishedGameLooserScore = game.createDynamicText("finishedGameLooserScore");
+			(finishedGameLooserScore.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
 			{
 				const loserScore = Math.min(pong.current.player1Score, pong.current.player2Score);
-				game.findComponentByName(pong, "finishedGameLoserScore").text = loserScore.toString();
+				game.findComponentByName(pong, "finishedGameLooserScore").text = loserScore.toString();
 			});
 	const	finishedGameBackButton = game.createDynamicButton("finishedGameBackButton", () =>
 	{
@@ -808,10 +827,10 @@ export const	instantiateFinishedGameGUI =
 	finishedGameHorizontalStackPanel1.addControl(scoredText1);
 	finishedGameHorizontalStackPanel1.addControl(finishedGameWinnerScore);
 
-	finishedGameHorizontalStackPanel2.addControl(finishedGameLoserText);
-	finishedGameHorizontalStackPanel2.addControl(finishedGameLoserPlayer);
+	finishedGameHorizontalStackPanel2.addControl(finishedGameLooserText);
+	finishedGameHorizontalStackPanel2.addControl(finishedGameLooserPlayer);
 	finishedGameHorizontalStackPanel2.addControl(scoredText2);
-	finishedGameHorizontalStackPanel2.addControl(finishedGameLoserScore);
+	finishedGameHorizontalStackPanel2.addControl(finishedGameLooserScore);
 
 	finishedGameHorizontalStackPanel3.addControl(finishedGameBackButton);
 	finishedGameHorizontalStackPanel3.addControl(finishedGameReplayButton);
@@ -1102,17 +1121,17 @@ export const instantiateBracketGUI =
 	(bracketRound3Text.children[0] as baby.TextBlock).fontSize = 32;
 	
 	// Create player cards with the new function
-	const	bracketPlayer1Card = game.createCard("bracketPlayer1Card", "Player 1");
-	const	bracketPlayer2Card = game.createCard("bracketPlayer2Card", "Player 2");
-	const	bracketPlayer3Card = game.createCard("bracketPlayer3Card", "Player 3");
-	const	bracketPlayer4Card = game.createCard("bracketPlayer4Card", "Player 4");
+	const	bracketPlayer1Card = game.createCard("bracketPlayer1Card", "player1");
+	const	bracketPlayer2Card = game.createCard("bracketPlayer2Card", "player2");
+	const	bracketPlayer3Card = game.createCard("bracketPlayer3Card", "player3");
+	const	bracketPlayer4Card = game.createCard("bracketPlayer4Card", "player4");
 	
 	// Finals cards
-	const	finalPlayer1Card = game.createCard("finalPlayer1Card", "Final Player 1");
-	const	finalPlayer2Card = game.createCard("finalPlayer2Card", "Final Player 2");
+	const	finalPlayer1Card = game.createCard("finalPlayer1Card", "finalPlayer1");
+	const	finalPlayer2Card = game.createCard("finalPlayer2Card", "finalPlayer2");
 	
 	// Winner card
-	const	winnerPlayer = game.createCard("winnerPlayer", "Winner Player");
+	const	winnerPlayer = game.createCard("winnerPlayer", "winnerPlayer");
 	
 	// Play button
 	const	bracketPlayButton = game.createDynamicButton("bracketPlayButton", () =>
@@ -1126,16 +1145,19 @@ export const instantiateBracketGUI =
 		{
 			case game.tournamentStates.waiting_game_1:
 				pong.current.tournamentState = game.tournamentStates.game_1;
+				// states.current = game.states.waiting_to_start;
 				break;
 			case game.tournamentStates.waiting_game_2:
 				pong.current.tournamentState = game.tournamentStates.game_2;
+				// states.current = game.states.waiting_to_start;
 				break;
 			case game.tournamentStates.waiting_game_3:
 				pong.current.tournamentState = game.tournamentStates.game_3;
+				// states.current = game.states.waiting_to_start;
 				break;
 		}
 		states.current = game.states.waiting_to_start;
-		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.arenaCam, 1, pong, states);
+		// game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.arenaCam, 1, pong, states);
 	}, pong, "play");
 			(bracketPlayButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
 			{
@@ -1200,6 +1222,45 @@ export const instantiateBracketGUI =
 		gameModes.current = game.gameModes.none;
 		pong.current.tournamentState = game.tournamentStates.none;
 		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
+
+		// Reset tournament state
+		pong.current.tournamentState = game.tournamentStates.none;
+		// Reset player scores
+		pong.current.tournamenFinalScore1 = 0;
+		pong.current.tournamentPlayer1Score = 0;
+		pong.current.tournamentPlayer2Score = 0;
+		pong.current.tournamentPlayer3Score = 0;
+		pong.current.tournamentPlayer4Score = 0;
+		// Reset player labels
+		pong.current.tournamentPlayer1Name = undefined;
+		pong.current.tournamentPlayer2Name = undefined;
+		pong.current.tournamentPlayer3Name = undefined;
+		pong.current.tournamentPlayer4Name = undefined;
+		pong.current.tournamentFinalist1 = undefined;
+		pong.current.tournamentFinalist2 = undefined;
+		pong.current.tournamentWinner = undefined;
+		// Reset player borders
+		const	player1 = bracketPlayer1Card.children[0] as baby.Container;
+		const	player1Rectangle = player1.children[0] as baby.Rectangle;
+				player1Rectangle.color = "transparent";
+		const	player2 = bracketPlayer2Card.children[0] as baby.Container;
+		const	player2Rectangle = player2.children[0] as baby.Rectangle;
+				player2Rectangle.color = "transparent";
+		const	player3 = bracketPlayer3Card.children[0] as baby.Container;
+		const	layer3Rectangle = player3.children[0] as baby.Rectangle;
+				layer3Rectangle.color = "transparent";
+		const	player4 = bracketPlayer4Card.children[0] as baby.Container;
+		const	player4Rectangle = player4.children[0] as baby.Rectangle;
+				player4Rectangle.color = "transparent";
+		const	finalPlayer1 = finalPlayer1Card.children[0] as baby.Container;
+		const	finalPlayer1Rectangle = finalPlayer1.children[0] as baby.Rectangle;
+				finalPlayer1Rectangle.color = "transparent";
+		const	finalPlayer2 = finalPlayer2Card.children[0] as baby.Container;
+		const	finalPlayer2Rectangle = finalPlayer2.children[0] as baby.Rectangle;
+				finalPlayer2Rectangle.color = "transparent";
+		const	winner = winnerPlayer.children[0] as baby.Container;
+		const	winnerRectangle = winner.children[0] as baby.Rectangle;
+				winnerRectangle.color = "transparent";
 	}, pong, "finish");
 			(bracketFinishButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
 			{
@@ -1218,9 +1279,12 @@ export const instantiateBracketGUI =
 	pong.current.bracketPlayer2 = bracketPlayer2Card;
 	pong.current.bracketPlayer3 = bracketPlayer3Card;
 	pong.current.bracketPlayer4 = bracketPlayer4Card;
+
 	pong.current.bracketFinalPlayer1 = finalPlayer1Card;
 	pong.current.bracketFinalPlayer2 = finalPlayer2Card;
+
 	pong.current.bracketWinnerPlayer = winnerPlayer;
+
 	pong.current.bracketPlayButton = bracketPlayButton;
 	pong.current.bracketAbandonButton = bracketAbandonButton;
 	pong.current.bracketFinishButton = bracketFinishButton;

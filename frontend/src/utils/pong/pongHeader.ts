@@ -177,18 +177,20 @@ export type pongStruct =
 	// tournamentPlayer3Id?: string;
 	// tournamentPlayer4Id?: string;
 
-	tournamentPlayer1Name?: string;
-	tournamentPlayer2Name?: string;
-	tournamentPlayer3Name?: string;
-	tournamentPlayer4Name?: string;
-
 	tournamentPlayer1Score?: number;
 	tournamentPlayer2Score?: number;
 	tournamentPlayer3Score?: number;
 	tournamentPlayer4Score?: number;
 
+	tournamentPlayer1Name?: string;
+	tournamentPlayer2Name?: string;
+	tournamentPlayer3Name?: string;
+	tournamentPlayer4Name?: string;
+
 	tournamentFinalist1?: string;
 	tournamentFinalist2?: string;
+
+	tournamentWinner?: string;
 
 	tournamenFinalScore1?: number;
 	tournamenFinalScore2?: number;
@@ -204,14 +206,14 @@ export type pongStruct =
 	// startFinalSent?: boolean;	// Used to know if the start final has been sent to the server
 	tournamentState: tournamentStates;
 
-	tournamentGame1WinnedByPlayer1?: boolean;
-	tournamentGame1WinnedByPlayer2?: boolean;
+	// tournamentGame1WinnedByPlayer1?: boolean;
+	// tournamentGame1WinnedByPlayer2?: boolean;
 
-	tournamentGame2WinnedByPlayer1?: boolean;
-	tournamentGame2WinnedByPlayer2?: boolean;
+	// tournamentGame2WinnedByPlayer1?: boolean;
+	// tournamentGame2WinnedByPlayer2?: boolean;
 
-	tournamentGame3WinnedByPlayer1?: boolean;
-	tournamentGame3WinnedByPlayer2?: boolean;
+	// tournamentGame3WinnedByPlayer1?: boolean;
+	// tournamentGame3WinnedByPlayer2?: boolean;
 
 	// Room management
 	rooms: Map<string, any>;
@@ -404,6 +406,14 @@ export const	label =
 	bracketRound1: ["First round", "Premier tour", "Primo turno", "⠨⠋⠊⠗⠎⠞"],
 	bracketRound2: ["Finals", "Finales", "Finali", "⠨⠋⠊⠝⠁⠇⠎"],
 	bracketRound3: ["Winner", "Gagnant", "Vincitore", "⠨⠺⠊⠝⠝⠑⠗"],
+	player1: ["Player 1", "Joueur 1", "Giocatore 1", "⠨⠏⠇⠁⠽⠑⠗ ⠼⠁"],
+	player2: ["Player 2", "Joueur 2", "Giocatore 2", "⠨⠏⠇⠁⠽⠑⠗ ⠼⠃"],
+	player3: ["Player 3", "Joueur 3", "Giocatore 3", "⠨⠏⠇⠁⠽⠑⠗ ⠼⠉"],
+	player4: ["Player 4", "Joueur 4", "Giocatore 4", "⠨⠏⠇⠁⠽⠑⠗ ⠼⠙"],
+	finalPlayer1: ["Finalist 1", "Finaliste 1", "Finalista 1", "⠨⠋⠊⠝⠁⠇⠊⠎⠞ ⠼⠁"],
+	finalPlayer2: ["Finalist 2", "Finaliste 2", "Finalista 2", "⠨⠋⠊⠝⠁⠇⠊⠎⠞ ⠼⠃"],
+	winnerPlayer: ["Winner", "Gagnant", "Vincitore", "⠨⠺⠊⠝⠝⠑⠗"],
+	
 
 	// Username Input
 	inputUsernameTitle: ["Enter your username", "Entrez votre nom d'utilisateur", "Inserisci il tuo nome utente", "⠨⠑⠝⠞⠑⠗ ⠽⠕⠥⠗ ⠥⠎⠑⠗⠝⠁⠍⠑"],
@@ -432,9 +442,10 @@ export const	getLabel = (key: labelKey, currentLanguage: lang): string =>
 		case lang.italian:
 			return label[key][2];
 		case lang.braille:
-			return label[key][3] || "⠨⠇⠁⠝⠛ ⠨⠝⠕⠞ ⠨⠋⠕⠥⠝⠙"; // Fallback to English if Brail translation is not available
+			return label[key][3] || "⠨⠇⠁⠝⠛ ⠨⠝⠕⠞ ⠨⠋⠕⠥⠝⠙";
 		default:
-			return "❌ language not found ❌";
+			return "";
+			// return "❌ language not found ❌";
 	}
 }
 

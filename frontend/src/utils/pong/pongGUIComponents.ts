@@ -271,7 +271,8 @@ export const createRoomPanel =
 export const	createDynamicText =
 (
 	textName: string,
-	labelKey?: game.labelKey
+	labelKey?: game.labelKey,
+	// defaultText?: string | null | undefined
 ): baby.StackPanel =>
 {
 	const	block = game.createDummyBlock();
@@ -287,6 +288,7 @@ export const	createDynamicText =
 	
 	// Store the label key in metadata for language updates
 	text.metadata = { labelKey: keyToUse };
+	// text.metadata = { defaultText: defaultText };
 	
 	block.addControl(text);
 	return block;
@@ -366,7 +368,7 @@ export const	createDynamicButton =
 export const	createCard =
 (
 	cardName: string,
-	cardText: string
+	cardText: game.labelKey
 ): baby.StackPanel =>
 {
 	const	block = game.createDummyBlock();
@@ -386,7 +388,7 @@ export const	createCard =
 			cardBackground.thickness = 2;
 			cardBackground.zIndex = 0;
 
-	const	cardLabel = createText(cardName + "Label", cardText);
+	const	cardLabel = createDynamicText(cardName + "Label", cardText);
 
 	container.addControl(cardBackground);
 	container.addControl(cardLabel);
