@@ -17,6 +17,9 @@ RUN apt-get update && apt-get install -y \
 # Copie les fichiers package.json + lock
 COPY package*.json ./
 
+# Installe les dépendances
+RUN npm install
+
 # Copie le reste du code
 COPY . .
 

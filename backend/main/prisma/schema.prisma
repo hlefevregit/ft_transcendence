@@ -1,6 +1,7 @@
 // 1. Définition du client
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 // 2. Définition de la base de données SQLite
