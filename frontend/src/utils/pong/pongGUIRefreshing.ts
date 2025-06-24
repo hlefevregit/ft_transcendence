@@ -126,16 +126,12 @@ export const	updateScreensVisibilityStates =
 	game.updateComponentControls(pong.current.waitingRoundStartGUI, game.states.waiting_to_start, pong, states);
 	game.updateComponentControls(pong.current.waitingTournamentToStartGUI, game.states.waiting_tournament_to_start, pong, states);
 	game.updateComponentControls(pong.current.waitingScreenGUI, game.states.hosting_waiting_players, pong, states);
+	game.updateComponentControls(pong.current.bracketGUI, game.states.tournament_bracket_preview, pong, states);
 
 	game.updateComponentControls(pong.current.countdownGUI,
 	[
 		game.states.countdown,
 		game.states.in_final_countdown,
-	], pong, states);
-	game.updateComponentControls(pong.current.bracketGUI,
-	[
-		game.states.tournament_bracket_preview,
-		// game.states.waiting_to_start,
 	], pong, states);
 	game.updateComponentControls(pong.current.inputUsernameGUI,
 	[
@@ -304,6 +300,10 @@ export const	updateBracketGUI = (pong: React.RefObject<game.pongStruct>, states:
 			const	player2Outline = game.findComponentByName(pong, "bracketPlayer2CardBackground");
 					player1Outline.color = game.colorsScheme.auroraAccent3;
 					player2Outline.color = game.colorsScheme.auroraAccent3;
+
+			pong.current.bracketPlayButton!.isEnabled = pong.current.bracketPlayButton!.isVisible = true;
+			pong.current.bracketAbandonButton!.isEnabled = pong.current.bracketAbandonButton!.isVisible = true;
+			pong.current.bracketFinishButton!.isEnabled = pong.current.bracketFinishButton!.isVisible = false;
 		}
 
 		// Second Match
@@ -313,6 +313,10 @@ export const	updateBracketGUI = (pong: React.RefObject<game.pongStruct>, states:
 			const	player4Outline = game.findComponentByName(pong, "bracketPlayer4CardBackground");
 					player3Outline.color = game.colorsScheme.auroraAccent3;
 					player4Outline.color = game.colorsScheme.auroraAccent3;
+
+			pong.current.bracketPlayButton!.isEnabled = pong.current.bracketPlayButton!.isVisible = true;
+			pong.current.bracketAbandonButton!.isEnabled = pong.current.bracketAbandonButton!.isVisible = true;
+			pong.current.bracketFinishButton!.isEnabled = pong.current.bracketFinishButton!.isVisible = false;
 		}
 
 		// Third Match
@@ -322,6 +326,18 @@ export const	updateBracketGUI = (pong: React.RefObject<game.pongStruct>, states:
 			const	finalPlayer2CardOutline = game.findComponentByName(pong, "finalPlayer2CardBackground");
 					finalPlayer1CardOutline.color = game.colorsScheme.auroraAccent3;
 					finalPlayer2CardOutline.color = game.colorsScheme.auroraAccent3;
+
+			pong.current.bracketPlayButton!.isEnabled = pong.current.bracketPlayButton!.isVisible = true;
+			pong.current.bracketAbandonButton!.isEnabled = pong.current.bracketAbandonButton!.isVisible = true;
+			pong.current.bracketFinishButton!.isEnabled = pong.current.bracketFinishButton!.isVisible = false;
+		}
+
+		// Finished Tournament
+		if (pong.current.tournamentState === game.tournamentStates.finished)
+		{
+			pong.current.bracketPlayButton!.isEnabled = pong.current.bracketPlayButton!.isVisible = false;
+			pong.current.bracketAbandonButton!.isEnabled = pong.current.bracketAbandonButton!.isVisible = false;
+			pong.current.bracketFinishButton!.isEnabled = pong.current.bracketFinishButton!.isVisible = true;
 		}
 	}
 }

@@ -145,7 +145,7 @@ export const	setupBabylonPong = async (pong: game.pongStruct, canvasRef: any): P
 
 	// Enable ambient occlusion
 	sceneInstance.createDefaultEnvironment();
-	const ssaoRenderingPipeline = new baby.SSAORenderingPipeline("ssao", sceneInstance,  .8);
+	const ssaoRenderingPipeline = new baby.SSAORenderingPipeline("ssao", sceneInstance,  1);
 	ssaoRenderingPipeline.scene.setRenderingOrder(0, null, null, null);
 	sceneInstance.postProcessRenderPipelineManager.attachCamerasToRenderPipeline("ssao", sceneInstance.cameras);
 
