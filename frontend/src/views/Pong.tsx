@@ -294,6 +294,9 @@ const	Pong: React.FC = () =>
 									(pong.current.player1Score > pong.current.player2Score)
 									? pong.current.tournamentPlayer1Name
 									: pong.current.tournamentPlayer2Name;
+								// pong.current.playerNameLeft = pong.current.tournamentPlayer1Name;
+								// pong.current.playerNameRight = pong.current.tournamentPlayer2Name;
+								// console.log("left player : ", pong.current.playerNameLeft, "right player : ", pong.current.playerNameRight);
 								break;
 							// Finished second game
 							case game.tournamentStates.game_2:
@@ -305,6 +308,9 @@ const	Pong: React.FC = () =>
 									(pong.current.player1Score > pong.current.player2Score)
 									? pong.current.tournamentPlayer3Name
 									: pong.current.tournamentPlayer4Name;
+								// pong.current.playerNameLeft = pong.current.tournamentPlayer3Name;
+								// pong.current.playerNameRight = pong.current.tournamentPlayer4Name;
+								// console.log("left player : ", pong.current.playerNameLeft, "right player : ", pong.current.playerNameRight);
 								break;
 							// Finished final game
 							case game.tournamentStates.game_3:

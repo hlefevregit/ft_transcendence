@@ -245,19 +245,31 @@ export const	updateGUIValues =
 
 export const	updatePlayerNames = (pong: React.RefObject<game.pongStruct>, gameModes: React.RefObject<game.gameModes>): void =>
 {
-	switch (gameModes.current)
+	if (gameModes.current === game.gameModes.tournament)
 	{
-		case game.gameModes.tournament:
-			const player1Name = game.findComponentByName(pong, "player1ScoreText");
-			const player2Name = game.findComponentByName(pong, "player2ScoreText");
-
-			if (player1Name && player2Name)
-			{
-				player1Name.text = pong.current.playerNameLeft;
-				player2Name.text = pong.current.playerNameRight;
-			}
-			break;
+		const player1Name = game.findComponentByName(pong, "player1ScoreText");
+		const player2Name = game.findComponentByName(pong, "player2ScoreText");
+		// if (!player1Name || !player2Name) return;
+		switch (pong.current.tournamentState)
+		{
+			case game.tournamentStates.game_1:
+				player1Name.text = pong.current.tournamentPlayer1Name;
+				player2Name.text = pong.current.tournamentPlayer2Name;
+				break;
+			case game.tournamentStates.game_2:
+				if (player1Name && player2Name)
+				{
+				player1Name.text = pong.current.tournamentPlayer1Name;
+				player2Name.text = pong.current.tournamentPlayer2Name;
+				}
+				break;
+			case game.tournamentStates.game_1:
+				player1Name.text = pong.current.tournamentPlayer1Name;
+				player2Name.text = pong.current.tournamentPlayer2Name;
+				break;
+		}
 	}
+	
 }
 
 const getPlayerCardLabel = (bracketPlayer: any): baby.TextBlock | null =>
@@ -409,6 +421,7 @@ export const	updateGUIsWhenNeeded =
 		game.updateScreensVisibilityStates(pong, states.current);
 		game.updateGUIValues(pong, lang);
 		game.updateBracketGUI(pong, states);
+		game.updatePlayerNames(pong, gameModes);
 		lastState.current = states.current;
 	}
 	// Update GUI on game mode change
