@@ -56,17 +56,17 @@ export const	makeBallBounce =
 			pong.current.player2Score += 1;
 		}
 
-		if (gameModes.current === game.gameModes.tournament)
-		{
-			if (pong.current.isInGame1)
-				states.current = game.states.in_game1;
-			else if (pong.current.isInGame2)
-				states.current = game.states.in_game2;
-			else if (pong.current.isFinal)
-				states.current = game.states.in_final;
-		}
-		else
-			states.current = game.states.in_game;
+		// if (gameModes.current === game.gameModes.tournament)
+		// {
+		// 	if (pong.current.isInGame1)
+		// 		states.current = game.states.in_game1;
+		// 	else if (pong.current.isInGame2)
+		// 		states.current = game.states.in_game2;
+		// 	else if (pong.current.isFinal)
+		// 		states.current = game.states.in_final;
+		// }
+		// else
+		// 	states.current = game.states.in_game;
 	}
 
 	// MAKE BALL BOUNCE
