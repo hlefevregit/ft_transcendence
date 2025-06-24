@@ -35,6 +35,8 @@ export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<v
 		if (BJ.card) BJ.card.scaling = new baby.Vector3(-3.5, 3.5, 3.5);
 		BJ.card.position = new baby.Vector3(0, 2, 3);
 		BJ.card.rotation = new baby.Vector3(0, 0, 0);
+		// Following line is an example of how to call a method on a specific card mesh if it exists
+		// BJ.scene.meshes.find(mesh => mesh.name === "diamondsSeven")?.method()
 	}
 	catch (error) { console.error("Error while loading card model:", error); }
 	try
