@@ -23,6 +23,8 @@ fastify.post('/host', async (req, res) => {
 	return res.send({ gameId, roomName });
 });
 
+
+
 fastify.post('/join', async (req, res) => {
 	const { gameId, userId } = req.body as { gameId: string, userId: string };
 	// juste pour log ou vérif de disponibilité

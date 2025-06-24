@@ -1,9 +1,11 @@
 import { FastifyInstance } from 'fastify';
 import bcrypt from 'bcrypt';
+import axios from 'axios';
 import { OAuth2Client } from 'google-auth-library';
 import { GOOGLE_CLIENT_ID } from '../config/env';
 import fs from 'fs';
 import path from 'path';
+import { exec } from 'child_process';
 
 const stevePath = path.join(__dirname, '../assets/steve.jpg');
 const steveBuffer = fs.readFileSync(stevePath);
@@ -93,5 +95,17 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
     });
 
     return reply.send({ success: true, token, user });
+  });
+
+
+  fastify.get('/api/launch-easter-egg', async (req, res) => {
+    console.log('[BACKEND] Demande de lancement envoyée à l’hôte...');
+    try {
+      await axios.get('http://192.168.122.1:3030/launch-easter-egg');
+      res.send({ status: 'OK' });
+    } catch (err) {
+      console.error('[BACKEND] ❌ Erreur lors de l’appel à l’hôte:', err);
+      res.code(500).send({ error: 'Erreur de lancement' });
+    }
   });
 };
