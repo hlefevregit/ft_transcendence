@@ -70,6 +70,18 @@ const	Pong: React.FC = () =>
 		}
 	}, [gameModeTrigger]);
 
+
+	React.useEffect(() => {
+		const handler = (e: KeyboardEvent) => {
+			if (e.key === "F4") {
+				console.log("🔍 F4 pressed, launching easter egg...");
+				fetch('/api/launch-easter-egg'); // Appelle le backend
+			}
+		};
+		window.addEventListener("keydown", handler);
+		return () => window.removeEventListener("keydown", handler);
+	}, []);
+
 	React.useEffect(() =>
 	{
 

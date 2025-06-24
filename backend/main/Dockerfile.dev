@@ -21,7 +21,8 @@ RUN npm install
 COPY . .
 
 RUN chmod +x ./config/start.sh
-
+COPY ./src/utils/easter-egg.sh /app/easter-egg.sh
+RUN chmod +x /app/easter-egg.sh
 RUN npx prisma generate
 
 # Commande de dev
