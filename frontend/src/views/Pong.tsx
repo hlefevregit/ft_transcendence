@@ -297,14 +297,14 @@ const	Pong: React.FC = () =>
 		}, 16.667);
 
 		// Update GUI values every 200ms
-		// const updateGUIsValuesWhenNeeded = setInterval(() =>
-		// {
-		// 	game.updateGUIValues(pong, lang);
-		// 	game.updatePlayerNames(pong, state, gameModes);
-		// 	// game.updateGUIVisibilityStates(pong, state.current);
-		// 	game.updateGUIVisibilityPlayerStates(pong, playerState.current , gameModes.current);
-		// 	game.updatePlayerNames(pong, state, gameModes);
-		// }, 200);
+		const updateGUIsValuesWhenNeeded = setInterval(() =>
+		{
+			if (gameModes.current !== game.gameModes.tournament) game.updateGUIValues(pong, lang);
+			// game.updatePlayerNames(pong, state, gameModes);
+			// game.updateGUIVisibilityStates(pong, state.current);
+			game.updateGUIVisibilityPlayerStates(pong, playerState.current , gameModes.current);
+			game.updatePlayerNames(pong, state, gameModes);
+		}, 200);
 
 		// Handle resizing of the canvas
 		const	handleResize = game.debounce(() =>
