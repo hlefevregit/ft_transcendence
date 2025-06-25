@@ -41,11 +41,8 @@ export const    instantiateMainMenuGUI =
 			(returnToMuseumButton.children[0] as baby.Button).color = bj.colorsScheme.auroraAccent1;
 	const	mainMenuPlay = bj.createDynamicButton("mainMenuPlay", () =>
 	{
-		if (!bjRef.current.scene) return;
-		states.current = bj.States.in_game;
-		bjRef.current.gameState = bj.GameState.waiting;
-		bj.PlayGame(bjRef, bj.setState);
-
+		// if (!bjRef.current.scene) return;
+		states.current = bj.States.game_mode_selection;
 	}, bjRef, "play");
 
 	// Add GUI components to the main menu
@@ -62,6 +59,55 @@ export const    instantiateMainMenuGUI =
 	// Add the screen to the GUI texture
 	bjRef.current.mainMenuGUI = mainMenuGUI;
 	// pong.current.guiTexture?.addControl(mainMenuGUI);
+}
+
+// ****************************************************************************** //
+//                                                                                //
+//                                 GAMEMODE GUI                                   //
+//                                                                                //
+// ****************************************************************************** //
+
+export const	instantiateGameModeGUI =
+(
+	bjRef: React.RefObject<bj.bjStruct>,
+	states: React.RefObject<bj.States>,
+): void =>
+{
+	const	gameModeGUI = bj.createScreen("gameModeGUI", "center");
+	const	gameModeContainer = bj.createAdaptiveContainer("gameModeContainer");
+
+	const	gameModeVerticalStackPanel = bj.createVerticalStackPanel("gameModeVerticalStackPanel");
+
+	// const	gameModeTitle = bj.createDynamicTitle("gameModeTitle", "gameModeTitle");
+	
+	const	gameModeSoloButton = bj.createDynamicButton("gameModeSoloButton", () =>
+	{
+		states.current = bj.States.in_game;
+		bjRef.current.gameState = bj.GameState.waiting;
+		bj.PlayGame(bjRef, bj.setState);
+	}, bjRef, "solo");
+	const	gameModeDuoButton = bj.createDynamicButton("gameModeDuoButton", () =>
+	{
+		states.current = bj.States.in_game;
+		bjRef.current.gameState = bj.GameState.waiting;
+		bj.PlayGame(bjRef, bj.setState);
+	}, bjRef, "duo");
+	const	gameModeBackButton = bj.createDynamicButton("gameModeBackButton", () =>
+	{
+		states.current = bj.States.main_menu;
+	}, bjRef, "back");
+
+	// Add GUI components to the game mode GUI
+	gameModeGUI.addControl(gameModeContainer);
+	gameModeContainer.addControl(gameModeVerticalStackPanel);
+
+	// Buttons
+	gameModeVerticalStackPanel.addControl(gameModeSoloButton);
+	gameModeVerticalStackPanel.addControl(gameModeDuoButton);
+	gameModeVerticalStackPanel.addControl(gameModeBackButton);
+
+	// Add the game mode GUI to the bjRef
+	bjRef.current.gameModeGUI = gameModeGUI;
 }
 
 // ****************************************************************************** //

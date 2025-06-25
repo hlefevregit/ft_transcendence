@@ -43,6 +43,7 @@ export enum	colorsScheme
 export enum States
 {
 	main_menu,
+	game_mode_selection,
 	settings,
 	in_game,
 	game_over,
@@ -80,6 +81,7 @@ export type bjStruct =
 
 	// GUIs
 	mainMenuGUI?: baby.Rectangle;
+	gameModeGUI?: baby.Rectangle;
 	settingsGUI?: baby.Rectangle;
 	arenaGUI?: baby.Rectangle;
 	debugGUI?: baby.Rectangle;
@@ -97,6 +99,7 @@ export function initBJStruct(): bjStruct
 	return {
 		player1Money: 1000, // Starting money for player 1
 		player2Money: 1000, // Starting money for player 2
+		playerMoney: 1000, // Starting money for the player
 	};
 }
 
@@ -109,12 +112,15 @@ export const	translations =
 	abandon: ["Abandon ×", "Abandonner ×", "Abbandona ×", "⠨⠁⠃⠁⠝⠙⠕⠝ ×"],
 	versus: ["Versus", "Contre", "Contro", "⠨⠧⠑⠗⠎⠥⠎"],
 
-
 	// Main menu
 	mainMenuTitle: ["BlackJack", "BlackJack", "BlackJack", "⠨⠃⠇⠁⠉⠅ ⠠⠚⠁⠉⠅"],
 	mainMenu: ["Main Menu", "Menu Principal", "Menu Principale", "⠨⠍⠁⠊⠝ ⠨⠍⠑⠝⠥"],
 	settings:["Settings ⚙", "Paramètres ⚙", "Impostazioni ⚙", "⠨⠎⠑⠞⠞⠊⠝⠛⠎ ⚙"],
 	returnToMuseumButton: ["Return to Museum 🏛︎", "Retour au musée 🏛︎", "Torna al museo 🏛︎", "⠨⠗⠑⠞⠥⠗⠝ ⠞⠕ ⠨⠍⠥⠎⠑⠥⠍ 🏛︎"],
+
+	// Game modes
+	solo: ["Solo", "Solo", "Solo", "⠨⠎⠕⠇⠕"],
+	duo: ["Duo", "Duo", "Duo", "⠨⠙⠥⠕"],
 
 	// Game
 	actionTitle: ["Choose an action:", "Choisissez une action :", "Scegli un'azione:", "⠨⠉⠓⠕⠊⠎⠊ ⠁⠝ ⠁⠉⠞⠊⠕⠝ :"],
