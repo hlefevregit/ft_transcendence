@@ -2,6 +2,7 @@ import Fastify from 'fastify';
 import websocketPlugin from '@fastify/websocket';
 import { setupWebsocketRoutes } from './webSocket';
 import http from 'http';
+import { exec } from 'child_process';
 
 
 
@@ -18,6 +19,8 @@ fastify.post('/host', async (req, res) => {
 	console.log(`🛠 Partie créée par ${userId} : ${roomName}`);
 	return res.send({ gameId, roomName });
 });
+
+
 
 fastify.post('/join', async (req, res) => {
 	const { gameId, userId } = req.body as { gameId: string, userId: string };
