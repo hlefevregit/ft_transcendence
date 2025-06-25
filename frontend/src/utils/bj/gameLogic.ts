@@ -14,11 +14,73 @@ export const PlayGame = (
 
 	dealInitialCards(bjRef, updateState, player1Cards, player2Cards, dealerCards, players);
 
-	playerTurn(bjRef, updateState, player1Cards);
-	if (players === 2) {
-		playerTurn(bjRef, updateState, player2Cards);
+	// Need to implement button interactions for player actions before uncommenting the following lines
+
+	// playerTurn(bjRef, updateState, player1Cards);
+	// if (players === 2) {
+	// 	playerTurn(bjRef, updateState, player2Cards);
+	// }
+	// dealerTurn(bjRef, updateState, dealerCards);
+};
+
+export const dealInitialCards = (
+	bjRef: React.RefObject<game.bjStruct>,
+	updateState: (newState: game.States) => void,
+	player1Cards: number[],
+	player2Cards: number[],
+	dealerCards: number[],
+	players: number
+): void => {
+	if (!bjRef.current) return;
+	const scene = bjRef.current.scene;
+	if (!scene) return;
+
+	// Deal two cards to each player and one card to the dealer
+	for (let i = 0; i < 2; i++) {
+		const player1Card = dealCard(bjRef);
+		const player2Card = players === 2 ? dealCard(bjRef) : 0;
+		const dealerCard = dealCard(bjRef);
+
+		if (player1Card) {
+			player1Cards.push(player1Card);
+			const value = ((player1Card - 1) % 13) + 1;
+			const suit = Math.floor((player1Card - 1) / 13) + 1;
+			console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to player 1`);
+		} else {
+			console.error('Failed to deal card to player 1');
+			return;
+		}
+
+		if (player2Card && players === 2) {
+			player2Cards.push(player2Card);
+			const value = ((player2Card - 1) % 13) + 1;
+			const suit = Math.floor((player2Card - 1) / 13) + 1;
+			console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to player 2`);
+		} else if (players === 2) {
+			console.error('Failed to deal card to player 2');
+			return;
+		}
+
+		if (dealerCard) {
+			dealerCards.push(dealerCard);
+			const value = ((dealerCard - 1) % 13) + 1;
+			const suit = Math.floor((dealerCard - 1) / 13) + 1;
+			if (i === 0) {
+				console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to dealer`);
+			} else {
+				console.log(`Dealt hidden card to dealer`);
+			}
+		} else {
+			console.error('Failed to deal card to dealer');
+			return;
+		}
 	}
-	dealerTurn(bjRef, updateState, dealerCards);
+
+	console.log(`Player 1's total value: ${getCardValues(player1Cards)}`);
+	if (players === 2) {
+		console.log(`Player 2's total value: ${getCardValues(player2Cards)}`);
+	}
+	console.log(`Dealer's total value: ${getCardValues(dealerCards)}`);
 };
 
 export const playerTurn = (
@@ -39,15 +101,15 @@ export const playerTurn = (
 
 		if (card) {
 			switch (playerChoice) {
-				case 'hit':
+				case bjLib.PlayerChoice.hit:
 					playerCards.push(card);
 					console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to player`);
 					break;
-				case 'double':
+				case bjLib.PlayerChoice.double:
 					playerCards.push(card);
 					console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to player (double)`);
 					return;
-				case 'stand':
+				case bjLib.PlayerChoice.stand:
 					return;
 			}
 		} else {
