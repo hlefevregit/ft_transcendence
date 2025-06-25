@@ -4,13 +4,21 @@ import * as game from '@/libs/bjLibs';
 
 export const PlayGame = (
   bjRef: React.RefObject<game.bjStruct>,
-  updateState: (newState: game.States) => void
+  updateState: (newState: game.States) => void,
+  players: number
 ): void => {
 	if (!bjRef.current) return;
-	const playerCards: number[] = [];
+	const player1Cards: number[] = [];
+	const player2Cards: number[] = [];
 	const dealerCards: number[] = [];
-	playerTurn(bjRef, updateState, playerCards);
-	dealerTurn(bjRef, updateState, playerCards, dealerCards);
+
+	dealInitialCards(bjRef, updateState, player1Cards, player2Cards, dealerCards, players);
+
+	playerTurn(bjRef, updateState, player1Cards);
+	if (players === 2) {
+		playerTurn(bjRef, updateState, player2Cards);
+	}
+	dealerTurn(bjRef, updateState, dealerCards);
 };
 
 export const playerTurn = (
@@ -22,16 +30,33 @@ export const playerTurn = (
 	const scene = bjRef.current.scene;
 	if (!scene) return;
 
-	while (playerCards.length < 2) {
+	while (1) {
 		const card = dealCard(bjRef);
 		const value = ((card - 1) % 13) + 1;
 		const suit = Math.floor((card - 1) / 13) + 1;
+
+		const playerChoice = bjRef.current.playerChoice;
+
 		if (card) {
-			playerCards.push(card);
-			console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to player`);
-		}
-		else {
+			switch (playerChoice) {
+				case 'hit':
+					playerCards.push(card);
+					console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to player`);
+					break;
+				case 'double':
+					playerCards.push(card);
+					console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to player (double)`);
+					return;
+				case 'stand':
+					return;
+			}
+		} else {
 			console.error('Failed to deal card');
+			return;
+		}
+		console.log(`Player's total value: ${getCardValues(playerCards)}`);
+		if (getCardValues(playerCards) > 21) {
+			console.log('Player busts!');
 			return;
 		}
 	}
@@ -40,14 +65,13 @@ export const playerTurn = (
 export const dealerTurn = (
 	bjRef: React.RefObject<game.bjStruct>,
 	updateState: (newState: game.States) => void,
-	playerCards: number[],
 	dealerCards: number[],
 ): void => {
 	if (!bjRef.current) return;
 	const scene = bjRef.current.scene;
 	if (!scene) return;
 
-	while (dealerCards.length < 2) {
+	while (dealerCards.length < 2 || getCardValues(dealerCards) < 17) {
 		const card = dealCard(bjRef);
 		const value = ((card - 1) % 13) + 1;
 		const suit = Math.floor((card - 1) / 13) + 1;
@@ -59,7 +83,30 @@ export const dealerTurn = (
 			console.error('Failed to deal card');
 			return;
 		}
+		console.log(`Dealer's total value: ${getCardValues(dealerCards)}`);
 	}
+};
+
+export const getCardValues = (cards: number[]): number => {
+	let totalValue = 0;
+	let acesCount = 0;
+
+	for (const card of cards) {
+		const value = ((card - 1) % 13) + 1;
+		if (value > 10) {
+			totalValue += 10;
+		} else if (value === 1) {
+			totalValue += 11;
+			acesCount++;
+		} else {
+			totalValue += value;
+		}
+	}
+	while (totalValue > 21 && acesCount > 0) {
+		totalValue -= 10;
+		acesCount--;
+	}
+	return totalValue;
 };
 
 export const dealCard = (

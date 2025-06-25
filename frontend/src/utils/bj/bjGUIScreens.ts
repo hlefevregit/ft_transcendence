@@ -79,18 +79,18 @@ export const	instantiateGameModeGUI =
 	const	gameModeVerticalStackPanel = bj.createVerticalStackPanel("gameModeVerticalStackPanel");
 
 	// const	gameModeTitle = bj.createDynamicTitle("gameModeTitle", "gameModeTitle");
-	
+
 	const	gameModeSoloButton = bj.createDynamicButton("gameModeSoloButton", () =>
 	{
 		states.current = bj.States.in_game;
 		bjRef.current.gameState = bj.GameState.waiting;
-		bj.PlayGame(bjRef, bj.setState);
+		bj.PlayGame(bjRef, bj.setState, 1);
 	}, bjRef, "solo");
 	const	gameModeDuoButton = bj.createDynamicButton("gameModeDuoButton", () =>
 	{
 		states.current = bj.States.in_game;
 		bjRef.current.gameState = bj.GameState.waiting;
-		bj.PlayGame(bjRef, bj.setState);
+		bj.PlayGame(bjRef, bj.setState, 2);
 	}, bjRef, "duo");
 	const	gameModeBackButton = bj.createDynamicButton("gameModeBackButton", () =>
 	{
@@ -363,7 +363,7 @@ export const instantiateActionGUI =
 		states.current = bj.States.in_game;
 		console.log("SPLIT")
 	}, bjRef, "split");
-			
+
 	bjRef.current.splitButton = splitButton;
 	bjRef.current.doubleButton = doubleButton;
 
