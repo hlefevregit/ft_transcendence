@@ -10,10 +10,10 @@ export const JWT_SECRET = process.env.JWT_SECRET;
 
 
 const fastify = Fastify({ logger: true });
-const server = http.createServer(fastify.server as any);
+const server = fastify.server as http.Server;
 
 fastify.register(websocketPlugin);
-setupWebsocketRoutes(fastify, server);
+setupWebsocketRoutes(server);
 
 fastify.post('/host', async (req, res) => {
 	const { userId, roomName } = req.body as { userId: string, roomName: string };
