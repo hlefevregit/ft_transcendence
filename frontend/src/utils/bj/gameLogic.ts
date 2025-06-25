@@ -2,27 +2,73 @@ import * as React from 'react';
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/bjLibs';
 
-// Gamelogic:
-// Player ->
-// 	- Selects either "Solo" or "Duo".
-// 	- Gets dealt hand(s) (2 cards) face up.
-// 	- Player can choose to hit or stay.
-// 	- If first round player can also double down and if first two cards are the same, player can split. These actions double the bet.
-// 	- If player doubles down, they get one more card and must stay.
-// 	- If player splits, they get two hands and can play each hand separately. (They can double down if first round of each hand.).
-// Dealer ->
-// 	- Dealer gets dealt two cards, one face up and one face down.
-// 	- Dealer waits for player to finish their turn (player stands or busts).
-// 	- Dealer reveals their face down card.
-// 	- Dealer hits until they reach 17 or higher (soft 17 included).
-// Bets ->
-// 	- Player can place a bet at the start of the game.
-// 	- If player wins, they get their bet back plus winnings (1:1 for normal win, 3:2 for blackjack).
-
 export const PlayGame = (
   bjRef: React.RefObject<game.bjStruct>,
   updateState: (newState: game.States) => void
-): void => {;
+): void => {
+	if (!bjRef.current) return;
+	const playerCards: number[] = [];
+	const dealerCards: number[] = [];
+	playerTurn(bjRef, updateState, playerCards);
+	dealerTurn(bjRef, updateState, playerCards, dealerCards);
+};
+
+export const playerTurn = (
+	bjRef: React.RefObject<game.bjStruct>,
+	updateState: (newState: game.States) => void,
+	playerCards: number[],
+): void => {
+	if (!bjRef.current) return;
+	const scene = bjRef.current.scene;
+	if (!scene) return;
+
+	while (playerCards.length < 2) {
+		const card = dealCard(bjRef);
+		const value = ((card - 1) % 13) + 1;
+		const suit = Math.floor((card - 1) / 13) + 1;
+		if (card) {
+			playerCards.push(card);
+			console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to player`);
+		}
+		else {
+			console.error('Failed to deal card');
+			return;
+		}
+	}
+};
+
+export const dealerTurn = (
+	bjRef: React.RefObject<game.bjStruct>,
+	updateState: (newState: game.States) => void,
+	playerCards: number[],
+	dealerCards: number[],
+): void => {
+	if (!bjRef.current) return;
+	const scene = bjRef.current.scene;
+	if (!scene) return;
+
+	while (dealerCards.length < 2) {
+		const card = dealCard(bjRef);
+		const value = ((card - 1) % 13) + 1;
+		const suit = Math.floor((card - 1) / 13) + 1;
+		if (card) {
+			dealerCards.push(card);
+			console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to dealer`);
+		}
+		else {
+			console.error('Failed to deal card');
+			return;
+		}
+	}
+};
+
+export const dealCard = (
+	bjRef: React.RefObject<game.bjStruct>,
+): number => {
+	const scene = bjRef.current?.scene;
+	if (!scene) return 0;
+
+	return Math.floor(Math.random() * 52) + 1;
 };
 
 export const makeCardMap = (bjRef: React.RefObject<game.bjStruct>): void => {

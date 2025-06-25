@@ -32,12 +32,11 @@ export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<v
 		const modelMeshes = await importGLTF(sceneInstance, cardUrl);
 		if (modelMeshes && modelMeshes.length > 0)
 		{
-			modelMeshes[0].scaling = new baby.Vector3(3.5, 3.5, 3.5);
-			modelMeshes[0].position = new baby.Vector3(0, 2, 3);
-			modelMeshes[0].rotation = new baby.Vector3(0, 0, 0);
+			modelMeshes[0].scaling = new baby.Vector3(4.5, 4.5, 4.5); // Make cards bigger
+			modelMeshes[0].position = new baby.Vector3(0, 1.55, 4); // All cards sitting on the table
+			modelMeshes[0].rotation = new baby.Vector3(Math.PI / -2, 0, 0); // Cards are flat on the table
 		}
-		// Following line is an example of how to call a method on a specific card mesh if it exists
-		// BJ.scene.meshes.find(mesh => mesh.name === "diamondsSeven")?.method()
+		bjLib.makeCardMap(BJ);
 	}
 	catch (error) { console.error("Error while loading card model:", error); }
 	try
