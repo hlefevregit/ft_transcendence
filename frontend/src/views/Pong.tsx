@@ -40,7 +40,7 @@ const	Pong: React.FC = () =>
 			const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 			const wsProtocol = isLocalhost ? 'ws:' : (window.location.protocol === 'https:' ? 'wss:' : 'ws:');
 
-			const wsUrl =`${wsProtocol}//${window.location.hostname}:4000/ws?token=${token || ''}`;
+			const wsUrl =`wss://${window.location.hostname}:8080/ws?token=${token || ''}`;
 
 			console.log("🌐 Connecting WebSocket to:", wsUrl);
 			const ws = new WebSocket(wsUrl);
