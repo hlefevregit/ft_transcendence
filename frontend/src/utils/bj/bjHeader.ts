@@ -47,6 +47,13 @@ export const SuitMap = {
   clubs: 4,
 }
 
+export const ReverseSuitMap = {
+	1: "hearts",
+	2: "diamonds",
+	3: "spades",
+	4: "clubs",
+}
+
 export const ValueMap = {
   ace: 1,
   two: 2,
@@ -61,6 +68,22 @@ export const ValueMap = {
   jack: 11,
   queen: 12,
   king: 13,
+}
+
+export const ReverseValueMap = {
+  1: "ace",
+  2: "two",
+  3: "three",
+  4: "four",
+  5: "five",
+  6: "six",
+  7: "seven",
+  8: "eight",
+  9: "nine",
+  10: "ten",
+  11: "jack",
+  12: "queen",
+  13: "king",
 }
 
 export enum States
