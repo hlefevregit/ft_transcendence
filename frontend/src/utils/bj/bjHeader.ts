@@ -40,6 +40,29 @@ export enum	colorsScheme
 
 }
 
+export const SuitMap = {
+  hearts: 1,
+  diamonds: 2,
+  spades: 3,
+  clubs: 4,
+}
+
+export const ValueMap = {
+  ace: 1,
+  two: 2,
+  three: 3,
+  four: 4,
+  five: 5,
+  six: 6,
+  seven: 7,
+  eight: 8,
+  nine: 9,
+  ten: 10,
+  jack: 11,
+  queen: 12,
+  king: 13,
+}
+
 export enum States
 {
 	main_menu,
@@ -66,7 +89,7 @@ export type bjStruct =
 	map?: baby.AbstractMesh;
 
 	// BlackJack objects
-	card?: baby.Mesh;
+	cards?: Record<string, baby.Mesh>; // Cards are stored in a dictionary with their ID as the key
 	chips?: baby.Mesh;
 
 	// Variables
