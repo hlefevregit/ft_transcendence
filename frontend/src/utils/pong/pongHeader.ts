@@ -199,7 +199,7 @@ export type pongStruct =
 	game2Finished: boolean;
 	game3Finished: boolean;
 
-	// isHost?: boolean;
+	isHost?: boolean;
 	// isHost2?: boolean;
 	// launched?: boolean;	// Used to know if the tournament has been launched
 	// waitingFinalSent?: boolean;	// Used to know if the waiting final has been sent to the server

@@ -8,7 +8,7 @@ import { URL } from 'url';
 
 const games = new Map<string, GameSession>();
 
-export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
+export function setupWebsocketRoutes(server: Server) {
 	const wss = new WebSocketServer({ server, path: '/ws' });
 
 	wss.on('connection', (ws: WebSocket, req) => {
@@ -16,11 +16,11 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 		const url = new URL(req.url || '', `http://${req.headers.host}`);
 		const token = url.searchParams.get('token');
 
-		let username = 'anonymous';
+		let username = -1;
 		if (token) {
 			try {
 				const payload: any = jwt.verify(token, 'supersecretkey');
-				username = payload.pseudo || 'unknown';
+				username = payload.id || 'unknown';
 			} catch (err) {
 				console.error('❌ JWT invalide :', err);
 			}

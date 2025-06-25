@@ -730,8 +730,9 @@ export const	instantiateFinishedGameGUI =
 			{
 				if (gameModes.current === game.gameModes.tournament && pong.current.playerNameLeft && pong.current.playerNameRight)
 				{
-					const winner = pong.current.player1Score > pong.current.player2Score ? pong.current.playerNameLeft : pong.current.playerNameRight;
+					const winner = pong.current.player1Score > pong.current.player2Score ? pong.current!.playerNameLeft : pong.current!.playerNameRight;
 					game.findComponentByName(pong, "finishedGameWinnerPlayer").text = winner;
+					console.warn("❌❌❌❌ WINNER")
 				}
 			});
 
@@ -748,8 +749,9 @@ export const	instantiateFinishedGameGUI =
 			{
 				if (gameModes.current === game.gameModes.tournament && pong.current.playerNameLeft && pong.current.playerNameRight)
 				{
-					const winner = pong.current.player1Score < pong.current.player2Score ? pong.current.playerNameLeft : pong.current.playerNameRight;
-					game.findComponentByName(pong, "finishedGameLooserPlayer").text = winner;
+					const looser = pong.current.player1Score < pong.current.player2Score ? pong.current.playerNameLeft : pong.current.playerNameRight;
+					game.findComponentByName(pong, "finishedGameLooserPlayer").text = looser;
+					console.warn("❌❌❌❌ LOOSER")
 				}
 			});
 
