@@ -371,6 +371,38 @@ export const instantiateActionGUI =
 	bjRef.current.actionGUI = actionGUI;
 }
 
+// ****************************************************************************** //
+//                                                                                //
+//                                    BALANCE                                     //
+//                                                                                //
+// ****************************************************************************** //
+
+export const	instantiateBalanceGUI =
+(
+	bjRef: React.RefObject<bj.bjStruct>,
+): void =>
+{
+	const	balanceGUI = bj.createScreen("balanceGUI", "top-right");
+	const	balanceContainer = bj.createAdaptiveContainer("balanceContainer", undefined, undefined, undefined, "top-right");
+	const	balanceHorizontalStackPanel = bj.createHorizontalStackPanel("balanceVerticalStackPanel");
+	const	balanceTitle = bj.createDynamicTitle("balanceTitle", "balance");
+	const	balanceValue = bj.createTitle("balanceValue", "NaN");
+			(balanceValue.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
+			{
+				// if (bjRef.current.player1Money !== undefined)
+				// 	(balanceValue.children[0] as baby.TextBlock).text = bjRef.current.player1Money.toString();
+				// else
+				// 	(balanceValue.children[0] as baby.TextBlock).text = "NaN";
+			});
+
+	// Add GUI components to the balance GUI
+	balanceHorizontalStackPanel.addControl(balanceTitle);
+	balanceHorizontalStackPanel.addControl(balanceValue);
+	balanceContainer.addControl(balanceHorizontalStackPanel);
+	balanceGUI.addControl(balanceContainer);
+
+	bjRef.current.balanceGUI = balanceGUI;
+}
 
 // ****************************************************************************** //
 //                                                                                //
