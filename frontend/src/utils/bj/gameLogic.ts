@@ -27,6 +27,19 @@ export const PlayGame = async (
 	}
   }
   if (getCardValues(player1Cards) > 21) {
+	const res = await fetch('/api/bj/lose', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+		},
+		body: JSON.stringify({
+			bet: 10,
+		})
+	});
+	if (!res.ok) {
+		console.error("Failed to update player money after Blackjack win");
+	}
 	console.log("Player 1 has busted!");
 	player1Busted = true;
   }
@@ -41,8 +54,52 @@ export const PlayGame = async (
   const dealerValue = getCardValues(dealerCards);
   if (!player1Busted) {
     if (player1Value > dealerValue && player1Value <= 21) {
-	    console.log("Player 1 wins against the dealer!");
+		if (player1Value === 21) {
+			console.log("Player 1 has a Blackjack! Player 1 wins against the dealer!");
+			const res = await fetch('/api/bj/win', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+				body: JSON.stringify({
+					bet: 20,
+				})
+			});
+			if (!res.ok) {
+				console.error("Failed to update player money after Blackjack win");
+			}
+		}
+		else {
+			const res = await fetch('/api/bj/win', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+				body: JSON.stringify({
+					bet: 10,
+				})
+			});
+			if (!res.ok) {
+				console.error("Failed to update player money after Blackjack win");
+			}
+			console.log("Player 1 wins against the dealer!");
+		}
       } else if (player1Value < dealerValue && dealerValue <= 21) {
+		const res = await fetch('/api/bj/lose', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+			},
+			body: JSON.stringify({
+				bet: 10,
+			})
+		});
+		if (!res.ok) {
+			console.error("Failed to update player money after Blackjack win");
+		}
 	    console.log("Dealer wins against Player 1!");
       } else if (player1Value === dealerValue && player1Value <= 21) {
   	    console.log("It's a tie between Player 1 and the dealer!");

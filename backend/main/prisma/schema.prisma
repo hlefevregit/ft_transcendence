@@ -31,6 +31,8 @@ model User {
   // Friend requests
   sentRequests     FriendRequest[] @relation("SentRequests")
   receivedRequests FriendRequest[] @relation("ReceivedRequests")
+
+  money       Int      @default(20) // Montant d'argent virtuel de l'utilisateur
 }
 
 model FriendRequest {
