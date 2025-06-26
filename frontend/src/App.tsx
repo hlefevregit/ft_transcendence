@@ -10,6 +10,7 @@ import BlackJack from './views/BlackJack';
 import RequireAuth from './components/RequireAuth';
 import YouAreAnIdiot404 from './components/NotFound';
 import Game2 from './views/Game2'; // Import Game2
+import PixelArtScene from './views/EasterEgg';
 
 const App: React.FC = () => {
   return (
@@ -23,6 +24,7 @@ const App: React.FC = () => {
         <Route path="/blackjack" element={<BlackJack />} />
         <Route path="/game1" element={<Game1 />} />
         <Route path="/game2" element={<Game2 />} />
+        <Route path="/easter-egg" element={<PixelArtScene />} />
         {/* Routes protégées */}
         <Route element={<RequireAuth />}>
           <Route path="/settings" element={<Settings />} />

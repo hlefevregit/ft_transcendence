@@ -25,7 +25,7 @@ export default function CityScene() {
       },
       leftBoundary: -330,
       rightBoundary: 390,
-      onGoLeftBeyond: () => {},
+      onGoLeftBeyond: () => {navigate("/easter-egg");},
       onGoRightBeyond: () => {
         navigate("/login");
       },

@@ -137,15 +137,6 @@ services:
     networks:
       - ft_network
 
-  launch_server:
-    image: node:18
-    volumes:
-      - /sgoinfre/hulefevr:/sgoinfre/hulefevr
-    working_dir: /sgoinfre/hulefevr
-    command: node launch_server.mjs
-    networks:
-      - ft_network
-
 
   #   #---------------------------------------------------------------------------------------
   #   # ---------------- ELK ----------------------------------------------------------------
