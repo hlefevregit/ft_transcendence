@@ -27,7 +27,10 @@ export const    instantiateMainMenuGUI =
 	{
 		states.current = bj.States.settings;
 	}, bjRef, "settings");
-	const	returnToMuseumButton = bj.createDynamicButton("returnToMuseumButton", () => { navigate("/game2"); }, bjRef, "returnToMuseumButton");
+	const	returnToMuseumButton = bj.createDynamicButton("returnToMuseumButton", () => {
+		bjRef.current.scene?.dispose();
+		navigate("/game2");
+	}, bjRef, "returnToMuseumButton");
 			(returnToMuseumButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
 			{
 				(returnToMuseumButton.children[0] as baby.Button).color = bj.colorsScheme.dark1;
@@ -80,17 +83,17 @@ export const	instantiateGameModeGUI =
 
 	// const	gameModeTitle = bj.createDynamicTitle("gameModeTitle", "gameModeTitle");
 
-	const	gameModeSoloButton = bj.createDynamicButton("gameModeSoloButton", () =>
+	const gameModeSoloButton = bj.createDynamicButton("gameModeSoloButton", async () =>
 	{
 		states.current = bj.States.in_game;
 		bjRef.current.gameState = bj.GameState.waiting;
-		bj.PlayGame(bjRef, bj.setState, 1);
+		await bj.PlayGame(bjRef, bj.setState, 1);
 	}, bjRef, "solo");
-	const	gameModeDuoButton = bj.createDynamicButton("gameModeDuoButton", () =>
+	const gameModeDuoButton = bj.createDynamicButton("gameModeDuoButton", async () =>
 	{
 		states.current = bj.States.in_game;
 		bjRef.current.gameState = bj.GameState.waiting;
-		bj.PlayGame(bjRef, bj.setState, 2);
+		await bj.PlayGame(bjRef, bj.setState, 2);
 	}, bjRef, "duo");
 	const	gameModeBackButton = bj.createDynamicButton("gameModeBackButton", () =>
 	{
@@ -345,22 +348,22 @@ export const instantiateActionGUI =
 
 	const	standButton = bj.createDynamicButton("standButton", () =>
 	{
-		states.current = bj.States.in_game;
+		bjRef.current.playerChoice = bj.PlayerChoices.stand;
 		console.log("STAND")
 	}, bjRef, "stand");
 	const	doubleButton = bj.createDynamicButton("doubleButton", () =>
 	{
-		states.current = bj.States.in_game;
+		bjRef.current.playerChoice = bj.PlayerChoices.double;
 		console.log("DOUBLE")
 	}, bjRef, "doubleDown");
 	const	hitButton = bj.createDynamicButton("hitButton", () =>
 	{
-		states.current = bj.States.in_game;
+		bjRef.current.playerChoice = bj.PlayerChoices.hit;
 		console.log("HIT")
 	}, bjRef, "hit");
 	const	splitButton = bj.createDynamicButton("splitButton", () =>
 	{
-		states.current = bj.States.in_game;
+		bjRef.current.playerChoice = bj.PlayerChoices.split;
 		console.log("SPLIT")
 	}, bjRef, "split");
 
@@ -375,6 +378,8 @@ export const instantiateActionGUI =
 
 	actionHorizontalStackPanel.addControl(hitButton);
 	actionHorizontalStackPanel.addControl(standButton);
+
+	actionVerticalStackPanel.addControl(actionHorizontalStackPanel);
 
 	actionContainer.addControl(actionVerticalStackPanel);
 	actionGUI.addControl(actionContainer);
