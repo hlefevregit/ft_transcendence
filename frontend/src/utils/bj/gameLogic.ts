@@ -18,10 +18,25 @@ export const PlayGame = async (
 
   dealInitialCards(bjRef, state, player1Cards, player2Cards, dealerCards, players, cardMeshes);
 
+  bjRef.current.playerChoice = null;
   await playerTurn(bjRef, state, player1Cards, cardMeshes);
   if (players === 2) {
+	bjRef.current.playerChoice = null;
     await playerTurn(bjRef, state, player2Cards, cardMeshes);
 	if (getCardValues(player2Cards) > 21) {
+	const res = await fetch('/api/bj/lose', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+		},
+		body: JSON.stringify({
+			bet: 10,
+		})
+	});
+	if (!res.ok) {
+		console.error("Failed to update player money after Blackjack loss");
+	}
 	  console.log("Player 2 has busted!");
 	  player2Busted = true;
 	}
@@ -38,7 +53,7 @@ export const PlayGame = async (
 		})
 	});
 	if (!res.ok) {
-		console.error("Failed to update player money after Blackjack win");
+		console.error("Failed to update player money after Blackjack loss");
 	}
 	console.log("Player 1 has busted!");
 	player1Busted = true;
@@ -63,7 +78,7 @@ export const PlayGame = async (
 					Authorization: `Bearer ${localStorage.getItem('token')}`,
 				},
 				body: JSON.stringify({
-					bet: 20,
+					bet: 15,
 				})
 			});
 			if (!res.ok) {
@@ -98,7 +113,7 @@ export const PlayGame = async (
 			})
 		});
 		if (!res.ok) {
-			console.error("Failed to update player money after Blackjack win");
+			console.error("Failed to update player money after Blackjack loss");
 		}
 	    console.log("Dealer wins against Player 1!");
       } else if (player1Value === dealerValue && player1Value <= 21) {
@@ -107,13 +122,56 @@ export const PlayGame = async (
   }
   if (players === 2 && !player2Busted) {
       if (player2Value > dealerValue && player2Value <= 21) {
-	    console.log("Player 2 wins against the dealer!");
-	  } else if (player2Value < dealerValue && dealerValue <= 21) {
+		if (player2Value === 21) {
+			console.log("Player 2 has a Blackjack! Player 2 wins against the dealer!");
+			const res = await fetch('/api/bj/win', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+				body: JSON.stringify({
+					bet: 15,
+				})
+			});
+			if (!res.ok) {
+				console.error("Failed to update player money after Blackjack win");
+			}
+		} else {
+			const res = await fetch('/api/bj/win', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+				body: JSON.stringify({
+					bet: 10,
+				})
+			});
+			if (!res.ok) {
+				console.error("Failed to update player money after Blackjack win");
+			}
+			console.log("Player 2 wins against the dealer!");
+		}
+  	  } else if (player2Value < dealerValue && dealerValue <= 21) {
+		const res = await fetch('/api/bj/lose', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+			},
+			body: JSON.stringify({
+				bet: 10,
+			})
+		});
+		if (!res.ok) {
+			console.error("Failed to update player money after Blackjack loss");
+		}
 	    console.log("Dealer wins against Player 2!");
 	  } else if (player2Value === dealerValue && player2Value <= 21) {
 	    console.log("It's a tie between Player 2 and the dealer!");
 	  }
-  }
+}
   destroyMeshes(cardMeshes);
   state.current = game.States.main_menu;
 };
@@ -199,14 +257,11 @@ export const playerTurn = async (
         if (getCardValues(playerCards) >= 21) {
           return;
         }
-        if (playerChoice === game.PlayerChoices.double) {
-          return;
-        }
         break;
       }
       case game.PlayerChoices.stand:
         console.log("Player stands");
-        return;
+		return;
     }
 	bjRef.current.playerChoice = null;
   }
