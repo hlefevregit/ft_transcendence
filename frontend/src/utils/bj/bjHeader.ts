@@ -104,8 +104,6 @@ export enum GameState
 export enum PlayerChoices
 {
 	stand,
-	split,
-	double,
 	hit,
 }
 
@@ -128,10 +126,6 @@ export type bjStruct =
 	player1Money: number;
 	player2Money: number;
 	playerChoice?: PlayerChoices;
-	splitButton?: baby.StackPanel;
-	canSplit?: boolean;
-	doubleButton?: baby.StackPanel;
-	canDouble?: boolean;
 
 	// GUIs
 	mainMenuGUI?: baby.Rectangle;

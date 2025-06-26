@@ -29,7 +29,7 @@ export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<v
 
 	try
 	{
-		const modelMeshes = await importGLTF(sceneInstance, cardUrl);
+		const modelMeshes = await importGLTF(sceneInstance, cardUrl, false, false);
 		if (modelMeshes && modelMeshes.length > 0)
 		{
 			modelMeshes[0].scaling = new baby.Vector3(4.5, 4.5, 4.5); // Make cards bigger
@@ -41,7 +41,7 @@ export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<v
 	catch (error) { console.error("Error while loading card model:", error); }
 	try
 	{
-		const mapMeshes = await importGLTF(BJ.scene, bjMapUrl);
+		const mapMeshes = await importGLTF(BJ.scene, bjMapUrl, true, true);
 		if (mapMeshes && mapMeshes.length > 0) BJ.map = mapMeshes[0];
 		else console.warn("Failed to load map");
 		if (BJ.map) BJ.map.scaling = new baby.Vector3(25, 25, -25);
@@ -116,7 +116,7 @@ export const	setupBabylonPong = async (pong: game.pongStruct, canvasRef: any): P
 
 	try
 	{
-		const meshes = await importGLTF(pong.scene, pongMapUrl);
+		const meshes = await importGLTF(pong.scene, pongMapUrl, true, true);
 		if (meshes && meshes.length > 0) pong.map = meshes[0];
 		else console.warn("Failed to load map");
 	}
@@ -155,7 +155,7 @@ export const	setupBabylonPong = async (pong: game.pongStruct, canvasRef: any): P
     sceneInstance.setRenderingAutoClearDepthStencil(1, false); // Don't clear depth for rendering group 1
 }
 
-export const importGLTF = async (scene: baby.Scene, modelUrl: string) => {
+export const importGLTF = async (scene: baby.Scene, modelUrl: string, visible: boolean, enabled: boolean) => {
   try {
     if (scene.isDisposed) {
       console.error("Scene was disposed before loading model");
@@ -181,6 +181,12 @@ export const importGLTF = async (scene: baby.Scene, modelUrl: string) => {
     result.meshes.forEach(mesh => {
       mesh.receiveShadows = true;
     });
+
+	result.meshes.forEach(mesh => {
+	  mesh.isVisible = !!visible;
+	  mesh.setEnabled = !!enabled;
+	});
+
 
     return result.meshes;
   } catch (error) {
