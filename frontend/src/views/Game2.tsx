@@ -22,10 +22,10 @@ export default function Game2() {
             "zoomTop",
             camera,
             "orthoTop",
-            30,
-            60,
+            25,
+            65,
             300,
-            10
+            20
           );
           BABYLON.Animation.CreateAndStartAnimation(
             "zoomBottom",
@@ -57,7 +57,7 @@ export default function Game2() {
 
           setTimeout(() => {
             navigate("/blackjack");
-          }, 1500);
+          }, 1900);
         }
       }
     });
