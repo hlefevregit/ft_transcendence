@@ -123,7 +123,6 @@ export const playerTurn = async (
   if (!scene) return;
   while (true) {
     const playerChoice = await waitForPlayerChoice(bjRef);
-    if (!playerChoice) continue;
     switch (playerChoice) {
       case game.PlayerChoices.hit:
       case game.PlayerChoices.double: {
