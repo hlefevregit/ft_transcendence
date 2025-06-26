@@ -343,7 +343,7 @@ export const instantiateActionGUI =
 	// All GUI components needed
 	const	actionContainer = bj.createAdaptiveContainer("actionContainer");
 	const	actionVerticalStackPanel = bj.createVerticalStackPanel("actionVerticalStackPanel");
-	const	actionHorizontalStackPanel = bj.createVerticalStackPanel("actionHorizontalStackPanel");
+	const	actionHorizontalStackPanel = bj.createHorizontalStackPanel("actionHorizontalStackPanel", 0);
 	const	actionTitle = bj.createDynamicTitle("actionTitle", "actionTitle");
 
 	const	standButton = bj.createDynamicButton("standButton", () =>
@@ -351,36 +351,19 @@ export const instantiateActionGUI =
 		bjRef.current.playerChoice = bj.PlayerChoices.stand;
 		console.log("STAND")
 	}, bjRef, "stand");
-	const	doubleButton = bj.createDynamicButton("doubleButton", () =>
-	{
-		bjRef.current.playerChoice = bj.PlayerChoices.double;
-		console.log("DOUBLE")
-	}, bjRef, "doubleDown");
 	const	hitButton = bj.createDynamicButton("hitButton", () =>
 	{
 		bjRef.current.playerChoice = bj.PlayerChoices.hit;
 		console.log("HIT")
 	}, bjRef, "hit");
-	const	splitButton = bj.createDynamicButton("splitButton", () =>
-	{
-		bjRef.current.playerChoice = bj.PlayerChoices.split;
-		console.log("SPLIT")
-	}, bjRef, "split");
-
-	bjRef.current.splitButton = splitButton;
-	bjRef.current.doubleButton = doubleButton;
 
 	// Add GUI components to the action GUI
 	actionVerticalStackPanel.addControl(actionTitle);
-
-	actionHorizontalStackPanel.addControl(splitButton);
-	actionHorizontalStackPanel.addControl(doubleButton);
 
 	actionHorizontalStackPanel.addControl(hitButton);
 	actionHorizontalStackPanel.addControl(standButton);
 
 	actionVerticalStackPanel.addControl(actionHorizontalStackPanel);
-
 	actionContainer.addControl(actionVerticalStackPanel);
 	actionGUI.addControl(actionContainer);
 

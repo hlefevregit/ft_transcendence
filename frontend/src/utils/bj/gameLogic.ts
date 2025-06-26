@@ -9,17 +9,18 @@ export const PlayGame = async (
 ): Promise<void> => {
   if (!bjRef.current) return;
 
-  const player1Cards: number[] = [];
-  const player2Cards: number[] = [];
-  const dealerCards: number[] = [];
+	const cardMeshes: baby.Mesh[] = [];
+	const player1Cards: number[] = [];
+	const player2Cards: number[] = [];
+	const dealerCards: number[] = [];
   let player1Busted = false;
   let player2Busted = false;
 
-  dealInitialCards(bjRef, state, player1Cards, player2Cards, dealerCards, players);
+  dealInitialCards(bjRef, state, player1Cards, player2Cards, dealerCards, players, cardMeshes);
 
-  await playerTurn(bjRef, state, player1Cards);
+  await playerTurn(bjRef, state, player1Cards, cardMeshes);
   if (players === 2) {
-    await playerTurn(bjRef, state, player2Cards);
+    await playerTurn(bjRef, state, player2Cards, cardMeshes);
 	if (getCardValues(player2Cards) > 21) {
 	  console.log("Player 2 has busted!");
 	  player2Busted = true;
@@ -34,7 +35,7 @@ export const PlayGame = async (
 	state.current = game.States.main_menu;
 	return;
   }
-  await dealerTurn(bjRef, state, dealerCards);
+  await dealerTurn(bjRef, state, dealerCards, cardMeshes);
   const player1Value = getCardValues(player1Cards);
   const player2Value = players === 2 ? getCardValues(player2Cards) : 0;
   const dealerValue = getCardValues(dealerCards);
@@ -56,6 +57,7 @@ export const PlayGame = async (
 	    console.log("It's a tie between Player 2 and the dealer!");
 	  }
   }
+  destroyMeshes(cardMeshes);
   state.current = game.States.main_menu;
 };
 
@@ -65,7 +67,8 @@ export const dealInitialCards = (
 	player1Cards: number[],
 	player2Cards: number[],
 	dealerCards: number[],
-	players: number
+	players: number,
+	meshes: baby.Mesh[]
 ): void => {
 	if (!bjRef.current) return;
 	const scene = bjRef.current.scene;
@@ -117,6 +120,7 @@ export const playerTurn = async (
   bjRef: React.RefObject<game.bjStruct>,
   state: React.RefObject<game.States>,
   playerCards: number[],
+  meshes: baby.Mesh[]
 ): Promise<void> => {
   if (!bjRef.current) return;
   const scene = bjRef.current.scene;
@@ -124,8 +128,7 @@ export const playerTurn = async (
   while (true) {
     const playerChoice = await waitForPlayerChoice(bjRef);
     switch (playerChoice) {
-      case game.PlayerChoices.hit:
-      case game.PlayerChoices.double: {
+      case game.PlayerChoices.hit: {
         const card = dealCard(bjRef);
         const value = ((card - 1) % 13) + 1;
         const suit = Math.floor((card - 1) / 13) + 1;
@@ -156,10 +159,15 @@ export const dealerTurn = (
 	bjRef: React.RefObject<game.bjStruct>,
     state: React.RefObject<game.States>,
 	dealerCards: number[],
+	meshes: baby.Mesh[]
 ): void => {
 	if (!bjRef.current) return;
 	const scene = bjRef.current.scene;
 	if (!scene) return;
+
+	if (dealerCards.length >= 2) {
+		console.log(`Dealer reveals ${game.ReverseValueMap[((dealerCards[1] - 1) % 13) + 1]} of ${game.ReverseSuitMap[Math.floor((dealerCards[1] - 1) / 13) + 1]}`);
+	}
 
 	while (dealerCards.length < 2 || getCardValues(dealerCards) < 17) {
 		const card = dealCard(bjRef);
@@ -201,6 +209,7 @@ export const getCardValues = (cards: number[]): number => {
 
 export const dealCard = (
 	bjRef: React.RefObject<game.bjStruct>,
+	meshes: baby.Mesh[]
 ): number => {
 	const scene = bjRef.current?.scene;
 	if (!scene) return 0;
@@ -231,6 +240,13 @@ export const getMeshByName = (name: string, bjRef: React.RefObject<game.bjStruct
 
 export const getCardKey = (suit: keyof typeof suitMap, value: keyof typeof valueMap): number => {
   return (suitMap[suit] - 1) * 13 + valueMap[value];
+};
+
+export const destroyMeshes = (meshes: baby.Mesh[]): void => {
+  for (const mesh of meshes) {
+    mesh.dispose();
+  }
+  meshes.length = 0;
 };
 
 export const waitForPlayerChoice = (bjRef: React.RefObject<game.bjStruct>): Promise<game.PlayerChoices> => {
