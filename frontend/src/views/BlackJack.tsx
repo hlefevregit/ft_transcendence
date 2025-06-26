@@ -43,6 +43,7 @@ const	BlackJack: React.FC = () =>
 		// }
 
 		// Game loop - 60 times per second
+		if (!bjRef.current.engine) return;
 		bjRef.current.engine.runRenderLoop(() =>
 		{
 			bj.updateGUIsWhenNeeded(bjRef, state, language, lastState, lastLanguage);

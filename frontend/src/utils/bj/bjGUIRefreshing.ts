@@ -29,6 +29,7 @@ export const initializeAllGUIScreens =
 	bj.instantiateSettingsGUI(pong, states, lang);
 	bj.instantiateGameModeGUI(pong, states);
 	bj.instantiateActionGUI(pong, states);
+	bj.instantiateBalanceGUI(pong);
 	// bj.instantiateArenaGUI(pong);
 	bj.instantiateDebugGUI(pong, states, lang);
 	// etc.
@@ -61,6 +62,7 @@ export const	updateGUIVisibilityStates =
 	setUIState(bjRef.current.arenaGUI,bj.States.in_game);
 	setUIState(bjRef.current.actionGUI,bj.States.in_game);
 	setUIState(bjRef.current.gameModeGUI, bj.States.game_mode_selection);
+	setUIState(bjRef.current.balanceGUI, [bj.States.in_game]);
 
 	bjRef.current.guiTexture?.removeControl(bjRef.current.debugGUI as baby.Container);
 	bjRef.current.guiTexture?.addControl(bjRef.current.debugGUI as baby.Container);
@@ -183,7 +185,7 @@ export const	updateGUIsWhenNeeded =
 	{
 		bj.updateGUIVisibilityStates(bjRef, states.current);
 		bj.updateGUIValues(bjRef, lang);
-		bj.updateActionsVisibility(bjRef, bjRef.current.gameState!);
+		// bj.updateActionsVisibility(bjRef, bjRef.current.gameState!);
 		lastState.current = states.current;
 	}
 	// Update GUI on language change
@@ -209,12 +211,12 @@ export const updateComponentVisibilityBasedOnStates =
 	ui.isVisible = ui.isEnabled = shouldShow;
 }
 
-export const	updateActionsVisibility =
-(
-	bjRef: React.RefObject<bj.bjStruct>,
-	gameState: bj.GameState,
-): void =>
-{
-	if (bjRef.current.canDouble) bjRef.current.doubleButton!.isVisible = bjRef.current.doubleButton!.isEnabled = bjRef.current.canDouble;
-	if (bjRef.current.canSplit) bjRef.current.splitButton!.isVisible = bjRef.current.splitButton!.isEnabled = bjRef.current.canSplit;
-}
+// export const	updateActionsVisibility =
+// (
+// 	bjRef: React.RefObject<bj.bjStruct>,
+// 	gameState: bj.GameState,
+// ): void =>
+// {
+// 	if (bjRef.current.canDouble) bjRef.current.doubleButton!.isVisible = bjRef.current.doubleButton!.isEnabled = bjRef.current.canDouble;
+// 	if (bjRef.current.canSplit) bjRef.current.splitButton!.isVisible = bjRef.current.splitButton!.isEnabled = bjRef.current.canSplit;
+// }

@@ -134,6 +134,7 @@ export type bjStruct =
 	arenaGUI?: baby.Rectangle;
 	debugGUI?: baby.Rectangle;
 	actionGUI?: baby.Rectangle;
+	balanceGUI?: baby.Rectangle;
 
 	// Textures
 	guiTexture?: baby.AdvancedDynamicTexture;
@@ -148,7 +149,7 @@ export function initBJStruct(): bjStruct
 		cards: {},
 		player1Money: 1000, // Starting money for player 1
 		player2Money: 1000, // Starting money for player 2
-		playerMoney: 1000, // Starting money for the player
+		// playerMoney: 1000, // Starting money for the player
 	};
 }
 
@@ -177,6 +178,7 @@ export const	translations =
 	split: ["Split", "Diviser", "Dividi", "⠨⠎⠉⠊⠝⠙⠑⠗"],
 	doubleDown: ["Double Down", "Doubler", "Raddoppia", "⠨⠙⠕⠥⠃⠇⠑ ⠙⠕⠺⠝"],
 	hit: ["Hit", "Prendre", "Prendi", "⠨⠓⠊⠞"],
+	balance: ["Balance:", "Solde:", "Saldo:", "⠨⠃⠁⠇⠁⠝⠉⠑:"],
 } as const;
 
 export type	labelKey = keyof typeof translations;
