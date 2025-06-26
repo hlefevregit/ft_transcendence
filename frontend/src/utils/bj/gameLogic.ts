@@ -215,12 +215,13 @@ export const dealCard = (
 	if (!scene) return 0;
 
 	const card = Math.floor(Math.random() * 52) + 1;
-	const originalMesh = bjRef.current!.cardMeshes[card];
+	const originalMesh = bjRef.current!.cards[card];
 	if (originalMesh)
 	{
 		const clonedMesh = originalMesh.clone(`${originalMesh.name}_clone`, originalMesh.parent);
 		meshes.push(clonedMesh);
 	}
+	return card;
 };
 
 export const makeCardMap = (bjRef: React.RefObject<game.bjStruct>): void => {
@@ -232,7 +233,7 @@ export const makeCardMap = (bjRef: React.RefObject<game.bjStruct>): void => {
       const meshName = `${suit}${value.charAt(0).toUpperCase() + value.slice(1)}`;
       const mesh = getMeshByName(meshName, bjRef);
       if (mesh) {
-        bjRef.current!.cardMeshes[key] = mesh;
+        bjRef.current!.cards[key] = mesh;
       }
     }
   }

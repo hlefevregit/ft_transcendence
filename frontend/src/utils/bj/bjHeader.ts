@@ -145,6 +145,7 @@ export type bjStruct =
 export function initBJStruct(): bjStruct
 {
 	return {
+		cards: {},
 		player1Money: 1000, // Starting money for player 1
 		player2Money: 1000, // Starting money for player 2
 		playerMoney: 1000, // Starting money for the player
