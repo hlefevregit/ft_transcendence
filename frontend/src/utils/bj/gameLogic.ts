@@ -214,7 +214,13 @@ export const dealCard = (
 	const scene = bjRef.current?.scene;
 	if (!scene) return 0;
 
-	return Math.floor(Math.random() * 52) + 1;
+	const card = Math.floor(Math.random() * 52) + 1;
+	const originalMesh = bjRef.current!.cardMeshes[card];
+	if (originalMesh)
+	{
+		const clonedMesh = originalMesh.clone(`${originalMesh.name}_clone`, originalMesh.parent);
+		meshes.push(clonedMesh);
+	}
 };
 
 export const makeCardMap = (bjRef: React.RefObject<game.bjStruct>): void => {
