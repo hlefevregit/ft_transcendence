@@ -111,7 +111,7 @@ export const	quaternionToEulerAngles = (x: number, y: number, z: number, w: numb
     return quaternion.toEulerAngles();
 }
 
-export 	const	setState = (newState: bj.States) => { state.current = newState; };
+export 	const	setState = (state: React.RefObject<bj.States>, newState: bj.States) => { state.current = newState; };
 
 export const	changeCamera = (newCamera: baby.Camera | undefined, bjRef: React.RefObject<bj.bjStruct>): void =>
 {

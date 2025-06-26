@@ -4,7 +4,7 @@ import * as game from '@/libs/bjLibs';
 
 export const PlayGame = async (
   bjRef: React.RefObject<game.bjStruct>,
-  updateState: (newState: game.States) => void,
+  state: React.RefObject<game.States>,
   players: number
 ): Promise<void> => {
   if (!bjRef.current) return;
@@ -12,19 +12,56 @@ export const PlayGame = async (
   const player1Cards: number[] = [];
   const player2Cards: number[] = [];
   const dealerCards: number[] = [];
+  let player1Busted = false;
+  let player2Busted = false;
 
-  dealInitialCards(bjRef, updateState, player1Cards, player2Cards, dealerCards, players);
+  dealInitialCards(bjRef, state, player1Cards, player2Cards, dealerCards, players);
 
-  await playerTurn(bjRef, updateState, player1Cards);
+  await playerTurn(bjRef, state, player1Cards);
   if (players === 2) {
-    await playerTurn(bjRef, updateState, player2Cards);
+    await playerTurn(bjRef, state, player2Cards);
+	if (getCardValues(player2Cards) > 21) {
+	  console.log("Player 2 has busted!");
+	  player2Busted = true;
+	}
   }
-  await dealerTurn(bjRef, updateState, dealerCards);
+  if (getCardValues(player1Cards) > 21) {
+	console.log("Player 1 has busted!");
+	player1Busted = true;
+  }
+  if (player1Busted && (players === 2 && player2Busted)) {
+	console.log("Both players have busted! Dealer wins by default.");
+	state.current = game.States.main_menu;
+	return;
+  }
+  await dealerTurn(bjRef, state, dealerCards);
+  const player1Value = getCardValues(player1Cards);
+  const player2Value = players === 2 ? getCardValues(player2Cards) : 0;
+  const dealerValue = getCardValues(dealerCards);
+  if (!player1Busted) {
+    if (player1Value > dealerValue && player1Value <= 21) {
+	    console.log("Player 1 wins against the dealer!");
+      } else if (player1Value < dealerValue && dealerValue <= 21) {
+	    console.log("Dealer wins against Player 1!");
+      } else if (player1Value === dealerValue && player1Value <= 21) {
+  	    console.log("It's a tie between Player 1 and the dealer!");
+      }
+  }
+  if (players === 2 && !player2Busted) {
+      if (player2Value > dealerValue && player2Value <= 21) {
+	    console.log("Player 2 wins against the dealer!");
+	  } else if (player2Value < dealerValue && dealerValue <= 21) {
+	    console.log("Dealer wins against Player 2!");
+	  } else if (player2Value === dealerValue && player2Value <= 21) {
+	    console.log("It's a tie between Player 2 and the dealer!");
+	  }
+  }
+  state.current = game.States.main_menu;
 };
 
 export const dealInitialCards = (
 	bjRef: React.RefObject<game.bjStruct>,
-	updateState: (newState: game.States) => void,
+	state: React.RefObject<game.States>,
 	player1Cards: number[],
 	player2Cards: number[],
 	dealerCards: number[],
@@ -33,13 +70,10 @@ export const dealInitialCards = (
 	if (!bjRef.current) return;
 	const scene = bjRef.current.scene;
 	if (!scene) return;
-
-	// Deal two cards to each player and one card to the dealer
 	for (let i = 0; i < 2; i++) {
 		const player1Card = dealCard(bjRef);
 		const player2Card = players === 2 ? dealCard(bjRef) : 0;
 		const dealerCard = dealCard(bjRef);
-
 		if (player1Card) {
 			player1Cards.push(player1Card);
 			const value = ((player1Card - 1) % 13) + 1;
@@ -49,7 +83,6 @@ export const dealInitialCards = (
 			console.error('Failed to deal card to player 1');
 			return;
 		}
-
 		if (player2Card && players === 2) {
 			player2Cards.push(player2Card);
 			const value = ((player2Card - 1) % 13) + 1;
@@ -59,7 +92,6 @@ export const dealInitialCards = (
 			console.error('Failed to deal card to player 2');
 			return;
 		}
-
 		if (dealerCard) {
 			dealerCards.push(dealerCard);
 			const value = ((dealerCard - 1) % 13) + 1;
@@ -74,7 +106,6 @@ export const dealInitialCards = (
 			return;
 		}
 	}
-
 	console.log(`Player 1's total value: ${getCardValues(player1Cards)}`);
 	if (players === 2) {
 		console.log(`Player 2's total value: ${getCardValues(player2Cards)}`);
@@ -84,7 +115,7 @@ export const dealInitialCards = (
 
 export const playerTurn = async (
   bjRef: React.RefObject<game.bjStruct>,
-  updateState: (newState: game.States) => void,
+  state: React.RefObject<game.States>,
   playerCards: number[],
 ): Promise<void> => {
   if (!bjRef.current) return;
@@ -105,29 +136,26 @@ export const playerTurn = async (
         }
         playerCards.push(card);
         console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to player${playerChoice === game.PlayerChoices.double ? " (double)" : ""}`);
-        bjRef.current.playerChoice = null;
         console.log(`Player's total value: ${getCardValues(playerCards)}`);
-        if (getCardValues(playerCards) > 21) {
-          console.log("Player busts!");
+        if (getCardValues(playerCards) >= 21) {
           return;
         }
         if (playerChoice === game.PlayerChoices.double) {
           return;
         }
-
         break;
       }
       case game.PlayerChoices.stand:
         console.log("Player stands");
-        bjRef.current.playerChoice = null;
         return;
     }
+	bjRef.current.playerChoice = null;
   }
 };
 
 export const dealerTurn = (
 	bjRef: React.RefObject<game.bjStruct>,
-	updateState: (newState: game.States) => void,
+    state: React.RefObject<game.States>,
 	dealerCards: number[],
 ): void => {
 	if (!bjRef.current) return;
