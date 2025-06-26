@@ -57,7 +57,7 @@ export default function Game1() {
 
           setTimeout(() => {
             navigate("/pong");
-          }, 1500);
+          }, 1900);
         }
       }
     });
