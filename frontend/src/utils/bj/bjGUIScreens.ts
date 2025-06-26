@@ -87,13 +87,13 @@ export const	instantiateGameModeGUI =
 	{
 		states.current = bj.States.in_game;
 		bjRef.current.gameState = bj.GameState.waiting;
-		await bj.PlayGame(bjRef, bj.setState, 1);
+		await bj.PlayGame(bjRef, states, 1);
 	}, bjRef, "solo");
 	const gameModeDuoButton = bj.createDynamicButton("gameModeDuoButton", async () =>
 	{
 		states.current = bj.States.in_game;
 		bjRef.current.gameState = bj.GameState.waiting;
-		await bj.PlayGame(bjRef, bj.setState, 2);
+		await bj.PlayGame(bjRef, states, 2);
 	}, bjRef, "duo");
 	const	gameModeBackButton = bj.createDynamicButton("gameModeBackButton", () =>
 	{
