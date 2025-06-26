@@ -2,25 +2,24 @@ import * as React from 'react';
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/bjLibs';
 
-export const PlayGame = (
+export const PlayGame = async (
   bjRef: React.RefObject<game.bjStruct>,
   updateState: (newState: game.States) => void,
   players: number
-): void => {
-	if (!bjRef.current) return;
-	const player1Cards: number[] = [];
-	const player2Cards: number[] = [];
-	const dealerCards: number[] = [];
+): Promise<void> => {
+  if (!bjRef.current) return;
 
-	dealInitialCards(bjRef, updateState, player1Cards, player2Cards, dealerCards, players);
+  const player1Cards: number[] = [];
+  const player2Cards: number[] = [];
+  const dealerCards: number[] = [];
 
-	// Need to implement button interactions for player actions before uncommenting the following lines
+  dealInitialCards(bjRef, updateState, player1Cards, player2Cards, dealerCards, players);
 
-	// playerTurn(bjRef, updateState, player1Cards);
-	// if (players === 2) {
-	// 	playerTurn(bjRef, updateState, player2Cards);
-	// }
-	// dealerTurn(bjRef, updateState, dealerCards);
+  await playerTurn(bjRef, updateState, player1Cards);
+  if (players === 2) {
+    await playerTurn(bjRef, updateState, player2Cards);
+  }
+  await dealerTurn(bjRef, updateState, dealerCards);
 };
 
 export const dealInitialCards = (
@@ -83,45 +82,47 @@ export const dealInitialCards = (
 	console.log(`Dealer's total value: ${getCardValues(dealerCards)}`);
 };
 
-export const playerTurn = (
-	bjRef: React.RefObject<game.bjStruct>,
-	updateState: (newState: game.States) => void,
-	playerCards: number[],
-): void => {
-	if (!bjRef.current) return;
-	const scene = bjRef.current.scene;
-	if (!scene) return;
+export const playerTurn = async (
+  bjRef: React.RefObject<game.bjStruct>,
+  updateState: (newState: game.States) => void,
+  playerCards: number[],
+): Promise<void> => {
+  if (!bjRef.current) return;
+  const scene = bjRef.current.scene;
+  if (!scene) return;
+  while (true) {
+    const playerChoice = await waitForPlayerChoice(bjRef);
+    if (!playerChoice) continue;
+    switch (playerChoice) {
+      case game.PlayerChoices.hit:
+      case game.PlayerChoices.double: {
+        const card = dealCard(bjRef);
+        const value = ((card - 1) % 13) + 1;
+        const suit = Math.floor((card - 1) / 13) + 1;
+        if (!card) {
+          console.error("Failed to deal card");
+          return;
+        }
+        playerCards.push(card);
+        console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to player${playerChoice === game.PlayerChoices.double ? " (double)" : ""}`);
+        bjRef.current.playerChoice = null;
+        console.log(`Player's total value: ${getCardValues(playerCards)}`);
+        if (getCardValues(playerCards) > 21) {
+          console.log("Player busts!");
+          return;
+        }
+        if (playerChoice === game.PlayerChoices.double) {
+          return;
+        }
 
-	while (1) {
-		const card = dealCard(bjRef);
-		const value = ((card - 1) % 13) + 1;
-		const suit = Math.floor((card - 1) / 13) + 1;
-
-		const playerChoice = bjRef.current.playerChoice;
-
-		if (card) {
-			switch (playerChoice) {
-				case bjLib.PlayerChoice.hit:
-					playerCards.push(card);
-					console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to player`);
-					break;
-				case bjLib.PlayerChoice.double:
-					playerCards.push(card);
-					console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to player (double)`);
-					return;
-				case bjLib.PlayerChoice.stand:
-					return;
-			}
-		} else {
-			console.error('Failed to deal card');
-			return;
-		}
-		console.log(`Player's total value: ${getCardValues(playerCards)}`);
-		if (getCardValues(playerCards) > 21) {
-			console.log('Player busts!');
-			return;
-		}
-	}
+        break;
+      }
+      case game.PlayerChoices.stand:
+        console.log("Player stands");
+        bjRef.current.playerChoice = null;
+        return;
+    }
+  }
 };
 
 export const dealerTurn = (
@@ -203,4 +204,16 @@ export const getMeshByName = (name: string, bjRef: React.RefObject<game.bjStruct
 
 export const getCardKey = (suit: keyof typeof suitMap, value: keyof typeof valueMap): number => {
   return (suitMap[suit] - 1) * 13 + valueMap[value];
+};
+
+export const waitForPlayerChoice = (bjRef: React.RefObject<game.bjStruct>): Promise<game.PlayerChoices> => {
+	return new Promise((resolve) => {
+		const interval = setInterval(() => {
+			if (!bjRef.current) return;
+			if (bjRef.current.playerChoice !== null && bjRef.current.playerChoice !== undefined) {
+				clearInterval(interval);
+				resolve(bjRef.current.playerChoice);
+			}
+		}, 100);
+	});
 };
