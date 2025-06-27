@@ -145,7 +145,7 @@ services:
       - "0.0.0.0:8082:8082"  # Changed from "8082:8082" to bind to all interfaces
     volumes:
       #- ./nginx.dev.conf:/etc/nginx/nginx.conf
-      - ./backend/main/certs:/etc/nginx/certs:ro
+      - ./frontend/nginx_conf/certs/:/etc/nginx/certs:ro
     depends_on:
       - frontend
       - backend
