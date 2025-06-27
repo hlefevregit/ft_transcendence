@@ -16,6 +16,9 @@ export const PlayGame = async (
   let player1Busted = false;
   let player2Busted = false;
 
+  bjRef.current.player1Cards = player1Cards;
+  bjRef.current.player2Cards = player2Cards;
+
   dealInitialCards(bjRef, state, player1Cards, player2Cards, dealerCards, players, cardMeshes);
 
   await playerTurn(bjRef, state, player1Cards, cardMeshes);
@@ -323,4 +326,27 @@ export const waitForPlayerChoice = (bjRef: React.RefObject<game.bjStruct>): Prom
 			}
 		}, 100);
 	});
+};
+
+const	getBalance = async (bjRef: React.RefObject<game.bjStruct>) =>
+{
+	const res = await fetch
+	(
+		"api/balance",
+		{
+			method: "GET",
+			headers: 
+			{
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+			},
+		}
+	);
+	if (!res.ok)
+	{
+		console.error("Failed to fetch balance");
+		return;
+	}
+	const data = await res.json();
+	bjRef.current.player1Money = data.balance;
 };

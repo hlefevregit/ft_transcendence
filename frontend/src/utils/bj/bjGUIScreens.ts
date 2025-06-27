@@ -217,7 +217,7 @@ export const	instantiateDebugGUI =
 ): void =>
 {
 	const	debugGUI = bj.createScreen("debugGUI", "top-left");
-			debugGUI.width = "250px";
+			debugGUI.width = "150px";
 			debugGUI.height = "500px";
 
 	const	debugContainer = bj.createAdaptiveContainer("debugContainer", "100%", "100%", undefined, "top-left");
@@ -383,16 +383,21 @@ export const	instantiateBalanceGUI =
 ): void =>
 {
 	const	balanceGUI = bj.createScreen("balanceGUI", "top-right");
+			balanceGUI.width = "400px";
+			balanceGUI.height = "75px";
 	const	balanceContainer = bj.createAdaptiveContainer("balanceContainer", undefined, undefined, undefined, "top-right");
 	const	balanceHorizontalStackPanel = bj.createHorizontalStackPanel("balanceVerticalStackPanel");
 	const	balanceTitle = bj.createDynamicTitle("balanceTitle", "balance");
+	
+	// getBalance();
+
 	const	balanceValue = bj.createTitle("balanceValue", "NaN");
 			(balanceValue.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
 			{
-				// if (bjRef.current.player1Money !== undefined)
-				// 	(balanceValue.children[0] as baby.TextBlock).text = bjRef.current.player1Money.toString();
-				// else
-				// 	(balanceValue.children[0] as baby.TextBlock).text = "NaN";
+				if (bjRef.current.player1Money !== undefined)
+					(balanceValue.children[0] as baby.TextBlock).text = bjRef.current.player1Money.toString();
+				else
+					(balanceValue.children[0] as baby.TextBlock).text = "NaN";
 			});
 
 	// Add GUI components to the balance GUI
@@ -402,6 +407,31 @@ export const	instantiateBalanceGUI =
 	balanceGUI.addControl(balanceContainer);
 
 	bjRef.current.balanceGUI = balanceGUI;
+}
+
+// ****************************************************************************** //
+//                                                                                //
+//                                PLAYER SCORE                                    //
+//                                                                                //
+// ****************************************************************************** //
+
+export const	instantiatePlayerScoreGUI =
+(
+	bjRef: React.RefObject<bj.bjStruct>,
+): void =>
+{
+	const	playerScoreGUI = bj.createScreen("playerScoreGUI", "bottom");
+	const	playerScoreContainer = bj.createAdaptiveContainer("playerScoreContainer", "800px", "75px", undefined, "bottom");
+
+	const	playerScorePlayer1Panel1 = bj.createHorizontalStackPanel("playerScorePlayer1Panel1");
+	const	playerScorePlayer1Panel2 = bj.createHorizontalStackPanel("playerScorePlayer1Panel2");
+
+	const	playerScorePlayer1Text = bj.createDynamicText("playerScorePlayer1Text", "player1");
+	const	playerScorePlayer1Value = bj.createDynamicText("playerScorePlayer1Value");
+			(playerScorePlayer1Value.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
+			{
+				bj.findComponentByName(bjRef, "playerScorePlayer1Value").text = bjRef.current.player1Score.toString();
+			});
 }
 
 // ****************************************************************************** //

@@ -141,6 +141,10 @@ export type bjStruct =
 
 	// Game state
 	gameState?: GameState;
+
+	// Game
+	player1Cards?: number[];
+	player2Cards?: number[];
 };
 
 export function initBJStruct(): bjStruct
@@ -179,6 +183,8 @@ export const	translations =
 	doubleDown: ["Double Down", "Doubler", "Raddoppia", "⠨⠙⠕⠥⠃⠇⠑ ⠙⠕⠺⠝"],
 	hit: ["Hit", "Prendre", "Prendi", "⠨⠓⠊⠞"],
 	balance: ["Balance:", "Solde:", "Saldo:", "⠨⠃⠁⠇⠁⠝⠉⠑:"],
+	player1: ["Player 1", "Joueur 1", "Giocatore 1", "⠨⠏⠇⠁⠽⠑⠗ ⠁"],
+	player2: ["Player 2", "Joueur 2", "Giocatore 2", "⠨⠏⠇⠁⠽⠑⠗ ⠃"],
 } as const;
 
 export type	labelKey = keyof typeof translations;
