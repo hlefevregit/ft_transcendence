@@ -5,6 +5,7 @@ services:
   #   cap_add:
   #     - IPC_LOCK
   #   environment:
+  #     VAULT_SKIP_VERIFY: "true"
   #     VAULT_ADDR: "https://vault:8200"
   #     VAULT_API_ADDR: "https://vault:8200"
   #   volumes:
@@ -57,6 +58,7 @@ services:
   #   depends_on:
   #     - vault
   #   ports:
+  #     - "8201:8201"
   #     - "8200:8200"
   #   volumes:
   #     - ./backend/main/certs:/etc/nginx/certs:ro
@@ -76,8 +78,11 @@ services:
     environment:
       - NODE_ENV=development
       - DATABASE_URL=file:./prisma/sqlite/dev.db
-      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
-      - JWT_SECRET=${JWT_SECRET}
+      - VAULT_ADDR=https://vault:8200
+      - VAULT_SKIP_VERIFY=true
+      - VAULT_TOKEN=${VAULT_TOKEN}
+      - VAULT_SECRET_PATH_GOOGLE=cubbyhole/google
+      - VAULT_SECRET_PATH_JWT=cubbyhole/JWT
     command: sh -c "npx prisma migrate deploy && npm run dev"
     working_dir: ${PWD}/backend/main
     networks:
@@ -87,6 +92,12 @@ services:
     build:
       context: ./backend/pong-service
       dockerfile: Dockerfile.dev
+    environment:
+      - VAULT_ADDR=https://vault:8200
+      - VAULT_SKIP_VERIFY=true
+      - VAULT_TOKEN=${VAULT_TOKEN}
+      - VAULT_SECRET_PATH_JWT=cubbyhole/JWT
+
     networks:
       - ft_network
 
@@ -116,6 +127,10 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
+      - VAULT_ADDR=https://vault:8200
+      - VAULT_SKIP_VERIFY=true
+      - VAULT_TOKEN=${VAULT_TOKEN}
+      - VAULT_SECRET_PATH=cubbyhole/google
     depends_on:
       - backend
     networks:
@@ -148,9 +163,9 @@ services:
   #     context: ./elk/elasticsearch
   #     dockerfile: Dockerfile
   #   container_name: elasticsearch
-  #     # environment:
-  #     # - discovery.type=single-node
-  #     # - ES_JAVA_OPTS=-Xms1g -Xmx1g
+  #   environment:
+  #     - discovery.type=single-node
+  #     - ES_JAVA_OPTS=-Xms1g -Xmx1g
   #   ports:
   #     - "9200:9200"
   #     - "9300:9300"
@@ -204,10 +219,10 @@ services:
   #     - T_ENDPOINT_LOGGING=kibana
   #     - T_SERVER_NAME=localhost
   #     - T_KIBANA_MAXSOCKS=100
-  #     # REMOVETHIS
-  #     - T_ELASTIC_SYSPASS_1=${KIBANA_PASSWORD}
-  #     - T_ENCRYPTION_PASSKEY_3=${KIBANA_ENCRYPTION_KEY}
-  #     - T_KIBANA_TOKEN=${KIBANA_TOKEN}
+  #     - VAULT_ADDR=https://vault:8200
+  #     - VAULT_SKIP_VERIFY=true
+  #     - VAULT_TOKEN=${VAULT_TOKEN}
+  #     - VAULT_SECRET_PATH=cubbyhole/kibana
   #   depends_on:
   #     - elasticsearch
   #   networks:
@@ -251,11 +266,15 @@ services:
   #     - ft_network
 
   # grafana:
-  #   image: grafana/grafana:latest
+  #   build:
+  #     context: ./monitoring/grafana
+  #     dockerfile: Dockerfile.dev
   #   container_name: grafana
   #   environment:
-  #     - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
-  #     - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+  #     - VAULT_ADDR=https://vault:8200
+  #     - VAULT_SKIP_VERIFY=true
+  #     - VAULT_TOKEN=${VAULT_TOKEN}
+  #     - VAULT_SECRET_PATH=cubbyhole/grafana
   #   ports:
   #     - "3001:3000"
   #   volumes:

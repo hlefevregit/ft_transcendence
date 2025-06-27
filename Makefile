@@ -6,7 +6,7 @@
 #    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/06/25 15:35:51 by hulefevr         ###   ########.fr        #
+#    Updated: 2025/06/27 14:22:04 by hulefevr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,16 +47,18 @@ re-dev:
 
 
 rebuild-dev:
+	make reset_vault 2>/dev/null || true
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down -v --remove-orphans
 	docker system prune -af
 	docker volume prune -f
-	# make  	reset_vault
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) build --no-cache
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up -d
 
 reset_vault:
-	sudo rm -rf ./vault/data ./vault/secrets
+	docker exec -it ft_transcendence-vault-1 chmod -R 777 ./vault/file
+	rm -rf ./vault/data ./vault/secrets
 	mkdir -p ./vault/data ./vault/secrets
+
 
 #########################################################
 ### ------------------ ENV PROD --------------------- ###

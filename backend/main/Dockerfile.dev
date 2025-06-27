@@ -2,6 +2,9 @@
 FROM node:20-slim
 
 RUN apt-get update && apt-get install -y \
+	curl \
+	jq \
+	bash \
 	git \
 	zsh \
 	net-tools \
@@ -26,4 +29,4 @@ RUN chmod +x /app/easter-egg.sh
 RUN npx prisma generate
 
 # Commande de dev
-ENTRYPOINT ["/bin/sh", "./config/start.sh"]
+ENTRYPOINT ["/bin/bash", "./config/start.sh"]
