@@ -21,9 +21,9 @@ export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<v
 	const	skyboxMesh = baby.MeshBuilder.CreateBox("skyBox", { size: 1000 }, sceneInstance);
 	BJ.skybox = skyboxMesh;
 
-	const	cameraInstance = new baby.FreeCamera("mainMenuCam", new baby.Vector3(0, 5, 7), sceneInstance);
+	const	cameraInstance = new baby.FreeCamera("mainMenuCam", new baby.Vector3(0, 1.5, 2.5), sceneInstance);
 	cameraInstance.inputs.clear();
-	cameraInstance.rotation = new baby.Vector3(0.6, Math.PI / 1.001, 0);
+	cameraInstance.rotation = new baby.Vector3(0.1, Math.PI / 1.001, 0);
 	BJ.mainMenuCam = cameraInstance;
 	BJ.scene.activeCamera = cameraInstance;
 
@@ -40,7 +40,7 @@ export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<v
 		const mapMeshes = await importGLTF(BJ.scene, bjMapUrl, true, true);
 		if (mapMeshes && mapMeshes.length > 0) BJ.map = mapMeshes[0];
 			else console.warn("Failed to load map");
-		if (BJ.map) BJ.map.scaling = new baby.Vector3(25, 25, -25);
+		// if (BJ.map) BJ.map.scaling = new baby.Vector3(25, 25, -25);
 	}
 	catch (error) { console.error("Error while loading map:", error); }
 	try
@@ -48,8 +48,8 @@ export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<v
 		const modelMeshes = await importGLTF(sceneInstance, cardUrl, false, false);
 		if (modelMeshes && modelMeshes.length > 0)
 	{
-			modelMeshes[0].scaling = new baby.Vector3(4.5, 4.5, 4.5); // Make cards bigger
-			modelMeshes[0].position = new baby.Vector3(0, 1.55, 4); // All cards sitting on the table
+			modelMeshes[0].scaling = new baby.Vector3(1.35, 1.35, 1.35); // Make cards bigger
+			modelMeshes[0].position = new baby.Vector3(0, 0.62, 1.4); // All cards sitting on the table
 			modelMeshes[0].rotation = new baby.Vector3(Math.PI / -2, 0, 0); // Cards are flat on the table
 		}
 		bjLib.makeCardMap(BJ);
