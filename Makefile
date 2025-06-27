@@ -6,7 +6,7 @@
 #    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/06/04 17:06:34 by hulefevr         ###   ########.fr        #
+#    Updated: 2025/06/27 14:05:46 by hulefevr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,6 +59,7 @@ reset_vault:
 	docker exec -it ft_transcendence-vault-1 chmod -R 777 ./vault/file
 	rm -rf ./vault/data ./vault/secrets
 	mkdir -p ./vault/data ./vault/secrets
+
 
 #########################################################
 ### ------------------ ENV PROD --------------------- ###

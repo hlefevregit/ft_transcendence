@@ -5,6 +5,7 @@ import { FastifyInstance } from 'fastify';
 import type { Server } from 'http';
 import jwt from 'jsonwebtoken';
 import { URL } from 'url';
+import { JWT_SECRET } from '.';
 
 const games = new Map<string, GameSession>();
 
@@ -19,7 +20,7 @@ export function setupWebsocketRoutes(fastify: FastifyInstance, server: Server) {
 		let username = 'anonymous';
 		if (token) {
 			try {
-				const payload: any = jwt.verify(token, 'supersecretkey');
+				const payload: any = jwt.verify(token, JWT_SECRET || '');
 				username = payload.pseudo || 'unknown';
 			} catch (err) {
 				console.error('❌ JWT invalide :', err);
