@@ -2,7 +2,11 @@ import Fastify from 'fastify';
 import websocketPlugin from '@fastify/websocket';
 import { setupWebsocketRoutes } from './webSocket';
 import http from 'http';
+import dotenv from 'dotenv';
 
+dotenv.config();
+
+export const JWT_SECRET = process.env.JWT_SECRET;
 
 
 const fastify = Fastify({ logger: true });

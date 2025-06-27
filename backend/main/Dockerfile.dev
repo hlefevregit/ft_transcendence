@@ -2,6 +2,9 @@
 FROM node:20-slim
 
 RUN apt-get update && apt-get install -y \
+	curl \
+	jq \
+	bash \
 	git \
 	zsh \
 	net-tools \
@@ -17,12 +20,9 @@ COPY package*.json ./
 # Copie le reste du code
 COPY . .
 
-# Expose le port si besoin
-EXPOSE 3000
-
 RUN chmod +x ./config/start.sh
 
 RUN npx prisma generate
 
 # Commande de dev
-ENTRYPOINT ["/bin/sh", "./config/start.sh"]
+ENTRYPOINT ["/bin/bash", "./config/start.sh"]

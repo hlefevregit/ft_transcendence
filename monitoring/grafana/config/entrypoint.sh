@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 vault_export_to_env() {
   local secret_path="$1"
   local env_file=".env"
@@ -37,15 +36,6 @@ vault_export_to_env() {
 }
 
 echo "Starting entrypoint script..."
-vault_export_to_env "${VAULT_SECRET_PATH_JWT}"
+vault_export_to_env "${VAULT_SECRET_PATH}"
 
-env > .env
-
-npm install -g typescript ts-node ts-node-dev pm2 fastify
-
-# Installe les dépendances, y compris nodemon
-npm install
-
-npm run dev
-
-# npx ts-node src/server.ts
+exec /run.sh "$@"
