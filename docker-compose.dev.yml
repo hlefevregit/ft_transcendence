@@ -5,6 +5,7 @@ services:
   #   cap_add:
   #     - IPC_LOCK
   #   environment:
+  #     VAULT_SKIP_VERIFY: "true"
   #     VAULT_ADDR: "https://vault:8200"
   #     VAULT_API_ADDR: "https://vault:8200"
   #   volumes:
@@ -57,6 +58,7 @@ services:
   #   depends_on:
   #     - vault
   #   ports:
+  #     - "8201:8201"
   #     - "8200:8200"
   #   volumes:
   #     - ./backend/main/certs:/etc/nginx/certs:ro
@@ -150,7 +152,7 @@ services:
       - "0.0.0.0:8080:8080"  # Changed from "8080:8080" to bind to all interfaces
       - "0.0.0.0:8082:8082"  # Changed from "8082:8082" to bind to all interfaces
     volumes:
-      - ./nginx.dev.conf:/etc/nginx/nginx.conf
+      #- ./nginx.dev.conf:/etc/nginx/nginx.conf
       - ./backend/main/certs:/etc/nginx/certs:ro
     depends_on:
       - frontend
@@ -164,75 +166,75 @@ services:
   #   #---------------------------------------------------------------------------------------
 
 
-  elasticsearch:
-    build:
-      context: ./elk/elasticsearch
-      dockerfile: Dockerfile
-    container_name: elasticsearch
-    environment:
-      - discovery.type=single-node
-      - ES_JAVA_OPTS=-Xms1g -Xmx1g
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    volumes:
-      - es_data:/app/storage
-      - ./elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-    networks:
-      - ft_network
+  # elasticsearch:
+  #   build:
+  #     context: ./elk/elasticsearch
+  #     dockerfile: Dockerfile
+  #   container_name: elasticsearch
+  #   environment:
+  #     - discovery.type=single-node
+  #     - ES_JAVA_OPTS=-Xms1g -Xmx1g
+  #   ports:
+  #     - "9200:9200"
+  #     - "9300:9300"
+  #   volumes:
+  #     - es_data:/app/storage
+  #     - ./elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+  #   networks:
+  #     - ft_network
 
-  logstash:
-    build:
-      context: ./elk/logstash
-      dockerfile: Dockerfile
-    container_name: logstash
-    ports:
-      - "5044:5044"
-      - "9600:9600"
-    environment:
-      - LS_JAVA_OPTS=-Xms512m -Xmx512m
-    depends_on:
-      - elasticsearch
-    volumes:
-      - ./logs:/app/logs
-    networks:
-      - ft_network
+  # logstash:
+  #   build:
+  #     context: ./elk/logstash
+  #     dockerfile: Dockerfile
+  #   container_name: logstash
+  #   ports:
+  #     - "5044:5044"
+  #     - "9600:9600"
+  #   environment:
+  #     - LS_JAVA_OPTS=-Xms512m -Xmx512m
+  #   depends_on:
+  #     - elasticsearch
+  #   volumes:
+  #     - ./logs:/app/logs
+  #   networks:
+  #     - ft_network
 
-  filebeat:
-    build:
-      context: ./elk/filebeat
-      dockerfile: Dockerfile
-    user: root
-    volumes:
-      - ./elk/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-      - ./logs:/app/logs:ro
-    depends_on:
-      - logstash
-    command: ["--strict.perms=false", "-e"]
-    networks:
-      - ft_network
+  # filebeat:
+  #   build:
+  #     context: ./elk/filebeat
+  #     dockerfile: Dockerfile
+  #   user: root
+  #   volumes:
+  #     - ./elk/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+  #     - ./logs:/app/logs:ro
+  #   depends_on:
+  #     - logstash
+  #   command: ["--strict.perms=false", "-e"]
+  #   networks:
+  #     - ft_network
 
 
-  kibana:
-    build:
-      context: ./elk/kibana
-      dockerfile: Dockerfile
-    container_name: kibana
-    ports:
-      - "5601:5601"
-    environment:
-      - T_PORT_INTERN_LOGGING=9200
-      - T_ENDPOINT_LOGGING=kibana
-      - T_SERVER_NAME=localhost
-      - T_KIBANA_MAXSOCKS=100
-      - VAULT_ADDR=https://vault:8200
-      - VAULT_SKIP_VERIFY=true
-      - VAULT_TOKEN=${VAULT_TOKEN}
-      - VAULT_SECRET_PATH=cubbyhole/kibana
-    depends_on:
-      - elasticsearch
-    networks:
-      - ft_network
+  # kibana:
+  #   build:
+  #     context: ./elk/kibana
+  #     dockerfile: Dockerfile
+  #   container_name: kibana
+  #   ports:
+  #     - "5601:5601"
+  #   environment:
+  #     - T_PORT_INTERN_LOGGING=9200
+  #     - T_ENDPOINT_LOGGING=kibana
+  #     - T_SERVER_NAME=localhost
+  #     - T_KIBANA_MAXSOCKS=100
+  #     - VAULT_ADDR=https://vault:8200
+  #     - VAULT_SKIP_VERIFY=true
+  #     - VAULT_TOKEN=${VAULT_TOKEN}
+  #     - VAULT_SECRET_PATH=cubbyhole/kibana
+  #   depends_on:
+  #     - elasticsearch
+  #   networks:
+  #     - ft_network
 
   # # ------------------ ELK END -----------------------------------------------------------
   # #---------------------------------------------------------------------------------------
@@ -241,74 +243,74 @@ services:
   # # ------------------ PROMETHEUS / GRAFANA ----------------------------------------------
   # # --------------------------------------------------------------------------------------
 
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./monitoring/prometheus/alert.rules.yml:/etc/prometheus/alert.rules.yml
-      - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.retention.time=30d'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.enable-lifecycle'
-    networks:
-      - ft_network
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: prometheus
+  #   ports:
+  #     - "9090:9090"
+  #   volumes:
+  #     - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  #     - ./monitoring/prometheus/alert.rules.yml:/etc/prometheus/alert.rules.yml
+  #     - prometheus_data:/prometheus
+  #   command:
+  #     - '--config.file=/etc/prometheus/prometheus.yml'
+  #     - '--storage.tsdb.retention.time=30d'
+  #     - '--storage.tsdb.path=/prometheus'
+  #     - '--web.enable-lifecycle'
+  #   networks:
+  #     - ft_network
 
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
-    container_name: cadvisor
-    ports:
-      - "8081:8080"
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-    networks:
-      - ft_network
+  # cadvisor:
+  #   image: gcr.io/cadvisor/cadvisor:latest
+  #   container_name: cadvisor
+  #   ports:
+  #     - "8081:8080"
+  #   volumes:
+  #     - /:/rootfs:ro
+  #     - /var/run:/var/run:ro
+  #     - /sys:/sys:ro
+  #     - /var/lib/docker/:/var/lib/docker:ro
+  #   networks:
+  #     - ft_network
 
-  grafana:
-    build:
-      context: ./monitoring/grafana
-      dockerfile: Dockerfile.dev
-    container_name: grafana
-    environment:
-      - VAULT_ADDR=https://vault:8200
-      - VAULT_SKIP_VERIFY=true
-      - VAULT_TOKEN=${VAULT_TOKEN}
-      - VAULT_SECRET_PATH=cubbyhole/grafana
-    ports:
-      - "3001:3000"
-    volumes:
-      - grafana_data:/var/lib/grafana
-    networks:
-      - ft_network
+  # grafana:
+  #   build:
+  #     context: ./monitoring/grafana
+  #     dockerfile: Dockerfile.dev
+  #   container_name: grafana
+  #   environment:
+  #     - VAULT_ADDR=https://vault:8200
+  #     - VAULT_SKIP_VERIFY=true
+  #     - VAULT_TOKEN=${VAULT_TOKEN}
+  #     - VAULT_SECRET_PATH=cubbyhole/grafana
+  #   ports:
+  #     - "3001:3000"
+  #   volumes:
+  #     - grafana_data:/var/lib/grafana
+  #   networks:
+  #     - ft_network
 
-  nginx-exporter:
-    image: nginx/nginx-prometheus-exporter:latest
-    container_name: nginx-exporter
-    command:
-      - '-nginx.scrape-uri=http://nginx:8082/nginx_status'
-    ports:
-      - "9113:9113"
-    depends_on:
-      - nginx
-    networks:
-      - ft_network
+  # nginx-exporter:
+  #   image: nginx/nginx-prometheus-exporter:latest
+  #   container_name: nginx-exporter
+  #   command:
+  #     - '-nginx.scrape-uri=http://nginx:8082/nginx_status'
+  #   ports:
+  #     - "9113:9113"
+  #   depends_on:
+  #     - nginx
+  #   networks:
+  #     - ft_network
 
 
 
 volumes:
-  vault_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${PWD}/vault/data
-      o: bind
+  # vault_data:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: ${PWD}/vault/data
+  #     o: bind
   backend_data:
     driver: local
     driver_opts:
@@ -353,4 +355,4 @@ volumes:
 
 networks:
   ft_network:
-  vault_network:
+  # vault_network:
