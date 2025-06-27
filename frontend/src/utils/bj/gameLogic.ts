@@ -16,6 +16,35 @@ export const PlayGame = async (
   let player1Busted = false;
   let player2Busted = false;
 
+	const res = await fetch('/api/bj/lose', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+		},
+		body: JSON.stringify({
+			bet: 10,
+		})
+	});
+	if (!res.ok) {
+		console.error("Failed to update player money after Blackjack loss");
+	}
+	if (players === 2) {
+		const res = await fetch('/api/bj/lose', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+			},
+			body: JSON.stringify({
+				bet: 10,
+			})
+		});
+		if (!res.ok) {
+			console.error("Failed to update player money after Blackjack loss");
+		}
+	}
+
   dealInitialCards(bjRef, state, player1Cards, player2Cards, dealerCards, players, cardMeshes);
 
   bjRef.current.playerChoice = null;
