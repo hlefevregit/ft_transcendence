@@ -16,6 +16,35 @@ export const PlayGame = async (
   let player1Busted = false;
   let player2Busted = false;
 
+	const res = await fetch('/api/bj/lose', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+		},
+		body: JSON.stringify({
+			bet: 10,
+		})
+	});
+	if (!res.ok) {
+		console.error("Failed to update player money after Blackjack loss");
+	}
+	if (players === 2) {
+		const res = await fetch('/api/bj/lose', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+			},
+			body: JSON.stringify({
+				bet: 10,
+			})
+		});
+		if (!res.ok) {
+			console.error("Failed to update player money after Blackjack loss");
+		}
+	}
+
   dealInitialCards(bjRef, state, player1Cards, player2Cards, dealerCards, players, cardMeshes);
 
   bjRef.current.playerChoice = null;
@@ -24,37 +53,11 @@ export const PlayGame = async (
 	bjRef.current.playerChoice = null;
     await playerTurn(bjRef, state, player2Cards, cardMeshes);
 	if (getCardValues(player2Cards) > 21) {
-	const res = await fetch('/api/bj/lose', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-		},
-		body: JSON.stringify({
-			bet: 10,
-		})
-	});
-	if (!res.ok) {
-		console.error("Failed to update player money after Blackjack loss");
-	}
 	  console.log("Player 2 has busted!");
 	  player2Busted = true;
 	}
   }
   if (getCardValues(player1Cards) > 21) {
-	const res = await fetch('/api/bj/lose', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-		},
-		body: JSON.stringify({
-			bet: 10,
-		})
-	});
-	if (!res.ok) {
-		console.error("Failed to update player money after Blackjack loss");
-	}
 	console.log("Player 1 has busted!");
 	player1Busted = true;
   }
@@ -78,7 +81,7 @@ export const PlayGame = async (
 					Authorization: `Bearer ${localStorage.getItem('token')}`,
 				},
 				body: JSON.stringify({
-					bet: 15,
+					bet: 25,
 				})
 			});
 			if (!res.ok) {
@@ -93,7 +96,7 @@ export const PlayGame = async (
 					Authorization: `Bearer ${localStorage.getItem('token')}`,
 				},
 				body: JSON.stringify({
-					bet: 10,
+					bet: 20,
 				})
 			});
 			if (!res.ok) {
@@ -102,21 +105,21 @@ export const PlayGame = async (
 			console.log("Player 1 wins against the dealer!");
 		}
       } else if (player1Value < dealerValue && dealerValue <= 21) {
-		const res = await fetch('/api/bj/lose', {
+	    console.log("Dealer wins against Player 1!");
+      } else if (player1Value === dealerValue && player1Value <= 21) {
+			const res = await fetch('/api/bj/win', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+				Authorization: `Bearer ${localStorage.getItem('token')}`,
 			},
 			body: JSON.stringify({
 				bet: 10,
 			})
 		});
 		if (!res.ok) {
-			console.error("Failed to update player money after Blackjack loss");
+		console.error("Failed to update player money after Blackjack draw");
 		}
-	    console.log("Dealer wins against Player 1!");
-      } else if (player1Value === dealerValue && player1Value <= 21) {
   	    console.log("It's a tie between Player 1 and the dealer!");
       }
   }
@@ -131,7 +134,7 @@ export const PlayGame = async (
 					Authorization: `Bearer ${localStorage.getItem('token')}`,
 				},
 				body: JSON.stringify({
-					bet: 15,
+					bet: 25,
 				})
 			});
 			if (!res.ok) {
@@ -145,7 +148,7 @@ export const PlayGame = async (
 					Authorization: `Bearer ${localStorage.getItem('token')}`,
 				},
 				body: JSON.stringify({
-					bet: 10,
+					bet: 20,
 				})
 			});
 			if (!res.ok) {
@@ -154,24 +157,24 @@ export const PlayGame = async (
 			console.log("Player 2 wins against the dealer!");
 		}
   	  } else if (player2Value < dealerValue && dealerValue <= 21) {
-		const res = await fetch('/api/bj/lose', {
+	    console.log("Dealer wins against Player 2!");
+	  } else if (player2Value === dealerValue && player2Value <= 21) {
+			const res = await fetch('/api/bj/win', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+				Authorization: `Bearer ${localStorage.getItem('token')}`,
 			},
 			body: JSON.stringify({
 				bet: 10,
 			})
 		});
 		if (!res.ok) {
-			console.error("Failed to update player money after Blackjack loss");
+			console.error("Failed to update player money after Blackjack draw");
 		}
-	    console.log("Dealer wins against Player 2!");
-	  } else if (player2Value === dealerValue && player2Value <= 21) {
 	    console.log("It's a tie between Player 2 and the dealer!");
 	  }
-}
+  }
   destroyMeshes(cardMeshes);
   state.current = game.States.main_menu;
 };
@@ -189,9 +192,9 @@ export const dealInitialCards = (
 	const scene = bjRef.current.scene;
 	if (!scene) return;
 	for (let i = 0; i < 2; i++) {
-		const player1Card = dealCard(bjRef);
-		const player2Card = players === 2 ? dealCard(bjRef) : 0;
-		const dealerCard = dealCard(bjRef);
+		const player1Card = dealCard(meshes, bjRef);
+		const player2Card = players === 2 ? dealCard(meshes, bjRef) : 0;
+		const dealerCard = dealCard(meshes, bjRef);
 		if (player1Card) {
 			player1Cards.push(player1Card);
 			const value = ((player1Card - 1) % 13) + 1;
@@ -216,6 +219,7 @@ export const dealInitialCards = (
 			const suit = Math.floor((dealerCard - 1) / 13) + 1;
 			if (i === 0) {
 				console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to dealer`);
+				console.log(`Dealer's total value: ${getCardValues(dealerCards)}`);
 			} else {
 				console.log(`Dealt hidden card to dealer`);
 			}
@@ -228,7 +232,6 @@ export const dealInitialCards = (
 	if (players === 2) {
 		console.log(`Player 2's total value: ${getCardValues(player2Cards)}`);
 	}
-	console.log(`Dealer's total value: ${getCardValues(dealerCards)}`);
 };
 
 export const playerTurn = async (
@@ -244,7 +247,7 @@ export const playerTurn = async (
     const playerChoice = await waitForPlayerChoice(bjRef);
     switch (playerChoice) {
       case game.PlayerChoices.hit: {
-        const card = dealCard(bjRef);
+        const card = dealCard(meshes, bjRef);
         const value = ((card - 1) % 13) + 1;
         const suit = Math.floor((card - 1) / 13) + 1;
         if (!card) {
@@ -279,10 +282,11 @@ export const dealerTurn = (
 
 	if (dealerCards.length >= 2) {
 		console.log(`Dealer reveals ${game.ReverseValueMap[((dealerCards[1] - 1) % 13) + 1]} of ${game.ReverseSuitMap[Math.floor((dealerCards[1] - 1) / 13) + 1]}`);
+		console.log(`Dealer's total value: ${getCardValues(dealerCards)}`);
 	}
 
 	while (dealerCards.length < 2 || getCardValues(dealerCards) < 17) {
-		const card = dealCard(bjRef);
+		const card = dealCard(meshes, bjRef);
 		const value = ((card - 1) % 13) + 1;
 		const suit = Math.floor((card - 1) / 13) + 1;
 		if (card) {
@@ -320,8 +324,8 @@ export const getCardValues = (cards: number[]): number => {
 };
 
 export const dealCard = (
-	bjRef: React.RefObject<game.bjStruct>,
-	meshes: baby.Mesh[]
+	meshes: baby.Mesh[],
+	bjRef: React.RefObject<game.bjStruct>
 ): number => {
 	const scene = bjRef.current?.scene;
 	if (!scene) return 0;

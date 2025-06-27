@@ -29,7 +29,7 @@ export const initializeAllGUIScreens =
 	bj.instantiateSettingsGUI(pong, states, lang);
 	bj.instantiateGameModeGUI(pong, states);
 	bj.instantiateActionGUI(pong, states);
-	bj.instantiateBalanceGUI(pong);
+	// bj.instantiateBalanceGUI(pong);
 	// bj.instantiateArenaGUI(pong);
 	bj.instantiateDebugGUI(pong, states, lang);
 	// etc.
