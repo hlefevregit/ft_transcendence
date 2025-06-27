@@ -10,6 +10,18 @@
 
 * **WAF/Vault:** hulefevr: merged branch WAF/HashiCorp done by lpolizzi ([f4b9248](https://github.com/hlefevregit/ft_transcendence/commit/f4b9248a7f7250327243d317eb39f20c4dea9196))
 
+# [1.7.0](https://github.com/hlefevregit/ft_transcendence/compare/1.6.0...1.7.0) (2025-06-27)
+
+
+### Bug Fixes
+
+* **Vault:** token for backend pong game encrypted ([28dc067](https://github.com/hlefevregit/ft_transcendence/commit/28dc067b8ccf799c1bdece955464635a0f72de73))
+
+
+### Features
+
+* **WAF/Vault:** hulefevr: merged branch WAF/HashiCorp done by lpolizzi ([f4b9248](https://github.com/hlefevregit/ft_transcendence/commit/f4b9248a7f7250327243d317eb39f20c4dea9196))
+
 # [1.6.0](https://github.com/hlefevregit/ft_transcendence/compare/v1.5.0...1.6.0) (2025-06-17)
 
 
