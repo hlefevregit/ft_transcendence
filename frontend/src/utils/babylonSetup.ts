@@ -27,27 +27,6 @@ export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<v
 	BJ.mainMenuCam = cameraInstance;
 	BJ.scene.activeCamera = cameraInstance;
 
-	try
-	{
-		const modelMeshes = await importGLTF(sceneInstance, cardUrl, false, false);
-		if (modelMeshes && modelMeshes.length > 0)
-		{
-			modelMeshes[0].scaling = new baby.Vector3(4.5, 4.5, 4.5); // Make cards bigger
-			modelMeshes[0].position = new baby.Vector3(0, 1.55, 4); // All cards sitting on the table
-			modelMeshes[0].rotation = new baby.Vector3(Math.PI / -2, 0, 0); // Cards are flat on the table
-		}
-		bjLib.makeCardMap(BJ);
-	}
-	catch (error) { console.error("Error while loading card model:", error); }
-	try
-	{
-		const mapMeshes = await importGLTF(BJ.scene, bjMapUrl, true, true);
-		if (mapMeshes && mapMeshes.length > 0) BJ.map = mapMeshes[0];
-		else console.warn("Failed to load map");
-		if (BJ.map) BJ.map.scaling = new baby.Vector3(25, 25, -25);
-	}
-	catch (error) { console.error("Error while loading map:", error); }
-
 	sceneInstance.createDefaultEnvironment();
 	const ssaoRenderingPipeline = new baby.SSAORenderingPipeline("ssao", sceneInstance,1);
 	ssaoRenderingPipeline.scene.setRenderingOrder(0, null, null, null);
@@ -84,11 +63,26 @@ export const	setupBabylonPong = async (pong: game.pongStruct, canvasRef: any): P
 	const	sceneInstance = new baby.Scene(engineInstance);
 	pong.engine = engineInstance;
 	pong.scene = sceneInstance;
-
+	
 	new baby.HemisphericLight("light", new baby.Vector3(1, 1, 0), sceneInstance);
-
+	
 	const	skyboxMesh = baby.MeshBuilder.CreateBox("skyBox", { size: 1000 }, sceneInstance);
 	pong.skybox = skyboxMesh;
+
+	const	cameraInstance = new baby.FreeCamera("mainMenuCam", new baby.Vector3(-40.0, 2.0, 25.0), sceneInstance);
+	cameraInstance.setTarget(baby.Vector3.Zero());
+	cameraInstance.inputs.clear();
+	cameraInstance.rotation = new baby.Vector3(0, 2.3, 0);
+	pong.mainMenuCam = cameraInstance;
+	pong.scene.activeCamera = cameraInstance;
+
+	try
+	{
+		const meshes = await importGLTF(pong.scene, pongMapUrl, true, true);
+		if (meshes && meshes.length > 0) pong.map = meshes[0];
+		else console.warn("Failed to load map");
+	}
+	catch (error) { console.error("Error while loading map:", error); }
 
 	//                                                            width: width,           height: depth, depth: height
 	const	paddle1Mesh = baby.MeshBuilder.CreateBox("paddle1", { width: pong.paddleWidth, height: 0.75, depth: 1 }, sceneInstance);
@@ -129,13 +123,6 @@ export const	setupBabylonPong = async (pong: game.pongStruct, canvasRef: any): P
 	ballMesh.position = new baby.Vector3(0, 0, 0);
 	pong.ball = ballMesh;
 
-	try
-	{
-		const meshes = await importGLTF(pong.scene, pongMapUrl, true, true);
-		if (meshes && meshes.length > 0) pong.map = meshes[0];
-		else console.warn("Failed to load map");
-	}
-	catch (error) { console.error("Error while loading map:", error); }
 
 	const	ceiling = baby.MeshBuilder.CreateBox("ceiling", { width: 1, height: 0.1, depth: 1 }, sceneInstance);
 	ceiling.position.y = 0;

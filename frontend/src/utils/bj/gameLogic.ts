@@ -218,9 +218,9 @@ export const dealInitialCards = (
 	const scene = bjRef.current.scene;
 	if (!scene) return;
 	for (let i = 0; i < 2; i++) {
-		const player1Card = dealCard(bjRef);
-		const player2Card = players === 2 ? dealCard(bjRef) : 0;
-		const dealerCard = dealCard(bjRef);
+		const player1Card = dealCard(meshes, bjRef);
+		const player2Card = players === 2 ? dealCard(meshes, bjRef) : 0;
+		const dealerCard = dealCard(meshes, bjRef);
 		if (player1Card) {
 			player1Cards.push(player1Card);
 			const value = ((player1Card - 1) % 13) + 1;
@@ -349,8 +349,8 @@ export const getCardValues = (cards: number[]): number => {
 };
 
 export const dealCard = (
-	bjRef: React.RefObject<game.bjStruct>,
-	meshes: baby.Mesh[]
+	meshes: baby.Mesh[],
+	bjRef: React.RefObject<game.bjStruct>
 ): number => {
 	const scene = bjRef.current?.scene;
 	if (!scene) return 0;
