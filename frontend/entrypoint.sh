@@ -37,4 +37,4 @@ echo "Starting entrypoint script..."
 vault_export_to_env "${VAULT_SECRET_PATH}"
 env > .env
 
-exec npm run dev
+exec npm run preview

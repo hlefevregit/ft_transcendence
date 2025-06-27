@@ -63,20 +63,11 @@ export const	setupBabylonPong = async (pong: game.pongStruct, canvasRef: any): P
 	const	sceneInstance = new baby.Scene(engineInstance);
 	pong.engine = engineInstance;
 	pong.scene = sceneInstance;
-
+	
 	new baby.HemisphericLight("light", new baby.Vector3(1, 1, 0), sceneInstance);
-
+	
 	const	skyboxMesh = baby.MeshBuilder.CreateBox("skyBox", { size: 1000 }, sceneInstance);
 	pong.skybox = skyboxMesh;
-
-	// Enable ambient occlusion
-	sceneInstance.createDefaultEnvironment();
-	const ssaoRenderingPipeline = new baby.SSAORenderingPipeline("ssao", sceneInstance,  1);
-	ssaoRenderingPipeline.scene.setRenderingOrder(0, null, null, null);
-	sceneInstance.postProcessRenderPipelineManager.attachCamerasToRenderPipeline("ssao", sceneInstance.cameras);
-
-	// Set rendering groups so GUI renders after post-processing
-	sceneInstance.setRenderingAutoClearDepthStencil(1, false); // Don't clear depth for rendering group 1
 
 	const	cameraInstance = new baby.FreeCamera("mainMenuCam", new baby.Vector3(-40.0, 2.0, 25.0), sceneInstance);
 	cameraInstance.setTarget(baby.Vector3.Zero());
@@ -86,10 +77,10 @@ export const	setupBabylonPong = async (pong: game.pongStruct, canvasRef: any): P
 	pong.scene.activeCamera = cameraInstance;
 
 	try
-{
+	{
 		const meshes = await importGLTF(pong.scene, pongMapUrl, true, true);
 		if (meshes && meshes.length > 0) pong.map = meshes[0];
-			else console.warn("Failed to load map");
+		else console.warn("Failed to load map");
 	}
 	catch (error) { console.error("Error while loading map:", error); }
 
@@ -155,6 +146,15 @@ export const	setupBabylonPong = async (pong: game.pongStruct, canvasRef: any): P
 	pong.wallLeft.position.x = pong.arenaHeight + 1;
 	pong.wallRight.scaling.z = pong.arenaHeight * 2 + 3;
 	pong.wallRight.position.x = -pong.arenaHeight - 1;
+
+	// Enable ambient occlusion
+	sceneInstance.createDefaultEnvironment();
+	const ssaoRenderingPipeline = new baby.SSAORenderingPipeline("ssao", sceneInstance,  1);
+	ssaoRenderingPipeline.scene.setRenderingOrder(0, null, null, null);
+	sceneInstance.postProcessRenderPipelineManager.attachCamerasToRenderPipeline("ssao", sceneInstance.cameras);
+
+	// Set rendering groups so GUI renders after post-processing
+    sceneInstance.setRenderingAutoClearDepthStencil(1, false); // Don't clear depth for rendering group 1
 }
 
 export const importGLTF = async (scene: baby.Scene, modelUrl: string, visible: boolean, enabled: boolean) => {
@@ -182,6 +182,9 @@ export const importGLTF = async (scene: baby.Scene, modelUrl: string, visible: b
 
     result.meshes.forEach(mesh => {
       mesh.receiveShadows = true;
+    });
+
+	result.meshes.forEach(mesh => {
 	  mesh.isVisible = !!visible;
 	  mesh.setEnabled = !!enabled;
 	});

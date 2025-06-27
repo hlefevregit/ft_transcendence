@@ -18,7 +18,7 @@ const	BlackJack: React.FC = () =>
 	React.useEffect(() =>
 	{
 		if (!canvasRef.current) return;
-			canvasRef.current.focus();
+			canvasRef.current.focus();   
 		game.setupBabylonBJ(bjRef.current, canvasRef.current);
 		bj.initializeAllGUIScreens
 		(
@@ -48,6 +48,21 @@ const	BlackJack: React.FC = () =>
 		{
 			bj.updateGUIsWhenNeeded(bjRef, state, language, lastState, lastLanguage);
 
+			switch (state.current)
+			{
+				default:
+					break;
+				case bj.States.main_menu:
+					// Que faire dans le menu principal ?
+					break;
+				case bj.States.settings:
+					// Que faire dans les paramètres ?
+					break;
+				case bj.States.in_game:
+					// if (bjRef.current.playerMoney <= 0 && GameState.current === bj.GameState.waiting)
+					// 	state.current = bj.States.game_over;
+					break;
+			}
 			if (bjRef.current.scene) bjRef.current.scene.render();
 		});
 
