@@ -5,6 +5,7 @@ services:
   #   cap_add:
   #     - IPC_LOCK
   #   environment:
+  #     VAULT_SKIP_VERIFY: "true"
   #     VAULT_ADDR: "https://vault:8200"
   #     VAULT_API_ADDR: "https://vault:8200"
   #   volumes:
@@ -57,6 +58,7 @@ services:
   #   depends_on:
   #     - vault
   #   ports:
+  #     - "8201:8201"
   #     - "8200:8200"
   #   volumes:
   #     - ./backend/main/certs:/etc/nginx/certs:ro
@@ -320,12 +322,12 @@ services:
 
 
 volumes:
-  vault_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${PWD}/vault/data
-      o: bind
+  # vault_data:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: ${PWD}/vault/data
+  #     o: bind
   backend_data:
     driver: local
     driver_opts:
