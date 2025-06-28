@@ -33,7 +33,6 @@ export const    instantiateMainMenuGUI =
 		states.current = game.states.settings;
 	}, pong, "settings");
 	const	returnToMuseumButton = game.createDynamicButton("returnToMuseumButton", () => {
-		pong.current.scene?.dispose();
 		navigate("/game1");
 	}, pong, "returnToMuseumButton");
 			(returnToMuseumButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>

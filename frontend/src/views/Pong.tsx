@@ -231,7 +231,7 @@ const	Pong: React.FC = () =>
 						if (maxScore >= pong.current.requiredPointsToWin)
 							state.current = game.states.game_finished;
 						game.fitCameraToArena(pong.current);
-						
+
 						break;
 
 					case game.states.game_finished:
@@ -320,8 +320,9 @@ const	Pong: React.FC = () =>
 			// clearInterval(updateMusicVolume);
 			clearInterval(backgroundCalculations);
 			// clearInterval(updateGUIsValuesWhenNeeded);
-			if (!pong.current.engine) return;
-			pong.current.engine.dispose();
+			if (pong.current.scene) pong.current.scene.dispose();
+			if (pong.current.engine) pong.current.engine.stopRenderLoop();
+			if (pong.current.engine) pong.current.engine.dispose();
 		};
 	}, [navigate]);
 
