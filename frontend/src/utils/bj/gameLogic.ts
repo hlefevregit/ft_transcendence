@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/bjLibs';
-import * as camLib from '@/libs/pongLibs';
 
 let x = 0;
 let y = 0;
@@ -85,14 +84,14 @@ export const PlayGame = async (
 	if (players === 1) {
 		console.log("Dealer wins by default since Player 1 has busted!");
 		state.current = game.States.main_menu;
-		camLib.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
+		game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
 		return;
 	}
   }
   if (player1Busted && (players === 2 && player2Busted)) {
 	console.log("Both players have busted! Dealer wins by default.");
 	state.current = game.States.main_menu;
-	camLib.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
+	game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
 	return;
   }
   await dealerTurn(bjRef, state, dealerCards, cardMeshes);
@@ -134,7 +133,7 @@ export const PlayGame = async (
     }
     destroyMeshes(cardMeshes);
     state.current = game.States.main_menu;
-    camLib.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
+    game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
     return;
 	}
   if (!player1Busted) {
@@ -244,7 +243,7 @@ export const PlayGame = async (
 	}
   destroyMeshes(cardMeshes);
   state.current = game.States.main_menu;
-  camLib.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
+  game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
 };
 
 export const dealInitialCards = (

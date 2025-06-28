@@ -91,7 +91,7 @@ const	Pong: React.FC = () =>
 		canvasRef.current.focus();
 
 		// Initialize babylon
-		game.setupBabylonPong(pong.current, canvasRef.current);
+		game.setupBabylonPong(pong, canvasRef);
 		// Initialize all the GUI screens
 		game.initializeAllGUIScreens
 		(

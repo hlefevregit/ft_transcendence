@@ -190,7 +190,13 @@ let		time: number = 0;
  * @param {React.RefObject<game.pongStruct>} pong - Reference to the pong game structure
  * @param {React.RefObject<game.states>} states - Reference to the current game state
  * */
-export const	transitionToCamera = async (cameraA: baby.FreeCamera | baby.FlyCamera | undefined, cameraB: baby.FreeCamera | baby.FlyCamera | undefined, duration: number, pong: React.RefObject<game.pongStruct>, states: React.RefObject<game.states>): Promise<void> =>
+export const	transitionToCamera = async (
+	cameraA: baby.FreeCamera | baby.FlyCamera | undefined,
+	cameraB: baby.FreeCamera | baby.FlyCamera | undefined,
+	duration: number,
+	pong: React.RefObject<game.pongStruct>,
+	states: React.RefObject<game.states>
+): Promise<void> =>
 {
 	console.log("Started transition");
 	const	lastState = states.current;
@@ -201,6 +207,7 @@ export const	transitionToCamera = async (cameraA: baby.FreeCamera | baby.FlyCame
 	// Set transitionCam to A
 	pong.current.transitionCam?.position.copyFrom(cameraA.position);
 	pong.current.transitionCam?.rotation.copyFrom(cameraA.rotation);
+	pong.current.transitionCam!.fov = cameraA.fov;
 
 	// Set transitionCam as the current active camera
 	if (pong.current.scene?.activeCamera?.name !== pong.current.transitionCam?.name)
