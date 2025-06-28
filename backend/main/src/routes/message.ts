@@ -154,9 +154,9 @@ export async function setupMessageRoutes(fastify: CustomFastifyInstance) {
     }
   )
 
-  // — DELETE /api/users/:id/block — débloquer l’utilisateur :id
-  fastify.delete(
-    '/api/users/:id/block',
+  // — POST /api/users/:id/unblock — débloquer l’utilisateur :id (idem DELETE mais en POST)
+  fastify.post(
+    '/api/users/:id/unblock',
     { preValidation: [fastify.authenticate] },
     async (
       req: FastifyRequest<{ Params: { id: string } }>,
@@ -165,6 +165,7 @@ export async function setupMessageRoutes(fastify: CustomFastifyInstance) {
       const blockerId = (req.user as any).id as number
       const blockedId = Number(req.params.id)
 
+      // Supprime la ou les entrées block
       await fastify.prisma.block.deleteMany({
         where: { blockerId, blockedId },
       })
@@ -172,6 +173,7 @@ export async function setupMessageRoutes(fastify: CustomFastifyInstance) {
       return reply.status(204).send()
     }
   )
+
 
   // — GET /api/users/:id/blocked — récupérer les utilisateurs bloqués
   fastify.get(
@@ -236,18 +238,44 @@ export async function setupMessageRoutes(fastify: CustomFastifyInstance) {
     async (req, reply) => {
       const me = (req.user as any).id as number
 
-      // 1) Identifier tous les expéditeurs de messages à moi
-      const senders = await fastify.prisma.message.groupBy({
-        by: ['fromId'],
-        where: { toId: me },
+      // 1) Récupérer la liste des blocks impliquant "me"
+      const blocks = await fastify.prisma.block.findMany({
+        where: {
+          OR: [
+            { blockerId: me },
+            { blockedId: me },
+          ]
+        },
+        select: {
+          blockerId: true,
+          blockedId: true,
+        }
       })
 
-      // 2) Charger mes états de lecture
+      // Construire l'ensemble des IDs à exclure
+      const excluded = new Set<number>()
+      for (const b of blocks) {
+        if (b.blockerId === me) excluded.add(b.blockedId)
+        if (b.blockedId  === me) excluded.add(b.blockerId)
+      }
+      // Toujours exclure soi-même
+      excluded.add(me)
+
+      // 2) Identifier tous les expéditeurs de messages à « me », hors exclus
+      const senders = await fastify.prisma.message.groupBy({
+        by: ['fromId'],
+        where: {
+          toId: me,
+          fromId: { notIn: Array.from(excluded) },
+        }
+      })
+
+      // 3) Charger mes états de lecture normaux
       const states = await fastify.prisma.conversationState.findMany({
         where: { readerId: me },
       })
 
-      // 3) Pour chaque expéditeur, compter les messages non lus
+      // 4) Pour chaque expéditeur, compter ses messages non lus
       const unreadCounts: Record<number, number> = {}
       await Promise.all(
         senders.map(async ({ fromId }) => {
@@ -268,4 +296,86 @@ export async function setupMessageRoutes(fastify: CustomFastifyInstance) {
       return reply.send({ unreadCounts })
     }
   )
+
+  // — GET /api/conversations/recentContacts — récupérer les contacts récents  // — GET /api/conversations/recent — liste des contacts “récents”
+  fastify.get(
+    '/api/conversations/recent',
+    { preValidation: [fastify.authenticate] },
+    async (req, reply) => {
+      const me = (req.user as any).id as number
+
+      // 1) IDs des interlocuteurs auxquels j'ai envoyé un message
+      const sentTo = await fastify.prisma.message.groupBy({
+        by: ['toId'],
+        where: { fromId: me },
+      })
+
+      // 2) IDs des interlocuteurs de qui j'ai reçu un message
+      const receivedFrom = await fastify.prisma.message.groupBy({
+        by: ['fromId'],
+        where: { toId: me },
+      })
+
+      // 3) Union distincte de ces IDs
+      const contactIds = Array.from(
+        new Set([
+          ...sentTo.map((g) => g.toId),
+          ...receivedFrom.map((g) => g.fromId),
+        ])
+      )
+
+      if (contactIds.length === 0) {
+        return reply.send({ recentContacts: [] })
+      }
+
+      // 4) Charger les infos utilisateur
+      const users = await fastify.prisma.user.findMany({
+        where: { id: { in: contactIds } },
+        select: {
+          id: true,
+          pseudo: true,
+          avatarUrl: true,
+          status: true,
+        },
+      })
+
+      // 5) Mapper sur ton type ChatUser attendu côté front
+      const recentContacts = users.map((u) => ({
+        id: u.id,
+        username: u.pseudo,
+        avatarUrl: u.avatarUrl,
+        status: u.status,
+      }))
+
+      return reply.send({ recentContacts })
+    }
+  )
+
+  fastify.get(
+    '/api/conversations/recentIds',
+    { preValidation: [fastify.authenticate] },
+    async (req, reply) => {
+      const me = (req.user as any).id as number
+
+      // IDs des destinataires de qui j'ai reçu ou à qui j'ai envoyé
+      const sentTo = await fastify.prisma.message.groupBy({
+        by: ['toId'],
+        where: { fromId: me },
+      })
+      const receivedFrom = await fastify.prisma.message.groupBy({
+        by: ['fromId'],
+        where: { toId: me },
+      })
+
+      const ids = Array.from(
+        new Set([
+          ...sentTo.map(g => g.toId),
+          ...receivedFrom.map(g => g.fromId),
+        ])
+      )
+
+      return reply.send({ ids })
+    }
+  )
+
 }

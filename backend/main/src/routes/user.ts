@@ -305,4 +305,38 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
       })
     }
   )
+
+  // POST /api/users/batch
+  fastify.post(
+    '/api/users/batch',
+    { preValidation: [fastify.authenticate] },
+    async (
+      req: FastifyRequest<{ Body: { ids: number[] } }>,
+      reply: FastifyReply
+    ) => {
+      const { ids } = req.body
+      if (!ids?.length) {
+        return reply.send({ users: [] })
+      }
+      const users = await fastify.prisma.user.findMany({
+        where: { id: { in: ids } },
+        select: {
+          id: true,
+          pseudo: true,
+          avatarUrl: true,
+          status: true,
+        },
+      })
+
+      const chatUsers = users.map(u => ({
+        id:        u.id,
+        username:  u.pseudo,
+        avatarUrl: u.avatarUrl,
+        status:    u.status,
+      }))
+
+      return reply.send({ users: chatUsers })
+    }
+  )
+
 }
