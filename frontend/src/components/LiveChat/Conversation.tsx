@@ -2,46 +2,38 @@
 import { useRef, useEffect } from 'react'
 import ChatInput from './ChatInput'
 import { useConversationMessages } from '../../hooks/useConversationMessages'
-import { useChatStore } from './ChatContext'
-import type { ChatUser } from '../../types'
+import { useChatStore } from './ChatStore'
 import '../../styles/LiveChat/Conversation.css'
 import { getCurrentUser } from './api'
 
 export default function Conversation({ className = '' }) {
-  const { open, selectedUser } = useChatStore()
+  const { open, selectedUserId, contactsById } = useChatStore()
+  const selectedUser = selectedUserId != null ? contactsById[selectedUserId] : null
   const { id: meId } = getCurrentUser()
 
-  const {
-    messages,
-    sendMessage,
-    refresh,        // ← on récupère la fonction
-  } = useConversationMessages(
-    selectedUser?.id ?? null,
-    1000,
-    meId
-  )
+  const { messages, sendMessage, refresh, isBlocked } =
+    useConversationMessages(selectedUserId, 1000, meId)
 
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Scroll automatique
+  // Scroll auto
   useEffect(() => {
     const el = containerRef.current
     if (el) el.scrollTop = el.scrollHeight
   }, [messages])
 
-  // 1) refresh à l’ouverture du panneau
+  // Refresh à l’ouverture et au changement de conversation
   useEffect(() => {
-    if (open && selectedUser) {
+    if (open && selectedUserId != null && !isBlocked) {
       refresh()
     }
-  }, [open, selectedUser])
+  }, [open, selectedUserId, isBlocked])
 
-  // 2) refresh à chaque changement de conversation
   useEffect(() => {
-    if (selectedUser) {
+    if (!isBlocked && selectedUserId != null) {
       refresh()
     }
-  }, [selectedUser])
+  }, [selectedUserId, isBlocked])
 
   return (
     <div className={`chat-conversation ${className}`}>
@@ -49,6 +41,10 @@ export default function Conversation({ className = '' }) {
         {!selectedUser ? (
           <p className="chat-conversation__placeholder">
             Sélectionnez un contact
+          </p>
+        ) : isBlocked ? (
+          <p className="chat-conversation__blocked">
+            Blocked.
           </p>
         ) : messages.length === 0 ? (
           <p className="chat-conversation__placeholder">
@@ -69,7 +65,10 @@ export default function Conversation({ className = '' }) {
           ))
         )}
       </div>
-      <ChatInput onSend={sendMessage} disabled={!selectedUser} />
+      <ChatInput
+        onSend={sendMessage}
+        disabled={!selectedUserId || isBlocked}
+      />
     </div>
   )
 }

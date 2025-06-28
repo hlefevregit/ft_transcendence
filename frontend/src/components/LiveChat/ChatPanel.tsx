@@ -1,10 +1,10 @@
 // src/components/LiveChat/ChatPanel.tsx
-import { useState, KeyboardEvent } from 'react'
+import React, { useState, KeyboardEvent } from 'react'
 import ChatList from './ChatList'
 import Conversation from './Conversation'
 import type { ChatUser } from '../../types'
 import { getUserByPseudo } from './api'
-import { useChatStore } from './ChatContext'
+import { useChatStore } from './ChatStore'
 import '../../styles/LiveChat/ChatPanel.css'
 
 interface ChatPanelProps {
@@ -13,23 +13,18 @@ interface ChatPanelProps {
 
 export default function ChatPanel({ onClose }: ChatPanelProps) {
   const {
-    recentContacts,
-    setRecentContacts,
-    selectedUser,
-    setSelectedUser,
+    contactsById,
+    selectedUserId,
+    setSelectedUserId,
+    addRecentContactId,
+    addContact,
   } = useChatStore()
+
+  const selectedUser: ChatUser | null =
+    selectedUserId != null ? contactsById[selectedUserId] : null
 
   const [searchText, setSearchText] = useState('')
   const [error, setError] = useState('')
-
-  const handleSelect = (user: ChatUser) => {
-    // si nouveau contact, on l'ajoute à recentContacts
-    if (!recentContacts.find(u => u.id === user.id)) {
-      setRecentContacts([...recentContacts, user])
-    }
-    setSelectedUser(user)
-    setError('')
-  }
 
   const handleKeyDown = async (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== 'Enter') return
@@ -38,8 +33,11 @@ export default function ChatPanel({ onClose }: ChatPanelProps) {
 
     try {
       const user = await getUserByPseudo(pseudo)
-      handleSelect(user)
+      addContact(user)
+      addRecentContactId(user.id)
+      setSelectedUserId(user.id)
       setSearchText('')
+      setError('')
     } catch {
       setError('Utilisateur introuvable')
     }
@@ -60,11 +58,8 @@ export default function ChatPanel({ onClose }: ChatPanelProps) {
           onKeyDown={handleKeyDown}
         />
         {error && <p className="chat-panel__error">{error}</p>}
-        <ChatList
-          contacts={recentContacts}
-          onSelect={handleSelect}
-          className="chat-panel__list"
-        />
+        {/* Plus de props : ChatList lit tout du contexte */}
+        <ChatList className="chat-panel__list" />
       </div>
 
       <div className="chat-panel__content">

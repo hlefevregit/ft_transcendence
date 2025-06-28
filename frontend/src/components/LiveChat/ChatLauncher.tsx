@@ -2,7 +2,7 @@
 import { MdMessage } from 'react-icons/md'
 import ChatPanel from './ChatPanel'
 import '../../styles/LiveChat/ChatLauncher.css'
-import { useChatStore } from './ChatContext'
+import { useChatStore } from './ChatStore'
 
 export default function ChatLauncher() {
   const { open, setOpen } = useChatStore()

@@ -38,7 +38,7 @@ export async function getMessagesWith(
 
   // si blocage : on renvoie un batch vide silencieusement
   if (resp.status === 403) {
-    return { messages: [], lastId: sinceId }
+    throw new Error('blocked')
   }
   if (!resp.ok) throw new Error(await resp.text())
 
@@ -73,7 +73,7 @@ export async function sendMessageTo(
 
   // si blocage : on ne renvoie rien et on n'affiche pas d’erreur
   if (resp.status === 403) {
-    return null
+    throw new Error('blocked')
   }
   if (!resp.ok) throw new Error(await resp.text())
 
@@ -96,9 +96,10 @@ export async function blockUser(userId: number): Promise<void> {
   if (!resp.ok) throw new Error(await resp.text())
 }
 
+// APRÈS : POST vers /unblock
 export async function unblockUser(userId: number): Promise<void> {
-  const resp = await fetch(`/api/users/${userId}/block`, {
-    method: 'DELETE',
+  const resp = await fetch(`/api/users/${userId}/unblock`, {
+    method: 'POST',
     headers: { Authorization: `Bearer ${getAuthToken()}` },
   })
   if (!resp.ok) throw new Error(await resp.text())
@@ -175,4 +176,38 @@ export function getCurrentUser(): { id: number } {
   const [, payloadBase64] = token.split('.')
   const payload = JSON.parse(atob(payloadBase64))
   return { id: Number(payload.id) }  // ou payload.userId selon ce que vous encodez
+}
+
+export async function getRecentContacts(): Promise<ChatUser[]> {
+  const resp = await fetch('/api/conversations/recent', {
+    headers: { Authorization: `Bearer ${getAuthToken()}` },
+  })
+  if (!resp.ok) throw new Error(await resp.text())
+  const { recentContacts } = (await resp.json()) as {
+    recentContacts: ChatUser[]
+  }
+  return recentContacts
+}
+
+export async function getRecentContactIds(): Promise<number[]> {
+  const resp = await fetch('/api/conversations/recentIds', {
+    headers: { Authorization: `Bearer ${getAuthToken()}` },
+  })
+  if (!resp.ok) throw new Error(await resp.text())
+  const { ids } = (await resp.json()) as { ids: number[] }
+  return ids
+}
+
+export async function getUsersByIds(ids: number[]): Promise<ChatUser[]> {
+  const resp = await fetch('/api/users/batch', {
+    method:  'POST',
+    headers: {
+      'Content-Type':  'application/json',
+      Authorization:   `Bearer ${getAuthToken()}`,
+    },
+    body: JSON.stringify({ ids }),
+  })
+  if (!resp.ok) throw new Error(await resp.text())
+  const { users } = (await resp.json()) as { users: ChatUser[] }
+  return users
 }

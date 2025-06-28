@@ -1,3 +1,5 @@
+/* src/styles/LiveChat/UserProfileCard.css */
+
 .user-profile-card {
   position: absolute;
   top: 0;
@@ -35,16 +37,40 @@
   color: #111827;
 }
 
+.user-profile-card__actions {
+  display: flex;
+  align-items: center;
+}
+
 .user-profile-card__block-btn {
   background: none;
   border: none;
   font-size: 0.8rem;
   color: #ef4444;
   cursor: pointer;
+  margin-right: 0.5rem; /* espace entre Bloquer et Ajouter ami */
 }
 
 .user-profile-card__block-btn:hover {
   color: #dc2626;
+}
+
+.user-profile-card__friend-btn {
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  color: #10b981;       /* texte en vert */
+  cursor: pointer;
+}
+
+.user-profile-card__friend-btn:hover {
+  color: #059669;       /* vert plus foncé au survol */
+}
+
+.user-profile-card__friend-btn:disabled {
+  color: #9ca3af;       /* gris */
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .user-profile-card__body {
