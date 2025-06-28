@@ -115,8 +115,8 @@ export const	updateGUIsWhenNeeded =
 	lastLang: React.RefObject<bj.language>
 ): void =>
 {
-	if (states.current > bj.States.game_over) states.current = bj.States.main_menu; // Roll over to main menu if past game over
-	else if (states.current < bj.States.main_menu) states.current = bj.States.game_over; // Roll over to game over if before main menu
+	// if (states.current > bj.States.game_over) states.current = bj.States.main_menu; // Roll over to main menu if past game over
+	// else if (states.current < bj.States.main_menu) states.current = bj.States.game_over; // Roll over to game over if before main menu
 	// Update GUI on state change
 	if (lastState.current !== states.current)
 	{

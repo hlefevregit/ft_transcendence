@@ -35,7 +35,7 @@ const BlackJack: React.FC = () => {
 		if (!bjRef.current.engine) return;
 		bjRef.current.engine.runRenderLoop(() =>
 		{
-			if (state.current !== bj.States.in_transition)
+			// if (state.current !== bj.States.in_transition)
 				bj.updateGUIsWhenNeeded(bjRef, state, language, lastState, lastLanguage);
 
 			if (bjRef.current.scene) bjRef.current.scene.render();
@@ -51,7 +51,7 @@ const BlackJack: React.FC = () => {
 
 		const	backgroundCalculations = setInterval(() =>
 		{
-			if (state.current !== bj.States.in_transition)
+			// if (state.current !== bj.States.in_transition)
 				bj.updateGUIValues(bjRef, language);
 		}, 200);
 
