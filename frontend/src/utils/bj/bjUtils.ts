@@ -250,7 +250,15 @@ export function	debounce(fn: Function, ms: number)
 	};
 }
 
-export const	transitionToCamera = async (cameraA: baby.FreeCamera | baby.FlyCamera | undefined, cameraB: baby.FreeCamera | baby.FlyCamera | undefined, duration: number, bjRef: React.RefObject<bj.bjStruct>, states: React.RefObject<bj.States>): Promise<void> =>
+export const	forceRender = (bjRef: bj.bjStruct):void => { if (bjRef.scene) bjRef.scene.render(); };
+
+export const	transitionToCamera = async (
+	cameraA: baby.FreeCamera | baby.FlyCamera | undefined, 
+	cameraB: baby.FreeCamera | baby.FlyCamera | undefined,
+	duration: number, 
+	bjRef: React.RefObject<bj.bjStruct>, 
+	states: React.RefObject<bj.States>
+): Promise<void> =>
 {
 	console.log("Started transition");
 	const	lastState = states.current;
@@ -265,7 +273,7 @@ export const	transitionToCamera = async (cameraA: baby.FreeCamera | baby.FlyCame
 	// Set transitionCamera as the current active camera
 	if (bjRef.current.scene?.activeCamera?.name !== bjRef.current.transitionCamera?.name)
 		changeCamera(bjRef.current.transitionCamera, bjRef);
-	// forceRender(bjRef.current);
+	forceRender(bjRef.current);
 	
 	// Animation loop
 	while (time <= duration)
