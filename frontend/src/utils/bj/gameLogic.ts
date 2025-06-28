@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/bjLibs';
+import * as camLib from '@/libs/pongLibs';
 
 export const PlayGame = async (
   bjRef: React.RefObject<game.bjStruct>,
@@ -56,52 +57,71 @@ export const PlayGame = async (
 	bjRef.current.playerChoice = null;
     await playerTurn(bjRef, state, player2Cards, cardMeshes);
 	if (getCardValues(player2Cards) > 21) {
-	const res = await fetch('/api/bj/lose', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-		},
-		body: JSON.stringify({
-			bet: 10,
-		})
-	});
-	if (!res.ok) {
-		console.error("Failed to update player money after Blackjack loss");
-	}
 	  console.log("Player 2 has busted!");
 	  player2Busted = true;
 	}
   }
   if (getCardValues(player1Cards) > 21) {
-	const res = await fetch('/api/bj/lose', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-		},
-		body: JSON.stringify({
-			bet: 10,
-		})
-	});
-	if (!res.ok) {
-		console.error("Failed to update player money after Blackjack loss");
-	}
 	console.log("Player 1 has busted!");
 	player1Busted = true;
+	if (players === 1) {
+		console.log("Dealer wins by default since Player 1 has busted!");
+		state.current = game.States.main_menu;
+		camLib.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
+		return;
+	}
   }
   if (player1Busted && (players === 2 && player2Busted)) {
 	console.log("Both players have busted! Dealer wins by default.");
 	state.current = game.States.main_menu;
+	camLib.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
 	return;
   }
   await dealerTurn(bjRef, state, dealerCards, cardMeshes);
   const player1Value = getCardValues(player1Cards);
   const player2Value = players === 2 ? getCardValues(player2Cards) : 0;
   const dealerValue = getCardValues(dealerCards);
+  if (dealerValue > 21) {
+    if (!player1Busted) {
+        console.log("Dealer busted! Player 1 wins by default.");
+        const res = await fetch('/api/bj/win', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+            },
+            body: JSON.stringify({
+                bet: 20,
+            })
+        });
+        if (!res.ok) {
+            console.error("Failed to update player money after Blackjack win");
+        }
+    }
+    if (players === 2 && !player2Busted) {
+        console.log("Dealer busted! Player 2 wins by default.");
+        const res = await fetch('/api/bj/win', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+            },
+            body: JSON.stringify({
+                bet: 20,
+            })
+        });
+        if (!res.ok) {
+            console.error("Failed to update player money after Blackjack win");
+        }
+    }
+    destroyMeshes(cardMeshes);
+    state.current = game.States.main_menu;
+    camLib.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
+    return;
+	}
   if (!player1Busted) {
     if (player1Value > dealerValue && player1Value <= 21) {
-		if (player1Value === 21) {
+		if (player1Value === 21 && playerCards.length === 2) {
 			console.log("Player 1 has a Blackjack! Player 1 wins against the dealer!");
 			const res = await fetch('/api/bj/win', {
 				method: 'POST',
@@ -110,7 +130,7 @@ export const PlayGame = async (
 					Authorization: `Bearer ${localStorage.getItem('token')}`,
 				},
 				body: JSON.stringify({
-					bet: 15,
+					bet: 25,
 				})
 			});
 			if (!res.ok) {
@@ -125,7 +145,7 @@ export const PlayGame = async (
 					Authorization: `Bearer ${localStorage.getItem('token')}`,
 				},
 				body: JSON.stringify({
-					bet: 10,
+					bet: 20,
 				})
 			});
 			if (!res.ok) {
@@ -141,7 +161,7 @@ export const PlayGame = async (
 				Authorization: `Bearer ${localStorage.getItem('authToken')}`,
 			},
 			body: JSON.stringify({
-				bet: 10,
+				bet: 20,
 			})
 		});
 		if (!res.ok) {
@@ -154,7 +174,7 @@ export const PlayGame = async (
   }
   if (players === 2 && !player2Busted) {
       if (player2Value > dealerValue && player2Value <= 21) {
-		if (player2Value === 21) {
+		if (player2Value === 21 && player2Cards.length === 2) {
 			console.log("Player 2 has a Blackjack! Player 2 wins against the dealer!");
 			const res = await fetch('/api/bj/win', {
 				method: 'POST',
@@ -163,7 +183,7 @@ export const PlayGame = async (
 					Authorization: `Bearer ${localStorage.getItem('token')}`,
 				},
 				body: JSON.stringify({
-					bet: 15,
+					bet: 25,
 				})
 			});
 			if (!res.ok) {
@@ -177,7 +197,7 @@ export const PlayGame = async (
 					Authorization: `Bearer ${localStorage.getItem('token')}`,
 				},
 				body: JSON.stringify({
-					bet: 10,
+					bet: 20,
 				})
 			});
 			if (!res.ok) {
@@ -186,26 +206,27 @@ export const PlayGame = async (
 			console.log("Player 2 wins against the dealer!");
 		}
   	  } else if (player2Value < dealerValue && dealerValue <= 21) {
-		const res = await fetch('/api/bj/lose', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-			},
-			body: JSON.stringify({
-				bet: 10,
-			})
-		});
-		if (!res.ok) {
-			console.error("Failed to update player money after Blackjack loss");
-		}
 	    console.log("Dealer wins against Player 2!");
 	  } else if (player2Value === dealerValue && player2Value <= 21) {
+			const res = await fetch('/api/bj/win', {
+				method: 'POST',
+				headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+				body: JSON.stringify({
+				bet: 10,
+				})
+			});
+			if (!res.ok) {
+				console.error("Failed to update player money after Blackjack win");
+			}
 	    console.log("It's a tie between Player 2 and the dealer!");
 	  }
-}
+	}
   destroyMeshes(cardMeshes);
   state.current = game.States.main_menu;
+  camLib.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
 };
 
 export const dealInitialCards = (
@@ -276,7 +297,7 @@ export const playerTurn = async (
     const playerChoice = await waitForPlayerChoice(bjRef);
     switch (playerChoice) {
       case game.PlayerChoices.hit: {
-        const card = dealCard(bjRef);
+        const card = dealCard(meshes, bjRef);
         const value = ((card - 1) % 13) + 1;
         const suit = Math.floor((card - 1) / 13) + 1;
         if (!card) {
@@ -287,6 +308,11 @@ export const playerTurn = async (
         console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to player${playerChoice === game.PlayerChoices.double ? " (double)" : ""}`);
         console.log(`Player's total value: ${getCardValues(playerCards)}`);
         if (getCardValues(playerCards) >= 21) {
+		  if (getCardValues(playerCards) === 21) {
+			console.log("Player has reached 21!");
+		  } else {
+			console.log("Player has busted!");
+		  }
           return;
         }
         break;
@@ -314,7 +340,7 @@ export const dealerTurn = (
 	}
 
 	while (dealerCards.length < 2 || getCardValues(dealerCards) < 17) {
-		const card = dealCard(bjRef);
+		const card = dealCard(meshes, bjRef);
 		const value = ((card - 1) % 13) + 1;
 		const suit = Math.floor((card - 1) / 13) + 1;
 		if (card) {
@@ -419,7 +445,7 @@ const	getBalance = async (bjRef: React.RefObject<game.bjStruct>) =>
 		"api/balance",
 		{
 			method: "GET",
-			headers: 
+			headers:
 			{
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${localStorage.getItem('authToken')}`,

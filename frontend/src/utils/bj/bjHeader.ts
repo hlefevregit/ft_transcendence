@@ -115,7 +115,10 @@ export type bjStruct =
 	skybox?: baby.Mesh;
 
 	// Cameras
-	camera?: baby.FreeCamera;
+	mainMenuCamera?: baby.FreeCamera;
+	gameCamera?: baby.FreeCamera;
+	freeCamera?: baby.FreeCamera;
+	transitionCamera?: baby.FreeCamera;
 	map?: baby.AbstractMesh;
 
 	// BlackJack objects

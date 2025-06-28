@@ -17,6 +17,7 @@ COPY index.html ./
 COPY . .
 RUN chmod +x entrypoint.sh
 
-RUN npm run build:css && npm run build
+RUN npm run build:css
+# RUN npm run build # Uncomment if you want to build the project for production
 
 ENTRYPOINT ["bash", "entrypoint.sh"]

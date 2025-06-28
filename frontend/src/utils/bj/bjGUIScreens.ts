@@ -2,6 +2,7 @@ import React from 'react';
 
 import * as baby from '@/libs/babylonLibs';
 import * as bj from '@/libs/bjLibs';
+import * as game from '@/libs/pongLibs';
 import { split } from 'postcss/lib/list';
 
 // ****************************************************************************** //
@@ -46,6 +47,7 @@ export const    instantiateMainMenuGUI =
 	{
 		// if (!bjRef.current.scene) return;
 		states.current = bj.States.game_mode_selection;
+		game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.gameCamera, 1, bjRef, states);
 	}, bjRef, "play");
 
 	// Add GUI components to the main menu
@@ -98,6 +100,7 @@ export const	instantiateGameModeGUI =
 	const	gameModeBackButton = bj.createDynamicButton("gameModeBackButton", () =>
 	{
 		states.current = bj.States.main_menu;
+		game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, states);
 	}, bjRef, "back");
 
 	// Add GUI components to the game mode GUI
@@ -388,7 +391,7 @@ export const	instantiateBalanceGUI =
 	const	balanceContainer = bj.createAdaptiveContainer("balanceContainer", undefined, undefined, undefined, "top-right");
 	const	balanceHorizontalStackPanel = bj.createHorizontalStackPanel("balanceVerticalStackPanel");
 	const	balanceTitle = bj.createDynamicTitle("balanceTitle", "balance");
-	
+
 	// getBalance();
 
 	const	balanceValue = bj.createTitle("balanceValue", "NaN");

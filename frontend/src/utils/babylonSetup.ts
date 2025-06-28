@@ -24,7 +24,7 @@ export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<v
 	const	cameraInstance = new baby.FreeCamera("mainMenuCam", new baby.Vector3(0, 1.5, 2.5), sceneInstance);
 	cameraInstance.inputs.clear();
 	cameraInstance.rotation = new baby.Vector3(0.1, Math.PI / 1.001, 0);
-	BJ.mainMenuCam = cameraInstance;
+	BJ.mainMenuCamera = cameraInstance;
 	BJ.scene.activeCamera = cameraInstance;
 
 	sceneInstance.createDefaultEnvironment();
@@ -55,6 +55,24 @@ export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<v
 		bjLib.makeCardMap(BJ);
 	}
 	catch (error) { console.error("Error while loading card model:", error); }
+
+	const	freeCamera = new baby.FlyCamera("freeCam", new baby.Vector3(0, 1, 0), sceneInstance);
+	freeCamera.position = new baby.Vector3(0, 10, 0);
+	freeCamera.attachControl(canvasRef);
+	freeCamera.keysUp = [87, 38];		// W, Up arrow
+	freeCamera.keysDown = [83, 40];		// S, Down arrow
+	freeCamera.keysLeft = [65, 37];		// A, Left arrow
+	freeCamera.keysRight = [68, 39];	// D, Right arrow
+	BJ.freeCamera = freeCamera;
+
+	const	gameCamera = new baby.FreeCamera("mainMenuCam", new baby.Vector3(0, 1.5, 2.7), sceneInstance);
+	gameCamera.inputs.clear();
+	gameCamera.rotation = new baby.Vector3(0.5, Math.PI / 1.001, 0);
+	BJ.gameCamera = gameCamera;
+
+	const	transitionCamera = new baby.FreeCamera("transitionCam", baby.Vector3.Zero(), sceneInstance);
+	BJ.transitionCam = transitionCamera;
+
 }
 
 export const	setupBabylonPong = async (pong: game.pongStruct, canvasRef: any): Promise<void> =>
@@ -63,9 +81,9 @@ export const	setupBabylonPong = async (pong: game.pongStruct, canvasRef: any): P
 	const	sceneInstance = new baby.Scene(engineInstance);
 	pong.engine = engineInstance;
 	pong.scene = sceneInstance;
-	
+
 	new baby.HemisphericLight("light", new baby.Vector3(1, 1, 0), sceneInstance);
-	
+
 	const	skyboxMesh = baby.MeshBuilder.CreateBox("skyBox", { size: 1000 }, sceneInstance);
 	pong.skybox = skyboxMesh;
 
