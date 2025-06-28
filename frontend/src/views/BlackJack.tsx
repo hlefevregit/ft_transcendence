@@ -70,6 +70,11 @@ const	BlackJack: React.FC = () =>
 			}, 50);
 		window.addEventListener('resize', handleResize);
 
+		const	backgroundCalculations = setInterval(() =>
+		{
+			bj.updateGUIValues(bjRef, language);
+		}, 200);
+
 	});
 
 	return (
