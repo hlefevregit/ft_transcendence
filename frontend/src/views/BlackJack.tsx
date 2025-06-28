@@ -51,7 +51,8 @@ const BlackJack: React.FC = () => {
 
 		const	backgroundCalculations = setInterval(() =>
 		{
-			bj.updateGUIValues(bjRef, language);
+			if (state.current !== bj.States.in_transition)
+				bj.updateGUIValues(bjRef, language);
 		}, 200);
 
 		// Cleanup on unmount
