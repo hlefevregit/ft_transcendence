@@ -100,7 +100,7 @@ export const	instantiateGameModeGUI =
 	const	gameModeBackButton = bj.createDynamicButton("gameModeBackButton", () =>
 	{
 		states.current = bj.States.main_menu;
-		game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, states);
+		bj.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, states);
 	}, bjRef, "back");
 
 	// Add GUI components to the game mode GUI
@@ -433,7 +433,7 @@ export const	instantiatePlayerScoreGUI =
 	const	playerScorePlayer1Value = bj.createDynamicText("playerScorePlayer1Value");
 			(playerScorePlayer1Value.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
 			{
-				bj.findComponentByName(bjRef, "playerScorePlayer1Value").text = bjRef.current.player1Score.toString();
+				bj.findComponentByName(bjRef, "playerScorePlayer1Value").text = bjRef.current.player1Money.toString();
 			});
 }
 
