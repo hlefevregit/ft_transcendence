@@ -3,6 +3,10 @@ import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/bjLibs';
 import * as camLib from '@/libs/pongLibs';
 
+let x = 0;
+let y = 0;
+let z = 0;
+
 export const PlayGame = async (
   bjRef: React.RefObject<game.bjStruct>,
   state: React.RefObject<game.States>,
@@ -14,8 +18,11 @@ export const PlayGame = async (
 	const player1Cards: number[] = [];
 	const player2Cards: number[] = [];
 	const dealerCards: number[] = [];
-  let player1Busted = false;
-  let player2Busted = false;
+    let player1Busted = false;
+    let player2Busted = false;
+	x = 0;
+	y = 0.62;
+	z = 1.4;
 
 	const res = await fetch('/api/bj/lose', {
 		method: 'POST',
@@ -31,6 +38,7 @@ export const PlayGame = async (
 		console.error("Failed to update player money after Blackjack loss");
 	}
 	if (players === 2) {
+		x = -2
 		const res = await fetch('/api/bj/lose', {
 			method: 'POST',
 			headers: {
@@ -49,12 +57,22 @@ export const PlayGame = async (
   bjRef.current.player1Cards = player1Cards;
   bjRef.current.player2Cards = player2Cards;
 
+  bjRef.current.playerChoice = null;
   dealInitialCards(bjRef, state, player1Cards, player2Cards, dealerCards, players, cardMeshes);
+  if (getCardValues(player1Cards) === 21 && player1Cards.length === 2) {
+    console.log("Player 1 has a Blackjack!");
+  }
+  if (players === 2 && getCardValues(player2Cards) === 21 && player2Cards.length === 2) {
+    console.log("Player 2 has a Blackjack!");
+  }
 
   bjRef.current.playerChoice = null;
   await playerTurn(bjRef, state, player1Cards, cardMeshes);
   if (players === 2) {
 	bjRef.current.playerChoice = null;
+	x = 2;
+	y = 0.62;
+	z = 1.4;
     await playerTurn(bjRef, state, player2Cards, cardMeshes);
 	if (getCardValues(player2Cards) > 21) {
 	  console.log("Player 2 has busted!");
@@ -121,7 +139,7 @@ export const PlayGame = async (
 	}
   if (!player1Busted) {
     if (player1Value > dealerValue && player1Value <= 21) {
-		if (player1Value === 21 && playerCards.length === 2) {
+		if (player1Value === 21 && player1Cards.length === 2) {
 			console.log("Player 1 has a Blackjack! Player 1 wins against the dealer!");
 			const res = await fetch('/api/bj/win', {
 				method: 'POST',
@@ -293,7 +311,7 @@ export const playerTurn = async (
   if (!bjRef.current) return;
   const scene = bjRef.current.scene;
   if (!scene) return;
-  while (true) {
+  while (getCardValues(playerCards) < 21) {
     const playerChoice = await waitForPlayerChoice(bjRef);
     switch (playerChoice) {
       case game.PlayerChoices.hit: {
@@ -388,35 +406,19 @@ export const dealCard = (
 	const originalMesh = bjRef.current!.cards[card];
 	if (originalMesh)
 	{
+		console.log(`Dealing card: ${originalMesh.name} with key: ${card}`);
 		const clonedMesh = originalMesh.clone(`${originalMesh.name}_clone`, originalMesh.parent);
+		clonedMesh.position = new baby.Vector3(x, y, z);
+	    clonedMesh.isVisible = true;
+	    clonedMesh.setEnabled = true;
+
 		meshes.push(clonedMesh);
 	}
 	return card;
 };
 
-export const makeCardMap = (bjRef: React.RefObject<game.bjStruct>): void => {
-  const scene = bjRef.current?.scene;
-  if (!scene) return;
-  for (const suit in suitMap) {
-    for (const value in valueMap) {
-      const key = getCardKey(suit as keyof typeof suitMap, value as keyof typeof valueMap);
-      const meshName = `${suit}${value.charAt(0).toUpperCase() + value.slice(1)}`;
-      const mesh = getMeshByName(meshName, bjRef);
-      if (mesh) {
-        bjRef.current!.cards[key] = mesh;
-      }
-    }
-  }
-};
-
-export const getMeshByName = (name: string, bjRef: React.RefObject<game.bjStruct>): baby.AbstractMesh | null => {
-  if (!bjRef.current.scene) return null;
-  const mesh = bjRef.current.scene.find(mesh => mesh.name === name);
-  return mesh || null;
-};
-
 export const getCardKey = (suit: keyof typeof suitMap, value: keyof typeof valueMap): number => {
-  return (suitMap[suit] - 1) * 13 + valueMap[value];
+  return (game.SuitMap[suit] - 1) * 13 + game.ValueMap[value];
 };
 
 export const destroyMeshes = (meshes: baby.Mesh[]): void => {

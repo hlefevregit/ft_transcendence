@@ -40,19 +40,29 @@ export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<v
 		const mapMeshes = await importGLTF(BJ.scene, bjMapUrl, true, true);
 		if (mapMeshes && mapMeshes.length > 0) BJ.map = mapMeshes[0];
 			else console.warn("Failed to load map");
-		// if (BJ.map) BJ.map.scaling = new baby.Vector3(25, 25, -25);
 	}
 	catch (error) { console.error("Error while loading map:", error); }
 	try
 {
 		const modelMeshes = await importGLTF(sceneInstance, cardUrl, false, false);
 		if (modelMeshes && modelMeshes.length > 0)
-	{
+		{
 			modelMeshes[0].scaling = new baby.Vector3(1.35, 1.35, 1.35); // Make cards bigger
 			modelMeshes[0].position = new baby.Vector3(0, 0.62, 1.4); // All cards sitting on the table
 			modelMeshes[0].rotation = new baby.Vector3(Math.PI / -2, 0, 0); // Cards are flat on the table
 		}
-		bjLib.makeCardMap(BJ);
+		  for (const suit in bjLib.SuitMap) {
+		  for (const value in bjLib.ValueMap) {
+	      const key = bjLib.getCardKey(suit as keyof typeof bjLib.SuitMap, value as keyof typeof bjLib.ValueMap);
+	      const meshName = `${suit}${value.charAt(0).toUpperCase() + value.slice(1)}`;
+	      console.log(`Looking for mesh: ${meshName} with key: ${key}`);
+	      const mesh = BJ.scene.meshes.find(mesh => mesh.name === name);
+	      if (mesh) {
+	        BJ.cards[key] = mesh;
+	      }
+	    }
+	  }
+
 	}
 	catch (error) { console.error("Error while loading card model:", error); }
 
@@ -200,11 +210,8 @@ export const importGLTF = async (scene: baby.Scene, modelUrl: string, visible: b
 
     result.meshes.forEach(mesh => {
       mesh.receiveShadows = true;
-    });
-
-	result.meshes.forEach(mesh => {
-	  mesh.isVisible = !!visible;
-	  mesh.setEnabled = !!enabled;
+	  // mesh.isVisible = !!visible;
+	  // mesh.setEnabled = !!enabled;
 	});
 
 
