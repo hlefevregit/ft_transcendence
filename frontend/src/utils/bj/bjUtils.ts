@@ -249,3 +249,46 @@ export function	debounce(fn: Function, ms: number)
 		timer = setTimeout(() => { fn(...args); }, ms);
 	};
 }
+
+export const	transitionToCamera = async (cameraA: baby.FreeCamera | baby.FlyCamera | undefined, cameraB: baby.FreeCamera | baby.FlyCamera | undefined, duration: number, bjRef: React.RefObject<bj.bjStruct>, states: React.RefObject<bj.States>): Promise<void> =>
+{
+	console.log("Started transition");
+	const	lastState = states.current;
+	if (cameraA === undefined || cameraB === undefined || !bjRef.current) return;
+	states.current = bj.States.in_transition;
+	duration *= 1000;	// Convert to milliseconds
+
+	// Set transitionCamera to A
+	bjRef.current.transitionCamera?.position.copyFrom(cameraA.position);
+	bjRef.current.transitionCamera?.rotation.copyFrom(cameraA.rotation);
+
+	// Set transitionCamera as the current active camera
+	if (bjRef.current.scene?.activeCamera?.name !== bjRef.current.transitionCamera?.name)
+		changeCamera(bjRef.current.transitionCamera, bjRef);
+	// forceRender(bjRef.current);
+	
+	// Animation loop
+	while (time <= duration)
+	{
+		if (!bjRef.current.transitionCamera) break;
+		const	lerpedPosition = smoothStepVector3(cameraA.position.clone(), cameraB.position.clone(), time / duration);
+		const	lerpedRotation = smoothStepVector3(cameraA.rotation.clone(), cameraB.rotation.clone(), time / duration);
+		const	lerpedFOV = smoothStep(cameraA.fov, cameraB.fov, time / duration);
+
+		bjRef.current.transitionCamera.position.set(lerpedPosition.x, lerpedPosition.y, lerpedPosition.z);
+		bjRef.current.transitionCamera.rotation.set(lerpedRotation.x, lerpedRotation.y, lerpedRotation.z);
+		bjRef.current.transitionCamera.fov = lerpedFOV;
+
+		const	deltaTime = bjRef.current.engine?.getDeltaTime() ?? 0;
+		time += deltaTime;
+		await sleep(deltaTime);
+	}
+	time = 0; // Reset time for next transition
+
+	// Change back to the new camera
+	changeCamera(cameraB, bjRef);
+	states.current = lastState; // Restore previous state
+	console.log("Transition complete");
+	bj.updateGUIVisibilityStates(bjRef, states.current);
+	return;
+}

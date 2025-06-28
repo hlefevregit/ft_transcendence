@@ -93,6 +93,7 @@ export enum States
 	settings,
 	in_game,
 	game_over,
+	in_transition,
 }
 
 export enum GameState
