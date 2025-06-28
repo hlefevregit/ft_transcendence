@@ -29,7 +29,7 @@ export const    instantiateMainMenuGUI =
 		states.current = bj.States.settings;
 	}, bjRef, "settings");
 	const	returnToMuseumButton = bj.createDynamicButton("returnToMuseumButton", () => {
-		bjRef.current.scene?.dispose();
+		bjRef.current.engine?.dispose();
 		navigate("/game2");
 	}, bjRef, "returnToMuseumButton");
 			(returnToMuseumButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
