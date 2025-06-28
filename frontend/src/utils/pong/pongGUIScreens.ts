@@ -1179,22 +1179,65 @@ export const instantiateBracketGUI =
 	// Abandon button
 	const	bracketAbandonButton = game.createDynamicButton("bracketAbandonButton", () =>
 	{
-		if (gameModes.current !== game.gameModes.none) {
-			// ✅ Envoie le leave_room au serveur
-			if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN)
-			{
-				socketRef.current.send
-				(
-					JSON.stringify({
-					type: 'leave_room',
-					gameId: pong.current.tournamentId, // Assure-toi que tournamentId est bien set !
-				}));
-			}
-		}
+		// if (gameModes.current !== game.gameModes.none) {
+		// 	// ✅ Envoie le leave_room au serveur
+		// 	if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN)
+		// 	{
+		// 		socketRef.current.send
+		// 		(
+		// 			JSON.stringify({
+		// 			type: 'leave_room',
+		// 			gameId: pong.current.tournamentId, // Assure-toi que tournamentId est bien set !
+		// 		}));
+		// 	}
+		// }
+		// states.current = game.states.main_menu;
+		// gameModes.current = game.gameModes.none;
+		// pong.current.tournamentState = game.tournamentStates.none;
+		// game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
 		states.current = game.states.main_menu;
 		gameModes.current = game.gameModes.none;
 		pong.current.tournamentState = game.tournamentStates.none;
 		game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
+
+		// Reset tournament state
+		pong.current.tournamentState = game.tournamentStates.none;
+		// Reset player scores
+		pong.current.tournamenFinalScore1 = 0;
+		pong.current.tournamentPlayer1Score = 0;
+		pong.current.tournamentPlayer2Score = 0;
+		pong.current.tournamentPlayer3Score = 0;
+		pong.current.tournamentPlayer4Score = 0;
+		// Reset player labels
+		pong.current.tournamentPlayer1Name = undefined;
+		pong.current.tournamentPlayer2Name = undefined;
+		pong.current.tournamentPlayer3Name = undefined;
+		pong.current.tournamentPlayer4Name = undefined;
+		pong.current.tournamentFinalist1 = undefined;
+		pong.current.tournamentFinalist2 = undefined;
+		pong.current.tournamentWinner = undefined;
+		// Reset player borders
+		const	player1 = bracketPlayer1Card.children[0] as baby.Container;
+		const	player1Rectangle = player1.children[0] as baby.Rectangle;
+				player1Rectangle.color = "transparent";
+		const	player2 = bracketPlayer2Card.children[0] as baby.Container;
+		const	player2Rectangle = player2.children[0] as baby.Rectangle;
+				player2Rectangle.color = "transparent";
+		const	player3 = bracketPlayer3Card.children[0] as baby.Container;
+		const	layer3Rectangle = player3.children[0] as baby.Rectangle;
+				layer3Rectangle.color = "transparent";
+		const	player4 = bracketPlayer4Card.children[0] as baby.Container;
+		const	player4Rectangle = player4.children[0] as baby.Rectangle;
+				player4Rectangle.color = "transparent";
+		const	finalPlayer1 = finalPlayer1Card.children[0] as baby.Container;
+		const	finalPlayer1Rectangle = finalPlayer1.children[0] as baby.Rectangle;
+				finalPlayer1Rectangle.color = "transparent";
+		const	finalPlayer2 = finalPlayer2Card.children[0] as baby.Container;
+		const	finalPlayer2Rectangle = finalPlayer2.children[0] as baby.Rectangle;
+				finalPlayer2Rectangle.color = "transparent";
+		const	winner = winnerPlayer.children[0] as baby.Container;
+		const	winnerRectangle = winner.children[0] as baby.Rectangle;
+				winnerRectangle.color = "transparent";
 	}, pong, "abandon");
 			(bracketAbandonButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
 			{
@@ -1211,18 +1254,6 @@ export const instantiateBracketGUI =
 	// Finish button
 	const	bracketFinishButton = game.createDynamicButton("bracketFinishButton", () =>
 	{
-		// if (gameModes.current !== game.gameModes.none) {
-		// 	// ✅ Envoie le leave_room au serveur
-		// 	if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN)
-		// 	{
-		// 		socketRef.current.send
-		// 		(
-		// 			JSON.stringify({
-		// 			type: 'leave_room',
-		// 			gameId: pong.current.tournamentId, // Assure-toi que tournamentId est bien set !
-		// 		}));
-		// 	}
-		// }
 		states.current = game.states.main_menu;
 		gameModes.current = game.gameModes.none;
 		pong.current.tournamentState = game.tournamentStates.none;
