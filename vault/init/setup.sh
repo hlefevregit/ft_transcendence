@@ -26,7 +26,6 @@ fi
 # Extract keys
 grep 'Unseal Key 1:' /vault/secrets/init.txt | awk '{print $NF}' > /vault/secrets/unseal_key.txt
 grep 'Initial Root Token:' /vault/secrets/init.txt | awk '{print $NF}' > /vault/secrets/root_token.txt
-
 # Unseal Vault
 echo "🔓 Unsealing Vault..."
 vault operator unseal -address="$VAULT_ADDR" "$(cat /vault/secrets/unseal_key.txt)"
@@ -75,4 +74,8 @@ if [ "${VAULT_FILLED}" != "true" ]; then
   export VAULT_FILLED="true"
 fi
 
+echo "VAULT_TOKEN=$(cat /vault/secrets/root_token.txt)" > /vault/secrets/.env
+
 echo "🏁 Vault initialized and unsealed."
+cp /vault/secrets/root_token.txt /vault/secrets/.env_token
+echo "VAULT_TOKEN=$(cat /vault/secrets/.env_token)" > /vault/secrets/.env_extracted
