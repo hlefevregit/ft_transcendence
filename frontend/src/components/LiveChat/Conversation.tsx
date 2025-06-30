@@ -1,7 +1,10 @@
 // src/components/LiveChat/Conversation.tsx
-import { useRef, useEffect } from 'react'
+import React, { useRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 import ChatInput from './ChatInput'
 import { useConversationMessages } from '../../hooks/useConversationMessages'
+import { useInvitations, Invite } from '../../hooks/useInvitations'
 import { useChatStore } from './ChatStore'
 import '../../styles/LiveChat/Conversation.css'
 import { getCurrentUser } from './api'
@@ -14,26 +17,48 @@ export default function Conversation({ className = '' }) {
   const { messages, sendMessage, refresh, isBlocked } =
     useConversationMessages(selectedUserId, 1000, meId)
 
-  const containerRef = useRef<HTMLDivElement>(null)
+  // Step 4: polling invitations
+  const invites = useInvitations(1000)
+  // Only keep the invite from the currently selected user
+  const currentInvite = invites.find(
+    (inv: Invite) => inv.inviterId === selectedUserId
+  )
 
-  // Scroll auto
+  const containerRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
+
+  // auto-scroll on new messages
   useEffect(() => {
     const el = containerRef.current
     if (el) el.scrollTop = el.scrollHeight
   }, [messages])
 
-  // Refresh à l’ouverture et au changement de conversation
+  // refresh on open or user change
   useEffect(() => {
     if (open && selectedUserId != null && !isBlocked) {
       refresh()
     }
-  }, [open, selectedUserId, isBlocked])
+  }, [open, selectedUserId, isBlocked, refresh])
 
+  // refresh on user change or unblock
   useEffect(() => {
     if (!isBlocked && selectedUserId != null) {
       refresh()
     }
-  }, [selectedUserId, isBlocked])
+  }, [selectedUserId, isBlocked, refresh])
+
+  // Handler for the “Rejoindre” button
+  const handleJoin = async (roomId: string) => {
+    console.log('handleJoin appelé avec roomId=', roomId)
+    try {
+      console.log('Tentative de rejoindre la partie avec roomId:', roomId) 
+      navigate(`/pong?joinRoomId=${roomId}`)
+    } catch (err) {
+      console.error('Erreur handleJoin:', err)
+      alert('Impossible de rejoindre la partie.')
+    }
+  }
+
 
   return (
     <div className={`chat-conversation ${className}`}>
@@ -43,15 +68,13 @@ export default function Conversation({ className = '' }) {
             Sélectionnez un contact
           </p>
         ) : isBlocked ? (
-          <p className="chat-conversation__blocked">
-            Blocked.
-          </p>
+          <p className="chat-conversation__blocked">Blocked.</p>
         ) : messages.length === 0 ? (
           <p className="chat-conversation__placeholder">
             Aucune conversation
           </p>
         ) : (
-          messages.map(m => (
+          messages.map((m) => (
             <div
               key={m.id}
               className={
@@ -65,6 +88,20 @@ export default function Conversation({ className = '' }) {
           ))
         )}
       </div>
+
+      {currentInvite && (
+        <div className="chat-invite-banner">
+          <span>
+            {contactsById[currentInvite.inviterId]?.username ||
+              'Quelqu\'un'}{' '}
+            vous invite à jouer
+          </span>
+          <button onClick={() => handleJoin(currentInvite.roomId)}>
+            Rejoindre
+          </button>
+        </div>
+      )}
+
       <ChatInput
         onSend={sendMessage}
         disabled={!selectedUserId || isBlocked}

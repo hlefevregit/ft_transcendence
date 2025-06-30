@@ -1,4 +1,4 @@
-// imports
+// onlineWS.ts
 import React, { use } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as baby from '@/libs/babylonLibs';
@@ -26,6 +26,7 @@ export const useWebSocketOnline = (pong: React.RefObject<game.pongStruct>,
     lang: React.RefObject<game.lang>,
     userNameRef: React.RefObject<string | null>,
     ws: WebSocket,
+    roomIdRef: React.RefObject<string>
 ) => {
 
     socketRef.current = ws;
@@ -76,6 +77,7 @@ export const useWebSocketOnline = (pong: React.RefObject<game.pongStruct>,
     
                 pong.current.rooms.set(roomId, () => roomPanel);
                 console.log("🗂 Room ajoutée au Map avec ID:", roomId);
+                roomIdRef.current = roomId;
                 break;
             }
     

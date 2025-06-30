@@ -57,3 +57,40 @@
   margin-left: auto;
   background-color: #bfdbfe;
 }
+
+
+/* =============================== */
+/* Bandeau d’invitation “Rejoindre” */
+/* =============================== */
+
+/* Ajoute ça à la fin de ton src/styles/LiveChat/Conversation.css */
+
+.chat-invite-banner {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #374151;
+  z-index: 10;
+}
+
+.chat-invite-banner button {
+  background-color: #3b82f6;
+  color: #ffffff;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.chat-invite-banner button:hover {
+  background-color: #2563eb;
+}

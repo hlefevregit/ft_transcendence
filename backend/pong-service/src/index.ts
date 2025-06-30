@@ -1,3 +1,4 @@
+// File: backend/pong-service/src/index.ts
 import Fastify from 'fastify';
 import websocketPlugin from '@fastify/websocket';
 import { setupWebsocketRoutes } from './webSocket';

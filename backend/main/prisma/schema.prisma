@@ -97,3 +97,14 @@ model ConversationState {
   @@index([readerId])
   @@index([otherId])
 }
+
+model Invitation {
+  inviterId        Int
+  inviteeId        Int
+  roomId           String?          // rempli quand l’hôte est prêt
+  waitingForPlayer Boolean @default(false)
+
+  @@id([inviterId, inviteeId])      // unique par paire
+  @@index([inviteeId, waitingForPlayer])
+}
+

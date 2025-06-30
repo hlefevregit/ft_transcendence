@@ -5,7 +5,7 @@ import type {
   FastifyReply,
 } from 'fastify'
 import type { PrismaClient } from '@prisma/client'
-
+import { games } from '../plugins/websocket'; // Import de ta Map
 /**
  * Étend FastifyInstance pour y déclarer authenticate()
  * et prisma (décoré dans le bootstrap).
@@ -256,7 +256,7 @@ export async function setupMessageRoutes(fastify: CustomFastifyInstance) {
       const excluded = new Set<number>()
       for (const b of blocks) {
         if (b.blockerId === me) excluded.add(b.blockedId)
-        if (b.blockedId  === me) excluded.add(b.blockerId)
+        if (b.blockedId === me) excluded.add(b.blockerId)
       }
       // Toujours exclure soi-même
       excluded.add(me)
@@ -377,5 +377,100 @@ export async function setupMessageRoutes(fastify: CustomFastifyInstance) {
       return reply.send({ ids })
     }
   )
+
+  // 1) Créer ou recréer une invitation
+  fastify.post('/api/invitations', { preValidation: [fastify.authenticate] }, async (req, reply) => {
+    const inviterId = (req.user as any).id as number;
+    const { inviteeId } = req.body as { inviteeId: number };
+    if (inviteeId === inviterId) {
+      return reply.code(400).send({ error: "Vous ne pouvez pas vous inviter vous-même." });
+    }
+    // optionnel : vérifier que l'utilisateur existe
+    // const user = await fastify.prisma.user.findUnique({ where: { id: inviteeId } });
+    // if (!user) return reply.code(404).send({ error: "Utilisateur introuvable." });
+
+    const invite = await fastify.prisma.invitation.upsert({
+      where: { inviterId_inviteeId: { inviterId, inviteeId } },
+      update: {},  // met à jour updatedAt automatiquement si @updatedAt
+      create: { inviterId, inviteeId },
+    });
+
+    return reply.code(201).send(invite);
+  });
+
+  fastify.post(
+    '/api/invitations/confirm',      // nouvelle URL
+    { preValidation: [fastify.authenticate] },
+    async (req, reply) => {
+      const inviterId = (req.user as any).id as number;
+      const { inviteeId, roomId } = req.body as {
+        inviteeId: number;
+        roomId: string;
+      };
+
+      const invite = await fastify.prisma.invitation.update({
+        where: { inviterId_inviteeId: { inviterId, inviteeId } },
+        data: { roomId, waitingForPlayer: true }
+      });
+
+      return reply.send(invite);
+    }
+  );
+
+  // 3) Polling : lister les invitations actives pour l'utilisateur connecté
+  fastify.get('/api/invitations', { preValidation: [fastify.authenticate] }, async (req, reply) => {
+    const inviteeId = (req.user as any).id as number;
+    const invites = await fastify.prisma.invitation.findMany({
+      where: { inviteeId, waitingForPlayer: true, roomId: { not: null } },
+      select: { inviterId: true, roomId: true },
+    });
+    return reply.send(invites);
+  });
+
+
+  // 4) Supprimer l'invitation (initiée par l’inviteur ou le destinataire)
+  fastify.post(
+    '/api/invitations/delete',
+    { preValidation: [fastify.authenticate] },
+    async (req, reply) => {
+      const inviterId = (req.user as any).id as number
+      const { inviteeId } = req.body as { inviteeId: number }
+      await fastify.prisma.invitation.delete({
+        where: { inviterId_inviteeId: { inviterId, inviteeId } }
+      })
+      return reply.code(204).send()
+    }
+  )
+
+  // Supprime toutes les invitations où je suis l'inviteur
+  fastify.post(
+    '/api/invitations/deleteAllMine',
+    { preValidation: [fastify.authenticate] },
+    async (req, reply) => {
+      const inviterId = (req.user as any).id as number
+      await fastify.prisma.invitation.deleteMany({
+        where: { inviterId }
+      })
+      return reply.code(204).send()
+    }
+  )
+
+  // Remet l’invitation en “non-ready” (roomId à null, waitingForPlayer=false)
+  fastify.post(
+    '/api/invitations/reset',
+    { preValidation: [fastify.authenticate] },
+    async (req, reply) => {
+      const inviterId = (req.user as any).id as number;
+      const { inviteeId } = req.body as { inviteeId: number };
+
+      const invite = await fastify.prisma.invitation.update({
+        where: { inviterId_inviteeId: { inviterId, inviteeId } },
+        data: { roomId: null, waitingForPlayer: false }
+      });
+
+      return reply.send(invite);
+    }
+  );
+
 
 }
