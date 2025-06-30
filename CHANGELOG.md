@@ -1,3 +1,16 @@
+# [1.7.0](https://github.com/hlefevregit/ft_transcendence/compare/1.6.0...1.7.0) (2025-06-30)
+
+
+### Bug Fixes
+
+* **livechat:** full overhaul of store, persistence & notifications ([d4fe5ab](https://github.com/hlefevregit/ft_transcendence/commit/d4fe5abc81b237c0e2a771cecc72a88826eac66b))
+* **Vault:** token for backend pong game encrypted ([28dc067](https://github.com/hlefevregit/ft_transcendence/commit/28dc067b8ccf799c1bdece955464635a0f72de73))
+
+
+### Features
+
+* **WAF/Vault:** hulefevr: merged branch WAF/HashiCorp done by lpolizzi ([f4b9248](https://github.com/hlefevregit/ft_transcendence/commit/f4b9248a7f7250327243d317eb39f20c4dea9196))
+
 # [1.7.0](https://github.com/hlefevregit/ft_transcendence/compare/1.6.0...1.7.0) (2025-06-28)
 
 
