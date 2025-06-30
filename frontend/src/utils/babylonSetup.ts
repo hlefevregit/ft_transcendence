@@ -9,23 +9,23 @@ import pongMapUrl from '@/assets/transcendence_map.gltf?url';
 import bjMapUrl from '@/assets/blackjack_map.gltf?url';
 import cardUrl from '@/assets/models/card/Card.gltf?url';
 
-export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<void> =>
+export const	setupBabylonBJ = async (BJ: React.RefObject<bj.BJStruct>, canvasRef: any): Promise<void> =>
 {
 	const	engineInstance = new baby.Engine(canvasRef, true);
 	const	sceneInstance = new baby.Scene(engineInstance);
-	BJ.engine = engineInstance;
-	BJ.scene = sceneInstance;
+	BJ.current.engine = engineInstance;
+	BJ.current.scene = sceneInstance;
 
 	new baby.HemisphericLight("light", new baby.Vector3(1, 1, 0), sceneInstance);
 
 	const	skyboxMesh = baby.MeshBuilder.CreateBox("skyBox", { size: 1000 }, sceneInstance);
-	BJ.skybox = skyboxMesh;
+	BJ.current.skybox = skyboxMesh;
 
 	const	cameraInstance = new baby.FreeCamera("mainMenuCam", new baby.Vector3(0, 1.5, 2.5), sceneInstance);
 	cameraInstance.inputs.clear();
 	cameraInstance.rotation = new baby.Vector3(0.1, Math.PI / 1.001, 0);
-	BJ.mainMenuCamera = cameraInstance;
-	BJ.scene.activeCamera = cameraInstance;
+	BJ.current.mainMenuCamera = cameraInstance;
+	BJ.current.scene.activeCamera = cameraInstance;
 
 	sceneInstance.createDefaultEnvironment();
 	const ssaoRenderingPipeline = new baby.SSAORenderingPipeline("ssao", sceneInstance,1);
@@ -37,8 +37,8 @@ export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<v
 
 	try
 	{
-		const mapMeshes = await importGLTF(BJ.scene, bjMapUrl, true, true);
-		if (mapMeshes && mapMeshes.length > 0) BJ.map = mapMeshes[0];
+		const mapMeshes = await importGLTF(BJ.current.scene, bjMapUrl, true, true);
+		if (mapMeshes && mapMeshes.length > 0) BJ.current.map = mapMeshes[0];
 			else console.warn("Failed to load map");
 	}
 	catch (error) { console.error("Error while loading map:", error); }
@@ -48,17 +48,16 @@ export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<v
 		if (modelMeshes && modelMeshes.length > 0)
 		{
 			modelMeshes[0].scaling = new baby.Vector3(1.35, 1.35, 1.35); // Make cards bigger
-			modelMeshes[0].position = new baby.Vector3(0, 0.62, 1.4); // All cards sitting on the table
-			modelMeshes[0].rotation = new baby.Vector3(Math.PI / -2, 0, 0); // Cards are flat on the table
+			modelMeshes[0].position = new baby.Vector3(0, 0.62, 0.4); // All cards sitting on the table
+			modelMeshes[0].rotation = new baby.Vector3(Math.PI / -2, Math.PI, 0); // Cards are flat on the table
 		}
 		  for (const suit in bjLib.SuitMap) {
 		  for (const value in bjLib.ValueMap) {
 	      const key = bjLib.getCardKey(suit as keyof typeof bjLib.SuitMap, value as keyof typeof bjLib.ValueMap);
 	      const meshName = `${suit}${value.charAt(0).toUpperCase() + value.slice(1)}`;
-	      console.log(`Looking for mesh: ${meshName} with key: ${key}`);
-	      const mesh = BJ.scene.meshes.find(mesh => mesh.name === name);
+	      const mesh = BJ.current.scene.getMeshByName(meshName);
 	      if (mesh) {
-	        BJ.cards[key] = mesh;
+	        BJ.current.cards[key] = mesh;
 	      }
 	    }
 	  }
@@ -73,15 +72,15 @@ export const	setupBabylonBJ = async (BJ: bj.BJStruct, canvasRef: any): Promise<v
 	freeCamera.keysDown = [83, 40];		// S, Down arrow
 	freeCamera.keysLeft = [65, 37];		// A, Left arrow
 	freeCamera.keysRight = [68, 39];	// D, Right arrow
-	BJ.freeCamera = freeCamera;
+	BJ.current.freeCamera = freeCamera;
 
 	const	gameCamera = new baby.FreeCamera("mainMenuCam", new baby.Vector3(0, 1.5, 2.7), sceneInstance);
 	gameCamera.inputs.clear();
 	gameCamera.rotation = new baby.Vector3(0.5, Math.PI / 1.001, 0);
-	BJ.gameCamera = gameCamera;
+	BJ.current.gameCamera = gameCamera;
 
 	const	transitionCamera = new baby.FreeCamera("transitionCam", baby.Vector3.Zero(), sceneInstance);
-	BJ.transitionCam = transitionCamera;
+	BJ.current.transitionCam = transitionCamera;
 
 }
 

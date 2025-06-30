@@ -19,7 +19,7 @@ const BlackJack: React.FC = () => {
 		if (!canvasRef.current) return;
 
 		canvasRef.current.focus();
-		game.setupBabylonBJ(bjRef.current, canvasRef.current);
+		game.setupBabylonBJ(bjRef, canvasRef.current);
 
 		bj.initializeAllGUIScreens(
 			bjRef,

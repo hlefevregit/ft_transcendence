@@ -1,11 +1,6 @@
 import * as React from 'react';
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/bjLibs';
-import * as camLib from '@/libs/pongLibs';
-
-let x = 0;
-let y = 0;
-let z = 0;
 
 export const PlayGame = async (
   bjRef: React.RefObject<game.bjStruct>,
@@ -20,9 +15,6 @@ export const PlayGame = async (
 	const dealerCards: number[] = [];
     let player1Busted = false;
     let player2Busted = false;
-	x = 0;
-	y = 0.62;
-	z = 1.4;
 
 	const res = await fetch('/api/bj/lose', {
 		method: 'POST',
@@ -38,7 +30,6 @@ export const PlayGame = async (
 		console.error("Failed to update player money after Blackjack loss");
 	}
 	if (players === 2) {
-		x = -2
 		const res = await fetch('/api/bj/lose', {
 			method: 'POST',
 			headers: {
@@ -70,9 +61,6 @@ export const PlayGame = async (
   await playerTurn(bjRef, state, player1Cards, cardMeshes);
   if (players === 2) {
 	bjRef.current.playerChoice = null;
-	x = 2;
-	y = 0.62;
-	z = 1.4;
     await playerTurn(bjRef, state, player2Cards, cardMeshes);
 	if (getCardValues(player2Cards) > 21) {
 	  console.log("Player 2 has busted!");
@@ -85,17 +73,16 @@ export const PlayGame = async (
 	if (players === 1) {
 		console.log("Dealer wins by default since Player 1 has busted!");
 		state.current = game.States.main_menu;
-		camLib.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
+		game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
 		return;
 	}
   }
   if (player1Busted && (players === 2 && player2Busted)) {
 	console.log("Both players have busted! Dealer wins by default.");
 	state.current = game.States.main_menu;
-	camLib.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
+	game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
 	return;
   }
-  await dealerTurn(bjRef, state, dealerCards, cardMeshes);
   const player1Value = getCardValues(player1Cards);
   const player2Value = players === 2 ? getCardValues(player2Cards) : 0;
   const dealerValue = getCardValues(dealerCards);
@@ -134,7 +121,7 @@ export const PlayGame = async (
     }
     destroyMeshes(cardMeshes);
     state.current = game.States.main_menu;
-    camLib.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
+    game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
     return;
 	}
   if (!player1Busted) {
@@ -244,7 +231,7 @@ export const PlayGame = async (
 	}
   destroyMeshes(cardMeshes);
   state.current = game.States.main_menu;
-  camLib.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
+  game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
 };
 
 export const dealInitialCards = (
@@ -403,12 +390,11 @@ export const dealCard = (
 	if (!scene) return 0;
 
 	const card = Math.floor(Math.random() * 52) + 1;
-	const originalMesh = bjRef.current!.cards[card];
+	const originalMesh = bjRef.current.cards[card];
 	if (originalMesh)
 	{
-		console.log(`Dealing card: ${originalMesh.name} with key: ${card}`);
 		const clonedMesh = originalMesh.clone(`${originalMesh.name}_clone`, originalMesh.parent);
-		clonedMesh.position = new baby.Vector3(x, y, z);
+		clonedMesh.position = new baby.Vector3(0, 0, 0);
 	    clonedMesh.isVisible = true;
 	    clonedMesh.setEnabled = true;
 

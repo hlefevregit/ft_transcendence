@@ -47,7 +47,7 @@ export const    instantiateMainMenuGUI =
 	{
 		// if (!bjRef.current.scene) return;
 		states.current = bj.States.game_mode_selection;
-		game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.gameCamera, 1, bjRef, states);
+		bj.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.gameCamera, 1, bjRef, states);
 	}, bjRef, "play");
 
 	// Add GUI components to the main menu

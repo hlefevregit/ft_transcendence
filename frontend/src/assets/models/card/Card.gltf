@@ -3975,7 +3975,7 @@
   ],
   "meshes": [
     {
-      "name": "hearts01_playingCards_Mat_0",
+      "name": "heartsAce",
       "primitives": [
         {
           "attributes": {
@@ -3991,7 +3991,7 @@
       ]
     },
     {
-      "name": "hearts02_playingCards_Mat_0",
+      "name": "heartsTwo",
       "primitives": [
         {
           "attributes": {
@@ -4007,7 +4007,7 @@
       ]
     },
     {
-      "name": "hearts03_playingCards_Mat_0",
+      "name": "heartsThree",
       "primitives": [
         {
           "attributes": {
@@ -4023,7 +4023,7 @@
       ]
     },
     {
-      "name": "hearts04_playingCards_Mat_0",
+      "name": "heartsFour",
       "primitives": [
         {
           "attributes": {
@@ -4039,7 +4039,7 @@
       ]
     },
     {
-      "name": "hearts05_playingCards_Mat_0",
+      "name": "heartsFive",
       "primitives": [
         {
           "attributes": {
@@ -4055,7 +4055,7 @@
       ]
     },
     {
-      "name": "hearts06_playingCards_Mat_0",
+      "name": "heartsSix",
       "primitives": [
         {
           "attributes": {
@@ -4071,7 +4071,7 @@
       ]
     },
     {
-      "name": "hearts07_playingCards_Mat_0",
+      "name": "heartsSeven",
       "primitives": [
         {
           "attributes": {
@@ -4087,7 +4087,7 @@
       ]
     },
     {
-      "name": "hearts08_playingCards_Mat_0",
+      "name": "heartsEight",
       "primitives": [
         {
           "attributes": {
@@ -4103,7 +4103,7 @@
       ]
     },
     {
-      "name": "hearts09_playingCards_Mat_0",
+      "name": "heartsNine",
       "primitives": [
         {
           "attributes": {
@@ -4119,7 +4119,7 @@
       ]
     },
     {
-      "name": "hearts10_playingCards_Mat_0",
+      "name": "heartsTen",
       "primitives": [
         {
           "attributes": {
@@ -4135,7 +4135,7 @@
       ]
     },
     {
-      "name": "hearts11_playingCards_Mat_0",
+      "name": "heartsJack",
       "primitives": [
         {
           "attributes": {
@@ -4151,7 +4151,7 @@
       ]
     },
     {
-      "name": "hearts12_playingCards_Mat_0",
+      "name": "heartsQueen",
       "primitives": [
         {
           "attributes": {
@@ -4167,7 +4167,7 @@
       ]
     },
     {
-      "name": "hearts13_playingCards_Mat_0",
+      "name": "heartsKing",
       "primitives": [
         {
           "attributes": {
@@ -4183,7 +4183,7 @@
       ]
     },
     {
-      "name": "diamonds01_playingCards_Mat_0",
+      "name": "diamondsAce",
       "primitives": [
         {
           "attributes": {
@@ -4199,7 +4199,7 @@
       ]
     },
     {
-      "name": "diamonds02_playingCards_Mat_0",
+      "name": "diamondsTwo",
       "primitives": [
         {
           "attributes": {
@@ -4215,7 +4215,7 @@
       ]
     },
     {
-      "name": "diamonds03_playingCards_Mat_0",
+      "name": "diamondsThree",
       "primitives": [
         {
           "attributes": {
@@ -4231,7 +4231,7 @@
       ]
     },
     {
-      "name": "diamonds04_playingCards_Mat_0",
+      "name": "diamondsFour",
       "primitives": [
         {
           "attributes": {
@@ -4247,7 +4247,7 @@
       ]
     },
     {
-      "name": "diamonds05_playingCards_Mat_0",
+      "name": "diamondsFive",
       "primitives": [
         {
           "attributes": {
@@ -4263,7 +4263,7 @@
       ]
     },
     {
-      "name": "diamonds06_playingCards_Mat_0",
+      "name": "diamondsSix",
       "primitives": [
         {
           "attributes": {
@@ -4279,7 +4279,7 @@
       ]
     },
     {
-      "name": "diamonds07_playingCards_Mat_0",
+      "name": "diamondsSeven",
       "primitives": [
         {
           "attributes": {
@@ -4295,7 +4295,7 @@
       ]
     },
     {
-      "name": "diamonds08_playingCards_Mat_0",
+      "name": "diamondsEight",
       "primitives": [
         {
           "attributes": {
@@ -4311,7 +4311,7 @@
       ]
     },
     {
-      "name": "diamonds09_playingCards_Mat_0",
+      "name": "diamondsNine",
       "primitives": [
         {
           "attributes": {
@@ -4327,7 +4327,7 @@
       ]
     },
     {
-      "name": "diamonds10_playingCards_Mat_0",
+      "name": "diamondsTen",
       "primitives": [
         {
           "attributes": {
@@ -4343,7 +4343,7 @@
       ]
     },
     {
-      "name": "diamonds11_playingCards_Mat_0",
+      "name": "diamondsJack",
       "primitives": [
         {
           "attributes": {
@@ -4359,7 +4359,7 @@
       ]
     },
     {
-      "name": "diamonds12_playingCards_Mat_0",
+      "name": "diamondsQueen",
       "primitives": [
         {
           "attributes": {
@@ -4375,7 +4375,7 @@
       ]
     },
     {
-      "name": "diamonds13_playingCards_Mat_0",
+      "name": "diamondsKing",
       "primitives": [
         {
           "attributes": {
@@ -4391,7 +4391,7 @@
       ]
     },
     {
-      "name": "clubs01_playingCards_Mat_0",
+      "name": "clubsAce",
       "primitives": [
         {
           "attributes": {
@@ -4407,7 +4407,7 @@
       ]
     },
     {
-      "name": "clubs02_playingCards_Mat_0",
+      "name": "clubsTwo",
       "primitives": [
         {
           "attributes": {
@@ -4423,7 +4423,7 @@
       ]
     },
     {
-      "name": "clubs03_playingCards_Mat_0",
+      "name": "clubsThree",
       "primitives": [
         {
           "attributes": {
@@ -4439,7 +4439,7 @@
       ]
     },
     {
-      "name": "clubs04_playingCards_Mat_0",
+      "name": "clubsFour",
       "primitives": [
         {
           "attributes": {
@@ -4455,7 +4455,7 @@
       ]
     },
     {
-      "name": "clubs05_playingCards_Mat_0",
+      "name": "clubsFive",
       "primitives": [
         {
           "attributes": {
@@ -4471,7 +4471,7 @@
       ]
     },
     {
-      "name": "clubs06_playingCards_Mat_0",
+      "name": "clubsSix",
       "primitives": [
         {
           "attributes": {
@@ -4487,7 +4487,7 @@
       ]
     },
     {
-      "name": "clubs07_playingCards_Mat_0",
+      "name": "clubsSeven",
       "primitives": [
         {
           "attributes": {
@@ -4503,7 +4503,7 @@
       ]
     },
     {
-      "name": "clubs08_playingCards_Mat_0",
+      "name": "clubsEight",
       "primitives": [
         {
           "attributes": {
@@ -4519,7 +4519,7 @@
       ]
     },
     {
-      "name": "clubs09_playingCards_Mat_0",
+      "name": "clubsNine",
       "primitives": [
         {
           "attributes": {
@@ -4535,7 +4535,7 @@
       ]
     },
     {
-      "name": "clubs10_playingCards_Mat_0",
+      "name": "clubsTen",
       "primitives": [
         {
           "attributes": {
@@ -4551,7 +4551,7 @@
       ]
     },
     {
-      "name": "clubs11_playingCards_Mat_0",
+      "name": "clubsJack",
       "primitives": [
         {
           "attributes": {
@@ -4567,7 +4567,7 @@
       ]
     },
     {
-      "name": "clubs12_playingCards_Mat_0",
+      "name": "clubsQueen",
       "primitives": [
         {
           "attributes": {
@@ -4583,7 +4583,7 @@
       ]
     },
     {
-      "name": "clubs13_playingCards_Mat_0",
+      "name": "clubsKing",
       "primitives": [
         {
           "attributes": {
@@ -4599,7 +4599,7 @@
       ]
     },
     {
-      "name": "spades01_playingCards_Mat_0",
+      "name": "spadesAce",
       "primitives": [
         {
           "attributes": {
@@ -4615,7 +4615,7 @@
       ]
     },
     {
-      "name": "spades02_playingCards_Mat_0",
+      "name": "spadesTwo",
       "primitives": [
         {
           "attributes": {
@@ -4631,7 +4631,7 @@
       ]
     },
     {
-      "name": "spades03_playingCards_Mat_0",
+      "name": "spadesThree",
       "primitives": [
         {
           "attributes": {
@@ -4647,7 +4647,7 @@
       ]
     },
     {
-      "name": "spades04_playingCards_Mat_0",
+      "name": "spadesFour",
       "primitives": [
         {
           "attributes": {
@@ -4663,7 +4663,7 @@
       ]
     },
     {
-      "name": "spades05_playingCards_Mat_0",
+      "name": "spadesFive",
       "primitives": [
         {
           "attributes": {
@@ -4679,7 +4679,7 @@
       ]
     },
     {
-      "name": "spades06_playingCards_Mat_0",
+      "name": "spadesSix",
       "primitives": [
         {
           "attributes": {
@@ -4695,7 +4695,7 @@
       ]
     },
     {
-      "name": "spades07_playingCards_Mat_0",
+      "name": "spadesSeven",
       "primitives": [
         {
           "attributes": {
@@ -4711,7 +4711,7 @@
       ]
     },
     {
-      "name": "spades08_playingCards_Mat_0",
+      "name": "spadesEight",
       "primitives": [
         {
           "attributes": {
@@ -4727,7 +4727,7 @@
       ]
     },
     {
-      "name": "spades09_playingCards_Mat_0",
+      "name": "spadesNine",
       "primitives": [
         {
           "attributes": {
@@ -4743,7 +4743,7 @@
       ]
     },
     {
-      "name": "spades10_playingCards_Mat_0",
+      "name": "spadesTen",
       "primitives": [
         {
           "attributes": {
@@ -4759,7 +4759,7 @@
       ]
     },
     {
-      "name": "spades11_playingCards_Mat_0",
+      "name": "spadesJack",
       "primitives": [
         {
           "attributes": {
@@ -4775,7 +4775,7 @@
       ]
     },
     {
-      "name": "spades12_playingCards_Mat_0",
+      "name": "spadesQueen",
       "primitives": [
         {
           "attributes": {
@@ -4791,7 +4791,7 @@
       ]
     },
     {
-      "name": "spades13_playingCards_Mat_0",
+      "name": "spadesKing",
       "primitives": [
         {
           "attributes": {
@@ -4933,7 +4933,7 @@
     },
     {
       "mesh": 0,
-      "name": "hearts01_playingCards_Mat_0"
+      "name": "heartsAce"
     },
     {
       "children": [
@@ -4961,7 +4961,7 @@
     },
     {
       "mesh": 1,
-      "name": "hearts02_playingCards_Mat_0"
+      "name": "heartsTwo"
     },
     {
       "children": [
@@ -4989,7 +4989,7 @@
     },
     {
       "mesh": 2,
-      "name": "hearts03_playingCards_Mat_0"
+      "name": "heartsThree"
     },
     {
       "children": [
@@ -5017,7 +5017,7 @@
     },
     {
       "mesh": 3,
-      "name": "hearts04_playingCards_Mat_0"
+      "name": "heartsFour"
     },
     {
       "children": [
@@ -5045,7 +5045,7 @@
     },
     {
       "mesh": 4,
-      "name": "hearts05_playingCards_Mat_0"
+      "name": "heartsFive"
     },
     {
       "children": [
@@ -5073,7 +5073,7 @@
     },
     {
       "mesh": 5,
-      "name": "hearts06_playingCards_Mat_0"
+      "name": "heartsSix"
     },
     {
       "children": [
@@ -5101,7 +5101,7 @@
     },
     {
       "mesh": 6,
-      "name": "hearts07_playingCards_Mat_0"
+      "name": "heartsSeven"
     },
     {
       "children": [
@@ -5129,7 +5129,7 @@
     },
     {
       "mesh": 7,
-      "name": "hearts08_playingCards_Mat_0"
+      "name": "heartsEight"
     },
     {
       "children": [
@@ -5157,7 +5157,7 @@
     },
     {
       "mesh": 8,
-      "name": "hearts09_playingCards_Mat_0"
+      "name": "heartsNine"
     },
     {
       "children": [
@@ -5185,7 +5185,7 @@
     },
     {
       "mesh": 9,
-      "name": "hearts10_playingCards_Mat_0"
+      "name": "heartsTen"
     },
     {
       "children": [
@@ -5213,7 +5213,7 @@
     },
     {
       "mesh": 10,
-      "name": "hearts11_playingCards_Mat_0"
+      "name": "heartsJack"
     },
     {
       "children": [
@@ -5241,7 +5241,7 @@
     },
     {
       "mesh": 11,
-      "name": "hearts12_playingCards_Mat_0"
+      "name": "heartsQueen"
     },
     {
       "children": [
@@ -5269,7 +5269,7 @@
     },
     {
       "mesh": 12,
-      "name": "hearts13_playingCards_Mat_0"
+      "name": "heartsKing"
     },
     {
       "children": [
@@ -5315,7 +5315,7 @@
     },
     {
       "mesh": 13,
-      "name": "diamonds01_playingCards_Mat_0"
+      "name": "diamondsAce"
     },
     {
       "children": [
@@ -5343,7 +5343,7 @@
     },
     {
       "mesh": 14,
-      "name": "diamonds02_playingCards_Mat_0"
+      "name": "diamondsTwo"
     },
     {
       "children": [
@@ -5371,7 +5371,7 @@
     },
     {
       "mesh": 15,
-      "name": "diamonds03_playingCards_Mat_0"
+      "name": "diamondsThree"
     },
     {
       "children": [
@@ -5399,7 +5399,7 @@
     },
     {
       "mesh": 16,
-      "name": "diamonds04_playingCards_Mat_0"
+      "name": "diamondsFour"
     },
     {
       "children": [
@@ -5427,7 +5427,7 @@
     },
     {
       "mesh": 17,
-      "name": "diamonds05_playingCards_Mat_0"
+      "name": "diamondsFive"
     },
     {
       "children": [
@@ -5455,7 +5455,7 @@
     },
     {
       "mesh": 18,
-      "name": "diamonds06_playingCards_Mat_0"
+      "name": "diamondsSix"
     },
     {
       "children": [
@@ -5483,7 +5483,7 @@
     },
     {
       "mesh": 19,
-      "name": "diamonds07_playingCards_Mat_0"
+      "name": "diamondsSeven"
     },
     {
       "children": [
@@ -5511,7 +5511,7 @@
     },
     {
       "mesh": 20,
-      "name": "diamonds08_playingCards_Mat_0"
+      "name": "diamondsEight"
     },
     {
       "children": [
@@ -5539,7 +5539,7 @@
     },
     {
       "mesh": 21,
-      "name": "diamonds09_playingCards_Mat_0"
+      "name": "diamondsNine"
     },
     {
       "children": [
@@ -5567,7 +5567,7 @@
     },
     {
       "mesh": 22,
-      "name": "diamonds10_playingCards_Mat_0"
+      "name": "diamondsTen"
     },
     {
       "children": [
@@ -5595,7 +5595,7 @@
     },
     {
       "mesh": 23,
-      "name": "diamonds11_playingCards_Mat_0"
+      "name": "diamondsJack"
     },
     {
       "children": [
@@ -5623,7 +5623,7 @@
     },
     {
       "mesh": 24,
-      "name": "diamonds12_playingCards_Mat_0"
+      "name": "diamondsQueen"
     },
     {
       "children": [
@@ -5651,7 +5651,7 @@
     },
     {
       "mesh": 25,
-      "name": "diamonds13_playingCards_Mat_0"
+      "name": "diamondsKing"
     },
     {
       "children": [
@@ -5697,7 +5697,7 @@
     },
     {
       "mesh": 26,
-      "name": "clubs01_playingCards_Mat_0"
+      "name": "clubsAce"
     },
     {
       "children": [
@@ -5725,7 +5725,7 @@
     },
     {
       "mesh": 27,
-      "name": "clubs02_playingCards_Mat_0"
+      "name": "clubsTwo"
     },
     {
       "children": [
@@ -5753,7 +5753,7 @@
     },
     {
       "mesh": 28,
-      "name": "clubs03_playingCards_Mat_0"
+      "name": "clubsThree"
     },
     {
       "children": [
@@ -5781,7 +5781,7 @@
     },
     {
       "mesh": 29,
-      "name": "clubs04_playingCards_Mat_0"
+      "name": "clubsFour"
     },
     {
       "children": [
@@ -5809,7 +5809,7 @@
     },
     {
       "mesh": 30,
-      "name": "clubs05_playingCards_Mat_0"
+      "name": "clubsFive"
     },
     {
       "children": [
@@ -5837,7 +5837,7 @@
     },
     {
       "mesh": 31,
-      "name": "clubs06_playingCards_Mat_0"
+      "name": "clubsSix"
     },
     {
       "children": [
@@ -5865,7 +5865,7 @@
     },
     {
       "mesh": 32,
-      "name": "clubs07_playingCards_Mat_0"
+      "name": "clubsSeven"
     },
     {
       "children": [
@@ -5893,7 +5893,7 @@
     },
     {
       "mesh": 33,
-      "name": "clubs08_playingCards_Mat_0"
+      "name": "clubsEight"
     },
     {
       "children": [
@@ -5921,7 +5921,7 @@
     },
     {
       "mesh": 34,
-      "name": "clubs09_playingCards_Mat_0"
+      "name": "clubsNine"
     },
     {
       "children": [
@@ -5949,7 +5949,7 @@
     },
     {
       "mesh": 35,
-      "name": "clubs10_playingCards_Mat_0"
+      "name": "clubsTen"
     },
     {
       "children": [
@@ -5977,7 +5977,7 @@
     },
     {
       "mesh": 36,
-      "name": "clubs11_playingCards_Mat_0"
+      "name": "clubsJack"
     },
     {
       "children": [
@@ -6005,7 +6005,7 @@
     },
     {
       "mesh": 37,
-      "name": "clubs12_playingCards_Mat_0"
+      "name": "clubsQueen"
     },
     {
       "children": [
@@ -6033,7 +6033,7 @@
     },
     {
       "mesh": 38,
-      "name": "clubs13_playingCards_Mat_0"
+      "name": "clubsKing"
     },
     {
       "children": [
@@ -6079,7 +6079,7 @@
     },
     {
       "mesh": 39,
-      "name": "spades01_playingCards_Mat_0"
+      "name": "spadesAce"
     },
     {
       "children": [
@@ -6107,7 +6107,7 @@
     },
     {
       "mesh": 40,
-      "name": "spades02_playingCards_Mat_0"
+      "name": "spadesTwo"
     },
     {
       "children": [
@@ -6135,7 +6135,7 @@
     },
     {
       "mesh": 41,
-      "name": "spades03_playingCards_Mat_0"
+      "name": "spadesThree"
     },
     {
       "children": [
@@ -6163,7 +6163,7 @@
     },
     {
       "mesh": 42,
-      "name": "spades04_playingCards_Mat_0"
+      "name": "spadesFour"
     },
     {
       "children": [
@@ -6191,7 +6191,7 @@
     },
     {
       "mesh": 43,
-      "name": "spades05_playingCards_Mat_0"
+      "name": "spadesFive"
     },
     {
       "children": [
@@ -6219,7 +6219,7 @@
     },
     {
       "mesh": 44,
-      "name": "spades06_playingCards_Mat_0"
+      "name": "spadesSix"
     },
     {
       "children": [
@@ -6247,7 +6247,7 @@
     },
     {
       "mesh": 45,
-      "name": "spades07_playingCards_Mat_0"
+      "name": "spadesSeven"
     },
     {
       "children": [
@@ -6275,7 +6275,7 @@
     },
     {
       "mesh": 46,
-      "name": "spades08_playingCards_Mat_0"
+      "name": "spadesEight"
     },
     {
       "children": [
@@ -6303,7 +6303,7 @@
     },
     {
       "mesh": 47,
-      "name": "spades09_playingCards_Mat_0"
+      "name": "spadesNine"
     },
     {
       "children": [
@@ -6331,7 +6331,7 @@
     },
     {
       "mesh": 48,
-      "name": "spades10_playingCards_Mat_0"
+      "name": "spadesTen"
     },
     {
       "children": [
@@ -6359,7 +6359,7 @@
     },
     {
       "mesh": 49,
-      "name": "spades11_playingCards_Mat_0"
+      "name": "spadesJack"
     },
     {
       "children": [
@@ -6387,7 +6387,7 @@
     },
     {
       "mesh": 50,
-      "name": "spades12_playingCards_Mat_0"
+      "name": "spadesQueen"
     },
     {
       "children": [
@@ -6415,7 +6415,7 @@
     },
     {
       "mesh": 51,
-      "name": "spades13_playingCards_Mat_0"
+      "name": "spadesKing"
     }
   ],
   "samplers": [
