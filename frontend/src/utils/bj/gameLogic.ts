@@ -2,6 +2,10 @@ import * as React from 'react';
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/bjLibs';
 
+let x = 0;
+let y = 0;
+let z = 0;
+
 export const PlayGame = async (
   bjRef: React.RefObject<game.bjStruct>,
   state: React.RefObject<game.States>,

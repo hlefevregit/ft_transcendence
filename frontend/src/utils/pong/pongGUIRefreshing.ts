@@ -140,13 +140,7 @@ export const	updateScreensVisibilityStates =
 		game.states.input_username_3,
 		game.states.input_username_4
 	], pong, states);
-	game.updateComponentControls(pong.current.arenaGUI,
-	[
-		game.states.in_game,
-		// game.states.in_game1,
-		// game.states.in_game2,
-		// game.states.in_final,
-	], pong, states);
+	game.updateComponentControls(pong.current.arenaGUI, game.states.in_game, pong, states);
 
 	pong.current.guiTexture?.removeControl(pong.current.debugGUI as baby.Container);
 	pong.current.guiTexture?.addControl(pong.current.debugGUI as baby.Container);
@@ -249,7 +243,6 @@ export const	updatePlayerNames = (pong: React.RefObject<game.pongStruct>, states
 	const player2Name = game.findComponentByName(pong, "player2ScoreText");
 	const winnerName = game.findComponentByName(pong, "finishedGameWinnerPlayer");
 	const looserName = game.findComponentByName(pong, "finishedGameLooserPlayer");
-	// if (!player1Name || !player2Name || !winnerName || !looserName) return;
 
 	if (gameModes.current === game.gameModes.tournament && player1Name && player2Name)
 	{

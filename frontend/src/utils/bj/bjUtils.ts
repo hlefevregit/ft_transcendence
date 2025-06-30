@@ -181,58 +181,6 @@ const	smoothStep = (start: number, end: number, alpha: number): number =>
 	return lerp(start, end, alpha);
 }
 
-let		time: number = 0;
-/**
- * Smoothly transitions between two cameras over a specified duration
- * @param {baby.FreeCamera | baby.FlyCamera} cameraA - Starting camera
- * @param {baby.FreeCamera | baby.FlyCamera} cameraB - Target camera
- * @param {number} duration - Transition duration in seconds
- * @param {React.RefObject<bj.pongStruct>} bjRef - Reference to the pong game structure
- * @param {React.RefObject<bj.states>} states - Reference to the current game state
- * */
-// export const	transitionToCamera = async (cameraA: baby.FreeCamera | baby.FlyCamera | undefined, cameraB: baby.FreeCamera | baby.FlyCamera | undefined, duration: number, bjRef: React.RefObject<bj.pongStruct>, states: React.RefObject<bj.states>): Promise<void> =>
-// {
-// 	console.log("Started transition");
-// 	const	lastState = states.current;
-// 	if (cameraA === undefined || cameraB === undefined || !bjRef.current) return;
-// 	states.current = bj.bjStates.in_transition;
-// 	duration *= 1000;	// Convert to milliseconds
-
-// 	// Set transitionCam to A
-// 	bjRef.current.transitionCam?.position.copyFrom(cameraA.position);
-// 	bjRef.current.transitionCam?.rotation.copyFrom(cameraA.rotation);
-
-// 	// Set transitionCam as the current active camera
-// 	if (bjRef.current.scene?.activeCamera?.name !== bjRef.current.transitionCam?.name)
-// 		changeCamera(bjRef.current.transitionCam, bjRef);
-// 	forceRender(bjRef.current);
-
-// 	// Animation loop
-// 	while (time <= duration)
-// 	{
-// 		if (!bjRef.current.transitionCam) break;
-// 		const	lerpedPosition = smoothStepVector3(cameraA.position.clone(), cameraB.position.clone(), time / duration);
-// 		const	lerpedRotation = smoothStepVector3(cameraA.rotation.clone(), cameraB.rotation.clone(), time / duration);
-// 		const	lerpedFOV = smoothStep(cameraA.fov, cameraB.fov, time / duration);
-
-// 		bjRef.current.transitionCam.position.set(lerpedPosition.x, lerpedPosition.y, lerpedPosition.z);
-// 		bjRef.current.transitionCam.rotation.set(lerpedRotation.x, lerpedRotation.y, lerpedRotation.z);
-// 		bjRef.current.transitionCam.fov = lerpedFOV;
-
-// 		const	deltaTime = bjRef.current.engine?.getDeltaTime() ?? 0;
-// 		time += deltaTime;
-// 		await sleep(deltaTime);
-// 	}
-// 	time = 0; // Reset time for next transition
-
-// 	// Change back to the new camera
-// 	changeCamera(cameraB, bjRef);
-// 	states.current = lastState; // Restore previous state
-// 	console.log("Transition complete");
-// 	bj.updateGUIVisibilityStates(bjRef, states.current);
-// 	return;
-// }
-
 export const	findComponentByName = (bjRef: React.RefObject<bj.bjStruct>, name: string): any =>
 {
 	const	component = bjRef.current.guiTexture?.getControlByName(name);
@@ -252,6 +200,7 @@ export function	debounce(fn: Function, ms: number)
 
 export const	forceRender = (bjRef: bj.bjStruct):void => { if (bjRef.scene) bjRef.scene.render(); };
 
+let		time: number = 0;
 export const	transitionToCamera = async (
 	cameraA: baby.FreeCamera | baby.FlyCamera | undefined, 
 	cameraB: baby.FreeCamera | baby.FlyCamera | undefined,
@@ -264,24 +213,33 @@ export const	transitionToCamera = async (
 	const	lastState = states.current;
 	if (cameraA === undefined || cameraB === undefined || !bjRef.current) return;
 	states.current = bj.States.in_transition;
+	console.log("STATES : ", states.current);
 	duration *= 1000;	// Convert to milliseconds
 
 	// Set transitionCamera to A
 	bjRef.current.transitionCamera?.position.copyFrom(cameraA.position);
 	bjRef.current.transitionCamera?.rotation.copyFrom(cameraA.rotation);
+	bjRef.current.transitionCamera!.fov = cameraA.fov;
 
 	// Set transitionCamera as the current active camera
 	if (bjRef.current.scene?.activeCamera?.name !== bjRef.current.transitionCamera?.name)
 		changeCamera(bjRef.current.transitionCamera, bjRef);
 	forceRender(bjRef.current);
-	
+
 	// Animation loop
 	while (time <= duration)
 	{
+		// if (states.current !== bj.States.in_transition) {
+        //     console.error("🚨 STATE CHANGED FROM", bj.States.in_transition, "TO", states.current);
+        //     // Force it back and continue
+        //     states.current = bj.States.in_transition;
+        // }
+		console.log("STATES : ", states.current);
 		if (!bjRef.current.transitionCamera) break;
-		const	lerpedPosition = smoothStepVector3(cameraA.position.clone(), cameraB.position.clone(), time / duration);
-		const	lerpedRotation = smoothStepVector3(cameraA.rotation.clone(), cameraB.rotation.clone(), time / duration);
-		const	lerpedFOV = smoothStep(cameraA.fov, cameraB.fov, time / duration);
+		const	alpha = time / duration;
+		const	lerpedPosition = smoothStepVector3(cameraA.position.clone(), cameraB.position.clone(), alpha);
+		const	lerpedRotation = smoothStepVector3(cameraA.rotation.clone(), cameraB.rotation.clone(), alpha);
+		const	lerpedFOV = smoothStep(cameraA.fov, cameraB.fov, alpha);
 
 		bjRef.current.transitionCamera.position.set(lerpedPosition.x, lerpedPosition.y, lerpedPosition.z);
 		bjRef.current.transitionCamera.rotation.set(lerpedRotation.x, lerpedRotation.y, lerpedRotation.z);
@@ -296,6 +254,7 @@ export const	transitionToCamera = async (
 	// Change back to the new camera
 	changeCamera(cameraB, bjRef);
 	states.current = lastState; // Restore previous state
+	console.log("STATES : ", states.current);
 	console.log("Transition complete");
 	bj.updateGUIVisibilityStates(bjRef, states.current);
 	return;

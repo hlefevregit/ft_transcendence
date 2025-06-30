@@ -118,7 +118,7 @@ export type bjStruct =
 	// Cameras
 	mainMenuCamera?: baby.FreeCamera;
 	gameCamera?: baby.FreeCamera;
-	freeCamera?: baby.FreeCamera;
+	freeCamera?: baby.FlyCamera;
 	transitionCamera?: baby.FreeCamera;
 	map?: baby.AbstractMesh;
 

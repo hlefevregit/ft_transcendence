@@ -70,14 +70,6 @@ export const	updateGUIVisibilityStates =
 	console.log("Current GUI texture children:", bjRef.current.guiTexture?.getDescendants().map(control => control.name));
 }
 
-// export const	updateGUIVisibilityPlayerStates =
-// (
-// 	bjRef: React.RefObject<bj.bjStruct>,
-// ): void =>
-// {
-
-// }
-
 export const	updateGUIValues =
 (
 	bjRef: React.RefObject<bj.bjStruct>,
@@ -114,61 +106,6 @@ export const	updateGUIValues =
 	}
 }
 
-// export const	updatePlayerNames = (pong: React.RefObject<bj.bjStruct>, gameModes: React.RefObject<bj.gameModes>): void =>
-// {
-// 	switch (gameModes.current)
-// 	{
-// 		case bj.gameModes.tournament:
-// 			const player1Name = bj.findComponentByName(pong, "player1ScoreText");
-// 			const player2Name = bj.findComponentByName(pong, "player2ScoreText");
-
-// 			if (player1Name && player2Name)
-// 			{
-// 				player1Name.text = pong.current.playerNameLeft;
-// 				player2Name.text = pong.current.playerNameRight;
-// 			}
-// 			break;
-// 	}
-// }
-
-// export const	refreshOnlineRoomsEntries = (pong: React.RefObject<bj.bjStruct>, states: React.RefObject<bj.States>, gameModes: React.RefObject<bj.gameModes>): baby.StackPanel =>
-// {
-// 	if (!pong.current.rooms)
-// 	{
-// 		console.warn("Rooms map is not initialized !");
-// 		return (bj.createDynamicText("roomsText", "roomListEmpty"));
-// 	}
-// 	console.log("🔁 Refreshing room list, rooms =", Array.from(pong.current.rooms.keys()));
-
-// 	const	roomsOnlineVerticalPanel = bj.createVerticalStackPanel("roomsOnlineVerticalPanel", 0);
-// 	for (const [key, valueOrGetter] of pong.current.rooms.entries())
-// 	{
-// 		console.log("🧱 Rendering room:", key);
-// 		const room = valueOrGetter();
-// 		roomsOnlineVerticalPanel.addControl(room);
-// 	}
-// 	return roomsOnlineVerticalPanel;
-// }
-
-// export const	refreshTournamentRoomsEntries = (pong: React.RefObject<bj.bjStruct>, states: React.RefObject<bj.States>, gameModes: React.RefObject<bj.gameModes>): baby.StackPanel =>
-// {
-// 	if (!pong.current.party)
-// 	{
-// 		console.warn("Rooms map is not initialized !");
-// 		return (bj.createDynamicText("roomsText", "roomListEmpty"));
-// 	}
-// 	console.log("🔁 Refreshing room list, rooms =", Array.from(pong.current.party.keys()));
-
-// 	const	roomsTournamentVerticalPanel = bj.createVerticalStackPanel("roomsTournamentVerticalPanel", 0);
-// 	for (const [key, valueOrGetter] of pong.current.party.entries())
-// 	{
-// 		console.log("🧱 Rendering room:", key);
-// 		const party = valueOrGetter();
-// 		roomsTournamentVerticalPanel.addControl(party);
-// 	}
-// 	return roomsTournamentVerticalPanel;
-// }
-
 export const	updateGUIsWhenNeeded =
 (
 	bjRef: React.RefObject<bj.bjStruct>,
@@ -178,8 +115,8 @@ export const	updateGUIsWhenNeeded =
 	lastLang: React.RefObject<bj.language>
 ): void =>
 {
-	if (states.current > bj.States.game_over) states.current = bj.States.main_menu; // Roll over to main menu if past game over
-	else if (states.current < bj.States.main_menu) states.current = bj.States.game_over; // Roll over to game over if before main menu
+	// if (states.current > bj.States.game_over) states.current = bj.States.main_menu; // Roll over to main menu if past game over
+	// else if (states.current < bj.States.main_menu) states.current = bj.States.game_over; // Roll over to game over if before main menu
 	// Update GUI on state change
 	if (lastState.current !== states.current)
 	{
@@ -210,13 +147,3 @@ export const updateComponentVisibilityBasedOnStates =
 
 	ui.isVisible = ui.isEnabled = shouldShow;
 }
-
-// export const	updateActionsVisibility =
-// (
-// 	bjRef: React.RefObject<bj.bjStruct>,
-// 	gameState: bj.GameState,
-// ): void =>
-// {
-// 	if (bjRef.current.canDouble) bjRef.current.doubleButton!.isVisible = bjRef.current.doubleButton!.isEnabled = bjRef.current.canDouble;
-// 	if (bjRef.current.canSplit) bjRef.current.splitButton!.isVisible = bjRef.current.splitButton!.isEnabled = bjRef.current.canSplit;
-// }

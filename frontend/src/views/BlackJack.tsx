@@ -33,9 +33,11 @@ const BlackJack: React.FC = () => {
 		bj.updateGUIValues(bjRef, language);
 
 		if (!bjRef.current.engine) return;
+		bjRef.current.engine.runRenderLoop(() =>
+		{
+			// if (state.current !== bj.States.in_transition)
+				bj.updateGUIsWhenNeeded(bjRef, state, language, lastState, lastLanguage);
 
-		bjRef.current.engine.runRenderLoop(() => {
-			bj.updateGUIsWhenNeeded(bjRef, state, language, lastState, lastLanguage);
 			if (bjRef.current.scene) bjRef.current.scene.render();
 		});
 
@@ -47,8 +49,10 @@ const BlackJack: React.FC = () => {
 
 		window.addEventListener('resize', handleResize);
 
-		const backgroundCalculations = setInterval(() => {
-			bj.updateGUIValues(bjRef, language);
+		const	backgroundCalculations = setInterval(() =>
+		{
+			// if (state.current !== bj.States.in_transition)
+				bj.updateGUIValues(bjRef, language);
 		}, 200);
 
 		// Cleanup on unmount
