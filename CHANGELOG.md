@@ -1,3 +1,10 @@
+## [1.8.3](https://github.com/hlefevregit/ft_transcendence/compare/1.8.2...1.8.3) (2025-06-30)
+
+
+### Bug Fixes
+
+* **Docker-compose:** hulefevr: Un peu de tri ca fait toujours du bieng ([e8b2d27](https://github.com/hlefevregit/ft_transcendence/commit/e8b2d270a5b6ed493eb0322e19159c0054377bc7))
+
 ## [1.8.2](https://github.com/hlefevregit/ft_transcendence/compare/1.8.1...1.8.2) (2025-06-30)
 
 
