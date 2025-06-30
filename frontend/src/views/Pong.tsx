@@ -121,7 +121,7 @@ const Pong: React.FC = () => {
 				musicRef,
 				audioRef,
 			);
-		game.updateGUIVisibilityStates(pong, state.current);
+		game.updateScreensVisibilityStates(pong, state.current);
 		game.updateGUIVisibilityPlayerStates(pong, playerState.current, gameModes.current);
 		game.updateGUIValues(pong, lang);
 

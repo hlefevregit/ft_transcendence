@@ -251,10 +251,10 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
     '/api/users/:pseudo/history',
     { preValidation: [fastify.authenticate] },
     async (req, reply) => {
-      const targetPseudo = (req.params as any).pseudo as string;
+      const targetPseudo = (req.params as any).pseudo as number;
       // 1) Récupérer le pseudo / avatar du target
       const target = await fastify.prisma.user.findUnique({
-        where: { pseudo: targetPseudo },
+        where: { id: targetPseudo },
         select: { id: true },
       });
       if (!target) {
@@ -276,8 +276,8 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
           const opponentPseudo = isP1 ? g.player2Id : g.player1Id;
           // result
           let result: 'win' | 'loss' | 'draw';
-          if (g.winnerId === targetPseudo) result = 'win';
-          else if (g.winnerId === opponentPseudo) result = 'loss';
+          if (Number(g.winnerId) === Number(targetPseudo)) result = 'win';
+          else if (String(g.winnerId) === String(opponentPseudo)) result = 'loss';
           else result = 'draw';
           return {
             id: g.id,
