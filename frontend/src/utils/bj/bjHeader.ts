@@ -139,6 +139,7 @@ export type bjStruct =
 	debugGUI?: baby.Rectangle;
 	actionGUI?: baby.Rectangle;
 	balanceGUI?: baby.Rectangle;
+	playerScoreGUI?: baby.Rectangle;
 
 	// Textures
 	guiTexture?: baby.AdvancedDynamicTexture;

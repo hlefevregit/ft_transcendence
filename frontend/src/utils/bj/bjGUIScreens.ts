@@ -424,17 +424,47 @@ export const	instantiatePlayerScoreGUI =
 ): void =>
 {
 	const	playerScoreGUI = bj.createScreen("playerScoreGUI", "bottom");
+			playerScoreGUI.width = "800px";
+			playerScoreGUI.height = "75px";
 	const	playerScoreContainer = bj.createAdaptiveContainer("playerScoreContainer", "800px", "75px", undefined, "bottom");
 
+	const	playerScoreHorizontalStackPanel = bj.createHorizontalStackPanel("playerScoreHorizontalStackPanel");
 	const	playerScorePlayer1Panel1 = bj.createHorizontalStackPanel("playerScorePlayer1Panel1");
 	const	playerScorePlayer1Panel2 = bj.createHorizontalStackPanel("playerScorePlayer1Panel2");
 
 	const	playerScorePlayer1Text = bj.createDynamicText("playerScorePlayer1Text", "player1");
+			// playerScorePlayer1Text.children[0]
 	const	playerScorePlayer1Value = bj.createDynamicText("playerScorePlayer1Value");
 			(playerScorePlayer1Value.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
 			{
 				bj.findComponentByName(bjRef, "playerScorePlayer1Value").text = bjRef.current.player1Money.toString();
 			});
+
+	const	playerScorePlayer2Text = bj.createDynamicText("playerScorePlayer2Text", "player2");
+
+	const	playerScorePlayer2Value = bj.createDynamicText("playerScorePlayer2Value");
+			(playerScorePlayer2Value.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
+			{
+				bj.findComponentByName(bjRef, "playerScorePlayer2Value").text = bjRef.current.player2Money.toString();
+			});
+
+	// Add GUI components to the player score GUI
+	// Layout
+	playerScoreGUI.addControl(playerScoreContainer);
+	playerScoreContainer.addControl(playerScoreHorizontalStackPanel);
+	playerScoreHorizontalStackPanel.addControl(playerScorePlayer1Panel1);
+	playerScoreHorizontalStackPanel.addControl(playerScorePlayer1Panel2);
+
+	// Player 1
+	playerScorePlayer1Panel1.addControl(playerScorePlayer1Text);
+	playerScorePlayer1Panel1.addControl(playerScorePlayer1Value);
+
+	// Player 2
+	playerScorePlayer1Panel2.addControl(playerScorePlayer2Text);
+	playerScorePlayer1Panel2.addControl(playerScorePlayer2Value);
+
+	// Add the screen to the GUI texture
+	bjRef.current.playerScoreGUI = playerScoreGUI;
 }
 
 // ****************************************************************************** //

@@ -4,14 +4,14 @@ import React from 'react';
 import * as baby from '@/libs/babylonLibs';
 import * as bj from '@/libs/bjLibs';
 
-export const	instantiateGUI = (pong: React.RefObject<bj.bjStruct>): void =>
+export const	instantiateGUI = (bjRef: React.RefObject<bj.bjStruct>): void =>
 {
-	pong.current.guiTexture = baby.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, pong.current.scene);
+	bjRef.current.guiTexture = baby.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, bjRef.current.scene);
 }
 
 export const initializeAllGUIScreens =
 (
-	pong: React.RefObject<bj.bjStruct>,
+	bjRef: React.RefObject<bj.bjStruct>,
 	states: React.RefObject<bj.States>,
 	lang: React.RefObject<bj.language>,
 	navigate: (path: string) => void,
@@ -20,18 +20,19 @@ export const initializeAllGUIScreens =
 {
 	// Initialize the GUI texture
 	console.log("initialized GUI texture...");
-	bj.instantiateGUI(pong);
+	bj.instantiateGUI(bjRef);
 	console.log("complete initializing GUI texture");
 
 	// Initialize all the GUI screens
 	console.log("initialized GUI screens...");
-	bj.instantiateMainMenuGUI(pong, states, navigate);
-	bj.instantiateSettingsGUI(pong, states, lang);
-	bj.instantiateGameModeGUI(pong, states);
-	bj.instantiateActionGUI(pong, states);
-	bj.instantiateBalanceGUI(pong);
+	bj.instantiateMainMenuGUI(bjRef, states, navigate);
+	bj.instantiateSettingsGUI(bjRef, states, lang);
+	bj.instantiateGameModeGUI(bjRef, states);
+	bj.instantiateActionGUI(bjRef, states);
+	bj.instantiateBalanceGUI(bjRef);
+	bj.instantiatePlayerScoreGUI(bjRef);
 	// bj.instantiateArenaGUI(pong);
-	bj.instantiateDebugGUI(pong, states, lang);
+	bj.instantiateDebugGUI(bjRef, states, lang);
 	// etc.
 	console.log("complete initializing GUI screens");
 }
@@ -59,10 +60,11 @@ export const	updateGUIVisibilityStates =
 	}
 	setUIState(bjRef.current.mainMenuGUI, bj.States.main_menu);
 	setUIState(bjRef.current.settingsGUI, bj.States.settings);
+	setUIState(bjRef.current.gameModeGUI, bj.States.game_mode_selection);
 	setUIState(bjRef.current.arenaGUI,bj.States.in_game);
 	setUIState(bjRef.current.actionGUI,bj.States.in_game);
-	setUIState(bjRef.current.gameModeGUI, bj.States.game_mode_selection);
-	setUIState(bjRef.current.balanceGUI, [bj.States.in_game]);
+	setUIState(bjRef.current.balanceGUI, bj.States.in_game);
+	setUIState(bjRef.current.playerScoreGUI, bj.States.in_game);
 
 	bjRef.current.guiTexture?.removeControl(bjRef.current.debugGUI as baby.Container);
 	bjRef.current.guiTexture?.addControl(bjRef.current.debugGUI as baby.Container);
