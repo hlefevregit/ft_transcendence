@@ -31,6 +31,7 @@ export const initializeAllGUIScreens =
 	bj.instantiateActionGUI(bjRef, states);
 	bj.instantiateBalanceGUI(bjRef);
 	bj.instantiatePlayerScoreGUI(bjRef);
+	bj.instantiateFinishedGameGUI(bjRef, states,lang);
 	// bj.instantiateArenaGUI(pong);
 	bj.instantiateDebugGUI(bjRef, states, lang);
 	// etc.
@@ -65,6 +66,7 @@ export const	updateGUIVisibilityStates =
 	setUIState(bjRef.current.actionGUI,bj.States.in_game);
 	setUIState(bjRef.current.balanceGUI, bj.States.in_game);
 	setUIState(bjRef.current.playerScoreGUI, bj.States.in_game);
+	setUIState(bjRef.current.finishedGameGUI, bj.States.game_over);
 
 	bjRef.current.guiTexture?.removeControl(bjRef.current.debugGUI as baby.Container);
 	bjRef.current.guiTexture?.addControl(bjRef.current.debugGUI as baby.Container);

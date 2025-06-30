@@ -483,6 +483,90 @@ export const	instantiatePlayerScoreGUI =
 
 // ****************************************************************************** //
 //                                                                                //
+//                                FINISHED GAME                                   //
+//                                                                                //
+// ****************************************************************************** //
+
+export const	instantiateFinishedGameGUI =
+(
+	bjRef: React.RefObject<bj.bjStruct>,
+	states: React.RefObject<bj.States>,
+	lang: React.RefObject<bj.language>
+): void =>
+{
+	const	finishedGameGUI = bj.createScreen("finishedGameGUI", "center");
+	const	finishedGameContainer = bj.createAdaptiveContainer("finishedGameContainer");
+
+	const	finishedGameVerticalStackPanel = bj.createVerticalStackPanel("finishedGameVerticalStackPanel");
+	const	finishedGameHorizontalStackPanel1 = bj.createHorizontalStackPanel("finishedGameHorizontalStackPanel1", 0);
+	const	finishedGameHorizontalStackPanel2 = bj.createHorizontalStackPanel("finishedGameHorizontalStackPanel2", 0);
+	const	finishedGameTitle = bj.createDynamicTitle("finishedGameTitle", "gameFinishedTitle");
+	const	finishedGameBackButton = bj.createDynamicButton("finishedGameBackButton", () =>
+	{
+		states.current = bj.States.main_menu;
+		bj.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, states);
+	}, bjRef, "back");
+
+	const	finishedGameReplayButton = bj.createDynamicButton("finishedGameReplayButton", () =>
+	{
+		states.current = bj.States.main_menu;
+		bj.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, states);
+	}, bjRef, "replay");
+			(finishedGameReplayButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
+			(finishedGameReplayButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
+			{
+				(finishedGameReplayButton.children[0] as baby.Button).color = game.colorsScheme.dark1;
+				(finishedGameReplayButton.children[0] as baby.Button).background = game.colorsScheme.auroraAccent4;
+			});
+			(finishedGameReplayButton.children[0] as baby.Button).onPointerOutObservable.add(() =>
+			{
+				(finishedGameReplayButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
+				(finishedGameReplayButton.children[0] as baby.Button).background = game.colorsScheme.dark1;
+			});
+
+	// Winner
+	const	winnerText = bj.createDynamicText("winnerText", "winner");
+	const	winnerName = bj.createText("winnerName", "prout");
+			(winnerName.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
+			{
+				if (bjRef.current.player1Score > bjRef.current.player2Score)
+					bj.findComponentByName(bjRef, "winnerName").text = bj.getLabel("player1", lang.current);
+				else if (bjRef.current.player1Score < bjRef.current.player2Score)
+					bj.findComponentByName(bjRef, "winnerName").text = bj.getLabel("player2", lang.current);
+				else if (bjRef.current.player1Score < bjRef.current.dealerScore && bjRef.current.player2Score < bjRef.current.dealerScore)
+					bj.findComponentByName(bjRef, "winnerName").text = bj.getLabel("dealer", lang.current);
+			});
+	const	winnerScore = bj.createText("winnerScore", "prout");
+			(winnerScore.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
+			{
+				bj.findComponentByName(bjRef, "winnerScore").text = ": " + Math.max(bjRef.current.player1Score, bjRef.current.player2Score, bjRef.current.dealerScore).toString();
+			});
+
+	// Add GUI components to the finished game GUI
+	// Layout
+	finishedGameVerticalStackPanel.addControl(finishedGameTitle);
+	finishedGameVerticalStackPanel.addControl(bj.createSpacer(0, 10));
+	finishedGameVerticalStackPanel.addControl(finishedGameHorizontalStackPanel1);
+	finishedGameVerticalStackPanel.addControl(bj.createSpacer(0, 10));
+	finishedGameVerticalStackPanel.addControl(finishedGameHorizontalStackPanel2);
+	finishedGameContainer.addControl(finishedGameVerticalStackPanel);
+	finishedGameGUI.addControl(finishedGameContainer);
+	
+	// Winner
+	finishedGameHorizontalStackPanel1.addControl(winnerText);
+	finishedGameHorizontalStackPanel1.addControl(winnerName);
+	finishedGameHorizontalStackPanel1.addControl(winnerScore);
+
+	// Buttons
+	finishedGameHorizontalStackPanel2.addControl(finishedGameBackButton);
+	finishedGameHorizontalStackPanel2.addControl(finishedGameReplayButton);
+
+	// Add the screen to the GUI texture
+	bjRef.current.finishedGameGUI = finishedGameGUI;
+}
+
+// ****************************************************************************** //
+//                                                                                //
 //                                  ARENAGUI                                      //
 //                                                                                //
 // ****************************************************************************** //

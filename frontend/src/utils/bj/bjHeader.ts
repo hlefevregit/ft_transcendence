@@ -143,6 +143,7 @@ export type bjStruct =
 	actionGUI?: baby.Rectangle;
 	balanceGUI?: baby.Rectangle;
 	playerScoreGUI?: baby.Rectangle;
+	finishedGameGUI?: baby.Rectangle;
 
 	// Textures
 	guiTexture?: baby.AdvancedDynamicTexture;
@@ -197,6 +198,10 @@ export const	translations =
 	player1: ["Player 1", "Joueur 1", "Giocatore 1", "⠨⠏⠇⠁⠽⠑⠗ ⠁"],
 	player2: ["Player 2", "Joueur 2", "Giocatore 2", "⠨⠏⠇⠁⠽⠑⠗ ⠃"],
 	dealer: ["Dealer", "Croupier", "Banco", "⠨⠙⠑⠁⠇⠑⠗"],
+
+	// Finished game
+	gameFinishedTitle: ["Game Finished", "Partie terminée", "Gioco terminato", "⠨⠛⠁⠍⠑ ⠨⠋⠊⠝⠊⠎⠓⠑⠙"],
+	winner: ["Winner:", "Gagnant:", "Vincitore:", "⠨⠺⠊⠝⠝⠑⠗ :"],
 } as const;
 
 export type	labelKey = keyof typeof translations;
