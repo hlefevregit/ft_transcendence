@@ -257,6 +257,7 @@ const Pong: React.FC = () => {
 									(pong.current.player1Score > pong.current.player2Score)
 									? pong.current.tournamentPlayer1Name
 									: pong.current.tournamentPlayer2Name;
+								pong.current.canSendNotification = true;
 								console.debug("✅✅✅✅✅✅Tournament finalist 1:", pong.current.tournamentFinalist1);
 								break;
 							// Finished second game
@@ -269,6 +270,7 @@ const Pong: React.FC = () => {
 									(pong.current.player1Score > pong.current.player2Score)
 									? pong.current.tournamentPlayer3Name
 									: pong.current.tournamentPlayer4Name;
+								pong.current.canSendNotification = true;
 								console.debug("✅✅✅✅✅✅Tournament finalist 2:", pong.current.tournamentFinalist2);
 								break;
 							// Finished final game
@@ -281,6 +283,7 @@ const Pong: React.FC = () => {
 									(pong.current.player1Score > pong.current.player2Score)
 									? pong.current.tournamentFinalist1
 									: pong.current.tournamentFinalist2;
+								pong.current.canSendNotification = true;
 								console.debug("✅✅✅✅✅✅Tournament winner:", pong.current.tournamentWinner);
 								break;
 							default:
@@ -289,28 +292,67 @@ const Pong: React.FC = () => {
 						break;
 
 						case game.states.tournament_bracket_preview:
+							if (!pong.current.canSendNotification) break;
 							switch (pong.current.tournamentState)
 							{
 								case game.tournamentStates.waiting_game_1:
+									if (pong.current.tournamentPlayer1Name && pong.current.tournamentPlayer2Name)
+										sendMatchNotification(pong.current.tournamentPlayer1Name, pong.current.tournamentPlayer2Name);
+									pong.current.canSendNotification = false;
 									break;
 								case game.tournamentStates.waiting_game_2:
+									if (pong.current.tournamentPlayer3Name && pong.current.tournamentPlayer4Name)
+										sendMatchNotification(pong.current.tournamentPlayer3Name, pong.current.tournamentPlayer4Name);
+									pong.current.canSendNotification = false;
 									break;
 								case game.tournamentStates.waiting_game_3:
+									if (pong.current.tournamentFinalist1 && pong.current.tournamentFinalist2)
+										sendMatchNotification(pong.current.tournamentFinalist1, pong.current.tournamentFinalist2);
+									pong.current.canSendNotification = false;
 									break;
 							}
 							break;
 				}
-				
 			}
 
 			pong.current.scene.render();
 			document.title = `Pong - ${Object.keys(game.states).find(key => game.states[key as keyof typeof game.states] === state.current)}`;
 			// — sync React state when Babylon state changes —
-			if (state.current !== lastReactState.current) {
+			if (state.current !== lastReactState.current)
+			{
 				setGameState(state.current);
 				lastReactState.current = state.current;
 			}
 		});
+
+		const sendMatchNotification = async (player1Name: string, player2Name: string): Promise<void> =>
+		{
+			console.debug("🚻🚻🚻 Sending match notification for players:", player1Name, player2Name);
+			try
+			{
+				const response = await fetch('/api/match-notification',
+					{
+						method: 'POST',
+						headers:
+						{
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+						},
+						body: JSON.stringify
+						({
+							player1: player1Name,
+							player2: player2Name,
+							isPrint: true,
+						})
+				});
+
+				if (!response.ok)
+					throw new Error(`HTTP error! status: ${response.status}`);
+
+				const data = await response.json();
+				console.log('Match notification sent successfully:', data);
+			} catch (error) { console.error('Error sending match notification:', error); }
+		};
 
 		// Handle movement in the background
 		const backgroundCalculations = setInterval(() =>

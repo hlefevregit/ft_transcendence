@@ -279,6 +279,7 @@ export const	instentiatePongSettingsGUI =
 		{
 			states.current = game.states.tournament_bracket_preview;
 			pong.current.tournamentState = game.tournamentStates.waiting_game_1;
+			pong.current.canSendNotification = true;
 		}
 		else states.current = game.states.waiting_to_start;
 	}, pong, "play");

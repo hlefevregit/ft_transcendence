@@ -200,6 +200,7 @@ export type pongStruct =
 	game3Finished: boolean;
 
 	isHost?: boolean;
+	canSendNotification: boolean;
 	// isHost2?: boolean;
 	// launched?: boolean;	// Used to know if the tournament has been launched
 	// waitingFinalSent?: boolean;	// Used to know if the waiting final has been sent to the server
@@ -324,6 +325,8 @@ export function initPongStruct(): pongStruct
 
 		musicVolume: 1,
 		soundVolume: 1,
+
+		canSendNotification: false,
 	};
 }
 
