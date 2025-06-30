@@ -1,6 +1,7 @@
 // 1. Définition du client
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 // 2. Définition de la base de données SQLite
@@ -30,6 +31,8 @@ model User {
   // Friend requests
   sentRequests     FriendRequest[] @relation("SentRequests")
   receivedRequests FriendRequest[] @relation("ReceivedRequests")
+
+  money       Int      @default(20) // Montant d'argent virtuel de l'utilisateur
 }
 
 model FriendRequest {
@@ -47,8 +50,8 @@ model FriendRequest {
 
 model GameResult {
   id           String   @id @default(uuid())
-  player1Id    String
-  player2Id    String
+  player1Id    Int
+  player2Id    Int
   winnerId     String
   reason       String
   player1Score Int

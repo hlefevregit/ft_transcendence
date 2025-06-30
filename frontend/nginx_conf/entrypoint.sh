@@ -56,5 +56,7 @@ fi
 
 echo "ModSecurity configuration is complete. Launching Nginx..."
 
+
+
 # Launch nginx in foreground.
 exec nginx -g "daemon off;"

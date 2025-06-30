@@ -17,11 +17,15 @@ RUN apt-get update && apt-get install -y \
 # Copie les fichiers package.json + lock
 COPY package*.json ./
 
+# Installe les dépendances
+RUN npm install
+
 # Copie le reste du code
 COPY . .
 
 RUN chmod +x ./config/start.sh
-
+COPY ./src/utils/easter-egg.sh /app/easter-egg.sh
+RUN chmod +x /app/easter-egg.sh
 RUN npx prisma generate
 
 # Commande de dev

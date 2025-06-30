@@ -36,8 +36,8 @@ vault_export_to_env() {
 }
 
 echo "Starting entrypoint script..."
-vault_export_to_env "${VAULT_SECRET_PATH_GOOGLE}"
-vault_export_to_env "${VAULT_SECRET_PATH_JWT}"
+vault_export_to_env "cubbyhole/default"
+# vault_export_to_env "${VAULT_SECRET_PATH_JWT}"
 
 env > .env
 

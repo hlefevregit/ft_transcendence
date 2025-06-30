@@ -261,4 +261,74 @@ export async function setupFriendRoutes(fastify: CustomFastifyInstance) {
       });
     }
   });
+
+  fastify.post('/api/bj/win', { preValidation: [fastify.authenticate] }, async (request, reply) => {
+    const { bet } = request.body as { bet: number };
+    const userId = (request.user as any).id;
+ // Le payload décodé du token
+    
+    try {
+      // Exemple avec Prisma
+      const updatedUser = await fastify.prisma.user.update({
+        where: { id: userId },
+        data: {
+          money: {
+            increment: bet, // ou toute autre logique métier
+          },
+        },
+      });
+      console.log(`User ${userId} won ${bet}. New balance: ${updatedUser.money}`);
+
+      reply.send({ success: true, newMoney: updatedUser.money });
+    }
+
+    catch (err) {
+      console.error(err);
+      reply.status(500).send({ success: false, message: 'Could not update user balance' });
+    }
+  });
+
+  fastify.post('/api/bj/lose', { preValidation: [fastify.authenticate] }, async (request, reply) => {
+    const { bet } = request.body as { bet: number };
+    const userId = (request.user as any).id;
+ // Le payload décodé du token
+
+    try {
+      // Exemple avec Prisma
+      const updatedUser = await fastify.prisma.user.update({
+        where: { id: userId },
+        data: {
+          money: {
+            decrement: bet, // ou toute autre logique métier
+          },
+        },
+      });
+      console.log(`User ${userId} lost ${bet}. New balance: ${updatedUser.money}`);
+
+      reply.send({ success: true, newMoney: updatedUser.money });
+    } catch (err) {
+      console.error(err);
+      reply.status(500).send({ success: false, message: 'Could not update user balance' });
+    }
+  });
+
+  fastify.get('/api/balance', { preValidation: [fastify.authenticate] }, async (request, reply) => {
+    const userId = (request.user as any).id; // Le payload décodé du token
+    
+    try {
+      const user = await fastify.prisma.user.findUnique({
+        where: { id: userId },
+        select: { money: true }, // Sélectionne uniquement le champ 'balance'
+      });
+
+      if (!user) {
+        return reply.status(404).send({ message: 'User not found' });
+      }
+
+      reply.send({ balance: user.money });
+    } catch (err) {
+      console.error(err);
+      reply.status(500).send({ message: 'Could not retrieve balance' });
+    }
+  });
 }

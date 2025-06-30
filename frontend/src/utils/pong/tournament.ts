@@ -88,7 +88,7 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 						pong.current.tournamentId = roomId;
 						const roomName = `${userNameRef.current || 'Anonymous'}'s room`;
 
-						console.log("🏠 Room name:", roomName, " Username = ", pong.current.username);
+						console.log("🏠 Room name:", roomName, " Username = ", pong.current.username_1);
 		
 
 						const roomPanel = game.createRoomPanel(pong, lang, roomName, () => {
@@ -96,7 +96,7 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 								socketRef.current.send(JSON.stringify({
 									type: 'join_tournament',
 									gameId: roomId,
-									username: pong.current.username,
+									username: pong.current.username_1,
 								}));
 							}
 						});
@@ -118,13 +118,13 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 							const roomName = room.name + 's tournament';
 
 							const waitForUsername = () => {
-								if (pong.current.username && pong.current.username.trim() !== '') {
-									console.log("✅ Username prêt:", pong.current.username);
+								if (pong.current.username_1 && pong.current.username_1.trim() !== '') {
+									console.log("✅ Username prêt:", pong.current.username_1);
 									if (socketRef.current) {
 										socketRef.current.send(JSON.stringify({
 											type: 'join_tournament',
 											gameId: roomId,
-											username: pong.current.username,
+											username: pong.current.username_1,
 										}));
 									}
 								} else {
@@ -375,7 +375,7 @@ export const handleTournamentLoop = (
 				socketRef.current.send(JSON.stringify({
 					type: 'host_tournament',
 					roomName: `${userNameRef.current}'s tournament`,
-					username: pong.current.username,
+					username: pong.current.username_1,
 					points_to_win: pong.current.requiredPointsToWin,
 				}));
 				lastHandledState.current = game.states.hosting_waiting_players;
