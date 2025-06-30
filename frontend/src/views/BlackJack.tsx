@@ -53,6 +53,12 @@ const BlackJack: React.FC = () => {
 		{
 			// if (state.current !== bj.States.in_transition)
 				bj.updateGUIValues(bjRef, language);
+			if (state.current === bj.States.in_game && bjRef.current.cards)
+			{
+				bjRef.current.player1Score = bj.getCardValues(bjRef.current.player1Cards);
+				bjRef.current.player2Score = bj.getCardValues(bjRef.current.player2Cards);
+				bjRef.current.dealerScore = bj.getCardValues(Array.isArray(bjRef.current.cards['dealer']) ? bjRef.current.cards['dealer'] : [] );
+			}
 		}, 200);
 
 		// Cleanup on unmount

@@ -431,21 +431,28 @@ export const	instantiatePlayerScoreGUI =
 	const	playerScoreHorizontalStackPanel = bj.createHorizontalStackPanel("playerScoreHorizontalStackPanel");
 	const	playerScorePlayer1Panel1 = bj.createHorizontalStackPanel("playerScorePlayer1Panel1");
 	const	playerScorePlayer1Panel2 = bj.createHorizontalStackPanel("playerScorePlayer1Panel2");
+	const	playerScoreCroupierPanel = bj.createHorizontalStackPanel("playerScoreCroupierPanel");
 
 	const	playerScorePlayer1Text = bj.createDynamicText("playerScorePlayer1Text", "player1");
 			// playerScorePlayer1Text.children[0]
 	const	playerScorePlayer1Value = bj.createDynamicText("playerScorePlayer1Value");
 			(playerScorePlayer1Value.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
 			{
-				bj.findComponentByName(bjRef, "playerScorePlayer1Value").text = bjRef.current.player1Money.toString();
+				bj.findComponentByName(bjRef, "playerScorePlayer1Value").text = ": " + bjRef.current.player1Score.toString();
 			});
-
 	const	playerScorePlayer2Text = bj.createDynamicText("playerScorePlayer2Text", "player2");
 
 	const	playerScorePlayer2Value = bj.createDynamicText("playerScorePlayer2Value");
 			(playerScorePlayer2Value.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
 			{
-				bj.findComponentByName(bjRef, "playerScorePlayer2Value").text = bjRef.current.player2Money.toString();
+				bj.findComponentByName(bjRef, "playerScorePlayer2Value").text = ": " + bjRef.current.player2Score.toString();
+			});
+
+	const	playerScoreCroupierText = bj.createDynamicText("playerScoreCroupierText", "dealer");
+	const	playerScoreCroupierValue = bj.createDynamicText("playerScoreCroupierValue");
+			(playerScoreCroupierValue.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
+			{
+				bj.findComponentByName(bjRef, "playerScoreCroupierValue").text = ": " + bjRef.current.dealerScore.toString();
 			});
 
 	// Add GUI components to the player score GUI
@@ -453,13 +460,20 @@ export const	instantiatePlayerScoreGUI =
 	playerScoreGUI.addControl(playerScoreContainer);
 	playerScoreContainer.addControl(playerScoreHorizontalStackPanel);
 	playerScoreHorizontalStackPanel.addControl(playerScorePlayer1Panel1);
+	playerScoreHorizontalStackPanel.addControl(bj.createSpacer(20, 0));
+	playerScoreHorizontalStackPanel.addControl(playerScoreCroupierPanel);
+	playerScoreHorizontalStackPanel.addControl(bj.createSpacer(20, 0));
 	playerScoreHorizontalStackPanel.addControl(playerScorePlayer1Panel2);
 
-	// Player 1
+	// Dealer Score
+	playerScoreCroupierPanel.addControl(playerScoreCroupierText);
+	playerScoreCroupierPanel.addControl(playerScoreCroupierValue);
+
+	// Player 1 Score
 	playerScorePlayer1Panel1.addControl(playerScorePlayer1Text);
 	playerScorePlayer1Panel1.addControl(playerScorePlayer1Value);
 
-	// Player 2
+	// Player 2 Score
 	playerScorePlayer1Panel2.addControl(playerScorePlayer2Text);
 	playerScorePlayer1Panel2.addControl(playerScorePlayer2Value);
 
