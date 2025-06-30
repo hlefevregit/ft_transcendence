@@ -1,3 +1,20 @@
+## [1.8.3](https://github.com/hlefevregit/ft_transcendence/compare/1.8.2...1.8.3) (2025-06-30)
+
+
+### Bug Fixes
+
+* **Docker-compose:** hulefevr: Un peu de tri ca fait toujours du bieng ([e8b2d27](https://github.com/hlefevregit/ft_transcendence/commit/e8b2d270a5b6ed493eb0322e19159c0054377bc7))
+
+## [1.8.2](https://github.com/hlefevregit/ft_transcendence/compare/1.8.1...1.8.2) (2025-06-30)
+
+
+### Bug Fixes
+
+* **DB:** hulefevr: db updated to store int instead of string for playerid ([ad5586e](https://github.com/hlefevregit/ft_transcendence/commit/ad5586e61141058dff9d34e8edea18ab4613003f))
+* **livechat:** full overhaul of store, persistence & notifications ([d4fe5ab](https://github.com/hlefevregit/ft_transcendence/commit/d4fe5abc81b237c0e2a771cecc72a88826eac66b))
+* **Merge:** hulefevr: Fixed some merge troiubles ([cadea3f](https://github.com/hlefevregit/ft_transcendence/commit/cadea3f1a618a22cc162815f3064ddfe9dcc4ddd))
+* **Pong:** hulefevr: Room deleted after the end of a game ([0ee91d4](https://github.com/hlefevregit/ft_transcendence/commit/0ee91d4adbaa0c4dc02277cfa419136d433e34c6))
+
 ## [1.8.1](https://github.com/hlefevregit/ft_transcendence/compare/1.8.0...1.8.1) (2025-06-30)
 
 
