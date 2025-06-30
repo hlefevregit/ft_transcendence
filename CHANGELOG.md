@@ -1,3 +1,15 @@
+# [1.9.0](https://github.com/hlefevregit/ft_transcendence/compare/1.8.3...1.9.0) (2025-06-30)
+
+
+### Bug Fixes
+
+* **compose:** hulefevr: Fixed dev compose ([369ef29](https://github.com/hlefevregit/ft_transcendence/commit/369ef290b00eab06a4f60823f7525be9511d5c0d))
+
+
+### Features
+
+* **Notification Match Announcement in Live Chat:** ldalmass: Created a function thats sends to the back the next two battling players in a tournament ([8e7b2e8](https://github.com/hlefevregit/ft_transcendence/commit/8e7b2e81618b1cb02e2c530f12d83417ba5e2ae8))
+
 ## [1.8.3](https://github.com/hlefevregit/ft_transcendence/compare/1.8.2...1.8.3) (2025-06-30)
 
 
