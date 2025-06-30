@@ -208,6 +208,9 @@ export const useWebSocketOnline = (pong: React.RefObject<game.pongStruct>,
                         }
                         else {
                             console.log("✅ Données du jeu envoyées avec succès");
+                            if (pong.current.lastHostedRoomId) {
+                                pong.current.rooms.delete(pong.current.lastHostedRoomId);
+                            }
                         }
                     }
                 }
