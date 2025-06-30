@@ -53,8 +53,8 @@ model FriendRequest {
 
 model GameResult {
   id           String   @id @default(uuid())
-  player1Id    String
-  player2Id    String
+  player1Id    Int
+  player2Id    Int
   winnerId     String
   reason       String
   player1Score Int
