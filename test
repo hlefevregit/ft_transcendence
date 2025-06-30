@@ -1,0 +1,76 @@
+(() => {
+  const urls = [];
+
+//   // Génération des URLs
+//   for (let r = 1; r <= 4; r++) {
+//     for (let p = 1; p <= 9; p++) {
+//       urls.push(`https://c1r${r}p${p}.42nice.fr:8080`);
+//     }
+//   }
+//   for (let r = 5; r <= 8; r++) {
+//     for (let p = 1; p <= 3; p++) {
+//       urls.push(`https://c1r${r}p${p}.42nice.fr:8080`);
+//     }
+//   }
+//   for (let r = 1; r <= 3; r++) {
+//     for (let p = 1; p <= 6; p++) {
+//       urls.push(`https://c2r${r}p${p}.42nice.fr:8080`);
+//     }
+//   }
+//   for (let p = 1; p <= 6; p++) {
+//     urls.push(`https://c2r8p${p}.42nice.fr:8080`);
+//   }
+//   for (let r = 4; r <= 7; r++) {
+//     for (let p = 1; p <= 9; p++) {
+//       urls.push(`https://c2r${r}p${p}.42nice.fr:8080`);
+//     }
+//   }
+//   for (let r = 9; r <= 12; r++) {
+//     for (let p = 1; p <= 3; p++) {
+//       urls.push(`https://c2r${r}p${p}.42nice.fr:8080`);
+//     }
+//   }
+  for (let c of [3, 4]) {
+    for (let r = 1; r <= 2; r++) {
+      for (let p = 1; p <= 6; p++) {
+        urls.push(`https://c${c}r${r}p${p}.42nice.fr:8080`);
+      }
+    }
+  }
+
+  let index = 0;
+
+  function processNext() {
+    if (index >= urls.length) {
+      console.log('Toutes les URLs ont été injectées.');
+      return;
+    }
+    const btn = document.querySelector('[aria-label="Ajouter un URI"]');
+    if (!btn) {
+      console.error('Bouton "Ajouter un URI" non trouvé');
+      return;
+    }
+    // Clique sur le bouton
+    btn.click();
+
+    // Attends un peu que le focus soit sur l'input (100ms à 300ms)
+    setTimeout(() => {
+      const input = document.activeElement;
+      if (!input || (input.tagName !== 'INPUT' && input.tagName !== 'TEXTAREA')) {
+        console.warn('Aucun input ou textarea sélectionné après clic sur le bouton.');
+        return;
+      }
+      // Injecte l'URL
+      input.value = urls[index];
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      console.log(`URL injectée (${index + 1}/${urls.length}): ${urls[index]}`);
+
+      index++;
+      // Appelle la suivante après délai (ex: 1s)
+      setTimeout(processNext, 400);
+    }, 250);
+  }
+
+  // Démarre la boucle
+  processNext();
+})();

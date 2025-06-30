@@ -150,8 +150,13 @@ const PlayerSprite: React.FC<PlayerSpriteProps> = ({
       idleSprite.cellIndex = Math.floor(Date.now() / 100) % 6;
     }
   });
+  Object.values(spriteManager).forEach(manager => {
+    manager.texture.updateSamplingMode(BABYLON.Texture.NEAREST_NEAREST);
+  });
+
 
   return null;
+
 };
 
 export default PlayerSprite;

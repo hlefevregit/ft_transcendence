@@ -72,64 +72,64 @@ useEffect(() =>
 
 
 
-	// AUDIO
-	const createBeepSound = (pongRef: React.RefObject<game.pongStruct>) => 
-	{
-		let audioContext: AudioContext | null = null;
-		if (!audioContext) audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+	// // AUDIO
+	// const createBeepSound = (pongRef: React.RefObject<game.pongStruct>) => 
+	// {
+	// 	let audioContext: AudioContext | null = null;
+	// 	if (!audioContext) audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
 		
-		const oscillator = audioContext.createOscillator();
-		const gainNode = audioContext.createGain();
+	// 	const oscillator = audioContext.createOscillator();
+	// 	const gainNode = audioContext.createGain();
 		
-		oscillator.connect(gainNode);
-		gainNode.connect(audioContext.destination);
+	// 	oscillator.connect(gainNode);
+	// 	gainNode.connect(audioContext.destination);
 		
-		oscillator.frequency.value = 1000; // Frequency in Hz
-		oscillator.type = 'sine'; // Type of sound wave
+	// 	oscillator.frequency.value = 1000; // Frequency in Hz
+	// 	oscillator.type = 'sine'; // Type of sound wave
 		
-		gainNode.gain.setValueAtTime(pongRef.current.soundVolume, audioContext.currentTime);
-		gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+	// 	gainNode.gain.setValueAtTime(pongRef.current.soundVolume, audioContext.currentTime);
+	// 	gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
 		
-		oscillator.start(audioContext.currentTime);
-		oscillator.stop(audioContext.currentTime + 0.1);
-	};
+	// 	oscillator.start(audioContext.currentTime);
+	// 	oscillator.stop(audioContext.currentTime + 0.1);
+	// };
 
-	// const playBeep = createBeepSound();
-	const playBeep = () =>
-	{
-		if (pongRef.current.isButtonHovered)
-			createBeepSound(pongRef);
-		else console.debug("🎵 SFX not played: button not hovered");
-	}
+	// // const playBeep = createBeepSound();
+	// const playBeep = () =>
+	// {
+	// 	if (pongRef.current.isButtonHovered)
+	// 		createBeepSound(pongRef);
+	// 	else console.debug("🎵 SFX not played: button not hovered");
+	// }
 
-	const audio = new Audio("/assets/vaporwave.mp3");
-	if (musicRef && musicRef.current)
-	{
-		musicRef.current = audio;
-		musicRef.current.loop = true;
-		musicRef.current.volume = pongRef.current.musicVolume; // Ajuste le volume
-		console.log("🎵 Musique de fond chargée");
-	}
+	// const audio = new Audio("/assets/vaporwave.mp3");
+	// if (musicRef && musicRef.current)
+	// {
+	// 	musicRef.current = audio;
+	// 	musicRef.current.loop = true;
+	// 	musicRef.current.volume = pongRef.current.musicVolume; // Ajuste le volume
+	// 	console.log("🎵 Musique de fond chargée");
+	// }
 
-	const playAudio = () =>
-	{
-		console.log("🎵 Tentative de lecture de la musique de fond");
-		audio.play().catch((e) => { console.warn("🎵 Autoplay bloqué : interaction utilisateur requise."); });
-	};
+	// const playAudio = () =>
+	// {
+	// 	console.log("🎵 Tentative de lecture de la musique de fond");
+	// 	audio.play().catch((e) => { console.warn("🎵 Autoplay bloqué : interaction utilisateur requise."); });
+	// };
 
-	document.addEventListener("click", playAudio, { once: true });
-	document.addEventListener("click", playBeep, { once: false });
+	// document.addEventListener("click", playAudio, { once: true });
+	// document.addEventListener("click", playBeep, { once: false });
 
-	// Update volumes
-	const updateMusicVolume = setInterval(() =>
-	{
-		console.log("current music volume ", pongRef.current.musicVolume , "musicRef volume ", musicRef.current?.volume);
-		if (musicRef.current && musicRef.current.volume !== pongRef.current.musicVolume) 
-		{
-			musicRef.current.volume = pongRef.current.musicVolume;
-		}
-	}, 200);
-	return () => { clearInterval(updateMusicVolume); }
+	// // Update volumes
+	// const updateMusicVolume = setInterval(() =>
+	// {
+	// 	console.log("current music volume ", pongRef.current.musicVolume , "musicRef volume ", musicRef.current?.volume);
+	// 	if (musicRef.current && musicRef.current.volume !== pongRef.current.musicVolume) 
+	// 	{
+	// 		musicRef.current.volume = pongRef.current.musicVolume;
+	// 	}
+	// }, 200);
+	// return () => { clearInterval(updateMusicVolume); }
 }, []);
 
 return null;

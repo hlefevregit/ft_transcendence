@@ -9,8 +9,8 @@ export class GameSession {
 	roomName: string;
 
 	// Données utilisateur pour report API
-	player1Id: string = 'player1';
-	player2Id: string = 'player2';
+	player1Id: number = 0;
+	player2Id: number = 1;
 	score1: number = 0;
 	score2: number = 0;
 
@@ -30,13 +30,13 @@ export class GameSession {
 		this.roomName = roomName;
 	}
 
-	setPlayer2(socket: WebSocket, player2Id: string) {
+	setPlayer2(socket: WebSocket, player2Id: number) {
 		this.player2 = socket;
 		this.player2Id = player2Id;
 		this.broadcast({ type: 'game_start' });
 	}
 
-	setPlayer1(socket: WebSocket, player1Id: string) {
+	setPlayer1(socket: WebSocket, player1Id: number) {
 		this.player1 = socket;
 		this.player1Id = player1Id;	
 	}

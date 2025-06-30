@@ -1,12 +1,12 @@
-export * from '@/utils/pongHeader';
+export * from '@/utils/pong/pongHeader';
 
-export * from '@/utils/pongCollisionsHandler';
+export * from '@/utils/pong/pongCollisionsHandler';
 
-export * from '@/utils/GUIRefreshing';
+export * from '@/utils/pong/pongGUIRefreshing';
 
 export * from '@/hooks/pongMovementHandler';
 
-export * from '@/utils/pongUtils';
+export * from '@/utils/pong/pongUtils';
 
 export * from '@/utils/babylonSetup';
 
@@ -18,8 +18,8 @@ export * from '@/utils/pong/onlineWS';
 
 export * from '@/utils/pong/tournament';
 
-export * from  '@/utils/GUIComponents';
+export * from  '@/utils/pong/pongGUIComponents';
 
-export * from  '@/utils/GUIScreens';
+export * from  '@/utils/pong/pongGUIScreens';
 
-export * from  '@/utils/pongAI';
+export * from  '@/utils/pong/pongAI';

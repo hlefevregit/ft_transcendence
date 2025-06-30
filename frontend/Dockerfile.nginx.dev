@@ -28,6 +28,12 @@ COPY ./nginx_conf/nginx.dev.conf /etc/nginx/nginx.conf
 COPY ./nginx_conf/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+COPY ./nginx_conf/certs/generate.sh /generate_certs.sh
+RUN chmod +x /generate_certs.sh
+
+COPY ./nginx_conf/certs/ssl.conf /etc/nginx/certs/ssl.conf
+COPY ./nginx_conf/certs/CA/CA.ext /etc/nginx/certs/CA/CA.ext
+
 # Copy frontend build from previous stage
 COPY --from=builder /app/dist /var/www/html
 

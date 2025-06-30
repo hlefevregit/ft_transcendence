@@ -44,6 +44,10 @@ export default defineConfig({
     allowedHosts: [
       'localhost',
       'c2r10p2',
+      'c3r2p3',
+      'c3r2p3.42nice.fr',
+      'c3r2p4.42nice.fr',
+      'c3r2p5.42nice.fr',
     ],
     watch: {
       usePolling: true,

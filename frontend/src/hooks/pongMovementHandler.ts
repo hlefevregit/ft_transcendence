@@ -107,22 +107,26 @@ export	const	doPaddleMovement =
 			break;
 
 		case game.gameModes.tournament: 
-			if (pong.current.isHost || pong.current.isHost2)
-			{
-				// 🎮 Host contrôle paddle1
-				if (pong.current.pressedKeys.has('arrowup'))
-					pong.current.paddle1.position.z = movePaddleUpOnline(pong, pong.current.paddle1);
-				if (pong.current.pressedKeys.has('arrowdown'))
-					pong.current.paddle1.position.z = movePaddleDownOnline(pong, pong.current.paddle1);
-			}
-			else
-			{
-				// 🧑‍💻 Client contrôle paddle2
-				if (pong.current.pressedKeys.has('w'))
-					pong.current.paddle2.position.z = movePaddleUpOnline(pong, pong.current.paddle2);
-				if (pong.current.pressedKeys.has('s'))
-					pong.current.paddle2.position.z = movePaddleDownOnline(pong, pong.current.paddle2);
-			}
+			// if (pong.current.isHost || pong.current.isHost2)
+			// {
+			// 	// 🎮 Host contrôle paddle1
+			// 	if (pong.current.pressedKeys.has('arrowup'))
+			// 		pong.current.paddle1.position.z = movePaddleUpOnline(pong, pong.current.paddle1);
+			// 	if (pong.current.pressedKeys.has('arrowdown'))
+			// 		pong.current.paddle1.position.z = movePaddleDownOnline(pong, pong.current.paddle1);
+			// }
+			// else
+			// {
+			// 	// 🧑‍💻 Client contrôle paddle2
+			// 	if (pong.current.pressedKeys.has('w'))
+			// 		pong.current.paddle2.position.z = movePaddleUpOnline(pong, pong.current.paddle2);
+			// 	if (pong.current.pressedKeys.has('s'))
+			// 		pong.current.paddle2.position.z = movePaddleDownOnline(pong, pong.current.paddle2);
+			// }
+			if (pong.current.pressedKeys.has('arrowup')) pong.current.paddle1.position.z = movePaddleUp(pong, pong.current.paddle1.position.z);
+			if (pong.current.pressedKeys.has('arrowdown')) pong.current.paddle1.position.z = movePaddleDown(pong, pong.current.paddle1.position.z);
+			if (pong.current.pressedKeys.has('w')) pong.current.paddle2.position.z = movePaddleUp(pong, pong.current.paddle2.position.z);
+			if (pong.current.pressedKeys.has('s')) pong.current.paddle2.position.z = movePaddleDown(pong, pong.current.paddle2.position.z);
 			break;
 	}
 }
