@@ -1,3 +1,12 @@
+## [1.8.1](https://github.com/hlefevregit/ft_transcendence/compare/1.8.0...1.8.1) (2025-06-30)
+
+
+### Bug Fixes
+
+* **livechat:** full overhaul of store, persistence & notifications ([580fb16](https://github.com/hlefevregit/ft_transcendence/commit/580fb16328eff871d65454ad9c5c53a7f9e18cfe))
+* **Pong:** hulefevr: Room deleted after the end of a game ([f16ca40](https://github.com/hlefevregit/ft_transcendence/commit/f16ca40d5fb632d5804f8cce773206b14b807b32))
+* **Tournament + LiveChat:** hulefevr: Merged local tournament into main and rebased LiveChat from main to work on displaying new round of tournament in chat ([77b0c6a](https://github.com/hlefevregit/ft_transcendence/commit/77b0c6ab8b8b1548c7a8524cfe490ff27b7a6309))
+
 # [1.8.0](https://github.com/hlefevregit/ft_transcendence/compare/1.7.0...1.8.0) (2025-06-30)
 # [1.7.0](https://github.com/hlefevregit/ft_transcendence/compare/1.6.0...1.7.0) (2025-06-30)
 
