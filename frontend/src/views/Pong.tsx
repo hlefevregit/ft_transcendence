@@ -1,35 +1,49 @@
-import React, { use } from 'react';
+// Pong.tsx
+import React, { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
 import BackgroundMusic from '@/components/BG';
 import { useWebSocketOnline, useOnlineLoop } from '@/utils/pong/onlineWS';
+import LiveChat from '@/components/LiveChat/LiveChat'
+import { useSearchParams } from 'react-router-dom'
 
 
 
-const	Pong: React.FC = () =>
-{
+const Pong: React.FC = () => {
 	// Refs
-	const	canvasRef =			React.useRef<HTMLCanvasElement | null>(null);
-	const	pong =				React.useRef<game.pongStruct>(game.initPongStruct());
-	const	state =				React.useRef<game.states>(game.states.main_menu);
-	const	lastState =			React.useRef<game.states>(state.current);
-	const	gameModes =			React.useRef<game.gameModes>(game.gameModes.none);
-	const	playerState =		React.useRef<game.playerStates>(game.playerStates.none);
-	const	lastPlayerState =	React.useRef<game.playerStates>(playerState.current);
-	const	lang =				React.useRef<game.lang>(game.lang.english);
-	const	lastLang =			React.useRef<game.lang>(lang.current);
-	const	userNameRef =		React.useRef<string>(null as unknown as string);
-	const	musicRef =			React.useRef<HTMLAudioElement | null>(null);
-	const	audioRef =			React.useRef<HTMLAudioElement | null>(null);
-	const	socketRef =			React.useRef<WebSocket | null>(null);
-	const	lastHandledState = React.useRef<game.states>(game.states.main_menu);
+	const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
+	const pong = React.useRef<game.pongStruct>(game.initPongStruct());
+	const state = React.useRef<game.states>(game.states.main_menu);
+	const [gameState, setGameState] = useState<game.states>(state.current);
+	const lastReactState = useRef<game.states>(state.current);
+	const lastState = React.useRef<game.states>(state.current);
+	const gameModes = React.useRef<game.gameModes>(game.gameModes.none);
+	const playerState = React.useRef<game.playerStates>(game.playerStates.none);
+	const lastPlayerState = React.useRef<game.playerStates>(playerState.current);
+	const lang = React.useRef<game.lang>(game.lang.english);
+	const lastLang = React.useRef<game.lang>(lang.current);
+	const userNameRef = React.useRef<string>(null as unknown as string);
+	const musicRef = React.useRef<HTMLAudioElement | null>(null);
+	const audioRef = React.useRef<HTMLAudioElement | null>(null);
+	const socketRef = React.useRef<WebSocket | null>(null);
+	const lastHandledState = React.useRef<game.states>(game.states.main_menu);
+	const roomIdRef = React.useRef<string>('');
+	const [searchParams] = useSearchParams()
+	const joinRoomId = searchParams.get('joinRoomId')
 	// Hooks
-	const	[gameModeTrigger, setGameModeTrigger] = React.useState<number>(0);
-	const	navigate = useNavigate();
+	const [gameModeTrigger, setGameModeTrigger] = React.useState<number>(0);
+	const navigate = useNavigate();
 
-
+	React.useEffect(() => {
+		if (joinRoomId && socketRef.current?.readyState === WebSocket.OPEN) {
+			socketRef.current.send(JSON.stringify({
+				type: 'join_game',
+				gameId: joinRoomId,
+			}))
+		}
+	}, [joinRoomId, socketRef.current])
 
 	React.useEffect(() => {
 		if (
@@ -53,7 +67,7 @@ const	Pong: React.FC = () =>
 				console.error("❌ WebSocket connection error:", event);
 			});
 
-			useWebSocketOnline(pong, socketRef, gameModes, state, lang, userNameRef, ws);
+			useWebSocketOnline(pong, socketRef, gameModes, state, lang, userNameRef, ws, roomIdRef);
 
 			// import('@/utils/pong/tournament').then(tournamentModule => {
 			// 	tournamentModule.useTournamentWebSocket(
@@ -94,32 +108,30 @@ const	Pong: React.FC = () =>
 		game.setupBabylonPong(pong, canvasRef);
 		// Initialize all the GUI screens
 		game.initializeAllGUIScreens
-		(
-			pong,
-			gameModes,
-			state,
-			playerState,
-			lang,
-			socketRef,
-			navigate,
-			setGameModeTrigger,
-			lastHandledState,
-			musicRef,
-			audioRef,
-		);
-		game.updateScreensVisibilityStates(pong, state.current);
-		game.updateGUIVisibilityPlayerStates(pong, playerState.current , gameModes.current);
+			(
+				pong,
+				gameModes,
+				state,
+				playerState,
+				lang,
+				socketRef,
+				navigate,
+				setGameModeTrigger,
+				lastHandledState,
+				musicRef,
+				audioRef,
+			);
+		game.updateGUIVisibilityStates(pong, state.current);
+		game.updateGUIVisibilityPlayerStates(pong, playerState.current, gameModes.current);
 		game.updateGUIValues(pong, lang);
 
-		if (gameModes.current === game.gameModes.online)
-		{
+		if (gameModes.current === game.gameModes.online) {
 			if
-			(
-				   socketRef.current
+				(
+				socketRef.current
 				&& socketRef.current.readyState === WebSocket.OPEN
 				&& lastHandledState.current !== state.current
-			)
-			{
+			) {
 				console.log("Last handled state:", lastHandledState.current);
 				console.log("Sending current state:", state.current);
 				lastHandledState.current = state.current;
@@ -172,12 +184,11 @@ const	Pong: React.FC = () =>
 
 		// Game loop
 		if (!pong.current.engine) return;
-		pong.current.engine.runRenderLoop(() =>
-		{
+		pong.current.engine.runRenderLoop(() => {
 			game.updateGUIsWhenNeeded(pong, state, gameModes, playerState, lang, lastState, lastPlayerState, lastLang);
 			if
-			(
-				   !pong.current.scene
+				(
+				!pong.current.scene
 				|| !pong.current.engine
 				|| !pong.current.paddle1
 				|| !pong.current.paddle2
@@ -294,6 +305,11 @@ const	Pong: React.FC = () =>
 
 			pong.current.scene.render();
 			document.title = `Pong - ${Object.keys(game.states).find(key => game.states[key as keyof typeof game.states] === state.current)}`;
+			// — sync React state when Babylon state changes —
+			if (state.current !== lastReactState.current) {
+				setGameState(state.current);
+				lastReactState.current = state.current;
+			}
 		});
 
 		// Handle movement in the background
@@ -319,8 +335,7 @@ const	Pong: React.FC = () =>
 		}, 200);
 
 		// Handle resizing of the canvas
-		const	handleResize = game.debounce(() =>
-		{
+		const handleResize = game.debounce(() => {
 			if (!pong.current.engine) return;
 			pong.current.engine.resize();
 		}, 50);
@@ -346,6 +361,13 @@ const	Pong: React.FC = () =>
 				pongRef={pong}
 				musicRef={musicRef}
 				audioRef={audioRef}
+			/>
+			<LiveChat
+				gameState={gameState}
+				gameModesRef={gameModes}
+				statesRef={state}
+				setGameModeTrigger={setGameModeTrigger}
+				roomIdRef={roomIdRef}
 			/>
 		</div>
 	);

@@ -23,7 +23,6 @@
   padding: 0.5rem;
   border-top-left-radius: 0.75rem;
   border-bottom-left-radius: 0.75rem;
-
   overflow: visible !important;
 }
 
@@ -42,7 +41,6 @@
   overflow-y: auto;
   background-color: #ffffff;
   border-radius: 0.5rem;
-
   overflow: visible !important;
 }
 
@@ -53,7 +51,6 @@
   background-color: #ffffff;
   border-top-right-radius: 0.75rem;
   border-bottom-right-radius: 0.75rem;
-
   overflow: visible;
 }
 
@@ -63,6 +60,24 @@
   padding: 0.7rem 0.75rem;
   border-bottom: 1px solid #e5e7eb;
 }
+
+/* bouton “Inviter” style gris */
+.chat-panel__invite-button {
+  background-color: #6b7280; /* gris moyen */
+  color: #ffffff;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.25rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+
+.chat-panel__invite-button:disabled {
+  background-color: #d1d5db; /* gris clair */
+  cursor: default;
+}
+
 
 .chat-panel__title {
   flex: 1;
@@ -76,7 +91,7 @@
   background: none;
   border: none;
   font-size: 1rem;
-  color: #6B7280;
+  color: #6b7280;
   cursor: pointer;
   margin-left: 0.5rem;
 }
@@ -92,7 +107,6 @@
   padding: 0.5rem;
   overflow: hidden;
 }
-
 
 .chat-panel__error {
   color: #ef4444;      /* rouge pour l’erreur */

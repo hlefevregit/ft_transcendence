@@ -1,5 +1,6 @@
 // src/pages/Game1.tsx
-import React from "react";
+import React, { useRef, useState } from "react";
+import * as game from "@/libs/pongLibs";
 import { useNavigate } from "react-router-dom";
 import * as BABYLON from "@babylonjs/core";
 import BabylonScene from "@/components/BabylonScene";
@@ -9,6 +10,10 @@ import LiveChat from "@/components/LiveChat/LiveChat";
 
 export default function Game1() {
   const navigate = useNavigate();
+
+  const gameModesRef = useRef<game.gameModes>(game.gameModes.none);
+  const statesRef = useRef<game.states>(game.states.main_menu);
+  const [trigger, setTrigger] = useState(0);
 
   const handleSceneReady = (
     scene: BABYLON.Scene,
@@ -82,7 +87,13 @@ export default function Game1() {
 
   return (
     <>
-      <LiveChat />
+      <LiveChat
+        gameState={statesRef.current}
+        gameModesRef={gameModesRef}
+        statesRef={statesRef}
+        setGameModeTrigger={setTrigger}
+        roomIdRef={useRef<string>("")}
+      />
       <div className="city-scene">
         <BabylonScene
           backgroundUrl="/assets/4.jpg"
