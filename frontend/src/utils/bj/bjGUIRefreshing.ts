@@ -28,7 +28,7 @@ export const initializeAllGUIScreens =
 	bj.instantiateMainMenuGUI(bjRef, states, navigate);
 	bj.instantiateSettingsGUI(bjRef, states, lang);
 	bj.instantiateGameModeGUI(bjRef, states);
-	bj.instantiateActionGUI(bjRef, states);
+	bj.instantiateActionGUI(bjRef);
 	bj.instantiateBalanceGUI(bjRef);
 	bj.instantiatePlayerScoreGUI(bjRef);
 	bj.instantiateFinishedGameGUI(bjRef, states,lang);

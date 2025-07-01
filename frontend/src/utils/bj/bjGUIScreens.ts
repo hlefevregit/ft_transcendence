@@ -337,7 +337,6 @@ export const	instantiateDebugGUI =
 export const instantiateActionGUI =
 (
 	bjRef: React.RefObject<bj.bjStruct>,
-	states: React.RefObject<bj.States>,
 ): void =>
 {
 	// Canvas that will be used for the GUI

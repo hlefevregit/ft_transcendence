@@ -5,7 +5,7 @@ import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
 import * as bj from '@/libs/bjLibs';
 
-import pongMapUrl from '@/assets/transcendence_map.gltf?url';
+import pongMapUrl from '@/assets/transcendence_map_final.gltf?url';
 import bjMapUrl from '@/assets/blackjack_map.gltf?url';
 import cardUrl from '@/assets/models/card/Card.gltf?url';
 
@@ -134,7 +134,7 @@ export const	setupBabylonPong = async (pong: React.RefObject<game.pongStruct>, c
 	arenaCamera.rotation = new baby.Vector3(Math.PI / 2, 0, Math.PI);
 	pong.current.arenaCam = arenaCamera;
 
-	const	pongSettingsCamera = new baby.FreeCamera("settingsCam", new baby.Vector3(-10, 1.5, -12), sceneInstance);
+	const	pongSettingsCamera = new baby.FreeCamera("settingsCam", new baby.Vector3(-10, 1.5, -25), sceneInstance);
 	pongSettingsCamera.rotation = new baby.Vector3(0, Math.PI , 0);
 	pong.current.pongSettingsCam = pongSettingsCamera;
 
