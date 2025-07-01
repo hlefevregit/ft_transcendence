@@ -22,7 +22,7 @@ model User {
   createdAt DateTime @default(now())
 
   twoFAEnabled Boolean @default(false)
-  twoFASecret String?  // Stocke le secret TOTP de l'utilisateur
+  twoFASecret  String? // Stocke le secret TOTP de l'utilisateur
 
   // Friends (relation many-to-many implicite)
   friends  User[] @relation("UserFriends")
@@ -32,12 +32,14 @@ model User {
   sentRequests     FriendRequest[] @relation("SentRequests")
   receivedRequests FriendRequest[] @relation("ReceivedRequests")
 
-  money       Int      @default(20) // Montant d'argent virtuel de l'utilisateur
+  money            Int       @default(20) // Montant d'argent virtuel de l'utilisateur
   // Messages
   sentMessages     Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
-  blockedUsers Block[] @relation("BlockedUsers")
-  blockedBy    Block[] @relation("BlockedBy")
+  blockedUsers     Block[]   @relation("BlockedUsers")
+  blockedBy        Block[]   @relation("BlockedBy")
+
+  matchNotifications MatchNotification[] @relation("NotificationSender")
 }
 
 model FriendRequest {
@@ -52,7 +54,6 @@ model FriendRequest {
   createdAt DateTime @default(now())
 }
 
-
 model GameResult {
   id           String   @id @default(uuid())
   player1Id    Int
@@ -64,36 +65,35 @@ model GameResult {
   createdAt    DateTime @default(now())
 }
 
-
 model Block {
-  id         Int      @id @default(autoincrement())
-  blocker    User     @relation("BlockedUsers", fields: [blockerId], references: [id])
-  blockerId  Int
-  blocked    User     @relation("BlockedBy",    fields: [blockedId],  references: [id])
-  blockedId  Int
-  createdAt  DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  blocker   User     @relation("BlockedUsers", fields: [blockerId], references: [id])
+  blockerId Int
+  blocked   User     @relation("BlockedBy", fields: [blockedId], references: [id])
+  blockedId Int
+  createdAt DateTime @default(now())
 
   @@unique([blockerId, blockedId])
 }
 
 model Message {
-  id         Int      @id @default(autoincrement())
-  from       User     @relation("SentMessages",     fields: [fromId], references: [id])
-  fromId     Int
-  to         User     @relation("ReceivedMessages", fields: [toId],   references: [id])
-  toId       Int
-  content    String
-  createdAt  DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  from      User     @relation("SentMessages", fields: [fromId], references: [id])
+  fromId    Int
+  to        User     @relation("ReceivedMessages", fields: [toId], references: [id])
+  toId      Int
+  content   String
+  createdAt DateTime @default(now())
 
   @@index([fromId])
   @@index([toId])
 }
 
 model ConversationState {
-  readerId     Int
-  otherId      Int
-  lastReadId   Int      @default(0)
-  updatedAt    DateTime @updatedAt
+  readerId   Int
+  otherId    Int
+  lastReadId Int      @default(0)
+  updatedAt  DateTime @updatedAt
 
   @@id([readerId, otherId])
   @@index([readerId])
@@ -103,10 +103,21 @@ model ConversationState {
 model Invitation {
   inviterId        Int
   inviteeId        Int
-  roomId           String?          // rempli quand l’hôte est prêt
+  roomId           String? // rempli quand l’hôte est prêt
   waitingForPlayer Boolean @default(false)
 
-  @@id([inviterId, inviteeId])      // unique par paire
+  @@id([inviterId, inviteeId]) // unique par paire
   @@index([inviteeId, waitingForPlayer])
 }
 
+model MatchNotification {
+  id        Int      @id @default(autoincrement())
+  sender    User     @relation("NotificationSender", fields: [senderId], references: [id])
+  senderId  Int
+  player1   String
+  player2   String
+  isPrint   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([senderId])
+}

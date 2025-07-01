@@ -54,7 +54,7 @@ const Pong: React.FC = () => {
 			const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 			const wsProtocol = isLocalhost ? 'ws:' : (window.location.protocol === 'https:' ? 'wss:' : 'ws:');
 
-			const wsUrl =`wss://${window.location.hostname}:8080/ws?token=${token || ''}`;
+			const wsUrl = `wss://${window.location.hostname}:8080/ws?token=${token || ''}`;
 
 			console.log("🌐 Connecting WebSocket to:", wsUrl);
 			const ws = new WebSocket(wsUrl);
@@ -96,8 +96,7 @@ const Pong: React.FC = () => {
 		return () => window.removeEventListener("keydown", handler);
 	}, []);
 
-	React.useEffect(() =>
-	{
+	React.useEffect(() => {
 
 
 
@@ -195,14 +194,11 @@ const Pong: React.FC = () => {
 				|| !pong.current.ball
 			) return;
 			game.findComponentByName(pong, "debugFrameRateValue").text = pong.current.engine.getFps().toFixed(0);
-			if (gameModes.current === game.gameModes.online)
-			{
+			if (gameModes.current === game.gameModes.online) {
 				useOnlineLoop(pong, socketRef, gameModes, state, userNameRef, lastHandledState);
 			}
-			else
-			{
-				switch (state.current)
-				{
+			else {
+				switch (state.current) {
 					default:
 						if (state.current > 25) state.current = 0;
 						if (state.current < 0) state.current = 25;
@@ -214,11 +210,10 @@ const Pong: React.FC = () => {
 						break;
 
 					case game.states.countdown:
-						game.updateGUIVisibilityPlayerStates(pong, playerState.current , gameModes.current);
+						game.updateGUIVisibilityPlayerStates(pong, playerState.current, gameModes.current);
 						pong.current.countdown -= pong.current.engine.getDeltaTime() / 1000;
 						game.findComponentByName(pong, "countdown").text = Math.trunc(pong.current.countdown).toString();
-						if (pong.current.countdown <= 0)
-						{
+						if (pong.current.countdown <= 0) {
 							pong.current.countdown = 4;
 							state.current = game.states.in_game;
 						}
@@ -238,15 +233,14 @@ const Pong: React.FC = () => {
 					case game.states.in_game:
 						game.findComponentByName(pong, "player1ScoreValue").text = pong.current.player1Score.toString();
 						game.findComponentByName(pong, "player2ScoreValue").text = pong.current.player2Score.toString();
-						const	maxScore = Math.max(pong.current.player1Score, pong.current.player2Score);
+						const maxScore = Math.max(pong.current.player1Score, pong.current.player2Score);
 						if (maxScore >= pong.current.requiredPointsToWin)
 							state.current = game.states.game_finished;
 						game.fitCameraToArena(pong.current);
 						break;
 
 					case game.states.game_finished:
-						switch (pong.current.tournamentState)
-						{
+						switch (pong.current.tournamentState) {
 							// Finished first game
 							case game.tournamentStates.game_1:
 								pong.current.tournamentState = game.tournamentStates.waiting_game_2;
@@ -255,8 +249,8 @@ const Pong: React.FC = () => {
 								pong.current.tournamentPlayer2Score = pong.current.player2Score;
 								pong.current.tournamentFinalist1 =
 									(pong.current.player1Score > pong.current.player2Score)
-									? pong.current.tournamentPlayer1Name
-									: pong.current.tournamentPlayer2Name;
+										? pong.current.tournamentPlayer1Name
+										: pong.current.tournamentPlayer2Name;
 								pong.current.canSendNotification = true;
 								console.debug("✅✅✅✅✅✅Tournament finalist 1:", pong.current.tournamentFinalist1);
 								break;
@@ -268,8 +262,8 @@ const Pong: React.FC = () => {
 								pong.current.tournamentPlayer4Score = pong.current.player2Score;
 								pong.current.tournamentFinalist2 =
 									(pong.current.player1Score > pong.current.player2Score)
-									? pong.current.tournamentPlayer3Name
-									: pong.current.tournamentPlayer4Name;
+										? pong.current.tournamentPlayer3Name
+										: pong.current.tournamentPlayer4Name;
 								pong.current.canSendNotification = true;
 								console.debug("✅✅✅✅✅✅Tournament finalist 2:", pong.current.tournamentFinalist2);
 								break;
@@ -281,8 +275,8 @@ const Pong: React.FC = () => {
 								pong.current.tournamentState = game.tournamentStates.finished;
 								pong.current.tournamentWinner =
 									(pong.current.player1Score > pong.current.player2Score)
-									? pong.current.tournamentFinalist1
-									: pong.current.tournamentFinalist2;
+										? pong.current.tournamentFinalist1
+										: pong.current.tournamentFinalist2;
 								pong.current.canSendNotification = true;
 								console.debug("✅✅✅✅✅✅Tournament winner:", pong.current.tournamentWinner);
 								break;
@@ -291,74 +285,72 @@ const Pong: React.FC = () => {
 						}
 						break;
 
-						case game.states.tournament_bracket_preview:
-							if (!pong.current.canSendNotification) break;
-							switch (pong.current.tournamentState)
-							{
-								case game.tournamentStates.waiting_game_1:
-									if (pong.current.tournamentPlayer1Name && pong.current.tournamentPlayer2Name)
-										sendMatchNotification(pong.current.tournamentPlayer1Name, pong.current.tournamentPlayer2Name);
-									pong.current.canSendNotification = false;
-									break;
-								case game.tournamentStates.waiting_game_2:
-									if (pong.current.tournamentPlayer3Name && pong.current.tournamentPlayer4Name)
-										sendMatchNotification(pong.current.tournamentPlayer3Name, pong.current.tournamentPlayer4Name);
-									pong.current.canSendNotification = false;
-									break;
-								case game.tournamentStates.waiting_game_3:
-									if (pong.current.tournamentFinalist1 && pong.current.tournamentFinalist2)
-										sendMatchNotification(pong.current.tournamentFinalist1, pong.current.tournamentFinalist2);
-									pong.current.canSendNotification = false;
-									break;
-							}
-							break;
+					case game.states.tournament_bracket_preview:
+						if (!pong.current.canSendNotification) break;
+						switch (pong.current.tournamentState) {
+							case game.tournamentStates.waiting_game_1:
+								if (pong.current.tournamentPlayer1Name && pong.current.tournamentPlayer2Name)
+									sendMatchNotification(pong.current.tournamentPlayer1Name, pong.current.tournamentPlayer2Name);
+								pong.current.canSendNotification = false;
+								break;
+							case game.tournamentStates.waiting_game_2:
+								if (pong.current.tournamentPlayer3Name && pong.current.tournamentPlayer4Name)
+									sendMatchNotification(pong.current.tournamentPlayer3Name, pong.current.tournamentPlayer4Name);
+								pong.current.canSendNotification = false;
+								break;
+							case game.tournamentStates.waiting_game_3:
+								if (pong.current.tournamentFinalist1 && pong.current.tournamentFinalist2)
+									sendMatchNotification(pong.current.tournamentFinalist1, pong.current.tournamentFinalist2);
+								pong.current.canSendNotification = false;
+								break;
+						}
+						break;
 				}
 			}
 
 			pong.current.scene.render();
 			document.title = `Pong - ${Object.keys(game.states).find(key => game.states[key as keyof typeof game.states] === state.current)}`;
 			// — sync React state when Babylon state changes —
-			if (state.current !== lastReactState.current)
-			{
+			if (state.current !== lastReactState.current) {
 				setGameState(state.current);
 				lastReactState.current = state.current;
 			}
 		});
 
-		const sendMatchNotification = async (player1Name: string, player2Name: string): Promise<void> =>
-		{
+		const sendMatchNotification = async (player1Name: string, player2Name: string): Promise<void> => {
 			console.debug("🚻🚻🚻 Sending match notification for players:", player1Name, player2Name);
-			try
-			{
-				const response = await fetch('/api/match-notification',
-					{
-						method: 'POST',
-						headers:
-						{
-							'Content-Type': 'application/json',
-							'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-						},
-						body: JSON.stringify
-						({
-							player1: player1Name,
-							player2: player2Name,
-							isPrint: true,
-						})
+			try {
+				// Récupère l'ID numérique de l'utilisateur courant
+				const senderId = parseInt(userNameRef.current, 10);
+
+				const response = await fetch('/api/match-notification', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+					},
+					body: JSON.stringify({
+						senderId,
+						player1: player1Name,
+						player2: player2Name,
+						isPrint: false,
+					}),
 				});
 
-				if (!response.ok)
+				if (!response.ok) {
 					throw new Error(`HTTP error! status: ${response.status}`);
+				}
 
 				const data = await response.json();
 				console.log('Match notification sent successfully:', data);
-			} catch (error) { console.error('Error sending match notification:', error); }
+			} catch (error) {
+				console.error('Error sending match notification:', error);
+			}
 		};
 
 		// Handle movement in the background
-		const backgroundCalculations = setInterval(() =>
-		{
-			if (pong.current.ball && state.current === game.states.in_game)
-			{
+		const backgroundCalculations = setInterval(() => {
+			if (pong.current.ball && state.current === game.states.in_game) {
 				pong.current.ball.position.x += pong.current.ballDirection.x * pong.current.ballSpeedModifier;
 				pong.current.ball.position.z += pong.current.ballDirection.z * pong.current.ballSpeedModifier;
 			}
@@ -367,12 +359,11 @@ const Pong: React.FC = () => {
 		}, 16.667);
 
 		// Update GUI values every 200ms
-		const updateGUIsValuesWhenNeeded = setInterval(() =>
-		{
+		const updateGUIsValuesWhenNeeded = setInterval(() => {
 			if (gameModes.current !== game.gameModes.tournament) game.updateGUIValues(pong, lang);
 			// game.updatePlayerNames(pong, state, gameModes);
 			// game.updateGUIVisibilityStates(pong, state.current);
-			game.updateGUIVisibilityPlayerStates(pong, playerState.current , gameModes.current);
+			game.updateGUIVisibilityPlayerStates(pong, playerState.current, gameModes.current);
 			game.updatePlayerNames(pong, state, gameModes);
 		}, 200);
 
@@ -384,8 +375,7 @@ const Pong: React.FC = () => {
 
 		window.addEventListener('resize', handleResize);
 
-		return () =>
-		{
+		return () => {
 			// clearInterval(updateMusicVolume);
 			clearInterval(backgroundCalculations);
 			// clearInterval(updateGUIsValuesWhenNeeded);

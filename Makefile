@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
+#    By: thundder <thundder@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/06/30 14:16:05 by hulefevr         ###   ########.fr        #
+#    Updated: 2025/07/01 00:45:28 by thundder         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,8 +47,8 @@ re-dev:
 
 
 rebuild-dev:
-	make reset_vault 2>/dev/null || true
-	touch ./vault/secrets/.env
+	# make reset_vault 2>/dev/null || true
+	# touch ./vault/secrets/.env
 
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down -v --remove-orphans
 	docker system prune -af

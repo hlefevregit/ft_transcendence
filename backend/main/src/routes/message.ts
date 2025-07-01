@@ -473,4 +473,42 @@ export async function setupMessageRoutes(fastify: CustomFastifyInstance) {
   );
 
 
+  // — GET /api/match-notification — récupérer les notifications envoyées par l’utilisateur courant
+  fastify.get(
+    '/api/match-notification',
+    { preValidation: [fastify.authenticate] },
+    async (req: FastifyRequest, reply: FastifyReply) => {
+      const userId = (req.user as any).id as number
+
+      const notifications = await fastify.prisma.matchNotification.findMany({
+        where: { senderId: userId },
+        orderBy: { createdAt: 'desc' },
+      })
+
+      return reply.status(200).send(notifications)
+    }
+  )
+
+  // — POST /api/match-notification — créer une nouvelle notification de match
+  fastify.post(
+    '/api/match-notification',
+    { preValidation: [fastify.authenticate] },
+    async (
+      req: FastifyRequest<{
+        Body: { player1: string; player2: string; isPrint: boolean }
+      }>,
+      reply: FastifyReply
+    ) => {
+      const senderId = (req.user as any).id as number
+      const { player1, player2, isPrint } = req.body
+
+      const created = await fastify.prisma.matchNotification.create({
+        data: { senderId, player1, player2, isPrint },
+      })
+
+      return reply.status(201).send(created)
+    }
+  )
+
+
 }
