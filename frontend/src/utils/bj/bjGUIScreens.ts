@@ -424,17 +424,145 @@ export const	instantiatePlayerScoreGUI =
 ): void =>
 {
 	const	playerScoreGUI = bj.createScreen("playerScoreGUI", "bottom");
+			playerScoreGUI.width = "800px";
+			playerScoreGUI.height = "75px";
 	const	playerScoreContainer = bj.createAdaptiveContainer("playerScoreContainer", "800px", "75px", undefined, "bottom");
 
+	const	playerScoreHorizontalStackPanel = bj.createHorizontalStackPanel("playerScoreHorizontalStackPanel");
 	const	playerScorePlayer1Panel1 = bj.createHorizontalStackPanel("playerScorePlayer1Panel1");
 	const	playerScorePlayer1Panel2 = bj.createHorizontalStackPanel("playerScorePlayer1Panel2");
+	const	playerScoreCroupierPanel = bj.createHorizontalStackPanel("playerScoreCroupierPanel");
 
 	const	playerScorePlayer1Text = bj.createDynamicText("playerScorePlayer1Text", "player1");
+			// playerScorePlayer1Text.children[0]
 	const	playerScorePlayer1Value = bj.createDynamicText("playerScorePlayer1Value");
 			(playerScorePlayer1Value.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
 			{
-				bj.findComponentByName(bjRef, "playerScorePlayer1Value").text = bjRef.current.player1Money.toString();
+				bj.findComponentByName(bjRef, "playerScorePlayer1Value").text = ": " + bjRef.current.player1Score.toString();
 			});
+	const	playerScorePlayer2Text = bj.createDynamicText("playerScorePlayer2Text", "player2");
+
+	const	playerScorePlayer2Value = bj.createDynamicText("playerScorePlayer2Value");
+			(playerScorePlayer2Value.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
+			{
+				bj.findComponentByName(bjRef, "playerScorePlayer2Value").text = ": " + bjRef.current.player2Score.toString();
+			});
+
+	const	playerScoreCroupierText = bj.createDynamicText("playerScoreCroupierText", "dealer");
+	const	playerScoreCroupierValue = bj.createDynamicText("playerScoreCroupierValue");
+			(playerScoreCroupierValue.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
+			{
+				bj.findComponentByName(bjRef, "playerScoreCroupierValue").text = ": " + bjRef.current.dealerScore.toString();
+			});
+
+	// Add GUI components to the player score GUI
+	// Layout
+	playerScoreGUI.addControl(playerScoreContainer);
+	playerScoreContainer.addControl(playerScoreHorizontalStackPanel);
+	playerScoreHorizontalStackPanel.addControl(playerScorePlayer1Panel1);
+	playerScoreHorizontalStackPanel.addControl(bj.createSpacer(20, 0));
+	playerScoreHorizontalStackPanel.addControl(playerScoreCroupierPanel);
+	playerScoreHorizontalStackPanel.addControl(bj.createSpacer(20, 0));
+	playerScoreHorizontalStackPanel.addControl(playerScorePlayer1Panel2);
+
+	// Dealer Score
+	playerScoreCroupierPanel.addControl(playerScoreCroupierText);
+	playerScoreCroupierPanel.addControl(playerScoreCroupierValue);
+
+	// Player 1 Score
+	playerScorePlayer1Panel1.addControl(playerScorePlayer1Text);
+	playerScorePlayer1Panel1.addControl(playerScorePlayer1Value);
+
+	// Player 2 Score
+	playerScorePlayer1Panel2.addControl(playerScorePlayer2Text);
+	playerScorePlayer1Panel2.addControl(playerScorePlayer2Value);
+
+	// Add the screen to the GUI texture
+	bjRef.current.playerScoreGUI = playerScoreGUI;
+}
+
+// ****************************************************************************** //
+//                                                                                //
+//                                FINISHED GAME                                   //
+//                                                                                //
+// ****************************************************************************** //
+
+export const	instantiateFinishedGameGUI =
+(
+	bjRef: React.RefObject<bj.bjStruct>,
+	states: React.RefObject<bj.States>,
+	lang: React.RefObject<bj.language>
+): void =>
+{
+	const	finishedGameGUI = bj.createScreen("finishedGameGUI", "center");
+	const	finishedGameContainer = bj.createAdaptiveContainer("finishedGameContainer");
+
+	const	finishedGameVerticalStackPanel = bj.createVerticalStackPanel("finishedGameVerticalStackPanel");
+	const	finishedGameHorizontalStackPanel1 = bj.createHorizontalStackPanel("finishedGameHorizontalStackPanel1", 0);
+	const	finishedGameHorizontalStackPanel2 = bj.createHorizontalStackPanel("finishedGameHorizontalStackPanel2", 0);
+	const	finishedGameTitle = bj.createDynamicTitle("finishedGameTitle", "gameFinishedTitle");
+	const	finishedGameBackButton = bj.createDynamicButton("finishedGameBackButton", () =>
+	{
+		states.current = bj.States.main_menu;
+		bj.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, states);
+	}, bjRef, "back");
+
+	const	finishedGameReplayButton = bj.createDynamicButton("finishedGameReplayButton", () =>
+	{
+		states.current = bj.States.main_menu;
+		bj.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, states);
+	}, bjRef, "replay");
+			(finishedGameReplayButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
+			(finishedGameReplayButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
+			{
+				(finishedGameReplayButton.children[0] as baby.Button).color = game.colorsScheme.dark1;
+				(finishedGameReplayButton.children[0] as baby.Button).background = game.colorsScheme.auroraAccent4;
+			});
+			(finishedGameReplayButton.children[0] as baby.Button).onPointerOutObservable.add(() =>
+			{
+				(finishedGameReplayButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
+				(finishedGameReplayButton.children[0] as baby.Button).background = game.colorsScheme.dark1;
+			});
+
+	// Winner
+	const	winnerText = bj.createDynamicText("winnerText", "winner");
+	const	winnerName = bj.createText("winnerName", "prout");
+			(winnerName.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
+			{
+				if (bjRef.current.player1Score > bjRef.current.player2Score)
+					bj.findComponentByName(bjRef, "winnerName").text = bj.getLabel("player1", lang.current);
+				else if (bjRef.current.player1Score < bjRef.current.player2Score)
+					bj.findComponentByName(bjRef, "winnerName").text = bj.getLabel("player2", lang.current);
+				else if (bjRef.current.player1Score < bjRef.current.dealerScore && bjRef.current.player2Score < bjRef.current.dealerScore)
+					bj.findComponentByName(bjRef, "winnerName").text = bj.getLabel("dealer", lang.current);
+			});
+	const	winnerScore = bj.createText("winnerScore", "prout");
+			(winnerScore.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
+			{
+				bj.findComponentByName(bjRef, "winnerScore").text = ": " + Math.max(bjRef.current.player1Score, bjRef.current.player2Score, bjRef.current.dealerScore).toString();
+			});
+
+	// Add GUI components to the finished game GUI
+	// Layout
+	finishedGameVerticalStackPanel.addControl(finishedGameTitle);
+	finishedGameVerticalStackPanel.addControl(bj.createSpacer(0, 10));
+	finishedGameVerticalStackPanel.addControl(finishedGameHorizontalStackPanel1);
+	finishedGameVerticalStackPanel.addControl(bj.createSpacer(0, 10));
+	finishedGameVerticalStackPanel.addControl(finishedGameHorizontalStackPanel2);
+	finishedGameContainer.addControl(finishedGameVerticalStackPanel);
+	finishedGameGUI.addControl(finishedGameContainer);
+	
+	// Winner
+	finishedGameHorizontalStackPanel1.addControl(winnerText);
+	finishedGameHorizontalStackPanel1.addControl(winnerName);
+	finishedGameHorizontalStackPanel1.addControl(winnerScore);
+
+	// Buttons
+	finishedGameHorizontalStackPanel2.addControl(finishedGameBackButton);
+	finishedGameHorizontalStackPanel2.addControl(finishedGameReplayButton);
+
+	// Add the screen to the GUI texture
+	bjRef.current.finishedGameGUI = finishedGameGUI;
 }
 
 // ****************************************************************************** //

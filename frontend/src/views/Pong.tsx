@@ -231,7 +231,6 @@ const	Pong: React.FC = () =>
 						if (maxScore >= pong.current.requiredPointsToWin)
 							state.current = game.states.game_finished;
 						game.fitCameraToArena(pong.current);
-
 						break;
 
 					case game.states.game_finished:
@@ -277,7 +276,20 @@ const	Pong: React.FC = () =>
 								break;
 						}
 						break;
+
+						case game.states.tournament_bracket_preview:
+							switch (pong.current.tournamentState)
+							{
+								case game.tournamentStates.waiting_game_1:
+									break;
+								case game.tournamentStates.waiting_game_2:
+									break;
+								case game.tournamentStates.waiting_game_3:
+									break;
+							}
+							break;
 				}
+				
 			}
 
 			pong.current.scene.render();

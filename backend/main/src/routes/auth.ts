@@ -19,6 +19,7 @@ export const setupAuthRoutes = (fastify: FastifyInstance) => {
 
 
     const client = new OAuth2Client(GOOGLE_CLIENT_ID);
+    console.log("Google client initialized with ID:", GOOGLE_CLIENT_ID);
     const ticket = await client.verifyIdToken({ idToken: id_token, audience: GOOGLE_CLIENT_ID });
     const payload = ticket.getPayload();
     if (!payload || !payload.email) return reply.status(400).send({ success: false, message: 'Information not found' });

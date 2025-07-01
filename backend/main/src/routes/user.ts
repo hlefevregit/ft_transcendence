@@ -166,8 +166,8 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
       const games = await fastify.prisma.gameResult.findMany({
         where: {
           OR: [
-            { player1Id: myPseudo },
-            { player2Id: myPseudo }
+            { player1Id: userId },
+            { player2Id: userId }
           ]
         },
         orderBy: { createdAt: 'desc' }
@@ -181,10 +181,10 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
       // 4) Construire le tableau de matches
       const matches = await Promise.all(
         games.map(async (g) => {
-          const isP1 = g.player1Id === myPseudo;
+          const isP1 = g.player1Id === userId;
           const userScore     = isP1 ? g.player1Score   : g.player2Score;
           const opponentScore = isP1 ? g.player2Score   : g.player1Score;
-          const opponentPseudo= isP1 ? g.player2Id      : g.player1Id;
+          const opponentPseudo = String(isP1 ? g.player2Id : g.player1Id);
 
           // avatar de l'adversaire
           const oppUser = await fastify.prisma.user.findUnique({
@@ -192,12 +192,21 @@ export async function setupUserRoutes(fastify: CustomFastifyInstance) {
             select: { avatarUrl: true }
           });
 
+          // récupérer les IDs numériques pour la comparaison
+          const meUserId = userId;
+          // On suppose que g.player1Id et g.player2Id sont des pseudos, donc il faut récupérer l'ID de l'adversaire
+          const opponentUser = await fastify.prisma.user.findUnique({
+            where: { pseudo: opponentPseudo },
+            select: { id: true }
+          });
+          const opponentUserId = opponentUser?.id;
+
           // déterminer résultat d'après winnerId, pas le score
-          let result: 'win'|'loss'|'draw';
-          if (g.winnerId === myPseudo) {
+          let result: 'win' | 'loss' | 'draw';
+          if (g.winnerId === meUserId) {
             result = 'win';
             wins++;
-          } else if (g.winnerId === opponentPseudo) {
+          } else if (String(g.winnerId) === String(opponentUserId)) {
             result = 'loss';
             losses++;
           } else {

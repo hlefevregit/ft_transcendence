@@ -152,6 +152,9 @@ export type bjStruct =
 	// Variables
 	player1Money: number;
 	player2Money: number;
+	player1Score: number;
+	player2Score: number;
+	dealerScore: number;
 	playerChoice?: PlayerChoices;
 
 	// GUIs
@@ -162,6 +165,8 @@ export type bjStruct =
 	debugGUI?: baby.Rectangle;
 	actionGUI?: baby.Rectangle;
 	balanceGUI?: baby.Rectangle;
+	playerScoreGUI?: baby.Rectangle;
+	finishedGameGUI?: baby.Rectangle;
 
 	// Textures
 	guiTexture?: baby.AdvancedDynamicTexture;
@@ -170,8 +175,8 @@ export type bjStruct =
 	gameState?: GameState;
 
 	// Game
-	player1Cards?: number[];
-	player2Cards?: number[];
+	player1Cards: number[];
+	player2Cards: number[];
 };
 
 export function initBJStruct(): bjStruct
@@ -181,6 +186,9 @@ export function initBJStruct(): bjStruct
 		player1Money: 1000, // Starting money for player 1
 		player2Money: 1000, // Starting money for player 2
 		// playerMoney: 1000, // Starting money for the player
+		player1Score: 0,
+		player2Score: 0,
+		dealerScore: 0,
 	};
 }
 
@@ -212,6 +220,11 @@ export const	translations =
 	balance: ["Balance:", "Solde:", "Saldo:", "⠨⠃⠁⠇⠁⠝⠉⠑:"],
 	player1: ["Player 1", "Joueur 1", "Giocatore 1", "⠨⠏⠇⠁⠽⠑⠗ ⠁"],
 	player2: ["Player 2", "Joueur 2", "Giocatore 2", "⠨⠏⠇⠁⠽⠑⠗ ⠃"],
+	dealer: ["Dealer", "Croupier", "Banco", "⠨⠙⠑⠁⠇⠑⠗"],
+
+	// Finished game
+	gameFinishedTitle: ["Game Finished", "Partie terminée", "Gioco terminato", "⠨⠛⠁⠍⠑ ⠨⠋⠊⠝⠊⠎⠓⠑⠙"],
+	winner: ["Winner:", "Gagnant:", "Vincitore:", "⠨⠺⠊⠝⠝⠑⠗ :"],
 } as const;
 
 export type	labelKey = keyof typeof translations;
