@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/hlefevregit/ft_transcendence/compare/1.9.2...1.10.0) (2025-07-01)
+
+
+### Features
+
+* **LiveChat:** Add messages tournament ([17ae0ea](https://github.com/hlefevregit/ft_transcendence/commit/17ae0eaa6c02b51efc77a5912c349e02f9e57170))
+
 ## [1.9.2](https://github.com/hlefevregit/ft_transcendence/compare/1.9.1...1.9.2) (2025-07-01)
 
 
