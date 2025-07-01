@@ -17,6 +17,7 @@ export const PlayGame = async (
 	const player1Cards: number[] = [];
 	const player2Cards: number[] = [];
 	const dealerCards: number[] = [];
+	const dealerHiddenCard: number[] = [];
     let player1Busted = false;
     let player2Busted = false;
 
@@ -53,7 +54,7 @@ export const PlayGame = async (
   bjRef.current.player2Cards = player2Cards;
   bjRef.current.playerChoice = null;
 
-  dealInitialCards(bjRef, state, player1Cards, player2Cards, dealerCards, players, cardMeshes);
+  dealInitialCards(bjRef, state, player1Cards, player2Cards, dealerCards, dealerHiddenCard, players, cardMeshes);
   if (getCardValues(player1Cards) === 21 && player1Cards.length === 2) {
     console.log("Player 1 has a Blackjack!");
   }
@@ -62,9 +63,15 @@ export const PlayGame = async (
   }
 
   bjRef.current.playerChoice = null;
+  x = 32;
+  y = 0.02;
+  z = -40;
   await playerTurn(bjRef, state, player1Cards, cardMeshes);
   if (players === 2) {
 	bjRef.current.playerChoice = null;
+	x = 127;
+	y = 0.02;
+	z = -40;
     await playerTurn(bjRef, state, player2Cards, cardMeshes);
 	if (getCardValues(player2Cards) > 21) {
 	  console.log("Player 2 has busted!");
@@ -89,6 +96,10 @@ export const PlayGame = async (
 	game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
 	return;
   }
+  x = 77;
+  y = 0.02;
+  z = 35;
+  dealerTurn(bjRef, state, dealerCards, dealerHiddenCard, cardMeshes);
   const player1Value = getCardValues(player1Cards);
   const player2Value = players === 2 ? getCardValues(player2Cards) : 0;
   const dealerValue = getCardValues(dealerCards);
@@ -246,6 +257,7 @@ export const dealInitialCards = (
 	player1Cards: number[],
 	player2Cards: number[],
 	dealerCards: number[],
+	dealerHiddenCard: number[],
 	players: number,
 	meshes: baby.Mesh[]
 ): void => {
@@ -286,7 +298,10 @@ export const dealInitialCards = (
 		const hidden = i === 0 ? false : true;
 		const dealerCard = dealCard(hidden, meshes, bjRef);
 		if (dealerCard) {
-			dealerCards.push(dealerCard);
+			if (i === 1)
+				dealerHiddenCard.push(dealerCard);
+			else
+				dealerCards.push(dealerCard);
 			const value = ((dealerCard - 1) % 13) + 1;
 			const suit = Math.floor((dealerCard - 1) / 13) + 1;
 			if (i === 0) {
@@ -316,6 +331,8 @@ export const playerTurn = async (
   const scene = bjRef.current.scene;
   if (!scene) return;
   while (getCardValues(playerCards) < 21) {
+	x += 3.5;
+	y += 0.01;
     const playerChoice = await waitForPlayerChoice(bjRef);
     switch (playerChoice) {
       case game.PlayerChoices.hit: {
@@ -351,6 +368,7 @@ export const dealerTurn = (
 	bjRef: React.RefObject<game.bjStruct>,
     state: React.RefObject<game.States>,
 	dealerCards: number[],
+	dealerHiddenCard: number[],
 	meshes: baby.Mesh[]
 ): void => {
 	if (!bjRef.current) return;
@@ -358,10 +376,14 @@ export const dealerTurn = (
 	if (!scene) return;
 
 	if (dealerCards.length >= 2) {
-		meshes[5].rotation.y = Math.PI; // Show the dealer's second card
+		meshes[5].rotation.z = Math.PI;
+		meshes[5].position.y -= 0.2;
+		dealerCards.push(dealerHiddenCard[0]);
 	}
 
 	while (dealerCards.length < 2 || getCardValues(dealerCards) < 17) {
+		x += 3.5;
+		y += 0.01;
 		const card = dealCard(false, meshes, bjRef);
 		const value = ((card - 1) % 13) + 1;
 		const suit = Math.floor((card - 1) / 13) + 1;
