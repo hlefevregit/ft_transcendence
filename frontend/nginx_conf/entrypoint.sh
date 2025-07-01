@@ -57,6 +57,23 @@ fi
 echo "ModSecurity configuration is complete. Launching Nginx..."
 
 
+CERT_DIR="/etc/nginx/certs"
+CERT="$CERT_DIR/server.crt"
+KEY="$CERT_DIR/server.key"
+
+# Génère un cert auto-signé si manquant
+if [[ ! -f "$CERT" ] || [ ! -f "$KEY" ]]; then
+  echo "🔐 Generating self-signed certificate..."
+  mkdir -p "$CERT_DIR"
+  openssl req -x509 -nodes -days 365 \
+    -subj "/CN=localhost" \
+    -newkey rsa:2048 \
+    -keyout "$KEY" \
+    -out "$CERT"
+fi
+
+echo "🚀 Launching Nginx..."
+
 
 # Launch nginx in foreground.
 exec nginx -g "daemon off;"
