@@ -254,10 +254,10 @@ export const dealInitialCards = (
 	if (!scene) return;
 
 	for (let i = 0; i < 2; i++) {
-		x = 10 + (i * 1);
+		x = 25 + (i * 3.5);
 		y = 0 + (i * 0.01);
 		z = -40;
-		const player1Card = dealCard(meshes, bjRef);
+		const player1Card = dealCard(false, meshes, bjRef);
 		if (player1Card) {
 			player1Cards.push(player1Card);
 			const value = ((player1Card - 1) % 13) + 1;
@@ -267,10 +267,10 @@ export const dealInitialCards = (
 			console.error('Failed to deal card to player 1');
 			return;
 		}
-		x = -10 + (i * 1);
+		x = 120 + (i * 3.5);
 		y = 0 + (i * 0.01);
 		z = -40;
-		const player2Card = players === 2 ? dealCard(meshes, bjRef) : 0;
+		const player2Card = players === 2 ? dealCard(false, meshes, bjRef) : 0;
 		if (player2Card && players === 2) {
 			player2Cards.push(player2Card);
 			const value = ((player2Card - 1) % 13) + 1;
@@ -280,10 +280,11 @@ export const dealInitialCards = (
 			console.error('Failed to deal card to player 2');
 			return;
 		}
-		x = 10 + (i * 1);
+		x = 70 + (i * 3.5);
 		y = 0 + (i * 0.01);
-		z = -25;
-		const dealerCard = dealCard(meshes, bjRef);
+		z = 35;
+		const hidden = i === 0 ? false : true;
+		const dealerCard = dealCard(hidden, meshes, bjRef);
 		if (dealerCard) {
 			dealerCards.push(dealerCard);
 			const value = ((dealerCard - 1) % 13) + 1;
@@ -318,7 +319,7 @@ export const playerTurn = async (
     const playerChoice = await waitForPlayerChoice(bjRef);
     switch (playerChoice) {
       case game.PlayerChoices.hit: {
-        const card = dealCard(meshes, bjRef);
+        const card = dealCard(false, meshes, bjRef);
         const value = ((card - 1) % 13) + 1;
         const suit = Math.floor((card - 1) / 13) + 1;
         if (!card) {
@@ -357,11 +358,11 @@ export const dealerTurn = (
 	if (!scene) return;
 
 	if (dealerCards.length >= 2) {
-		console.log(`Dealer reveals ${game.ReverseValueMap[((dealerCards[1] - 1) % 13) + 1]} of ${game.ReverseSuitMap[Math.floor((dealerCards[1] - 1) / 13) + 1]}`);
+		meshes[5].rotation.y = Math.PI; // Show the dealer's second card
 	}
 
 	while (dealerCards.length < 2 || getCardValues(dealerCards) < 17) {
-		const card = dealCard(meshes, bjRef);
+		const card = dealCard(false, meshes, bjRef);
 		const value = ((card - 1) % 13) + 1;
 		const suit = Math.floor((card - 1) / 13) + 1;
 		if (card) {
@@ -399,6 +400,7 @@ export const getCardValues = (cards: number[]): number => {
 };
 
 export const dealCard = (
+	hidden: boolean,
 	meshes: baby.Mesh[],
 	bjRef: React.RefObject<game.bjStruct>
 ): number => {
@@ -416,7 +418,11 @@ export const dealCard = (
 		const offsetX = game.CardXOffset[cardValue] || 10;
 		const offsetZ = game.CardZOffset[cardSuit] || 0;
 		clonedMesh.position = new baby.Vector3(x - offsetX, y, z - offsetZ);
-	    clonedMesh.isVisible = true;
+		clonedMesh.isVisible = true;
+		if (hidden) {
+			clonedMesh.rotation = new baby.Vector3(0, 0, Math.PI); // Hide the card by rotating it
+			clonedMesh.position.y += 0.2; // Slightly raise the card to avoid z-fighting
+		}
 	    clonedMesh.setEnabled(true);
 
 		meshes.push(clonedMesh);
