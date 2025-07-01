@@ -312,7 +312,7 @@ export const	instentiatePongSettingsGUI =
 			{
 				game.findComponentByName(pong, "pongSettingsArenaWidthTextValue").text = pong.current.arenaWidth.toString();
 			});
-	const	pongSettingsArenaWidth = game.createSlider("pongSettingsArenaWidth", 7, 80, 1, pong.current.arenaWidth, (value: number) =>
+	const	pongSettingsArenaWidth = game.createSlider("pongSettingsArenaWidth", 7, 20, 1, pong.current.arenaWidth, (value: number) =>
 	{
 		pong.current.arenaWidth = value;
 		game.resizeArenaShell(pong);
