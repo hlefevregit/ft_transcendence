@@ -63,9 +63,15 @@ export const PlayGame = async (
   }
 
   bjRef.current.playerChoice = null;
+  x = 32;
+  y = 0.02;
+  z = -40;
   await playerTurn(bjRef, state, player1Cards, cardMeshes);
   if (players === 2) {
 	bjRef.current.playerChoice = null;
+	x = 127;
+	y = 0.02;
+	z = -40;
     await playerTurn(bjRef, state, player2Cards, cardMeshes);
 	if (getCardValues(player2Cards) > 21) {
 	  console.log("Player 2 has busted!");
@@ -90,6 +96,9 @@ export const PlayGame = async (
 	game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
 	return;
   }
+  x = 77;
+  y = 0.02;
+  z = 35;
   dealerTurn(bjRef, state, dealerCards, dealerHiddenCard, cardMeshes);
   const player1Value = getCardValues(player1Cards);
   const player2Value = players === 2 ? getCardValues(player2Cards) : 0;
@@ -322,6 +331,8 @@ export const playerTurn = async (
   const scene = bjRef.current.scene;
   if (!scene) return;
   while (getCardValues(playerCards) < 21) {
+	x += 3.5;
+	y += 0.01;
     const playerChoice = await waitForPlayerChoice(bjRef);
     switch (playerChoice) {
       case game.PlayerChoices.hit: {
@@ -371,6 +382,8 @@ export const dealerTurn = (
 	}
 
 	while (dealerCards.length < 2 || getCardValues(dealerCards) < 17) {
+		x += 3.5;
+		y += 0.01;
 		const card = dealCard(false, meshes, bjRef);
 		const value = ((card - 1) % 13) + 1;
 		const suit = Math.floor((card - 1) / 13) + 1;
