@@ -1,4 +1,4 @@
-// src/components/LiveChat/index.tsx
+// src/components/LiveChat/LiveChat.tsx
 import React, { useRef } from 'react'
 import * as game from '@/libs/pongLibs'
 import ChatLauncher from './ChatLauncher'

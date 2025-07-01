@@ -499,16 +499,28 @@ export async function setupMessageRoutes(fastify: CustomFastifyInstance) {
 			}>,
 			reply: FastifyReply
 		) => {
-			const senderId = (req.user as any).id as number
-			const { player1, player2, isPrint } = req.body
+			const senderId = (req.user as any).id as number;
+			const { player1, player2, isPrint } = req.body;
 
-			const created = await fastify.prisma.matchNotification.create({
+			// 1) on crée la notification en base
+			const createdNotif = await fastify.prisma.matchNotification.create({
 				data: { senderId, player1, player2, isPrint },
-			})
+			});
 
-			return reply.status(201).send(created)
+			// 2) on écrit un message système dans le chat
+			const content = `🎉 Tournament: ${player1} vs ${player2} is starting now!`;
+			await fastify.prisma.message.create({
+				data: {
+					fromId: fastify.systemUserId,
+					toId: senderId,       // tu peux envoyer à tous les participants si nécessaire
+					content,
+				}
+			});
+
+			return reply.status(201).send(createdNotif);
 		}
-	)
+	);
+
 
 	// — GET /api/me/blocked — récupérer les bloqués avec leurs infos
 	fastify.get(
