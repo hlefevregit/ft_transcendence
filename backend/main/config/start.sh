@@ -39,7 +39,20 @@ echo "Starting entrypoint script..."
 vault_export_to_env "cubbyhole/default"
 # vault_export_to_env "${VAULT_SECRET_PATH_JWT}"
 
+
+
 env > .env
+
+
+host=$1
+port=$2
+
+echo "⏳ Waiting for $host:$port..."
+until nc -z $host $port; do
+  sleep 1
+done
+
+echo "✅ $host:$port is up!"
 
 npm install -g typescript ts-node ts-node-dev pm2 fastify
 

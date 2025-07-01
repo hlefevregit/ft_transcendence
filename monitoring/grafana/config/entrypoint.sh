@@ -38,4 +38,14 @@ vault_export_to_env() {
 echo "Starting entrypoint script..."
 vault_export_to_env "${VAULT_SECRET_PATH}"
 
-exec /run.sh "$@"
+# Fix permissions on Grafana data directory
+echo "Fixing permissions on /var/lib/grafana..."
+chown -R grafana:grafana /var/lib/grafana
+
+
+# ✅ Vérifie qu'on peut écrire dans la DB
+touch /var/lib/grafana/test_write || echo "❌ Cannot write to /var/lib/grafana"
+
+# ✅ Drop privileges
+echo "✅ Switching to grafana user"
+exec su-exec grafana /run.sh "$@"

@@ -4,11 +4,10 @@ USER root
 
 RUN apk update && \
 	apk upgrade && \
-	apk add --no-cache jq
+	apk add --no-cache jq su-exec
 
 COPY ./config/entrypoint.sh /bin/entrypoint.sh
 RUN chmod +x /bin/entrypoint.sh
 
-USER grafana
 
 ENTRYPOINT ["/bin/entrypoint.sh"]

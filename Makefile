@@ -6,7 +6,7 @@
 #    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/07/01 16:36:19 by hulefevr         ###   ########.fr        #
+#    Updated: 2025/07/01 17:30:16 by hulefevr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,7 +57,7 @@ rebuild-dev:
 	docker volume prune -f
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) build --no-cache
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up -d
-	@make rebuild name=backend
+	# @make rebuild name=backend
 
 reset_vault:
 	docker exec -it ft_transcendence-vault-1 chmod -R 777 ./vault/file
