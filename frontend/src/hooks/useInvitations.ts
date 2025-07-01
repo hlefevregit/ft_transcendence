@@ -26,7 +26,7 @@ export function useInvitations(pollInterval = 1000) {
           setInvites(res.data)
         }
       } catch (err: any) {
-        console.error('[Invitations] erreur fetchInvites:', err.response?.status, err.message)
+        // console.error('[Invitations] erreur fetchInvites:', err.response?.status, err.message)
         if (err.response?.status === 401) {
           mounted = false
         }

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: thundder <thundder@student.42.fr>          +#+  +:+       +#+         #
+#    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/07/01 00:45:28 by thundder         ###   ########.fr        #
+#    Updated: 2025/07/01 16:36:19 by hulefevr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ build-dev:
 
 up-dev:
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up -d
+	@make rebuild name=backend
 
 down-dev:
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down
@@ -36,6 +37,7 @@ down-dev:
 restart-dev:
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up -d
+	@make rebuild name=backend
 
 logs-dev:
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) logs -f
@@ -47,14 +49,15 @@ re-dev:
 
 
 rebuild-dev:
-	# make reset_vault 2>/dev/null || true
-	# touch ./vault/secrets/.env
+	make reset_vault 2>/dev/null || true
+	touch ./vault/secrets/.env
 
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down -v --remove-orphans
 	docker system prune -af
 	docker volume prune -f
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) build --no-cache
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up -d
+	@make rebuild name=backend
 
 reset_vault:
 	docker exec -it ft_transcendence-vault-1 chmod -R 777 ./vault/file

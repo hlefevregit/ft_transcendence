@@ -32,11 +32,11 @@ export const useWebSocketOnline = (pong: React.RefObject<game.pongStruct>,
     socketRef.current = ws;
     
     ws.onopen = () => {
-        console.log("✅ WebSocket connecté");
+        // console.log("✅ WebSocket connecté");
     };
     
     ws.onerror = (err) => {
-        console.error("❌ WebSocket erreur :", err);
+        // console.error("❌ WebSocket erreur :", err);
     };
 
     // Remove the game mode check to ensure the handler is always registered
@@ -47,49 +47,49 @@ export const useWebSocketOnline = (pong: React.RefObject<game.pongStruct>,
         let data;
         try {
             data = JSON.parse(event.data);
-            console.log("🔄 Message received:", data.type); // Add this debug line
+            // console.log("🔄 Message received:", data.type); // Add this debug line
         } catch (err) {
-            console.error("❌ Erreur parsing JSON :", err);
+            // console.error("❌ Erreur parsing JSON :", err);
             return;
         }
     
         switch (data.type) {
     
             case 'game_hosted': {
-                console.log('🎮 Game hosted with ID:', data.gameId);
+                // console.log('🎮 Game hosted with ID:', data.gameId);
     
                 pong.current.isHost = true ;
                 const roomId = data.gameId;
                 pong.current.lastHostedRoomId = roomId;
     
                 const roomName = `${userNameRef.current || 'Anonymous'}'s room`;
-                console.log("🧠 userNameRef.current =", userNameRef.current);
+                // console.log("🧠 userNameRef.current =", userNameRef.current);
     
                 const roomPanel = game.createRoomPanel(pong, lang, roomName, () => {
-                    console.log("🧩 Creating GUI for", roomId);
+                    // console.log("🧩 Creating GUI for", roomId);
                     socketRef.current?.send(JSON.stringify({
                         type: 'join_game',
                         gameId: roomId,
                         roomName: roomName,
                     }));
                 });
-                console.log("📦 roomPanel créé :", roomPanel?.name ?? 'undefined');
+                // console.log("📦 roomPanel créé :", roomPanel?.name ?? 'undefined');
     
                 pong.current.rooms.set(roomId, () => roomPanel);
-                console.log("🗂 Room ajoutée au Map avec ID:", roomId);
+                // console.log("🗂 Room ajoutée au Map avec ID:", roomId);
                 roomIdRef.current = roomId;
                 break;
             }
     
             case 'room_list': {
-                console.log("📜 Liste des rooms reçue:", data.rooms);
+                // console.log("📜 Liste des rooms reçue:", data.rooms);
     
                 // Réinitialise les rooms
                 pong.current.rooms.clear();
     
                 for (const room of data.rooms) {
                     const roomPanel = game.createRoomPanel(pong, lang, room.roomName, () => {
-                        console.log("🔗 Joining room:", room.gameId);
+                        // console.log("🔗 Joining room:", room.gameId);
                         pong.current.isHost = false;
                         socketRef.current?.send(JSON.stringify({
                             type: 'join_game',
@@ -107,35 +107,37 @@ export const useWebSocketOnline = (pong: React.RefObject<game.pongStruct>,
                     if (old) verticalStack.removeControl(old);
                     verticalStack.addControl(updatedList);
                 } else {
-                    console.warn("⚠️ roomListVerticalStackPanel introuvable");
+                    // console.warn("⚠️ roomListVerticalStackPanel introuvable");
                 }
     
                 break;
             }
+
+            
     
             case 'room_left': {
                 const roomId = data.gameId;
-                console.log("🚪 Room left:", roomId);
+                // console.log("🚪 Room left:", roomId);
     
                 const roomPanel = pong.current.rooms.get(roomId)?.();
                 if (roomPanel) {
                     roomPanel.dispose();
                     pong.current.rooms.delete(roomId);
-                    console.log("🗑️ Room removed from Map:", roomId);
+                    // console.log("🗑️ Room removed from Map:", roomId);
                 } else {
-                    console.warn("⚠️ Room panel not found for ID:", roomId);
+                    // console.warn("⚠️ Room panel not found for ID:", roomId);
                 }
                 break;
             }
     
             case 'joined_game': {
-                console.log('👥 Rejoint game:', data.gameId);
+                // console.log('👥 Rejoint game:', data.gameId);
     
                 break;
             }
     
             case 'start_game': {
-                console.log("🚀 Start game triggered for:", data.gameId);
+                // console.log("🚀 Start game triggered for:", data.gameId);
                 if (gameModes.current !== game.gameModes.online)
                     gameModes.current = game.gameModes.online;
                 states.current = game.states.waiting_to_start;
@@ -175,8 +177,8 @@ export const useWebSocketOnline = (pong: React.RefObject<game.pongStruct>,
             }
     
             case 'game_finished': {
-                console.log("🏁 Game finished:", data.reason || "normal");
-                console.log("🏆 Winner:", (pong.current.player1Score > pong.current.player2Score ? data.player1Id : data.player2Id));
+                // console.log("🏁 Game finished:", data.reason || "normal");
+                // console.log("🏆 Winner:", (pong.current.player1Score > pong.current.player2Score ? data.player1Id : data.player2Id));
                 // ✅ Mets à jour l'état interne de ton jeu
                 states.current = game.states.game_finished;
     
@@ -204,10 +206,10 @@ export const useWebSocketOnline = (pong: React.RefObject<game.pongStruct>,
                             }),
                         });
                         if (!res) {
-                            console.error("❌ Erreur lors de l'envoi des données du jeu :", res);
+                            // console.error("❌ Erreur lors de l'envoi des données du jeu :", res);
                         }
                         else {
-                            console.log("✅ Données du jeu envoyées avec succès");
+                            // console.log("✅ Données du jeu envoyées avec succès");
                             if (pong.current.lastHostedRoomId) {
                                 pong.current.rooms.delete(pong.current.lastHostedRoomId);
                             }
@@ -217,12 +219,12 @@ export const useWebSocketOnline = (pong: React.RefObject<game.pongStruct>,
                 break;
             }
             case 'error': {
-                console.error('❗ Erreur serveur:', data.message);
+                // console.error('❗ Erreur serveur:', data.message);
                 break;
             }
     
             default: {
-                console.log('ℹ️ Message inconnu reçu:', data);
+                // console.log('ℹ️ Message inconnu reçu:', data);
             }
         }
     };
@@ -236,6 +238,7 @@ export const useOnlineLoop = (pong: React.RefObject<game.pongStruct>,
     states: React.RefObject<game.states>,
     userNameRef: React.RefObject<string>,
     lastHandledState: React.RefObject<game.states | null>,
+    joinRoomId: string | null = null
 
 ) =>
 {
@@ -251,12 +254,31 @@ export const useOnlineLoop = (pong: React.RefObject<game.pongStruct>,
                 lastHandledState.current !== game.states.hosting_waiting_players
             ) {
                 const name = userNameRef.current || 'Anonymous';
-                console.log(`🎮 Hosting game as ${name}`);
+                // console.log(`🎮 Hosting game as ${name}`);
                 socketRef.current.send(JSON.stringify({
                     type: 'host_game',
                     roomName: `${name}'s room`,
                 }));
                 lastHandledState.current = game.states.hosting_waiting_players;
+            }
+            break;
+        }
+
+        case game.states.join_invite: {
+
+            console.log("💡 socketRef:", socketRef.current);
+
+            if (
+                socketRef.current &&
+                socketRef.current.readyState === WebSocket.OPEN &&
+                lastHandledState.current !== game.states.join_invite
+            ) {
+                // console.log("Joining game with ID:", pong.current.lastJoinedRoomId);
+                socketRef.current.send(JSON.stringify({
+                    type: 'join_game',
+                    gameId: joinRoomId,
+                }));
+                lastHandledState.current = game.states.join_invite;
             }
             break;
         }
@@ -270,7 +292,7 @@ export const useOnlineLoop = (pong: React.RefObject<game.pongStruct>,
                 socketRef.current.readyState === WebSocket.OPEN &&
                 lastHandledState.current !== game.states.room_list
             ) {
-                console.log("Requesting list of rooms");
+                // console.log("Requesting list of rooms");
                 socketRef.current.send(JSON.stringify({ type: 'room_list' }));
                 lastHandledState.current = game.states.room_list;
             }
@@ -287,7 +309,7 @@ export const useOnlineLoop = (pong: React.RefObject<game.pongStruct>,
                 socketRef.current.readyState === WebSocket.OPEN &&
                 lastHandledState.current !== game.states.waiting_to_start
             ) {
-                console.log("Waiting for players to join...");
+                // console.log("Waiting for players to join...");
                 // socketRef.current.send(JSON.stringify({ type: 'waiting_to_start' }));
                 lastHandledState.current = game.states.waiting_to_start;
                 pong.current.player1Score = 0;
@@ -326,7 +348,7 @@ export const useOnlineLoop = (pong: React.RefObject<game.pongStruct>,
             ) {
                 if (pong.current.isHost) {
 
-                    console.log("Game finished, sending scores");
+                    // console.log("Game finished, sending scores");
                     socketRef.current.send(JSON.stringify({
                         type: 'game_finished',
                         player1Score: pong.current.player1Score,
@@ -441,8 +463,8 @@ export const useOnlineLoop = (pong: React.RefObject<game.pongStruct>,
                 && (states.current as game.states) !== game.states.countdown
                 && (states.current as game.states) !== game.states.waiting_to_start
             ) {
-                console.log("Sending current state:", states.current);
-                console.log("Last handled state:", lastHandledState.current);
+                // console.log("Sending current state:", states.current);
+                // console.log("Last handled state:", lastHandledState.current);
 
                 // if (socketRef.current) {
                 // 	socketRef.current.send(JSON.stringify({

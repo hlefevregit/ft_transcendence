@@ -131,17 +131,17 @@ export const    instantiateSettingsGUI =
 		pong.current.musicVolume = value;
 		if (musicRef && musicRef.current)
 		{
-			console.debug("IL FÉ TARPING CHAUD");
+			// console.debug("IL FÉ TARPING CHAUD");
 			musicRef.current.volume = value;
 		}
-		console.log("music volume: ", pong.current.musicVolume);
+		// console.log("music volume: ", pong.current.musicVolume);
 		game.findComponentByName(pong, "musicSliderTextValue").text = pong.current.musicVolume.toFixed(2);
 	});
 	const	soundSlider = game.createSlider("soundSlider", 0, 1, 0.02, pong.current.soundVolume, (value: number) =>
 	{
 		pong.current.soundVolume = value;
 		if (audioRef && audioRef.current) audioRef.current.volume = value;
-		console.log("sound volume: ", pong.current.musicVolume);
+		// console.log("sound volume: ", pong.current.musicVolume);
 		game.findComponentByName(pong, "soundSliderTextValue").text = pong.current.soundVolume.toFixed(2);
 	});
 	const	musicSliderText = game.createDynamicText("musicSliderText", "settingsMusic");
@@ -735,7 +735,7 @@ export const	instantiateFinishedGameGUI =
 				{
 					const winner = pong.current.player1Score > pong.current.player2Score ? pong.current!.playerNameLeft : pong.current!.playerNameRight;
 					game.findComponentByName(pong, "finishedGameWinnerPlayer").text = winner;
-					console.warn("❌❌❌❌ WINNER")
+					// console.warn("❌❌❌❌ WINNER")
 				}
 			});
 
@@ -754,7 +754,7 @@ export const	instantiateFinishedGameGUI =
 				{
 					const looser = pong.current.player1Score < pong.current.player2Score ? pong.current.playerNameLeft : pong.current.playerNameRight;
 					game.findComponentByName(pong, "finishedGameLooserPlayer").text = looser;
-					console.warn("❌❌❌❌ LOOSER")
+					// console.warn("❌❌❌❌ LOOSER")
 				}
 			});
 
@@ -932,7 +932,7 @@ export const	instantiateRoomListGUI =
 		{
 			const ws = socketRef.current;
 			if (ws && ws.readyState === WebSocket.OPEN) {
-			console.log("🔄 Demande de mise à jour de la liste des rooms");
+			// console.log("🔄 Demande de mise à jour de la liste des rooms");
 			ws.send(JSON.stringify({ type: "room_list" }));
 
 			// Nettoie l'ancien affichage
@@ -942,7 +942,7 @@ export const	instantiateRoomListGUI =
 				if (old) verticalStack.removeControl(old);
 			}
 			} else {
-			console.warn("❌ socketRef n'est pas prêt");
+			// console.warn("❌ socketRef n'est pas prêt");
 			}
 		}, pong, "refresh");
 
@@ -1143,7 +1143,7 @@ export const instantiateBracketGUI =
 	{
 		if (gameModes.current !== game.gameModes.tournament)
 		{
-			console.warn("❌ Cannot start the game, not in tournament mode");
+			// console.warn("❌ Cannot start the game, not in tournament mode");
 			return;
 		}
 		switch (pong.current.tournamentState)

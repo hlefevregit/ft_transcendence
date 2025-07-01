@@ -39,7 +39,7 @@ export default function SettingsHistory() {
         setStats(stats);
         setMatches(matches);
       })
-      .catch(console.error);
+      .catch(/*console.error*/);
   }, []);
 
   // active le scroll si plus de 5 matchs

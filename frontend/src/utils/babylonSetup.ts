@@ -39,9 +39,9 @@ export const	setupBabylonBJ = async (bjRef: bj.bjStruct, canvasRef: any): Promis
 	{
 		const mapMeshes = await importGLTF(bjRef.scene, bjMapUrl, true, true);
 		if (mapMeshes && mapMeshes.length > 0) bjRef.map = mapMeshes[0];
-			else console.warn("Failed to load map");
+			// else console.warn("Failed to load map");
 	}
-	catch (error) { console.error("Error while loading map:", error); }
+	catch (error) { /*console.error("Error while loading map:", error);*/ }
 	try
 {
 		const modelMeshes = await importGLTF(sceneInstance, cardUrl, false, false);
@@ -59,7 +59,7 @@ export const	setupBabylonBJ = async (bjRef: bj.bjStruct, canvasRef: any): Promis
 		  for (const value in bj.ValueMap) {
 		  const key = bj.getCardKey(suit as keyof typeof bj.SuitMap, value as keyof typeof bj.ValueMap);
 		  const meshName = `${suit}${value.charAt(0).toUpperCase() + value.slice(1)}`;
-		  console.log(`Looking for mesh: ${meshName} with key: ${key}`);
+		//   console.log(`Looking for mesh: ${meshName} with key: ${key}`);
 		  const mesh: baby.AbstractMesh | undefined = bjRef.scene.meshes.find((mesh: baby.AbstractMesh) => mesh.name === meshName);
 		  if (mesh) {
 			bjRef.cards[key] = mesh as baby.Mesh;
@@ -68,7 +68,7 @@ export const	setupBabylonBJ = async (bjRef: bj.bjStruct, canvasRef: any): Promis
 	  }
 
 	}
-	catch (error) { console.error("Error while loading card model:", error); }
+	catch (error) { /*console.error("Error while loading card model:", error);*/ }
 
 	const	freeCamera = new baby.FlyCamera("freeCam", new baby.Vector3(0, 1, 0), sceneInstance);
 	freeCamera.position = new baby.Vector3(0, 10, 0);
@@ -112,9 +112,9 @@ export const	setupBabylonPong = async (pong: React.RefObject<game.pongStruct>, c
 	{
 		const meshes = await importGLTF(pong.current.scene, pongMapUrl, true, true);
 		if (meshes && meshes.length > 0) pong.current.map = meshes[0];
-		else console.warn("Failed to load map");
+		// else console.warn("Failed to load map");
 	}
-	catch (error) { console.error("Error while loading map:", error); }
+	catch (error) { /*console.error("Error while loading map:", error); */}
 
 	//                                                            width: width,           height: depth, depth: height
 	const	paddle1Mesh = baby.MeshBuilder.CreateBox("paddle1", { width: pong.current.paddleWidth, height: 0.75, depth: 1 }, sceneInstance);
@@ -192,7 +192,7 @@ export const	setupBabylonPong = async (pong: React.RefObject<game.pongStruct>, c
 export const importGLTF = async (scene: baby.Scene, modelUrl: string, visible: boolean, enabled: boolean) => {
   try {
     if (scene.isDisposed) {
-      console.error("Scene was disposed before loading model");
+    //   console.error("Scene was disposed before loading model");
       return null;
     }
 
@@ -208,7 +208,7 @@ export const importGLTF = async (scene: baby.Scene, modelUrl: string, visible: b
     );
 
     if (!result || !result.meshes || result.meshes.length === 0) {
-      console.warn("No meshes loaded");
+    //   console.warn("No meshes loaded");
       return null;
     }
 
@@ -221,7 +221,7 @@ export const importGLTF = async (scene: baby.Scene, modelUrl: string, visible: b
 
     return result.meshes;
   } catch (error) {
-    console.error("Error loading model:", error);
+    // console.error("Error loading model:", error);
     return null;
   }
 };

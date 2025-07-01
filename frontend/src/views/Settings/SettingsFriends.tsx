@@ -92,7 +92,7 @@ export default function SettingsFriends() {
       const received = await resReceived.json();
       setReceivedRequests(received);
     } catch (err: any) {
-      console.error(err);
+      // console.error(err);
       setError(err.message || "Erreur lors du chargement");
     }
   };
@@ -123,7 +123,7 @@ export default function SettingsFriends() {
       setNewFriendPseudo("");
       fetchFriendsData();
     } catch (err: any) {
-      console.error(err);
+      // console.error(err);
       setError(err.message || "Erreur lors de l'envoi");
     }
   };
@@ -146,7 +146,7 @@ export default function SettingsFriends() {
       if (!res.ok) throw new Error("Échec annulation");
       fetchFriendsData();
     } catch (err: any) {
-      console.error(err);
+      // console.error(err);
       setError(err.message || "Erreur annulation");
     }
   };
@@ -162,7 +162,7 @@ export default function SettingsFriends() {
       if (!res.ok) throw new Error("Échec acceptation");
       fetchFriendsData();
     } catch (err: any) {
-      console.error(err);
+      // console.error(err);
       setError(err.message || "Erreur acceptation");
     }
   };
@@ -178,7 +178,7 @@ export default function SettingsFriends() {
       if (!res.ok) throw new Error("Échec refus");
       fetchFriendsData();
     } catch (err: any) {
-      console.error(err);
+      // console.error(err);
       setError(err.message || "Erreur refus");
     }
   };
@@ -194,7 +194,7 @@ export default function SettingsFriends() {
       if (!res.ok) throw new Error("Échec suppression");
       fetchFriendsData();
     } catch (err: any) {
-      console.error(err);
+      // console.error(err);
       setError(err.message || "Erreur suppression");
     }
   };

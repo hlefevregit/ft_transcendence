@@ -81,7 +81,7 @@ export function useConversationMessages(
       if (err.message === 'blocked') {
         setIsBlocked(true)
       } else {
-        console.error('Erreur de refresh :', err)
+        // console.error('Erreur de refresh :', err)
       }
     }
   }
@@ -129,7 +129,7 @@ export function useConversationMessages(
       if (err.message === 'blocked') {
         setIsBlocked(true)
       } else {
-        console.error('Erreur sendMessage :', err)
+        // console.error('Erreur sendMessage :', err)
       }
     }
   }

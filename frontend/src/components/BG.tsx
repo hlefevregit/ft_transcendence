@@ -26,14 +26,14 @@ useEffect(() =>
 
 		BGMusic.play().then(() =>
 		{
-			console.log("🎵 Musique auto-démarrée");
+			// console.log("🎵 Musique auto-démarrée");
 			setTimeout(() =>
 			{
 				BGMusic.muted = false;
 				setIsPlaying(true);
 			}, 1000);
 		})
-			.catch((err) =>{ console.warn("🔇 Autoplay bloqué", err); });
+			.catch((err) =>{});
 	}
 
 	const handleClick = () =>
@@ -48,19 +48,19 @@ useEffect(() =>
 				audio.play().then(() =>
 				{
 					setIsPlaying(true);
-					console.log("▶️ Lecture");
+					// console.log("▶️ Lecture");
 				}).catch((err) => {
-					console.error("⚠️ Erreur lors de la lecture", err);
+					// console.error("⚠️ Erreur lors de la lecture", err);
 				});
 			}
 			else
 			{
 				audio.pause();
 				setIsPlaying(false);
-				console.log("⏸️ Pause");
+				// console.log("⏸️ Pause");
 			}
 		}
-		catch (err) { console.error("🚫 Erreur audio", err); }
+		catch (err) {  }
 	};
 
 	document.addEventListener("click", handleClick);

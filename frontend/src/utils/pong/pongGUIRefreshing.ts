@@ -25,12 +25,12 @@ export const initializeAllGUIScreens =
 ): void =>
 {
 	// Initialize the GUI texture
-	console.log("initialized GUI texture...");
+	// console.log("initialized GUI texture...");
 	game.instantiateGUI(pong);
-	console.log("complete initializing GUI texture");
+	// console.log("complete initializing GUI texture");
 
 	// Initialize all the GUI screens
-	console.log("initialized GUI screens...");
+	// console.log("initialized GUI screens...");
 	game.instantiateMainMenuGUI(pong, states, gameModes, navigate, setGameModeTrigger);
 	game.instantiateSettingsGUI(pong, states, lang, musicRef, audioRef);
 	game.instentiatePongSettingsGUI(pong, states, gameModes, playerStates, lastState);
@@ -45,7 +45,7 @@ export const initializeAllGUIScreens =
 	game.instantiateInputUsernameGUI(pong, states, gameModes, playerStates, lastState);
 	game.instantiateDebugGUI(pong, states, gameModes, playerStates, lang);
 	// etc.
-	console.log("complete initializing GUI screens");
+	// console.log("complete initializing GUI screens");
 }
 
 export const updateComponentControls =
@@ -144,7 +144,7 @@ export const	updateScreensVisibilityStates =
 
 	pong.current.guiTexture?.removeControl(pong.current.debugGUI as baby.Container);
 	pong.current.guiTexture?.addControl(pong.current.debugGUI as baby.Container);
-	console.log("Updated GUI visibility based on states:", states);
+	// console.log("Updated GUI visibility based on states:", states);
 }
 
 export const	updateGUIVisibilityPlayerStates =
@@ -271,7 +271,7 @@ export const	updatePlayerNames = (pong: React.RefObject<game.pongStruct>, states
 	{
 		winnerName.text	= (pong.current.player1Score > pong.current.player2Score ? player1Name.text : player2Name.text)
 		looserName.text	= (pong.current.player1Score < pong.current.player2Score ? player1Name.text : player2Name.text)
-		console.debug("🔨🔨🔨🔨🔨🔨Updated player names in finished game GUI:", winnerName.text, looserName.text);
+		// console.debug("🔨🔨🔨🔨🔨🔨Updated player names in finished game GUI:", winnerName.text, looserName.text);
 	}
 	return;
 }
@@ -401,15 +401,15 @@ export const	refreshOnlineRoomsEntries = (pong: React.RefObject<game.pongStruct>
 {
 	if (!pong.current.rooms)
 	{
-		console.warn("Rooms map is not initialized !");
+		// console.warn("Rooms map is not initialized !");
 		return (game.createDynamicText("roomsText", "roomListEmpty"));
 	}
-	console.log("🔁 Refreshing room list, rooms =", Array.from(pong.current.rooms.keys()));
+	// console.log("🔁 Refreshing room list, rooms =", Array.from(pong.current.rooms.keys()));
 
 	const	roomsOnlineVerticalPanel = game.createVerticalStackPanel("roomsOnlineVerticalPanel", 0);
 	for (const [key, valueOrGetter] of pong.current.rooms.entries())
 	{
-		console.log("🧱 Rendering room:", key);
+		// console.log("🧱 Rendering room:", key);
 		const room = valueOrGetter();
 		roomsOnlineVerticalPanel.addControl(room);
 	}
@@ -420,15 +420,15 @@ export const	refreshTournamentRoomsEntries = (pong: React.RefObject<game.pongStr
 {
 	if (!pong.current.party)
 	{
-		console.warn("Rooms map is not initialized !");
+		// console.warn("Rooms map is not initialized !");
 		return (game.createDynamicText("roomsText", "roomListEmpty"));
 	}
-	console.log("🔁 Refreshing room list, rooms =", Array.from(pong.current.party.keys()));
+	// console.log("🔁 Refreshing room list, rooms =", Array.from(pong.current.party.keys()));
 
 	const	roomsTournamentVerticalPanel = game.createVerticalStackPanel("roomsTournamentVerticalPanel", 0);
 	for (const [key, valueOrGetter] of pong.current.party.entries())
 	{
-		console.log("🧱 Rendering room:", key);
+		// console.log("🧱 Rendering room:", key);
 		const party = valueOrGetter();
 		roomsTournamentVerticalPanel.addControl(party);
 	}

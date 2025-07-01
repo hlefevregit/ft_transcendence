@@ -117,7 +117,7 @@ export const	changeCamera = (newCamera: baby.Camera | undefined, pong: React.Ref
 {
 	if (!pong.current.scene || newCamera === undefined) return;
 	pong.current.scene.activeCamera = newCamera;
-	console.log("Camera changed to: ", newCamera.name);
+	// console.log("Camera changed to: ", newCamera.name);
 	return;
 }
 
@@ -198,7 +198,7 @@ export const	transitionToCamera = async (
 	states: React.RefObject<game.states>
 ): Promise<void> =>
 {
-	console.log("Started transition");
+	// console.log("Started transition");
 	const	lastState = states.current;
 	if (cameraA === undefined || cameraB === undefined || !pong.current) return;
 	states.current = game.states.in_transition;
@@ -235,7 +235,7 @@ export const	transitionToCamera = async (
 	// Change back to the new camera
 	changeCamera(cameraB, pong);
 	states.current = lastState; // Restore previous state
-	console.log("Transition complete");
+	// console.log("Transition complete");
 	game.updateScreensVisibilityStates(pong, states.current);
 	return;
 }

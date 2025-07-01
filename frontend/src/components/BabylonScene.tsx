@@ -23,7 +23,7 @@ const BabylonScene: React.FC<BabylonSceneProps> = ({
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) {
-      console.error("BabylonScene : canvas introuvable");
+      // console.error("BabylonScene : canvas introuvable");
       return;
     }
 
@@ -63,7 +63,7 @@ const BabylonScene: React.FC<BabylonSceneProps> = ({
       BABYLON.Texture.TRILINEAR_SAMPLINGMODE,
       null,
       (msg, err) => {
-        console.error("BabylonScene : erreur chargement texture :", msg, err);
+        // console.error("BabylonScene : erreur chargement texture :", msg, err);
       }
     );
     texture.uScale = 1;

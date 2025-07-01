@@ -110,6 +110,7 @@ export enum states
 	tournament_final_game_finished,
 	party_canceled,
 	disconnecting,
+	join_invite,
 }
 
 export type pongStruct =
@@ -284,7 +285,10 @@ export type pongStruct =
 	mainMenuMusic?: baby.Sound;
 	playingMusic?: baby.Sound;
 	waitingMusic?: baby.Sound;
+
+	inviteRoomId?: string;	// Used to store the room id of the invitee
 };
+
 
 export function initPongStruct(): pongStruct 
 {

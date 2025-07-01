@@ -58,7 +58,7 @@ export const UserProfileCard: FC<UserProfileCardProps> = ({
         const prev = profileCache.get(cacheKey) ?? { history: [], isBlocked: blocked }
         profileCache.set(cacheKey, { history: prev.history, isBlocked: blocked })
       })
-      .catch(console.error)
+      // .catch(console.error)
 
     // fetch history
     getUserHistory(user.username)
@@ -70,7 +70,7 @@ export const UserProfileCard: FC<UserProfileCardProps> = ({
         const prev = profileCache.get(cacheKey) ?? { history: h, isBlocked }
         profileCache.set(cacheKey, { history: h, isBlocked: prev.isBlocked })
       })
-      .catch(console.error)
+      // .catch(console.error)
 
     return () => {
       active = false
@@ -90,7 +90,7 @@ export const UserProfileCard: FC<UserProfileCardProps> = ({
         profileCache.set(cacheKey, { history, isBlocked: true })
       }
     } catch (err) {
-      console.error(err)
+      // console.error(err)
     } finally {
       setBlockLoading(false)
     }

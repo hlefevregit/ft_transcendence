@@ -16,10 +16,10 @@ const YouAreAnIdiot404: React.FC = () => {
       audioRef.current.play()
         .then(() => {
           setAudioUnlocked(true);
-          console.log("Audio activé!");
+          // console.log("Audio activé!");
         })
         .catch((err) => {
-          console.warn("Erreur lors de la lecture audio:", err);
+          // console.warn("Erreur lors de la lecture audio:", err);
         });
     }
   };

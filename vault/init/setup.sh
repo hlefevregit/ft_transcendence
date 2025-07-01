@@ -31,7 +31,7 @@ echo "🔓 Unsealing Vault..."
 vault operator unseal -address="$VAULT_ADDR" "$(cat /vault/secrets/unseal_key.txt)"
 
 # Fill Vault if not already filled
-if [ "${VAULT_FILLED}" != "true" ]; then
+if [ "${VAULT_FILLED:-false}" != "true" ]; then
   echo "🔑 Logging into Vault..."
   vault login "$(cat /vault/secrets/root_token.txt)"
 
@@ -74,8 +74,8 @@ if [ "${VAULT_FILLED}" != "true" ]; then
   export VAULT_FILLED="true"
 fi
 
-echo "VAULT_TOKEN=$(cat /vault/secrets/root_token.txt)" > /vault/secrets/.env
+echo "VAULT_TOKEN=$(cat /vault/secrets/root_token.txt)" >> /vault/secrets/.env
 
 echo "🏁 Vault initialized and unsealed."
 cp /vault/secrets/root_token.txt /vault/secrets/.env_token
-echo "VAULT_TOKEN=$(cat /vault/secrets/.env_token)" > /vault/secrets/.env_extracted
+echo "VAULT_TOKEN=$(cat /vault/secrets/.env_token)" >> /vault/secrets/.env_extracted

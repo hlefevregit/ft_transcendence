@@ -61,8 +61,8 @@ const LoginForm: React.FC = () => {
   const handleGoogle = async (idToken: string) => {
     setError('');
     try {
-      console.log("Google ID Token:", idToken); // Debugging line
-      console.log("Google Client ID:", GOOGLE_CLIENT_ID); // Debugging line
+      // console.log("Google ID Token:", idToken); // Debugging line
+      // console.log("Google Client ID:", GOOGLE_CLIENT_ID); // Debugging line
       const res = await googleLogin(idToken);
       if (res.success) {
         // Security: block deleted_ accounts

@@ -114,7 +114,7 @@ const Settings: React.FC = () => {
 	const fetchFriends = async () => {
 		const res = await fetch('/api/friends', { headers });
 		const data = await res.json();
-		console.log('👥 Friends response:', data);
+		// console.log('👥 Friends response:', data);
 		setFriends(data.friends);
 	};
 	
@@ -144,7 +144,7 @@ const Settings: React.FC = () => {
 		if (!token) {
 			navigate('/login');
 		}
-		console.log('Token:', token);
+		// console.log('Token:', token);
 	}, [navigate]);
 	
 	const fetchUser = async () => {
@@ -168,7 +168,7 @@ const Settings: React.FC = () => {
 			setAvatarUrl(data.avatarUrl || '');
 			setStatus(data.status);
 			setTwoFAEnabled(data.twoFAEnabled);
-			console.log('2FA Enabled:', data.twoFAEnabled);
+			// console.log('2FA Enabled:', data.twoFAEnabled);
 		} catch (err) {
 			setError('Failed to load profile');
 		}
@@ -197,7 +197,7 @@ const Settings: React.FC = () => {
 			}
 			
 			canvas.focus();
-			console.log("✅ Canvas détecté", canvas);
+			// console.log("✅ Canvas détecté", canvas);
 
 			engine = new BABYLON.Engine(canvas, true);
 			scene = new BABYLON.Scene(engine);
@@ -212,7 +212,7 @@ const Settings: React.FC = () => {
 
 			const backgroundMaterial = new BABYLON.StandardMaterial("bgMat", scene);
 			const texture = new BABYLON.Texture("/assets/3.jpg", scene, false, false, BABYLON.Texture.TRILINEAR_SAMPLINGMODE, null, (msg, err) => {
-				console.error("Erreur chargement texture:", msg, err);
+				// console.error("Erreur chargement texture:", msg, err);
 			});
 			texture.uScale = 1;
 			texture.vScale = -1;
@@ -378,12 +378,12 @@ const Settings: React.FC = () => {
 			const data = await res.json();
 			if (res.ok) {
 			setQrCodeUrl(data.qrCode);
-			console.log("🔐 QR Code URL:", data.qrCode); // ou affiche-le avec <img src={data.qrCode} />
+			// console.log("🔐 QR Code URL:", data.qrCode); // ou affiche-le avec <img src={data.qrCode} />
 			} else {
 			alert(data.error || "Échec de l'activation 2FA");
 			}
 		} catch (err) {
-			console.error("Erreur activation 2FA:", err);
+			// console.error("Erreur activation 2FA:", err);
 		}
 	};
 

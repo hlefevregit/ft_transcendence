@@ -72,7 +72,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
           })
         }
       } catch (err) {
-        console.error('Erreur ChatStore polling:', err)
+        // console.error('Erreur ChatStore polling:', err)
       }
     }
 

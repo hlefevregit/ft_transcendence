@@ -8,8 +8,15 @@ import { useInvitations, Invite } from '../../hooks/useInvitations'
 import { useChatStore } from './ChatStore'
 import '../../styles/LiveChat/Conversation.css'
 import { getCurrentUser } from './api'
+import * as game from '@/libs/pongLibs'
+import * as baby from '@/libs/babylonLibs'
 
-export default function Conversation({ className = '' }) {
+interface ConversationProps {
+  className?: string
+  states: React.RefObject<game.states>
+}
+
+export default function Conversation({ className = '', states }: ConversationProps) {
   const { open, selectedUserId, contactsById } = useChatStore()
   const selectedUser = selectedUserId != null ? contactsById[selectedUserId] : null
   const { id: meId } = getCurrentUser()
@@ -49,12 +56,13 @@ export default function Conversation({ className = '' }) {
 
   // Handler for the “Rejoindre” button
   const handleJoin = async (roomId: string) => {
-    console.log('handleJoin appelé avec roomId=', roomId)
+    // console.log('handleJoin appelé avec roomId=', roomId)
     try {
-      console.log('Tentative de rejoindre la partie avec roomId:', roomId) 
       navigate(`/pong?joinRoomId=${roomId}`)
+ 
+      // setState()
     } catch (err) {
-      console.error('Erreur handleJoin:', err)
+      // console.error('Erreur handleJoin:', err)
       alert('Impossible de rejoindre la partie.')
     }
   }

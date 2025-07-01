@@ -117,7 +117,7 @@ export const	changeCamera = (newCamera: baby.Camera | undefined, bjRef: React.Re
 {
 	if (!bjRef.current.scene || newCamera === undefined) return;
 	bjRef.current.scene.activeCamera = newCamera;
-	console.log("Camera changed to: ", newCamera.name);
+	// console.log("Camera changed to: ", newCamera.name);
 	return;
 }
 
@@ -209,11 +209,11 @@ export const	transitionToCamera = async (
 	states: React.RefObject<bj.States>
 ): Promise<void> =>
 {
-	console.log("Started transition");
+	// console.log("Started transition");
 	const	lastState = states.current;
 	if (cameraA === undefined || cameraB === undefined || !bjRef.current) return;
 	states.current = bj.States.in_transition;
-	console.log("STATES : ", states.current);
+	// console.log("STATES : ", states.current);
 	duration *= 1000;	// Convert to milliseconds
 
 	// Set transitionCamera to A
@@ -234,7 +234,7 @@ export const	transitionToCamera = async (
         //     // Force it back and continue
         //     states.current = bj.States.in_transition;
         // }
-		console.log("STATES : ", states.current);
+		// console.log("STATES : ", states.current);
 		if (!bjRef.current.transitionCamera) break;
 		const	alpha = time / duration;
 		const	lerpedPosition = smoothStepVector3(cameraA.position.clone(), cameraB.position.clone(), alpha);
@@ -254,8 +254,8 @@ export const	transitionToCamera = async (
 	// Change back to the new camera
 	changeCamera(cameraB, bjRef);
 	states.current = lastState; // Restore previous state
-	console.log("STATES : ", states.current);
-	console.log("Transition complete");
+	// console.log("STATES : ", states.current);
+	// console.log("Transition complete");
 	bj.updateGUIVisibilityStates(bjRef, states.current);
 	return;
 }

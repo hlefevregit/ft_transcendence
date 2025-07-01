@@ -83,7 +83,7 @@ export default function ChatPanel({
         { inviteeId: pendingInviteeId },
         { headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` } }
       ).catch(err => {
-        console.error('Erreur invitation :', err)
+        // console.error('Erreur invitation :', err)
         alert("Impossible d'envoyer l'invitation.")
       })
     }
@@ -107,7 +107,7 @@ export default function ChatPanel({
           { headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` } }
         )
         .then(() => setHasUpdatedInvite(true))
-        .catch(err => console.error('Erreur update invitation :', err))
+        .catch(err => {})
     }
 
     // 2) hosting_waiting_players → game_settings → reset (sans supprimer)
@@ -123,10 +123,10 @@ export default function ChatPanel({
           { headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` } }
         )
         .then(() => {
-          console.log('Invitation remise à zéro')
+          // console.log('Invitation remise à zéro')
           setHasUpdatedInvite(false)
         })
-        .catch(err => console.error('Erreur reset invitation :', err))
+        .catch(err => {})
     }
 
     // 3) hosting_waiting_players → autre état (hors game_settings) → suppression
@@ -134,7 +134,7 @@ export default function ChatPanel({
       curr !== game.states.hosting_waiting_players &&
       curr !== game.states.game_settings
     ) {
-      console.log('State actuel (curr):', curr)
+      // console.log('State actuel (curr):', curr)
       axios
         .post(
           '/api/invitations/delete',
@@ -142,11 +142,11 @@ export default function ChatPanel({
           { headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` } }
         )
         .then(() => {
-          console.log('Invitation supprimée')
+          // console.log('Invitation supprimée')
           setPendingInviteeId(null)
           setHasUpdatedInvite(false)
         })
-        .catch(err => console.error('Erreur delete invitation :', err))
+        .catch(err => {})
     }
 
     prevGameStateRef.current = curr
@@ -162,8 +162,8 @@ export default function ChatPanel({
       ).then(() => {
         setPendingInviteeId(null)
         setHasUpdatedInvite(false)
-        console.log('Toutes mes invitations supprimées (auto, plus sur /pong)')
-      }).catch(err => console.error('Erreur deleteAllMine :', err))
+        // console.log('Toutes mes invitations supprimées (auto, plus sur /pong)')
+      }).catch(err => {})
     }
   }, [location.pathname])
 

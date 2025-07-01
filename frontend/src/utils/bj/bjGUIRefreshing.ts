@@ -19,12 +19,12 @@ export const initializeAllGUIScreens =
 ): void =>
 {
 	// Initialize the GUI texture
-	console.log("initialized GUI texture...");
+	// console.log("initialized GUI texture...");
 	bj.instantiateGUI(bjRef);
-	console.log("complete initializing GUI texture");
+	// console.log("complete initializing GUI texture");
 
 	// Initialize all the GUI screens
-	console.log("initialized GUI screens...");
+	// console.log("initialized GUI screens...");
 	bj.instantiateMainMenuGUI(bjRef, states, navigate);
 	bj.instantiateSettingsGUI(bjRef, states, lang);
 	bj.instantiateGameModeGUI(bjRef, states);
@@ -35,7 +35,7 @@ export const initializeAllGUIScreens =
 	// bj.instantiateArenaGUI(pong);
 	bj.instantiateDebugGUI(bjRef, states, lang);
 	// etc.
-	console.log("complete initializing GUI screens");
+	// console.log("complete initializing GUI screens");
 }
 
 export const	updateGUIVisibilityStates =
@@ -70,8 +70,8 @@ export const	updateGUIVisibilityStates =
 
 	bjRef.current.guiTexture?.removeControl(bjRef.current.debugGUI as baby.Container);
 	bjRef.current.guiTexture?.addControl(bjRef.current.debugGUI as baby.Container);
-	console.log("Updated GUI visibility based on states:", states);
-	console.log("Current GUI texture children:", bjRef.current.guiTexture?.getDescendants().map(control => control.name));
+	// console.log("Updated GUI visibility based on states:", states);
+	// console.log("Current GUI texture children:", bjRef.current.guiTexture?.getDescendants().map(control => control.name));
 }
 
 export const	updateGUIValues =

@@ -42,12 +42,12 @@
 
   function processNext() {
     if (index >= urls.length) {
-      console.log('Toutes les URLs ont été injectées.');
+      // console.log('Toutes les URLs ont été injectées.');
       return;
     }
     const btn = document.querySelector('[aria-label="Ajouter un URI"]');
     if (!btn) {
-      console.error('Bouton "Ajouter un URI" non trouvé');
+      // console.error('Bouton "Ajouter un URI" non trouvé');
       return;
     }
     // Clique sur le bouton
@@ -57,13 +57,13 @@
     setTimeout(() => {
       const input = document.activeElement;
       if (!input || (input.tagName !== 'INPUT' && input.tagName !== 'TEXTAREA')) {
-        console.warn('Aucun input ou textarea sélectionné après clic sur le bouton.');
+        // console.warn('Aucun input ou textarea sélectionné après clic sur le bouton.');
         return;
       }
       // Injecte l'URL
       input.value = urls[index];
       input.dispatchEvent(new Event('input', { bubbles: true }));
-      console.log(`URL injectée (${index + 1}/${urls.length}): ${urls[index]}`);
+      // console.log(`URL injectée (${index + 1}/${urls.length}): ${urls[index]}`);
 
       index++;
       // Appelle la suivante après délai (ex: 1s)

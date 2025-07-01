@@ -7,7 +7,7 @@ export const handleEmailLogin = async (email: string, password: string) => {
     });
 
     const data = await response.json();
-    console.log("📡 Login API response:", data); // 👈 utile pour voir la vraie structure
+    // console.log("📡 Login API response:", data); // 👈 utile pour voir la vraie structure
 
     if (!response.ok || !data.success) {
       return {
@@ -22,7 +22,7 @@ export const handleEmailLogin = async (email: string, password: string) => {
       user: data.user ?? null, // 👈 important pour éviter "undefined"
     };
   } catch (err) {
-    console.error("❌ Login fetch error:", err);
+    // console.error("❌ Login fetch error:", err);
     return { success: false, message: 'Login request failed.' };
   }
 };
