@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/hlefevregit/ft_transcendence/compare/1.9.0...1.9.1) (2025-07-01)
+
+
+### Bug Fixes
+
+* **Nginx:** hulefevr: nginx create now its own certs ([884c6f8](https://github.com/hlefevregit/ft_transcendence/commit/884c6f8dcb68dccf24f9dfb13ba9372ef3816ccc))
+
 # [1.9.0](https://github.com/hlefevregit/ft_transcendence/compare/1.8.3...1.9.0) (2025-06-30)
 
 
