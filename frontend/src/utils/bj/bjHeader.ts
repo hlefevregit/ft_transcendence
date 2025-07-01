@@ -117,6 +117,7 @@ export enum States
 	in_game,
 	game_over,
 	in_transition,
+	not_found,
 }
 
 export enum GameState
@@ -204,6 +205,9 @@ export type bjStruct =
 	player1Cards: number[];
 	player2Cards: number[];
 	dealerCards: number[];
+
+	pressedKeys: Set<string>;
+	debugMode: boolean;
 };
 
 export function initBJStruct(): bjStruct
@@ -216,6 +220,9 @@ export function initBJStruct(): bjStruct
 		player1Score: 0,
 		player2Score: 0,
 		dealerScore: 0,
+
+		pressedKeys: new Set<string>(),
+		debugMode: false,
 	};
 }
 

@@ -35,6 +35,7 @@ const BlackJack: React.FC = () => {
 
 		bj.updateGUIVisibilityStates(bjRef, state.current);
 		bj.updateGUIValues(bjRef, language);
+		bj.manageLocalKeyboardInputs(bjRef.current);
 
 		if (!bjRef.current.engine) return;
 		bjRef.current.engine.runRenderLoop(() =>
@@ -49,6 +50,7 @@ const BlackJack: React.FC = () => {
 					lastState,
 					lastLanguage);
 
+			
 			if (bjRef.current.scene) bjRef.current.scene.render();
 		});
 
@@ -60,8 +62,10 @@ const BlackJack: React.FC = () => {
 
 		window.addEventListener('resize', handleResize);
 
+		const debugKeys = setInterval(() => { bj.debugKeys(bjRef, state); }, 100);
 		const	backgroundCalculations = setInterval(() =>
 		{
+			
 			bj.updateFinishedGameGUI(bjRef, winState);
 			// if (state.current !== bj.States.in_transition)
 				bj.updateGUIValues(bjRef, language);
@@ -78,6 +82,7 @@ const BlackJack: React.FC = () => {
 
 		// Cleanup on unmount
 		return () => {
+			clearInterval(debugKeys);
 			clearInterval(backgroundCalculations);
 			window.removeEventListener('resize', handleResize);
 			if (bjRef.current.engine) {

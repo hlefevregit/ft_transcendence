@@ -345,6 +345,8 @@ export const	instantiateDebugGUI =
 	// Add the screen to the GUI texture
 	bjRef.current.debugGUI = debugGUI;
 	bjRef.current.guiTexture?.addControl(debugGUI);
+
+	debugGUI.isVisible = debugGUI.isEnabled = false;
 }
 
 // ****************************************************************************** //
