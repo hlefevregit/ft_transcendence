@@ -598,6 +598,7 @@ export const	instantiateDebugGUI =
 	// Add the screen to the GUI texture
 	pong.current.debugGUI = debugGUI;
 	pong.current.guiTexture?.addControl(debugGUI);
+	debugGUI.isVisible = debugGUI.isEnabled = false;
 }
 
 // ****************************************************************************** //

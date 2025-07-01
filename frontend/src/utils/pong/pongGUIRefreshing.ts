@@ -142,8 +142,11 @@ export const	updateScreensVisibilityStates =
 	], pong, states);
 	game.updateComponentControls(pong.current.arenaGUI, game.states.in_game, pong, states);
 
-	pong.current.guiTexture?.removeControl(pong.current.debugGUI as baby.Container);
-	pong.current.guiTexture?.addControl(pong.current.debugGUI as baby.Container);
+	if (pong.current.debugMode)
+	{
+		pong.current.guiTexture?.removeControl(pong.current.debugGUI as baby.Container);
+		pong.current.guiTexture?.addControl(pong.current.debugGUI as baby.Container);
+	}
 	console.log("Updated GUI visibility based on states:", states);
 }
 
