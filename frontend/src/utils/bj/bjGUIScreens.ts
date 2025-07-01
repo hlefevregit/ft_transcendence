@@ -345,6 +345,7 @@ export const instantiateActionGUI =
 
 	// All GUI components needed
 	const	actionContainer = bj.createAdaptiveContainer("actionContainer");
+			actionContainer.top = "200px";
 	const	actionVerticalStackPanel = bj.createVerticalStackPanel("actionVerticalStackPanel");
 	const	actionHorizontalStackPanel = bj.createHorizontalStackPanel("actionHorizontalStackPanel", 0);
 	const	actionTitle = bj.createDynamicTitle("actionTitle", "actionTitle");
