@@ -57,7 +57,10 @@ const BlackJack: React.FC = () => {
 			{
 				bjRef.current.player1Score = bj.getCardValues(bjRef.current.player1Cards);
 				bjRef.current.player2Score = bj.getCardValues(bjRef.current.player2Cards);
-				bjRef.current.dealerScore = bj.getCardValues(Array.isArray(bjRef.current.cards['dealer']) ? bjRef.current.cards['dealer'] : [] );
+				bjRef.current.dealerScore = bj.getCardValues(bjRef.current.dealerCards);
+
+				bj.getBalance(bjRef);
+				bj.findComponentByName(bjRef, "balanceValue").markAsDirty();
 			}
 		}, 200);
 

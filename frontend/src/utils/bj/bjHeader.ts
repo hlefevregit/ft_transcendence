@@ -150,6 +150,7 @@ export type bjStruct =
 	chips?: baby.Mesh;
 
 	// Variables
+	balance?: number;
 	player1Money: number;
 	player2Money: number;
 	player1Score: number;
@@ -177,13 +178,14 @@ export type bjStruct =
 	// Game
 	player1Cards: number[];
 	player2Cards: number[];
+	dealerCards: number[];
 };
 
 export function initBJStruct(): bjStruct
 {
 	return {
 		cards: {},
-		player1Money: 1000, // Starting money for player 1
+		player1Money: 0, // Starting money for player 1
 		player2Money: 1000, // Starting money for player 2
 		// playerMoney: 1000, // Starting money for the player
 		player1Score: 0,

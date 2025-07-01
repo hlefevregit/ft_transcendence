@@ -52,7 +52,9 @@ export const PlayGame = async (
 
   bjRef.current.player1Cards = player1Cards;
   bjRef.current.player2Cards = player2Cards;
-  bjRef.current.playerChoice = null;
+  bjRef.current.dealerCards = dealerCards;
+  bjRef.current.playerChoice = undefined;
+//   bjRef.current.playerChoice = null;
 
   dealInitialCards(bjRef, state, player1Cards, player2Cards, dealerCards, dealerHiddenCard, players, cardMeshes);
   if (getCardValues(player1Cards) === 21 && player1Cards.length === 2) {
@@ -475,7 +477,7 @@ export const waitForPlayerChoice = (bjRef: React.RefObject<game.bjStruct>): Prom
 	});
 };
 
-const	getBalance = async (bjRef: React.RefObject<game.bjStruct>) =>
+export const	getBalance = async (bjRef: React.RefObject<game.bjStruct>) =>
 {
 	const res = await fetch
 	(
@@ -495,5 +497,6 @@ const	getBalance = async (bjRef: React.RefObject<game.bjStruct>) =>
 		return;
 	}
 	const data = await res.json();
-	bjRef.current.player1Money = data.balance;
+	bjRef.current.balance = data.balance;
+	console.log(`Fetched balance: ${bjRef.current.balance}`);
 };

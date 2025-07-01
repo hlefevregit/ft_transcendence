@@ -397,8 +397,8 @@ export const	instantiateBalanceGUI =
 	const	balanceValue = bj.createTitle("balanceValue", "NaN");
 			(balanceValue.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
 			{
-				if (bjRef.current.player1Money !== undefined)
-					(balanceValue.children[0] as baby.TextBlock).text = bjRef.current.player1Money.toString();
+				if (bjRef.current.balance !== undefined)
+					(balanceValue.children[0] as baby.TextBlock).text = bjRef.current.balance.toString();
 				else
 					(balanceValue.children[0] as baby.TextBlock).text = "NaN";
 			});
