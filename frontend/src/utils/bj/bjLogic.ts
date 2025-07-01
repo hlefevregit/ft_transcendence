@@ -9,6 +9,7 @@ let z = 0;
 export const PlayGame = async (
   bjRef: React.RefObject<game.bjStruct>,
   state: React.RefObject<game.States>,
+  winState: React.RefObject<game.winState>,
   players: number
 ): Promise<void> => {
   if (!bjRef.current) return;
@@ -59,18 +60,22 @@ export const PlayGame = async (
   dealInitialCards(bjRef, state, player1Cards, player2Cards, dealerCards, dealerHiddenCard, players, cardMeshes);
   if (getCardValues(player1Cards) === 21 && player1Cards.length === 2) {
     console.log("Player 1 has a Blackjack!");
+	winState.current = game.winState.player_1_blackjack;
   }
   if (players === 2 && getCardValues(player2Cards) === 21 && player2Cards.length === 2) {
     console.log("Player 2 has a Blackjack!");
+	winState.current = game.winState.player_2_blackjack;
   }
 
-  bjRef.current.playerChoice = null;
+  bjRef.current.playerChoice = undefined;
+//   bjRef.current.playerChoice = null;
   x = 32;
   y = 0.02;
   z = -40;
   await playerTurn(bjRef, state, player1Cards, cardMeshes);
   if (players === 2) {
-	bjRef.current.playerChoice = null;
+	bjRef.current.playerChoice = undefined;
+	// bjRef.current.playerChoice = null;
 	x = 127;
 	y = 0.02;
 	z = -40;
@@ -85,17 +90,19 @@ export const PlayGame = async (
 	player1Busted = true;
 	if (players === 1) {
 		console.log("Dealer wins by default since Player 1 has busted!");
+		winState.current = game.winState.dealer_win;
 		destroyMeshes(cardMeshes);
-		state.current = game.States.main_menu;
-		game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
+		state.current = game.States.game_over;
+		// game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
 		return;
 	}
   }
   if (player1Busted && (players === 2 && player2Busted)) {
 	console.log("Both players have busted! Dealer wins by default.");
+	winState.current = game.winState.dealer_win;
     destroyMeshes(cardMeshes);
-	state.current = game.States.main_menu;
-	game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
+	state.current = game.States.game_over;
+	// game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
 	return;
   }
   x = 77;
@@ -108,6 +115,7 @@ export const PlayGame = async (
   if (dealerValue > 21) {
     if (!player1Busted) {
         console.log("Dealer busted! Player 1 wins by default.");
+		winState.current = game.winState.player_1_win;
         const res = await fetch('/api/bj/win', {
             method: 'POST',
             headers: {
@@ -124,6 +132,7 @@ export const PlayGame = async (
     }
     if (players === 2 && !player2Busted) {
         console.log("Dealer busted! Player 2 wins by default.");
+		winState.current = game.winState.player_2_win;
         const res = await fetch('/api/bj/win', {
             method: 'POST',
             headers: {
@@ -139,14 +148,15 @@ export const PlayGame = async (
         }
     }
     destroyMeshes(cardMeshes);
-    state.current = game.States.main_menu;
-    game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
+    state.current = game.States.game_over;
+    // game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
     return;
 	}
   if (!player1Busted) {
     if (player1Value > dealerValue && player1Value <= 21) {
 		if (player1Value === 21 && player1Cards.length === 2) {
 			console.log("Player 1 has a Blackjack! Player 1 wins against the dealer!");
+			winState.current = game.winState.player_1_blackjack;
 			const res = await fetch('/api/bj/win', {
 				method: 'POST',
 				headers: {
@@ -176,6 +186,7 @@ export const PlayGame = async (
 				console.error("Failed to update player money after Blackjack win");
 			}
 			console.log("Player 1 wins against the dealer!");
+			winState.current = game.winState.player_1_win;
 		}
       } else if (player1Value < dealerValue && dealerValue <= 21) {
 		const res = await fetch('/api/bj/lose', {
@@ -192,14 +203,17 @@ export const PlayGame = async (
 			console.error("Failed to update player money after Blackjack loss");
 		}
 	    console.log("Dealer wins against Player 1!");
+		winState.current = game.winState.dealer_win;
       } else if (player1Value === dealerValue && player1Value <= 21) {
   	    console.log("It's a tie between Player 1 and the dealer!");
+		winState.current = game.winState.tie;
       }
   }
   if (players === 2 && !player2Busted) {
       if (player2Value > dealerValue && player2Value <= 21) {
 		if (player2Value === 21 && player2Cards.length === 2) {
 			console.log("Player 2 has a Blackjack! Player 2 wins against the dealer!");
+			winState.current = game.winState.player_2_blackjack;
 			const res = await fetch('/api/bj/win', {
 				method: 'POST',
 				headers: {
@@ -228,6 +242,7 @@ export const PlayGame = async (
 				console.error("Failed to update player money after Blackjack win");
 			}
 			console.log("Player 2 wins against the dealer!");
+			winState.current = game.winState.player_2_win;
 		}
   	  } else if (player2Value < dealerValue && dealerValue <= 21) {
 	    console.log("Dealer wins against Player 2!");
@@ -246,11 +261,12 @@ export const PlayGame = async (
 				console.error("Failed to update player money after Blackjack win");
 			}
 	    console.log("It's a tie between Player 2 and the dealer!");
+		winState.current = game.winState.tie;
 	  }
 	}
   destroyMeshes(cardMeshes);
-  state.current = game.States.main_menu;
-  game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
+  state.current = game.States.game_over;
+//   game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
 };
 
 export const dealInitialCards = (

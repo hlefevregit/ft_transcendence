@@ -131,6 +131,24 @@ export enum PlayerChoices
 	hit,
 }
 
+export enum gameMode
+{
+	none,
+	solo,
+	duo,
+}
+
+export enum winState
+{
+	none,
+	dealer_win,
+	player_1_win,
+	player_2_win,
+	player_1_blackjack,
+	player_2_blackjack,
+	tie,
+}
+
 export type bjStruct =
 {
 	// Engine and scene
@@ -168,6 +186,13 @@ export type bjStruct =
 	balanceGUI?: baby.Rectangle;
 	playerScoreGUI?: baby.Rectangle;
 	finishedGameGUI?: baby.Rectangle;
+
+	finishedGameDealerWin?: baby.StackPanel;
+	finishedGamePlayer1Win?: baby.StackPanel;
+	finishedGamePlayer2Win?: baby.StackPanel;
+	finishedGamePlayer1Blackjack?: baby.StackPanel;
+	finishedGamePlayer2Blackjack?: baby.StackPanel;
+	finishedGameTie?: baby.StackPanel;
 
 	// Textures
 	guiTexture?: baby.AdvancedDynamicTexture;
@@ -226,7 +251,13 @@ export const	translations =
 
 	// Finished game
 	gameFinishedTitle: ["Game Finished", "Partie terminée", "Gioco terminato", "⠨⠛⠁⠍⠑ ⠨⠋⠊⠝⠊⠎⠓⠑⠙"],
-	winner: ["Winner:", "Gagnant:", "Vincitore:", "⠨⠺⠊⠝⠝⠑⠗ :"],
+	// winner: ["Winner:", "Gagnant:", "Vincitore:", "⠨⠺⠊⠝⠝⠑⠗ :"],
+	dealer_win: ["Dealer wins!", "Le croupier gagne !", "Il banco vince!", "⠨⠙⠑⠁⠇⠑⠗ ⠺⠊⠝⠎ !"],
+	player_1_win: ["Player 1 wins!", "Le joueur 1 gagne !", "Il giocatore 1 vince!", "⠨⠏⠇⠁⠽⠑⠗ ⠁ ⠺⠊⠝⠎ !"],
+	player_2_win: ["Player 2 wins!", "Le joueur 2 gagne !", "Il giocatore 2 vince!", "⠨⠏⠇⠁⠽⠑⠗ ⠃ ⠺⠊⠝⠎ !"],
+	player_1_blackjack: ["Player 1 \nhas a Blackjack!", "Le joueur 1 \na un Blackjack !", "Il giocatore 1 \nha un Blackjack!", "⠨⠏⠇⠁⠽⠑⠗ ⠁ ⠓⠁⠎ ⠁ \n⠃⠇⠁⠉⠅ ⠁⠝⠙ ⠺⠊⠝⠎ !"],
+	player_2_blackjack: ["Player 2 \nhas a Blackjack!", "Le joueur 2 \na un Blackjack !", "Il giocatore 2 \nha un Blackjack!", "⠨⠏⠇⠁⠽⠑⠗ ⠃ ⠓⠁⠎ ⠁ \n⠃⠇⠁⠉⠅ ⠁⠝⠙ ⠺⠊⠝⠎ !"],
+	tie: ["It's a tie!", "C'est une égalité !", "È un pareggio!", "⠨⠊⠞'⠎ ⠁ ⠞⠊⠑ !"],
 } as const;
 
 export type	labelKey = keyof typeof translations;

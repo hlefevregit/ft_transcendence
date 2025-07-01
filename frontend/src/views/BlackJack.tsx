@@ -7,6 +7,8 @@ import * as bj from '@/libs/bjLibs';
 const BlackJack: React.FC = () => {
 	const bjRef = React.useRef<bj.bjStruct>(bj.initBJStruct());
 	const state = React.useRef<bj.States>(bj.States.main_menu);
+	const winState = React.useRef<bj.winState>(bj.winState.none);
+	const gameMode = React.useRef<bj.gameMode>(bj.gameMode.none);
 	const gameState = React.useRef<bj.GameState>(bj.GameState.waiting);
 	const lastState = React.useRef<bj.States>(state.current);
 	const language = React.useRef<bj.language>(bj.language.english);
@@ -24,6 +26,8 @@ const BlackJack: React.FC = () => {
 		bj.initializeAllGUIScreens(
 			bjRef,
 			state,
+			gameMode,
+			winState,
 			language,
 			navigate,
 			lastState
@@ -36,7 +40,14 @@ const BlackJack: React.FC = () => {
 		bjRef.current.engine.runRenderLoop(() =>
 		{
 			// if (state.current !== bj.States.in_transition)
-				bj.updateGUIsWhenNeeded(bjRef, state, language, lastState, lastLanguage);
+				bj.updateGUIsWhenNeeded
+				(
+					bjRef,
+					state,
+					winState,
+					language,
+					lastState,
+					lastLanguage);
 
 			if (bjRef.current.scene) bjRef.current.scene.render();
 		});
@@ -51,6 +62,7 @@ const BlackJack: React.FC = () => {
 
 		const	backgroundCalculations = setInterval(() =>
 		{
+			bj.updateFinishedGameGUI(bjRef, winState);
 			// if (state.current !== bj.States.in_transition)
 				bj.updateGUIValues(bjRef, language);
 			if (state.current === bj.States.in_game && bjRef.current.cards)
