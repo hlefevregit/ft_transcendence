@@ -9,10 +9,11 @@ import * as game from "@/libs/pongLibs";
 import SettingsProfile from "./SettingsProfile";
 import SettingsFriends from "./SettingsFriends";
 import SettingsHistory from "./SettingsHistory";
+import SettingsBlock from "./SettingsBlock";
 
 import "@/styles/Settings.css";
 
-type Tab = "profile" | "friends" | "history";
+type Tab = "profile" | "friends" | "history" | "block";
 
 export default function Settings() {
   const navigate = useNavigate();
@@ -47,12 +48,13 @@ export default function Settings() {
     [navigate]
   );
 
-  // Pour déplacer la barre sous l’onglet
-  const tabIndex = activeTab === "profile" ? 0 : activeTab === "friends" ? 1 : 2;
+  // Pour déplacer la barre sous l'onglet
+  const tabIndex = activeTab === "profile" ? 0 : activeTab === "friends" ? 1 : activeTab === "history" ? 2 : 3;
   const underlineColors: Record<Tab, string> = {
     profile: "#3b82f6",  // bleu
     friends: "#10b981",  // vert
     history: "#f59e0b",  // ambre
+    block: "#dc2626",    // rouge
   };
 
   return (
@@ -103,12 +105,21 @@ export default function Settings() {
               History
             </button>
 
+            <button
+              className={`settings-tab ${activeTab === "block" ? "active block-tab" : ""
+                }`}
+              onClick={() => setActiveTab("block")}
+              type="button"
+            >
+              Block
+            </button>
+
             {/* ─── Barre de soulignement qui se déplace ─── */}
             <div
               className="tab-underline"
               style={{
-                width: "25%",
-                left: `calc(${tabIndex} * (100% / 3) + (100% / 24))`,
+                width: "20%",
+                left: `calc(${tabIndex} * (100% / 4) + (100% / 40))`,
                 backgroundColor: underlineColors[activeTab],
               }}
             />
@@ -127,6 +138,10 @@ export default function Settings() {
 
             <div style={{ display: activeTab === "history" ? "block" : "none" }}>
               <SettingsHistory />
+            </div>
+
+            <div style={{ display: activeTab === "block" ? "block" : "none" }}>
+              <SettingsBlock />
             </div>
           </div>
         </div>

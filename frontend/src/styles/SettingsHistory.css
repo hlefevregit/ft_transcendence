@@ -51,13 +51,15 @@
   overflow-y: auto;
 }
 
+/* Carte de match */
 .match-card {
+  position: relative;       /* conteneur pour les éléments absolus */
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: #ffffff;
   border-radius: 8px;
-  padding: 16px;
+  padding: 32px 16px;       /* espace en haut/bas pour englober raison et date */
   width: 100%;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
@@ -84,13 +86,17 @@
 }
 
 .score-container {
-  position: relative;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100px;
-  margin: 0 16px;
+  /* on supprime la largeur fixe et la marge */
+  width: auto;
+  margin: 0;
 }
+
 .score {
   display: flex;
   align-items: center;
@@ -100,12 +106,16 @@
   z-index: 1;
 }
 .dash { margin: 0 6px; }
+
+/* Raison affichée juste au-dessus du score */
 .reason {
   position: absolute;
   top: -18px;
   font-size: 0.8rem;
   pointer-events: none;
 }
+
+/* Date affichée juste en dessous du score */
 .date {
   position: absolute;
   bottom: -18px;

@@ -108,6 +108,9 @@
 .settings-tab.history-tab.active {
   color: #f59e0b; /* ambre */
 }
+.settings-tab.block-tab.active {
+  color: #dc2626; /* rouge */
+}
 
 /* ────────────────────────────────────────────── */
 /*  Barre unique (underline) qui se déplace      */
