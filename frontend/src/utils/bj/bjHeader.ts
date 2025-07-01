@@ -86,6 +86,29 @@ export const ReverseValueMap = {
   13: "king",
 }
 
+export const CardXOffset = {
+	1: 10,
+	2: 42,
+	3: 46.8,
+	4: 55,
+	5: 65,
+	6: 75,
+	7: 87.75,
+	8: 96.8,
+	9: 107.325,
+	10: 118.20,
+	11: 129.14,
+	12: 139.8,
+	13: 150.15,
+}
+
+export const CardZOffset = {
+	0: 0,
+	1: 15,
+	2: 45,
+	3: 30,
+}
+
 export enum States
 {
 	main_menu,

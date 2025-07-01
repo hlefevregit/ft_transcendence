@@ -50,6 +50,8 @@ export const	setupBabylonBJ = async (bjRef: bj.bjStruct, canvasRef: any): Promis
 			modelMeshes[0].scaling = new baby.Vector3(1.35, 1.35, 1.35); // Make cards bigger
 			modelMeshes[0].position = new baby.Vector3(0, 0.62, 0.4); // All cards sitting on the table
 			modelMeshes[0].rotation = new baby.Vector3(Math.PI / -2, Math.PI, 0); // Cards are flat on the table
+			modelMeshes[0].isVisible = true;
+			modelMeshes[0].setEnabled(true);
 		}
 		  if (!bjRef.cards) {
 			bjRef.cards = {};
@@ -211,8 +213,8 @@ export const importGLTF = async (scene: baby.Scene, modelUrl: string, visible: b
 
     result.meshes.forEach(mesh => {
       mesh.receiveShadows = true;
-	  // mesh.isVisible = !!visible;
-	  // mesh.setEnabled = !!enabled;
+	  mesh.isVisible = !!visible;
+	  mesh.setEnabled(!!enabled);
 	});
 
 

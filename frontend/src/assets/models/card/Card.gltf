@@ -3947,28 +3947,16 @@
   ],
   "images": [
     {
-      "uri": "textures/playingCards_Mat_baseColor.png"
-    },
-    {
-      "uri": "textures/playingCards_Mat_metallicRoughness.png"
-    },
-    {
-      "uri": "textures/playingCards_Mat_normal.png"
+      "uri": "textures/cardsTex.png"
     }
   ],
   "materials": [
     {
       "doubleSided": true,
       "name": "playingCards_Mat",
-      "normalTexture": {
-        "index": 2
-      },
       "pbrMetallicRoughness": {
         "baseColorTexture": {
           "index": 0
-        },
-        "metallicRoughnessTexture": {
-          "index": 1
         }
       }
     }

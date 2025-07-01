@@ -51,8 +51,8 @@ export const PlayGame = async (
 
   bjRef.current.player1Cards = player1Cards;
   bjRef.current.player2Cards = player2Cards;
-
   bjRef.current.playerChoice = null;
+
   dealInitialCards(bjRef, state, player1Cards, player2Cards, dealerCards, players, cardMeshes);
   if (getCardValues(player1Cards) === 21 && player1Cards.length === 2) {
     console.log("Player 1 has a Blackjack!");
@@ -76,6 +76,7 @@ export const PlayGame = async (
 	player1Busted = true;
 	if (players === 1) {
 		console.log("Dealer wins by default since Player 1 has busted!");
+		destroyMeshes(cardMeshes);
 		state.current = game.States.main_menu;
 		game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
 		return;
@@ -83,6 +84,7 @@ export const PlayGame = async (
   }
   if (player1Busted && (players === 2 && player2Busted)) {
 	console.log("Both players have busted! Dealer wins by default.");
+    destroyMeshes(cardMeshes);
 	state.current = game.States.main_menu;
 	game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
 	return;
@@ -250,10 +252,12 @@ export const dealInitialCards = (
 	if (!bjRef.current) return;
 	const scene = bjRef.current.scene;
 	if (!scene) return;
+
 	for (let i = 0; i < 2; i++) {
+		x = 10 + (i * 1);
+		y = 0 + (i * 0.01);
+		z = -40;
 		const player1Card = dealCard(meshes, bjRef);
-		const player2Card = players === 2 ? dealCard(meshes, bjRef) : 0;
-		const dealerCard = dealCard(meshes, bjRef);
 		if (player1Card) {
 			player1Cards.push(player1Card);
 			const value = ((player1Card - 1) % 13) + 1;
@@ -263,6 +267,10 @@ export const dealInitialCards = (
 			console.error('Failed to deal card to player 1');
 			return;
 		}
+		x = -10 + (i * 1);
+		y = 0 + (i * 0.01);
+		z = -40;
+		const player2Card = players === 2 ? dealCard(meshes, bjRef) : 0;
 		if (player2Card && players === 2) {
 			player2Cards.push(player2Card);
 			const value = ((player2Card - 1) % 13) + 1;
@@ -272,6 +280,10 @@ export const dealInitialCards = (
 			console.error('Failed to deal card to player 2');
 			return;
 		}
+		x = 10 + (i * 1);
+		y = 0 + (i * 0.01);
+		z = -25;
+		const dealerCard = dealCard(meshes, bjRef);
 		if (dealerCard) {
 			dealerCards.push(dealerCard);
 			const value = ((dealerCard - 1) % 13) + 1;
@@ -397,10 +409,15 @@ export const dealCard = (
 	const originalMesh = bjRef.current.cards[card];
 	if (originalMesh)
 	{
+		console.log(`Dealing card: ${game.ReverseValueMap[((card - 1) % 13) + 1]} of ${game.ReverseSuitMap[Math.floor((card - 1) / 13) + 1]}`);
 		const clonedMesh = originalMesh.clone(`${originalMesh.name}_clone`, originalMesh.parent);
-		clonedMesh.position = new baby.Vector3(0, 0, 0);
+		const cardValue = ((card - 1) % 13);
+		const cardSuit = Math.floor((card - 1) / 13);
+		const offsetX = game.CardXOffset[cardValue] || 10;
+		const offsetZ = game.CardZOffset[cardSuit] || 0;
+		clonedMesh.position = new baby.Vector3(x - offsetX, y, z - offsetZ);
 	    clonedMesh.isVisible = true;
-	    clonedMesh.setEnabled = true;
+	    clonedMesh.setEnabled(true);
 
 		meshes.push(clonedMesh);
 	}
