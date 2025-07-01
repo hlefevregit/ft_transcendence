@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as BABYLON from "@babylonjs/core";
 import BabylonScene from "@/components/BabylonScene";
 import PlayerSprite from "@/components/PlayerSprite";
+import LanguageSwitcher from '../../components/ChangeLanguage';
 
 import SettingsProfile from "./SettingsProfile";
 import SettingsFriends from "./SettingsFriends";
@@ -54,6 +55,7 @@ export default function Settings() {
 
   return (
     <div className="settings-page">
+	  <LanguageSwitcher />
       <BabylonScene
         backgroundUrl="/assets/3.jpg"
         onSceneReady={handleSceneReady}

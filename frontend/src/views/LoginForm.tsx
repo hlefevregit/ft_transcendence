@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { handleEmailLogin, googleLogin, handle2FALogin } from '../services/authServices';
 import '@/styles/style.css';
 import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../components/ChangeLanguage';
 
 const LoginForm: React.FC = () => {
   const { t } = useTranslation();
@@ -107,6 +108,7 @@ const LoginForm: React.FC = () => {
 
   return (
     <div className="font-[sans-serif] bg-gray-50 flex items-center md:h-screen p-4">
+	  <LanguageSwitcher />
       <div className="w-full max-w-3xl mx-auto">
         <div className="bg-white grid md:grid-cols-1 gap-12 w-full sm:p-8 p-6 shadow-md rounded-md overflow-hidden">
           <form className="w-full">
