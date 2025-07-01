@@ -6,7 +6,18 @@ import * as game from '@/libs/pongLibs';
 import BackgroundMusic from '@/components/BG';
 import { useWebSocketOnline, useOnlineLoop } from '@/utils/pong/onlineWS';
 
+// Language utility functions
+const getLanguageFromStorage = (): string =>
+{
+	return localStorage.getItem('i18nextLng') || 'en';
+};
 
+const setLanguageInStorage = (language: string): void =>
+{
+	localStorage.setItem('i18nextLng', language);
+	// Optionally trigger a storage event for other components to react
+	window.dispatchEvent(new Event('storage'));
+};
 
 const	Pong: React.FC = () =>
 {
