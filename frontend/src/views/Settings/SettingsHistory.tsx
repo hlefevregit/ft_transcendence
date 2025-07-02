@@ -1,4 +1,4 @@
-// src/components/SettingsHistory.tsx
+// File: frontend/src/views/Settings/SettingsHistory.tsx
 import React, { useState, useEffect } from "react";
 import "@/styles/SettingsHistory.css";
 
@@ -23,7 +23,7 @@ export default function SettingsHistory() {
   const [stats, setStats] = useState<Stats>({ wins: 0, losses: 0, trophies: 0 });
   const [matches, setMatches] = useState<Match[]>([]);
 
-  // JWT header helper
+  // Prépare l'en-tête Authorization
   const getAuthHeader = (): Record<string, string> => {
     const token = localStorage.getItem("authToken");
     return token ? { Authorization: `Bearer ${token}` } : {};
@@ -32,9 +32,9 @@ export default function SettingsHistory() {
   useEffect(() => {
     fetch("/api/user/history", {
       credentials: "include",
-      headers: getAuthHeader()
+      headers: getAuthHeader(),
     })
-      .then((res) => res.json())
+      .then(res => res.json())
       .then(({ stats, matches }) => {
         setStats(stats);
         setMatches(matches);
@@ -42,7 +42,7 @@ export default function SettingsHistory() {
       .catch(/*console.error*/);
   }, []);
 
-  // active le scroll si plus de 5 matchs
+  // Active le scroll si plus de 5 matchs
   const isScrollable = matches.length > 5;
 
   return (
@@ -65,12 +65,12 @@ export default function SettingsHistory() {
 
       {/* ─── Liste des matchs ─── */}
       <div className={`matches-list${isScrollable ? " scrollable" : ""}`}>
-        {matches.map((m) => (
+        {matches.map(m => (
           <div key={m.id} className={`match-card ${m.result}`}>
             <div className="player player--left">
               <img
                 src={m.user.avatarUrl || "/default-avatar.png"}
-                alt=""
+                alt={`${m.user.pseudo} avatar`}
                 className="avatar"
               />
               <span className="pseudo">{m.user.pseudo}</span>
@@ -88,7 +88,7 @@ export default function SettingsHistory() {
               <span className="pseudo">{m.opponent.pseudo}</span>
               <img
                 src={m.opponent.avatarUrl || "/default-avatar.png"}
-                alt=""
+                alt={`${m.opponent.pseudo} avatar`}
                 className="avatar"
               />
             </div>

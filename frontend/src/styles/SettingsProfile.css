@@ -2,27 +2,27 @@
 .profile-section {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
 
-  max-width: 780px;      /* largeur un peu plus généreuse */
-  margin: 0 auto;      /* centrer le contenu */
-  padding: 24px 12px;
-  font-size: 1.05rem;    /* légère augmentation de la taille de base */
-  min-height: 600px;
+  max-width: 600px;      /* réduit de 780px à 600px */
+  margin: 0 auto;
+  padding: 16px 8px;     /* réduit de 24px 12px */
+  font-size: 1rem;       /* réduit de 1.05rem */
+  min-height: 480px;     /* réduit de 600px */
 }
 
 
 /* Block wrapper */
 .profile-block,
 .twofa-block {
-  width: 100%;           /* prend tout l’espace */
+  width: 100%;
   border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  padding: 20px;         /* padding augmenté */
+  border-radius: 8px;    /* réduit de 10px */
+  padding: 16px;         /* réduit de 20px */
   background: #ffffff;
   display: flex;
   flex-direction: column;
-  gap: 20px;             /* plus d’espace entre les lignes */
+  gap: 16px;             /* réduit de 20px */
 }
 
 /* 2) General row styling */
@@ -39,8 +39,8 @@
 /* 3) Avatar + status */
 .avatar-wrapper {
   position: relative;
-  width: 80px;           /* avatar agrandi */
-  height: 80px;
+  width: 64px;           /* réduit de 80px */
+  height: 64px;
 }
 .avatar-image {
   width: 100%;
@@ -51,10 +51,10 @@
 }
 .status-dot {
   position: absolute;
-  bottom: -4px;
-  right: -4px;
-  width: 28px;           /* statut agrandi */
-  height: 28px;
+  bottom: -3px;
+  right: -3px;
+  width: 22px;           /* réduit de 28px */
+  height: 22px;
   border: 2px solid #fff;
   border-radius: 50%;
   cursor: pointer;
@@ -65,13 +65,13 @@
 /* 4) Username area */
 .pseudo-area {
   flex: 1;
-  margin-left: 20px;
+  margin-left: 16px;     /* réduit de 20px */
   display: flex;
   align-items: center;
 }
 .pseudo-text.editable {
   flex: 1;
-  font-size: 1.1rem;     /* pseudo plus gros */
+  font-size: 1rem;       /* réduit de 1.1rem */
   font-weight: 600;
   color: #374151;
   background: none;
@@ -79,41 +79,41 @@
   text-align: left;
   cursor: pointer;
   border-bottom: 1px solid #d1d5db;
-  padding-bottom: 6px;
+  padding-bottom: 4px;   /* réduit de 6px */
 }
 .pseudo-input {
   flex: 1;
-  font-size: 1.1rem;
+  font-size: 1rem;       /* réduit de 1.1rem */
   font-weight: 600;
   color: #374151;
   background: none;
   border: none;
   border-bottom: 1px solid #d1d5db;
-  padding: 6px 0;
+  padding: 4px 0;        /* réduit de 6px */
 }
 .pseudo-input.error {
   border-bottom-color: #ef4444;
 }
 .pencil-icon {
-  font-size: 22px;
+  font-size: 18px;       /* réduit de 22px */
   color: #6b7280;
-  margin-left: 10px;
+  margin-left: 8px;      /* réduit de 10px */
 }
 
 /* 5) Avatar actions */
 .avatar-actions {
   display: flex;
-  gap: 12px;
+  gap: 10px;             /* réduit de 12px */
 }
 .change-avatar-btn,
 .delete-avatar-btn {
   flex: 1;
   background: none;
   border: none;
-  padding: 14px 0;       /* bouton plus grand */
-  font-size: 1rem;
+  padding: 10px 0;       /* réduit de 14px */
+  font-size: 0.9rem;     /* réduit de 1rem */
   font-weight: 600;
-  border-radius: 8px;
+  border-radius: 6px;    /* réduit de 8px */
   cursor: pointer;
   transition: background 0.2s;
 }
@@ -134,13 +134,13 @@
 /* Save + Reset */
 .save-reset-container {
   display: flex;
-  gap: 16px;
+  gap: 12px;             /* réduit de 16px */
   align-items: center;
 }
 .save-button {
   flex: 1;
-  font-size: 1.05rem;
-  padding-bottom: 6px;
+  font-size: 1rem;       /* réduit de 1.05rem */
+  padding-bottom: 4px;   /* réduit de 6px */
   background: none;
   border: none;
   color: #9ca3af;
@@ -159,7 +159,7 @@
 }
 .reset-button {
   flex: 0 0 auto;
-  font-size: 1.6rem;     /* croix plus visible */
+  font-size: 1.4rem;     /* réduit de 1.6rem */
   background: none;
   border: none;
   color: #ef4444;
@@ -182,13 +182,13 @@
 }
 .switch {
   position: relative;
-  width: 60px;           /* interrupteur agrandi */
-  height: 32px;
+  width: 48px;           /* réduit de 60px */
+  height: 26px;          /* réduit de 32px */
 }
 .slider {
   position: absolute;
   inset: 0;
-  border-radius: 16px;
+  border-radius: 13px;   /* réduit de 16px */
   background: #ef4444;
   transition: background 0.2s;
 }
@@ -198,8 +198,8 @@
 .slider:before {
   content: '';
   position: absolute;
-  width: 28px;
-  height: 28px;
+  width: 22px;           /* réduit de 28px */
+  height: 22px;
   left: 2px;
   bottom: 2px;
   border-radius: 50%;
@@ -207,7 +207,7 @@
   transition: transform 0.2s;
 }
 .toggle-row.enabled .slider:before {
-  transform: translateX(28px);
+  transform: translateX(22px);  /* réduit de 28px */
 }
 
 /* QR + verify */
@@ -217,29 +217,29 @@
   grid-template-areas:
     "qr-instruction qr-image"
     "qr-input-group qr-input-group";
-  gap: 16px;
-  align-items: center; /* centre verticalement texte et QR */
+  gap: 12px;             /* réduit de 16px */
+  align-items: center;
 }
 
 .qr-instruction {
   grid-area: qr-instruction;
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.9rem;     /* réduit de 1rem */
   color: #374151;
-  text-align: center;    /* centrer chaque ligne */
-  justify-self: center;  /* centrer horizontalement dans la moitié gauche */
-  line-height: 1.4;      /* espacement entre lignes */
+  text-align: center;
+  justify-self: center;
+  line-height: 1.3;      /* réduit de 1.4 */
 }
 
 .qr-image {
   grid-area: qr-image;
-  width: 150px;
-  height: 150px;
+  width: 120px;          /* réduit de 150px */
+  height: 120px;
   object-fit: contain;
   border: 1px solid #e0e0e0;
-  border-radius: 10px;
-  justify-self: center;  /* centrer horizontalement dans la moitié droite */
-  align-self: center;    /* centrer verticalement */
+  border-radius: 8px;    /* réduit de 10px */
+  justify-self: center;
+  align-self: center;
 }
 
 .qr-input-group {
@@ -252,19 +252,19 @@
 
 .qr-input {
   flex: 1;
-  padding: 10px;
+  padding: 8px;          /* réduit de 10px */
   border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: 6px;    /* réduit de 8px */
+  font-size: 0.9rem;     /* réduit de 1rem */
 }
 
 .verify-button {
-  padding: 10px 18px;
+  padding: 8px 14px;     /* réduit de 10px 18px */
   background: #3b82f6;
   color: #fff;
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: 6px;    /* réduit de 8px */
+  font-size: 0.9rem;     /* réduit de 1rem */
 }
 
 
@@ -278,61 +278,57 @@
 /* Logout & Delete Account */
 .extra-actions {
   display: flex;
-  gap: 16px;
-  margin-top: auto;           /* pousse les boutons en bas de la div parente */
-  justify-content: flex-end;  /* optionnel : aligne à droite, sinon enlever */
+  gap: 12px;             /* réduit de 16px */
+  margin-top: auto;
+  justify-content: flex-end;
 }
 .logout-button,
 .delete-data-button {
   flex: 1;
-  padding: 14px 0;       /* bouton plus grand */
-  font-size: 1rem;
+  padding: 10px 0;       /* réduit de 14px */
+  font-size: 0.9rem;     /* réduit de 1rem */
   background: #f3f4f6;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;    /* réduit de 10px */
   font-weight: 600;
   cursor: pointer;
-}
-.delete-data-button {
-  background: #fee2e2;
-  color: #900;
 }
 
 /* Responsive */
 @media (max-width: 420px) {
   .profile-section {
     max-width: 100%;
-    padding: 16px 8px;
-    gap: 20px;
+    padding: 12px 6px;    /* réduit de 16px 8px */
+    gap: 16px;            /* réduit de 20px */
   }
   .profile-block,
   .twofa-block {
-    padding: 16px;
-    gap: 16px;
+    padding: 12px;        /* réduit de 16px */
+    gap: 12px;            /* réduit de 16px */
   }
   .avatar-wrapper {
-    width: 64px;
-    height: 64px;
+    width: 52px;          /* réduit de 64px */
+    height: 52px;
   }
   .status-dot {
-    width: 24px;
-    height: 24px;
-    bottom: -3px;
-    right: -3px;
+    width: 18px;          /* réduit de 24px */
+    height: 18px;
+    bottom: -2px;
+    right: -2px;
   }
   .change-avatar-btn,
   .delete-avatar-btn,
   .logout-button,
   .delete-data-button {
-    padding: 10px 0;
-    font-size: 0.95rem;
+    padding: 8px 0;       /* réduit de 10px */
+    font-size: 0.85rem;   /* réduit de 0.95rem */
   }
   .switch {
-    width: 52px;
-    height: 28px;
+    width: 42px;          /* réduit de 52px */
+    height: 24px;         /* réduit de 28px */
   }
   .slider:before {
-    width: 24px;
-    height: 24px;
+    width: 20px;          /* réduit de 24px */
+    height: 20px;
   }
 }

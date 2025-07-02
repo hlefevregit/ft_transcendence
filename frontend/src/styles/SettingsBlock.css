@@ -1,0 +1,89 @@
+/* Container général */
+.sb-container {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 600px;
+  margin: 0 auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* Titre */
+.sb-title {
+  margin: 0 0 16px;
+  font-size: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+/* Liste des éléments */
+.sb-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Chaque ligne d’utilisateur bloqué */
+.sb-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.sb-item:last-child {
+  border-bottom: none;
+}
+
+/* Avatar */
+.sb-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 16px;
+  border: 2px solid #ccc;
+}
+
+/* Pseudo */
+.sb-pseudo {
+  flex: 1;
+  font-size: 1rem;
+  color: #444;
+}
+
+/* Bouton débloquer */
+.sb-unblock-btn {
+  background: #e0e0e0;
+  color: #333;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.sb-unblock-btn:hover {
+  background: #d4d4d4;
+  transform: translateY(-1px);
+}
+
+.sb-unblock-btn:active {
+  transform: translateY(0);
+}
+
+/* États spéciaux */
+.sb-loading,
+.sb-empty {
+  text-align: center;
+  color: #666;
+  font-size: 1rem;
+}
+
+.sb-error {
+  text-align: center;
+  color: #b00020;
+  font-size: 1rem;
+}

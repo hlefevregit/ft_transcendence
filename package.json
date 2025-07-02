@@ -3,5 +3,8 @@
   "devDependencies": {
     "semantic-release": "^24.2.5"
   },
-  "version": "1.9.0"
+  "version": "1.10.0",
+  "dependencies": {
+    "file-type": "^21.0.0"
+  }
 }

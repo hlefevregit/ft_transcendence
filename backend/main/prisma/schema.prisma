@@ -58,7 +58,7 @@ model GameResult {
   id           String   @id @default(uuid())
   player1Id    Int
   player2Id    Int
-  winnerId     String
+  winnerId     Int
   reason       String
   player1Score Int
   player2Score Int
