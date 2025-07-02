@@ -53,6 +53,7 @@
 	"delete_account_confirmation": "Are you sure you want to delete your account? This action cannot be undone.",
 
 	"_errors": "Errors",
+	"invalid_char": "Invalid character",
 	"email_error": "Invalid email address",
 	"2fa_error": "Invalid 2FA code",
 	"2fa_failed_error": "2FA verification failed. Please try again.",

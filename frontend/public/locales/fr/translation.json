@@ -54,6 +54,7 @@
 	"delete_account_confirmation": "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.",
 
 	"_errors": "Erreurs",
+	"invalid_char": "Caractère invalide",
 	"email_error": "Adresse e-mail invalide",
 	"2fa_error": "Code 2FA invalide",
 	"2fa_failed_error": "Échec de la vérification du 2FA. Veuillez réessayer.",
