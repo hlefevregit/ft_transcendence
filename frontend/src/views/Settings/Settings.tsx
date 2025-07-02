@@ -5,6 +5,7 @@ import BabylonScene from "@/components/BabylonScene";
 import PlayerSprite from "@/components/PlayerSprite";
 import LiveChat from "@/components/LiveChat/LiveChat";
 import * as game from "@/libs/pongLibs";
+import LanguageSwitcher from '../../components/ChangeLanguage';
 
 import SettingsProfile from "./SettingsProfile";
 import SettingsFriends from "./SettingsFriends";
@@ -14,8 +15,12 @@ import SettingsBlock from "./SettingsBlock";
 import "@/styles/Settings.css";
 
 type Tab = "profile" | "friends" | "history" | "block";
+import { useTranslation } from "react-i18next";
+
+type Tab = "profile" | "friends" | "history";
 
 export default function Settings() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<Tab>("profile");
 
@@ -58,52 +63,45 @@ export default function Settings() {
   };
 
   return (
-    <>
-      <LiveChat
-        gameState={statesRef.current}
-        gameModesRef={gameModesRef}
-        statesRef={statesRef}
-        setGameModeTrigger={setTrigger}
-        roomIdRef={useRef<string>("")}
+    <div className="settings-page">
+	  <LanguageSwitcher />
+      <BabylonScene
+        backgroundUrl="/assets/3.jpg"
+        onSceneReady={handleSceneReady}
+        canvasClassName="settings-canvas"
       />
-      <div className="settings-page">
-        <BabylonScene
-          backgroundUrl="/assets/3.jpg"
-          onSceneReady={handleSceneReady}
-          canvasClassName="settings-canvas"
-        />
-        <div className="settings-backdrop" />
-        <div className="settings-container">
-          <h1 className="settings-title">USER INFORMATIONS</h1>
+      <div className="settings-backdrop" />
+      <div className="settings-container">
+        <h1 className="settings-title">{t('settings_title')}</h1>
 
-          {/* ─────────── Onglets ─────────── */}
-          <nav className="settings-tabs">
-            <button
-              className={`settings-tab ${activeTab === "profile" ? "active profile-tab" : ""
-                }`}
-              onClick={() => setActiveTab("profile")}
-              type="button"
-            >
-              Profile
-            </button>
+        {/* ─────────── Onglets ─────────── */}
+        <nav className="settings-tabs">
+          <button
+            className={`settings-tab ${activeTab === "profile" ? "active profile-tab" : ""
+              }`}
+            onClick={() => setActiveTab("profile")}
+            type="button"
+          >
+			{t('profile_menu')}
+          </button>
 
-            <button
-              className={`settings-tab ${activeTab === "friends" ? "active friends-tab" : ""
-                }`}
-              onClick={() => setActiveTab("friends")}
-              type="button"
-            >
-              Friends
-            </button>
+          <button
+            className={`settings-tab ${activeTab === "friends" ? "active friends-tab" : ""
+              }`}
+            onClick={() => setActiveTab("friends")}
+            type="button"
+          >
+			{t('friends_menu')}
+          </button>
 
-            <button
-              className={`settings-tab ${activeTab === "history" ? "active history-tab" : ""
-                }`}
-              onClick={() => setActiveTab("history")}
-              type="button"
-            >
-              History
-            </button>
+          <button
+            className={`settings-tab ${activeTab === "history" ? "active history-tab" : ""
+              }`}
+            onClick={() => setActiveTab("history")}
+            type="button"
+          >
+			{t('history_menu')}
+          </button>
 
             <button
               className={`settings-tab ${activeTab === "block" ? "active block-tab" : ""

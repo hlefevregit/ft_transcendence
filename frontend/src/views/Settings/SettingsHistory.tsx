@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import "@/styles/SettingsHistory.css";
 
+import { useTranslation } from "react-i18next";
+
 interface Match {
   id: string;
   user: { pseudo: string; avatarUrl?: string };
@@ -20,6 +22,7 @@ interface Stats {
 }
 
 export default function SettingsHistory() {
+  const { t } = useTranslation();
   const [stats, setStats] = useState<Stats>({ wins: 0, losses: 0, trophies: 0 });
   const [matches, setMatches] = useState<Match[]>([]);
 
@@ -51,15 +54,15 @@ export default function SettingsHistory() {
       <div className="history-stats">
         <div className="stat-card win-card">
           <span className="stat-value">{stats.wins}</span>
-          <span className="stat-label">Wins</span>
+          <span className="stat-label">{t('wins')}</span>
         </div>
         <div className="stat-card loss-card">
           <span className="stat-value">{stats.losses}</span>
-          <span className="stat-label">Losses</span>
+          <span className="stat-label">{t('losses')}</span>
         </div>
         <div className="stat-card trophy-card">
           <span className="stat-value">{stats.trophies}</span>
-          <span className="stat-label">Trophées</span>
+          <span className="stat-label">{t('trophies')}</span>
         </div>
       </div>
 

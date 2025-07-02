@@ -10,6 +10,8 @@ import {
 import "@/styles/SettingsFriends.css";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 
+import { useTranslation } from "react-i18next";
+
 interface User {
   id: number;
   pseudo: string;
@@ -31,6 +33,7 @@ export default function SettingsFriends() {
   // ──────────────────────────────────────────────
   // États locaux
   // ──────────────────────────────────────────────
+  const { t } = useTranslation();
   const [newFriendPseudo, setNewFriendPseudo] = useState<string>("");
   const [friends, setFriends] = useState<User[]>([]);
   const [sentRequests, setSentRequests] = useState<SentRequest[]>([]);
@@ -68,7 +71,7 @@ export default function SettingsFriends() {
         headers,
         credentials: "include",
       });
-      if (!resFriends.ok) throw new Error("Échec récupération amis");
+      if (!resFriends.ok) throw new Error(t('friends_fetch_error'));
       const { friends: friendsList } = await resFriends.json();
       setFriends(friendsList);
 
@@ -78,7 +81,7 @@ export default function SettingsFriends() {
         headers,
         credentials: "include",
       });
-      if (!resSent.ok) throw new Error("Échec récupération demandes envoyées");
+      if (!resSent.ok) throw new Error(t('requests_sent_fetch_error'));
       const sent = await resSent.json();
       setSentRequests(sent);
 
@@ -88,12 +91,12 @@ export default function SettingsFriends() {
         headers,
         credentials: "include",
       });
-      if (!resReceived.ok) throw new Error("Échec récupération demandes reçues");
+      if (!resReceived.ok) throw new Error(t('requests_received_fetch_error'));
       const received = await resReceived.json();
       setReceivedRequests(received);
     } catch (err: any) {
-      // console.error(err);
-      setError(err.message || "Erreur lors du chargement");
+      console.error(err);
+      setError(err.message || t('generic_fetch_error'));
     }
   };
 
@@ -118,13 +121,13 @@ export default function SettingsFriends() {
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.message || "Échec envoi demande");
+        throw new Error(data.message || t('request_send_error'));
       }
       setNewFriendPseudo("");
       fetchFriendsData();
     } catch (err: any) {
-      // console.error(err);
-      setError(err.message || "Erreur lors de l'envoi");
+      console.error(err);
+      setError(err.message || t('generic_send_error'));
     }
   };
 
@@ -143,11 +146,11 @@ export default function SettingsFriends() {
         headers: getAuthHeader(),
         credentials: "include",
       });
-      if (!res.ok) throw new Error("Échec annulation");
+      if (!res.ok) throw new Error(t('request_cancel_error'));
       fetchFriendsData();
     } catch (err: any) {
-      // console.error(err);
-      setError(err.message || "Erreur annulation");
+      console.error(err);
+      setError(err.message || t('generic_cancel_error'));
     }
   };
 
@@ -159,11 +162,11 @@ export default function SettingsFriends() {
         headers: getAuthHeader(),
         credentials: "include",
       });
-      if (!res.ok) throw new Error("Échec acceptation");
+      if (!res.ok) throw new Error(t('request_accept_error'));
       fetchFriendsData();
     } catch (err: any) {
-      // console.error(err);
-      setError(err.message || "Erreur acceptation");
+      console.error(err);
+      setError(err.message || t('generic_accept_error'));
     }
   };
 
@@ -175,11 +178,11 @@ export default function SettingsFriends() {
         headers: getAuthHeader(),
         credentials: "include",
       });
-      if (!res.ok) throw new Error("Échec refus");
+      if (!res.ok) throw new Error(t('request_decline_error'));
       fetchFriendsData();
     } catch (err: any) {
-      // console.error(err);
-      setError(err.message || "Erreur refus");
+      console.error(err);
+      setError(err.message || t('generic_decline_error'));
     }
   };
 
@@ -191,11 +194,11 @@ export default function SettingsFriends() {
         headers: getAuthHeader(),
         credentials: "include",
       });
-      if (!res.ok) throw new Error("Échec suppression");
+      if (!res.ok) throw new Error(t('suppression_error'));
       fetchFriendsData();
     } catch (err: any) {
-      // console.error(err);
-      setError(err.message || "Erreur suppression");
+      console.error(err);
+      setError(err.message || t('suppression_error'));
     }
   };
 
@@ -226,7 +229,7 @@ export default function SettingsFriends() {
         <div className="friend-input-row">
           <input
             type="text"
-            placeholder="Add friend"
+            placeholder={t('add_friend_placeholder')}
             value={newFriendPseudo}
             onChange={e => setNewFriendPseudo(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -246,7 +249,7 @@ export default function SettingsFriends() {
       {/* Confirmation de suppression */}
       {dialogVisible && selectedFriend && (
         <ConfirmationDialog
-          message={`Do you really want to remove ${selectedFriend.pseudo} ?`}
+		  message={t('confirm_remove_friend', { name: selectedFriend.pseudo })}
           onConfirm={handleConfirmRemove}
           onCancel={handleCancelRemove}
         />
@@ -256,13 +259,13 @@ export default function SettingsFriends() {
       <div className="scrollable-block">
         {/* Sent Requests */}
         <div className="dropdown-header" onClick={() => setSentOpen(o => !o)}>
-          <span>Sent Requests ({sentRequests.length})</span>
+          <span>{t('sent_friend_requests')} ({sentRequests.length})</span>
           <FaArrowDown className={sentOpen ? "open" : ""} />
         </div>
         <div className={`section-content ${sentOpen ? "open" : ""}`}>
           <ul className="dropdown-list">
             {sentRequests.length === 0 ? (
-              <li className="dropdown-item-empty">No sent requests</li>
+              <li className="dropdown-item-empty">{t('no_sent_requests')}</li>
             ) : (
               sentRequests.map(r => (
                 <li key={r.id} className="dropdown-item">
@@ -285,13 +288,13 @@ export default function SettingsFriends() {
 
         {/* Received Requests */}
         <div className="dropdown-header" onClick={() => setReceivedOpen(o => !o)}>
-          <span>Received Requests ({receivedRequests.length})</span>
+          <span>{t('received_friend_requests')} ({receivedRequests.length})</span>
           <FaArrowDown className={receivedOpen ? "open" : ""} />
         </div>
         <div className={`section-content ${receivedOpen ? "open" : ""}`}>
           <ul className="dropdown-list">
             {receivedRequests.length === 0 ? (
-              <li className="dropdown-item-empty">No received requests</li>
+              <li className="dropdown-item-empty">{t('no_received_requests')}</li>
             ) : (
               receivedRequests.map(r => (
                 <li key={r.id} className="dropdown-item">
@@ -323,13 +326,13 @@ export default function SettingsFriends() {
 
         {/* Friends List */}
         <div className="dropdown-header" onClick={() => setFriendsOpen(o => !o)}>
-          <span>Friends ({friends.length})</span>
+          <span>{t('friends_list')} ({friends.length})</span>
           <FaArrowDown className={friendsOpen ? "open" : ""} />
         </div>
         <div className={`section-content ${friendsOpen ? "open" : ""}`}>
           <ul className="dropdown-list">
             {friends.length === 0 ? (
-              <li className="dropdown-item-empty">No friends yet</li>
+              <li className="dropdown-item-empty">{t('no_friends')}</li>
             ) : (
               friends.map(f => (
                 <li key={f.id} className="dropdown-item">
@@ -338,7 +341,7 @@ export default function SettingsFriends() {
                     <div className="item-text-group">
                       <span className="item-pseudo">{f.pseudo}</span>
                       <span className="item-status">
-                        {f.status === "active" ? "online" : "offline"}
+                        {f.status === "active" ? t('status_online') : t('status_offline')}
                       </span>
                     </div>
                   </div>

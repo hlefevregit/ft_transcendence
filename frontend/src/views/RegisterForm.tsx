@@ -2,13 +2,33 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { handleRegister, googleLogin } from '@/services/authServices';
 import '@/styles/style.css';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../components/ChangeLanguage';
 
 const RegisterForm: React.FC = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState<{ pseudo?: string; email?: string; password?: string; general?: string }>({});
+  const [loading, setLoading] = useState(false);
+
+  // front-end validation
+  const validate = () => {
+    const newErrors: { pseudo?: string; email?: string; password?: string } = {};
+    if (!/^[A-Za-z0-9_]{1,16}$/.test(pseudo.trim())) {
+      newErrors.pseudo = t('username_format_error');
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      newErrors.email = t('email_format_error');
+    }
+    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}/.test(password)) {
+      newErrors.password = t('password_format_error');
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleCreateAccount = async () => {
     try {
@@ -16,10 +36,36 @@ const RegisterForm: React.FC = () => {
       if (res.success) {
         navigate('/login');
       } else {
-        setError(res.message || 'Registration failed');
+        // mapper le message renvoyé sur le bon champ
+        const msg = res.message || t('registration_error');
+        const fieldErrors: typeof errors = {};
+        if (/email/i.test(msg)) fieldErrors.email = msg;
+        else if (/pseudo/i.test(msg)) fieldErrors.pseudo = msg;
+        else if (/password/i.test(msg)) fieldErrors.password = msg;
+        else fieldErrors.general = msg;
+        setErrors(fieldErrors);
+      }
+    } catch {
+      setErrors({ general: t('registration_error') });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async (idToken: string) => {
+    // réinitialise les erreurs globales avant tentative Google
+    setErrors(e => ({ ...e, general: undefined }));
+    try {
+      const res = await googleLogin(idToken);
+      if (res.success) {
+        localStorage.setItem('authToken', res.token);
+        navigate('/game1');
+      } else {
+        setErrors(e => ({ ...e, general: res.message || t('google_auth_error') }));
       }
     } catch (err) {
-      setError('An error occurred during registration.');
+      console.error('Google login error:', err);
+      setErrors(e => ({ ...e, general: t('google_auth_error') }));
     }
   };
   const handleGoogleLogin = async (idToken: string) => {
@@ -55,6 +101,7 @@ const RegisterForm: React.FC = () => {
 
   return (
     <div className="font-[sans-serif] bg-gray-50 flex items-center md:h-screen p-4">
+	  <LanguageSwitcher />
       <div className="w-full max-w-3xl max-md:max-w-xl mx-auto">
         <div className="bg-white grid md:grid-cols-2 gap-12 w-full sm:p-8 p-6 shadow-md rounded-md overflow-hidden">
           <div className="max-md:order-1 space-y-6">
@@ -67,43 +114,55 @@ const RegisterForm: React.FC = () => {
           </div>
 
           <form className="w-full">
-            <div className="mb-8">
-              <h3 className="text-gray-800 text-xl">Register</h3>
-            </div>
-
+            <h3 className="text-gray-800 text-xl mb-4">{t('register')}</h3>
+            {/* Affichage de l’erreur "générale" */}
+            {errors.general && (
+              <p className="text-red-600 text-sm mb-4">
+                {errors.general}
+              </p>
+            )}
             <div className="space-y-4">
               <div>
-                <label className="text-gray-800 text-sm mb-2 block">Name</label>
+                <label htmlFor="reg-pseudo" className="text-gray-800 text-sm mb-2 block">
+				  {t('username')}
+                </label>
                 <input
                   id="reg-name"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
+                  placeholder={t('username_placeholder')}
                   className="bg-white border border-gray-300 w-full text-sm text-gray-800 pl-4 py-2.5 rounded-md outline-blue-500"
                   placeholder="Enter name"
                 />
               </div>
               <div>
-                <label className="text-gray-800 text-sm mb-2 block">Email</label>
+                <label htmlFor="reg-email" className="text-gray-800 text-sm mb-2 block">
+				  {t('email')}
+                </label>
                 <input
                   id="reg-email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  placeholder={t('email_placeholder')}
                   className="bg-white border border-gray-300 w-full text-sm text-gray-800 pl-4 py-2.5 rounded-md outline-blue-500"
                   placeholder="Enter email"
                 />
               </div>
               <div>
-                <label className="text-gray-800 text-sm mb-2 block">Password</label>
+                <label htmlFor="reg-password" className="text-gray-800 text-sm mb-2 block">
+				  {t('password')}
+                </label>
                 <input
                   id="reg-password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  placeholder={t('password_placeholder')}
                   className="bg-white border border-gray-300 w-full text-sm text-gray-800 pl-4 py-2.5 rounded-md outline-blue-500"
                   placeholder="Enter password"
                 />
@@ -128,13 +187,18 @@ const RegisterForm: React.FC = () => {
                 onClick={handleCreateAccount}
                 className="w-full py-2.5 px-4 text-sm tracking-wider rounded-md bg-blue-600 hover:bg-blue-700 text-white focus:outline-none"
               >
-                Create Account
+				{t('create_account_button')}
               </button>
             </div>
-            <p className="text-gray-800 text-sm mt-4 text-center">
-              Already have an account?
-              <Link to="/login" className="text-blue-600 font-semibold hover:underline ml-1">Login here</Link>
-            </p>
+            <div className="flex items-center justify-between mt-4">
+              <div id="google-login-btn"></div>
+              <p className="text-gray-800 text-sm">
+				{t('already_have_account')}{' '}
+                <Link to="/login" className="text-blue-600 font-semibold hover:underline ml-1">
+				  {t('login_here_button')}
+                </Link>
+              </p>
+            </div>
           </form>
         </div>
       </div>

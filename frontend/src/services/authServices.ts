@@ -27,7 +27,7 @@ export const handleEmailLogin = async (email: string, password: string) => {
   }
 };
 
-  
+
   export const handleRegister = async (name: string, email: string, password: string) => {
     const response = await fetch('/api/register', {
         method: 'POST',
@@ -36,7 +36,7 @@ export const handleEmailLogin = async (email: string, password: string) => {
     });
     return response.json();
   };
-  
+
   export const googleLogin = async (idToken: string) => {
     const response = await fetch('/api/auth/google', {
         method: 'POST',

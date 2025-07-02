@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { handleEmailLogin, googleLogin, handle2FALogin } from '../services/authServices';
 import '@/styles/style.css';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../components/ChangeLanguage';
 
 const LoginForm: React.FC = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,7 +20,7 @@ const LoginForm: React.FC = () => {
     const trimmedEmail = email.trim();
     // Security: block deleted_ accounts
     if (trimmedEmail.startsWith('deleted_')) {
-      setError('Email non autorisé');
+      setError(t('email_error'));
       return;
     }
     try {
@@ -27,15 +30,15 @@ const LoginForm: React.FC = () => {
         if (res.user.twoFAEnabled) {
           setIs2FAEnabled(true);
           localStorage.setItem('pendingUserId', String(res.user.id));
-          setError('2FA enabled, please enter your code.');
+          setError(t('2fa_waiting_code_error'));
           return;
         }
         navigate('/game1');
       } else {
-        setError(res.message || 'Invalid credentials');
+        setError(res.message || t('login_error'));
       }
     } catch {
-      setError('Login failed. Please try again.');
+      setError(t('login_error'));
     }
   };
 
@@ -49,10 +52,10 @@ const LoginForm: React.FC = () => {
         localStorage.removeItem('pendingUserId');
         navigate('/game1');
       } else {
-        setError('Invalid 2FA code');
+        setError(t('2fa_error'));
       }
     } catch {
-      setError('2FA verification failed.');
+      setError(t('2fa_failed_error'));
     }
   };
 
@@ -64,22 +67,22 @@ const LoginForm: React.FC = () => {
       if (res.success) {
         // Security: block deleted_ accounts
         if (res.user.email.startsWith('deleted_')) {
-          setError('Email non autorisé');
+          setError(t('email_error'));
           return;
         }
         localStorage.setItem('authToken', res.token);
         if (res.user.twoFAEnabled) {
           setIs2FAEnabled(true);
           localStorage.setItem('pendingUserId', String(res.user.id));
-          setError('2FA enabled, please enter your code.');
+          setError(t('2fa_waiting_code_error'));
           return;
         }
         navigate('/game1');
       } else {
-        setError(res.message || 'Google login failed');
+        setError(res.message || t('google_auth_error'));
       }
     } catch {
-      setError('Google login error.');
+      setError(t('google_auth_error'));
     }
   };
 
@@ -105,10 +108,11 @@ const LoginForm: React.FC = () => {
 
   return (
     <div className="font-[sans-serif] bg-gray-50 flex items-center md:h-screen p-4">
+	  <LanguageSwitcher />
       <div className="w-full max-w-3xl mx-auto">
         <div className="bg-white grid md:grid-cols-1 gap-12 w-full sm:p-8 p-6 shadow-md rounded-md overflow-hidden">
           <form className="w-full">
-            <h3 className="text-gray-800 text-xl mb-4 text-center">Sign In</h3>
+            <h3 className="text-gray-800 text-xl mb-4 text-center">{t('sign_in')}</h3>
             {/* General error */}
             {error && <p className="text-red-600 text-sm mb-4 text-center">{error}</p>}
 
@@ -118,7 +122,7 @@ const LoginForm: React.FC = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email address"
+                  placeholder={t('email_placeholder')}
                   required
                   className="bg-white border border-gray-300 w-full text-sm text-gray-800 pl-4 py-2.5 rounded-md outline-blue-500"
                 />
@@ -128,7 +132,7 @@ const LoginForm: React.FC = () => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password"
+                  placeholder={t('password_placeholder')}
                   required
                   className="bg-white border border-gray-300 w-full text-sm text-gray-800 pl-4 py-2.5 rounded-md outline-blue-500"
                 />
@@ -142,7 +146,7 @@ const LoginForm: React.FC = () => {
                 disabled={is2FAEnabled}
                 className="w-full py-2.5 px-4 text-sm rounded-md bg-blue-600 hover:bg-blue-700 text-white focus:outline-none disabled:opacity-50"
               >
-                Log In
+				{t('login_button')}
               </button>
             </div>
 
@@ -154,7 +158,7 @@ const LoginForm: React.FC = () => {
                     type="text"
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
-                    placeholder="Enter 2FA code"
+                    placeholder={t('2fa_placeholder')}
                     className="bg-white border border-gray-300 w-full text-sm text-gray-800 pl-4 py-2.5 rounded-md outline-blue-500"
                   />
                 </div>
@@ -164,7 +168,7 @@ const LoginForm: React.FC = () => {
                     onClick={handle2FACheck}
                     className="w-full py-2.5 px-4 text-sm rounded-md bg-green-600 hover:bg-green-700 text-white focus:outline-none"
                   >
-                    Verify 2FA
+					{t('verify_2fa_button')}
                   </button>
                 </div>
               </>
@@ -172,7 +176,7 @@ const LoginForm: React.FC = () => {
 
             <div className="my-4 flex items-center gap-4">
               <hr className="w-full border-gray-300" />
-              <p className="text-gray-800 text-sm text-center">or</p>
+              <p className="text-gray-800 text-sm text-center">{t('or')}</p>
               <hr className="w-full border-gray-300" />
             </div>
 
@@ -181,9 +185,9 @@ const LoginForm: React.FC = () => {
             </div>
 
             <p className="text-gray-800 text-sm mt-6 text-center">
-              Don't have an account?
+			  {t('no_account')}
               <Link to="/register" className="text-blue-600 font-semibold hover:underline ml-1">
-                Register here
+				{t('register_here')}
               </Link>
             </p>
           </form>
