@@ -5,6 +5,7 @@ import '@/styles/style.css';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '@/components/ChangeLanguage';
 
+
 const RegisterForm: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -64,14 +65,14 @@ const RegisterForm: React.FC = () => {
         setErrors(e => ({ ...e, general: res.message || t('google_auth_error') }));
       }
     } catch (err) {
-      console.error('Google login error:', err);
+      // console.error('Google login error:', err);
       setErrors(e => ({ ...e, general: t('google_auth_error') }));
     }
   };
     useEffect(() => {
       if (window.google && window.google.accounts) {
         window.google.accounts.id.initialize({
-          client_id: '930883947615-3ful7pfe6k38qbdqfph7ja2lp76spahf.apps.googleusercontent.com',
+          client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
           callback: (response: any) => {
             handleGoogleLogin(response.credential);
           },

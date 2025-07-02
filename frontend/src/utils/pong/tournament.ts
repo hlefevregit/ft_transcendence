@@ -66,7 +66,7 @@ export const useTournamentWebSocket = (pong: React.RefObject<game.pongStruct>,
 		}
 
 		ws.onerror = (error) => {
-			console.error("❌ WebSocket error:", error);
+			// console.error("❌ WebSocket error:", error);
 		}
 		ws.onclose = () => {
 			// console.log("❌ WebSocket connection closed");

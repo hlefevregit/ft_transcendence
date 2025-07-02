@@ -6,7 +6,7 @@
 #    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/07/02 15:54:39 by hulefevr         ###   ########.fr        #
+#    Updated: 2025/07/02 17:37:26 by hulefevr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,7 @@ prepare:
 
 post-build:
 	@make rebuild name=backend
-	# @make rebuild name=kibana
+	@make rebuild name=kibana
 	@make rebuild name=nginx
 
 build:

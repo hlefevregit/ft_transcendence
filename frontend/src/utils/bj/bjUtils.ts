@@ -285,12 +285,12 @@ export	const	debugKeys =
 		{
 			bjRef.current.debugMode = !bjRef.current.debugMode;
 			bjRef.current.debugGUI.isVisible = bjRef.current.debugGUI.isEnabled = bjRef.current.debugMode;
-			console.debug(`Debug mode: ${bjRef.current.debugMode}`);
+			// console.debug(`Debug mode: ${bjRef.current.debugMode}`);
 			bj.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.scene?.activeCamera as baby.FreeCamera, 0.1, bjRef, states);
 		}
 		if (bjRef.current.pressedKeys.has('o') && states.current !== bj.States.in_transition)
 		{
-			console.debug(`free cam: ${bjRef.current.scene?.activeCamera !== bjRef.current.freeCamera}`);
+			// console.debug(`free cam: ${bjRef.current.scene?.activeCamera !== bjRef.current.freeCamera}`);
 			if (bjRef.current.scene?.activeCamera === bjRef.current.freeCamera)
 			{
 				states.current = bj.States.main_menu;

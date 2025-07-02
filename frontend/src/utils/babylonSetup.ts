@@ -57,7 +57,7 @@ export const	setupBabylonBJ = async (bjRef: bj.bjStruct, canvasRef: any): Promis
 		if (mapMeshes && mapMeshes.length > 0) bjRef.map = mapMeshes[0];
 			// else console.warn("Failed to load map");
 	}
-	catch (error) { console.error("Error while loading map:", error); }
+	catch (error) { /*console.error("Error while loading map:", error);*/ }
 	try
 	{
 		const modelMeshes = await importGLTF(sceneInstance, cardUrl, false, false);

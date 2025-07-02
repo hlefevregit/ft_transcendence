@@ -177,79 +177,79 @@ services:
   #   #---------------------------------------------------------------------------------------
 
 
-  # elasticsearch:
-  #   build:
-  #     context: ./elk/elasticsearch
-  #     dockerfile: Dockerfile
-  #   container_name: elasticsearch
-  #   environment:
-  #     - discovery.type=single-node
-  #     - ES_JAVA_OPTS=-Xms1g -Xmx1g
-  #   ports:
-  #     - "9200:9200"
-  #     - "9300:9300"
-  #   volumes:
-  #     - es_data:/app/storage
-  #     - ./elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-  #   networks:
-  #     - ft_network
-  #
-  # logstash:
-  #   build:
-  #     context: ./elk/logstash
-  #     dockerfile: Dockerfile
-  #   container_name: logstash
-  #   ports:
-  #     - "5044:5044"
-  #     - "9600:9600"
-  #   environment:
-  #     - LS_JAVA_OPTS=-Xms512m -Xmx512m
-  #   depends_on:
-  #     - elasticsearch
-  #   volumes:
-  #     - ./logs:/app/logs
-  #   networks:
-  #     - ft_network
-  #
-  # filebeat:
-  #   build:
-  #     context: ./elk/filebeat
-  #     dockerfile: Dockerfile
-  #   user: root
-  #   volumes:
-  #     - ./elk/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-  #     - ./logs:/app/logs:ro
-  #   depends_on:
-  #     - logstash
-  #   command: ["--strict.perms=false", "-e"]
-  #   networks:
-  #     - ft_network
+  elasticsearch:
+    build:
+      context: ./elk/elasticsearch
+      dockerfile: Dockerfile
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - es_data:/app/storage
+      - ./elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    networks:
+      - ft_network
+  
+  logstash:
+    build:
+      context: ./elk/logstash
+      dockerfile: Dockerfile
+    container_name: logstash
+    ports:
+      - "5044:5044"
+      - "9600:9600"
+    environment:
+      - LS_JAVA_OPTS=-Xms512m -Xmx512m
+    depends_on:
+      - elasticsearch
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - ft_network
+  
+  filebeat:
+    build:
+      context: ./elk/filebeat
+      dockerfile: Dockerfile
+    user: root
+    volumes:
+      - ./elk/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./logs:/app/logs:ro
+    depends_on:
+      - logstash
+    command: ["--strict.perms=false", "-e"]
+    networks:
+      - ft_network
 
 
-  # kibana:
-  #   build:
-  #     context: ./elk/kibana
-  #     dockerfile: Dockerfile
-  #   container_name: kibana
-  #   ports:
-  #     - "5601:5601"
-  #   environment:
-  #     - T_PORT_INTERN_LOGGING=9200
-  #     - T_ENDPOINT_LOGGING=kibana
-  #     - T_SERVER_NAME=localhost
-  #     - T_KIBANA_MAXSOCKS=100
-  #     - server.basePath=/kibana
-  #     - server.rewriteBasePath=true
-  #     - VAULT_ADDR=https://vault:8200
-  #     - VAULT_SKIP_VERIFY=true
-  #     - VAULT_TOKEN=${VAULT_TOKEN}
-  #     - VAULT_SECRET_PATH=cubbyhole/default
-  #   depends_on:
-  #     - elasticsearch
-  #     - vault
-  #     - vault_init
-  #   networks:
-  #     - ft_network
+  kibana:
+    build:
+      context: ./elk/kibana
+      dockerfile: Dockerfile
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - T_PORT_INTERN_LOGGING=9200
+      - T_ENDPOINT_LOGGING=kibana
+      - T_SERVER_NAME=localhost
+      - T_KIBANA_MAXSOCKS=100
+      - server.basePath=/kibana
+      - server.rewriteBasePath=true
+      - VAULT_ADDR=https://vault:8200
+      - VAULT_SKIP_VERIFY=true
+      - VAULT_TOKEN=${VAULT_TOKEN}
+      - VAULT_SECRET_PATH=cubbyhole/default
+    depends_on:
+      - elasticsearch
+      - vault
+      - vault_init
+    networks:
+      - ft_network
 
 
   # ------------------ ELK END -----------------------------------------------------------

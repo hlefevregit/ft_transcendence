@@ -137,12 +137,12 @@ export	const	doPaddleMovement =
 		{
 			pong.current.debugMode = !pong.current.debugMode;
 			pong.current.debugGUI.isVisible = pong.current.debugGUI.isEnabled = pong.current.debugMode;
-			console.debug(`Debug mode: ${pong.current.debugMode}`);
+			// console.debug(`Debug mode: ${pong.current.debugMode}`);
 			game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.scene?.activeCamera as baby.FreeCamera, 0.1, pong, states);
 		}
 		if (pong.current.pressedKeys.has('o'))
 		{
-			console.debug(`free cam: ${pong.current.scene?.activeCamera !== pong.current.notFoundCam}`);
+			// console.debug(`free cam: ${pong.current.scene?.activeCamera !== pong.current.notFoundCam}`);
 			if (pong.current.scene?.activeCamera === pong.current.notFoundCam)
 			{
 				states.current = game.states.main_menu;

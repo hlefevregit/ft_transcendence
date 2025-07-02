@@ -266,7 +266,7 @@ export const useOnlineLoop = (pong: React.RefObject<game.pongStruct>,
 
         case game.states.join_invite: {
 
-            console.log("💡 socketRef:", socketRef.current);
+            // console.log("💡 socketRef:", socketRef.current);
 
             if (
                 socketRef.current &&

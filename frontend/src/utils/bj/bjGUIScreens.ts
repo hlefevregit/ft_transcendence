@@ -377,12 +377,12 @@ export const instantiateActionGUI =
 	const	standButton = bj.createDynamicButton("standButton", () =>
 	{
 		bjRef.current.playerChoice = bj.PlayerChoices.stand;
-		console.log("STAND")
+		// console.log("STAND")
 	}, bjRef, "stand");
 	const	hitButton = bj.createDynamicButton("hitButton", () =>
 	{
 		bjRef.current.playerChoice = bj.PlayerChoices.hit;
-		console.log("HIT")
+		// console.log("HIT")
 	}, bjRef, "hit");
 
 	// Add GUI components to the action GUI
