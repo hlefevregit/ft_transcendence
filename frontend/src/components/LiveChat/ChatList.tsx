@@ -1,10 +1,10 @@
 // src/components/LiveChat/ChatList.tsx
 import React, { useState, useRef } from 'react'
 import { createPortal } from 'react-dom'
-import { useChatStore } from './ChatStore'
-import { UserProfileCard } from './UserProfileCard'
-import type { ChatUser } from '../../types'
-import '../../styles/LiveChat/ChatList.css'
+import { useChatStore } from '@/components/LiveChat/ChatStore'
+import { UserProfileCard } from '@/components/LiveChat/UserProfileCard'
+import type { ChatUser } from '@/types'
+import '@/styles/LiveChat/ChatList.css'
 
 // Timings
 const OPEN_DELAY = 1000

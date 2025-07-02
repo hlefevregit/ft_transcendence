@@ -8,3 +8,4 @@ export const setupCors = (fastify: FastifyInstance) => {
     credentials: true,
   });
 };
+  

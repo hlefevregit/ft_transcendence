@@ -6,12 +6,12 @@ import React, {
   useEffect,
   ReactNode,
 } from 'react'
-import type { ChatUser } from '../../types'
+import type { ChatUser } from '@/types'
 import {
   getRecentContactIds,
   getUsersByIds,
   getUnreadCounts,
-} from './api'
+} from '@/components/LiveChat/api'
 
 interface ChatStore {
   open: boolean

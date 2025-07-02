@@ -74,6 +74,7 @@ fi
 
 echo "🚀 Launching Nginx..."
 
+# COPY ./dist /usr/share/nginx/html
 
 # Launch nginx in foreground.
 exec nginx -g "daemon off;"

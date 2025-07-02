@@ -1,13 +1,13 @@
 // src/components/LiveChat/ChatPanel.tsx
 import React, { useState, KeyboardEvent, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import ChatList from './ChatList'
-import Conversation from './Conversation'
-import type { ChatUser } from '../../types'
-import { getUserByPseudo, getCurrentUser } from './api'
-import { useChatStore } from './ChatStore'
+import ChatList from '@/components/LiveChat/ChatList'
+import Conversation from '@/components/LiveChat/Conversation'
+import type { ChatUser } from '@/types'
+import { getUserByPseudo, getCurrentUser } from '@/components/LiveChat/api'
+import { useChatStore } from '@/components/LiveChat/ChatStore'
 import axios from 'axios'
-import '../../styles/LiveChat/ChatPanel.css'
+import '@/styles/LiveChat/ChatPanel.css'
 import * as game from '@/libs/pongLibs'
 
 interface ChatPanelProps {

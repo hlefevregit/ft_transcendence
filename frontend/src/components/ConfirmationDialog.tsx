@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/ConfirmationDialog.css';
+import '@/styles/ConfirmationDialog.css';
 
 interface ConfirmationDialogProps {
   message: string;

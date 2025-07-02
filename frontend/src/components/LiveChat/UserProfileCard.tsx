@@ -6,9 +6,9 @@ import {
   blockUser,
   unblockUser,
   getCurrentUser,
-} from './api'
-import type { ChatUser } from '../../types'
-import '../../styles/LiveChat/UserProfileCard.css'
+} from '@/components/LiveChat/api'
+import type { ChatUser } from '@/types'
+import '@/styles/LiveChat/UserProfileCard.css'
 
 // Cache par userId pour ne fetcher qu'une seule fois par utilisateur
 const profileCache = new Map<

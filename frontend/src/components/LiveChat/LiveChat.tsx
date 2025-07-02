@@ -1,7 +1,7 @@
 // src/components/LiveChat/LiveChat.tsx
 import React, { useRef } from 'react'
 import * as game from '@/libs/pongLibs'
-import ChatLauncher from './ChatLauncher'
+import ChatLauncher from '@/components/LiveChat/ChatLauncher'
 
 export interface LiveChatProps {
   gameState?: number

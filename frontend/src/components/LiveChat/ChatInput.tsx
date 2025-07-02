@@ -1,7 +1,7 @@
 // src/components/LiveChat/ChatInput.tsx
 import { useState, KeyboardEvent } from 'react'
 import { MdSend } from 'react-icons/md'
-import '../../styles/LiveChat/ChatInput.css'
+import '@/styles/LiveChat/ChatInput.css'
 
 interface ChatInputProps {
   onSend: (text: string) => void

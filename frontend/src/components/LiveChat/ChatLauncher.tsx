@@ -2,9 +2,9 @@
 import React from 'react'
 import { MdMessage } from 'react-icons/md'
 import * as game from '@/libs/pongLibs'
-import ChatPanel from './ChatPanel'
+import ChatPanel from '@/components/LiveChat/ChatPanel'
 import { useChatStore } from './ChatStore'
-import '../../styles/LiveChat/ChatLauncher.css'
+import '@/styles/LiveChat/ChatLauncher.css'
 
 interface ChatLauncherProps {
   gameState: number

@@ -13,11 +13,10 @@ import SettingsHistory from "./SettingsHistory";
 import SettingsBlock from "./SettingsBlock";
 
 import "@/styles/Settings.css";
-
-type Tab = "profile" | "friends" | "history" | "block";
 import { useTranslation } from "react-i18next";
 
-type Tab = "profile" | "friends" | "history";
+type Tab = "profile" | "friends" | "history" | "block";
+
 
 export default function Settings() {
   const { t } = useTranslation();
@@ -144,6 +143,5 @@ export default function Settings() {
           </div>
         </div>
       </div>
-    </>
   );
 }

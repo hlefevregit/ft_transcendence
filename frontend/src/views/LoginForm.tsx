@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { handleEmailLogin, googleLogin, handle2FALogin } from '../services/authServices';
+import { handleEmailLogin, googleLogin, handle2FALogin } from '@/services/authServices';
 import '@/styles/style.css';
 import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from '../components/ChangeLanguage';
+import LanguageSwitcher from '@/components/ChangeLanguage';
 
 const LoginForm: React.FC = () => {
   const { t } = useTranslation();
