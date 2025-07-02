@@ -5,7 +5,7 @@ import BabylonScene from "@/components/BabylonScene";
 import PlayerSprite from "@/components/PlayerSprite";
 import LiveChat from "@/components/LiveChat/LiveChat";
 import * as game from "@/libs/pongLibs";
-import LanguageSwitcher from '../../components/ChangeLanguage';
+import LanguageSwitcher from '@/components/ChangeLanguage';
 
 import SettingsProfile from "./SettingsProfile";
 import SettingsFriends from "./SettingsFriends";

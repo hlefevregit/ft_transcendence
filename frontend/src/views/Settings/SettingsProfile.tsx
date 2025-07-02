@@ -76,6 +76,7 @@ export default function SettingsProfile() {
     })();
   }, []);
 
+<<<<<<< HEAD
   // Avatar → Base64
   const onAvatarFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -90,6 +91,28 @@ export default function SettingsProfile() {
     reader.readAsDataURL(file);
   };
   const triggerFileSelect = () => fileInputRef.current?.click();
+=======
+	// Avatar → Base64
+	const onAvatarFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		if (!file) return;
+
+		// lecture du buffer
+		const arrayBuffer = await file.arrayBuffer();
+		const ft = await fileTypeFromBuffer(new Uint8Array(arrayBuffer));
+
+		if (!ft || !['image/jpeg', 'image/png'].includes(ft.mime)) {
+			setError('File must be a valid JPG, JPEG, or PNG image.');
+			return;
+		}
+
+		// OK, on peut générer le preview
+		const reader = new FileReader();
+		reader.onloadend = () => setAvatarUrl(reader.result as string);
+		reader.readAsDataURL(file);
+	};
+	const triggerFileSelect = () => fileInputRef.current?.click();
+>>>>>>> refs/remotes/origin/Prod
 
 	const isDirty =
 		initial != null &&
@@ -104,153 +127,93 @@ export default function SettingsProfile() {
 		setStatus(initial.status);
 		setError('');
 	};
-  // Save
-  const handleSave = async () => {
-    setError('');
-    if (pseudo.length > 16) {
-      setError(t('username_format_error'));
-      return;
-    }
-    try {
-      const token = localStorage.getItem('authToken');
-      if (!token) throw new Error();
-      const res = await fetch('/api/user/me', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        credentials: 'include',
-        body: JSON.stringify({ pseudo, avatarUrl, status }),
-      });
-      if (!res.ok) {
-        const { message } = await res.json();
-        throw new Error(message);
-      }
-      const updated: UserProfile = await res.json();
-      setUser(updated);
-      setPseudo(updated.pseudo);
-      const av = updated.avatarUrl || defaultAvatar;
-      setAvatarUrl(av);
-      setStatus(updated.status);
-      setInitial({ pseudo: updated.pseudo, avatarUrl: av, status: updated.status });
-    } catch (err: any) {
-      setError(err.message || t('profile_fetch_error'));
-    }
-  };
 
-  // Status toggle
-  const toggleStatus = async () => {
-    if (!user) return;
-    const next = status === 'active' ? 'offline' : 'active';
-    setStatus(next);
-    try {
-      const token = localStorage.getItem('authToken');
-      if (!token) throw new Error();
-      const res = await fetch('/api/user/me', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        credentials: 'include',
-        body: JSON.stringify({ status: next, pseudo, avatarUrl }),
-      });
-      if (!res.ok) throw new Error();
-      setInitial(i => i && ({ ...i, status: next }));
-    } catch {
-      setStatus(user.status);
-      setError(t('status_update_error'));
-    }
-  };
-
-  // 2FA toggle
-  const handleToggle2FA = async () => {
-    setError('');
-    if (!twoFAEnabled && !qrCodeUrl) {
-      try {
-        const token = localStorage.getItem('authToken');
-        if (!token) throw new Error();
-        const res = await fetch('/api/2fa/enable', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ userId: user?.id }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || t('2fa_enable_error'));
-        setQrCodeUrl(data.qrCode);
-      } catch (err: any) {
-        setError(err.message || t('2fa_enable_error'));
-      }
-    } else if (!twoFAEnabled && qrCodeUrl) {
-      setQrCodeUrl(null);
-    } else {
-      setDialog({
-        message: t('disable_2fa_confirmation'),
-        onConfirm: async () => {
-          setDialog(null);
-          try {
-            const token = localStorage.getItem('authToken');
-            if (!token) throw new Error();
-            const res = await fetch('/api/2fa/disable', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify({ userId: user?.id }),
-            });
-            if (!res.ok) throw new Error(t('2fa_disable_error'));
-            const pr = await fetch('/api/me', {
-              headers: { Authorization: `Bearer ${token}` },
-              credentials: 'include',
-            });
-            const upd: UserProfile = await pr.json();
-            setTwoFAEnabled(upd.twoFAEnabled);
-            setQrCodeUrl(null);
-          } catch {
-            setError(t('2fa_disable_error'));
-          }
-        },
-      });
-    }
-  };
-
-  const handleVerify2FA = async () => {
-    setError('');
-    try {
-      const token = localStorage.getItem('authToken');
-      if (!token) throw new Error();
-      const res = await fetch('/api/2fa/verify', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token: totp }),
-      });
-      if (!res.ok) {
-        setError(t('2fa_error'));
-        return;
-      }
-      setQrCodeUrl(null);
-      setTotp('');
-      const pr = await fetch('/api/me', {
-        headers: { Authorization: `Bearer ${token}` },
-        credentials: 'include',
-      });
-      const upd: UserProfile = await pr.json();
-      setTwoFAEnabled(upd.twoFAEnabled);
-    } catch {
-      setError(t('2fa_failed_error'));
-    }
-  };
-
+<<<<<<< HEAD
   // Logout & Delete account
 
+=======
+	// Save
+	const handleSave = async () => {
+		setError('');
+		if (pseudo.length > 16) {
+			setError('Username too long');
+			return;
+		}
+		try {
+			const token = localStorage.getItem('authToken');
+			if (!token) throw new Error();
+			const res = await fetch('/api/user/me', {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+				},
+				credentials: 'include',
+				body: JSON.stringify({ pseudo, avatarUrl, status }),
+			});
+			if (!res.ok) {
+				const { message } = await res.json();
+				throw new Error(message);
+			}
+			const updated: UserProfile = await res.json();
+			setUser(updated);
+			setPseudo(updated.pseudo);
+			const av = updated.avatarUrl || defaultAvatar;
+			setAvatarUrl(av);
+			setStatus(updated.status);
+			setInitial({ pseudo: updated.pseudo, avatarUrl: av, status: updated.status });
+		} catch (err: any) {
+			setError(err.message || 'Failed to update profile.');
+		}
+	};
+
+	// Status toggle
+	const toggleStatus = async () => {
+		if (!user) return;
+		const next = status === 'active' ? 'offline' : 'active';
+		setStatus(next);
+		try {
+			const token = localStorage.getItem('authToken');
+			if (!token) throw new Error();
+			const res = await fetch('/api/user/me', {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+				},
+				credentials: 'include',
+				body: JSON.stringify({ status: next, pseudo, avatarUrl }),
+			});
+			if (!res.ok) throw new Error();
+			setInitial(i => i && ({ ...i, status: next }));
+		} catch {
+			setStatus(user.status);
+			setError('Failed to update status.');
+		}
+	};
+
+	// 2FA toggle
+	const handleToggle2FA = async () => {
+		setError('');
+		try {
+			const token = localStorage.getItem('authToken');
+			if (!token) throw new Error();
+			const res = await fetch('/api/2fa/enable', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+				},
+				body: JSON.stringify({ userId: user?.id }),
+			});
+			const data = await res.json();
+			if (!res.ok) throw new Error(data.error || 'Enable 2FA failed');
+			setQrCodeUrl(data.qrCode);
+		} catch (err: any) {
+			setError(err.message || 'Error enabling 2FA');
+		}
+	};
+>>>>>>> refs/remotes/origin/Prod
   const deleteAccount = () => {
     setDialog({
       message: t('delete_account_confirmation'),
@@ -429,6 +392,7 @@ export default function SettingsProfile() {
         )}
       </div>
 
+<<<<<<< HEAD
 			{/* Avatar + Change + Save/Reset */}
 			<div className="profile-block">
 				<div className="profile-row">
@@ -557,4 +521,21 @@ export default function SettingsProfile() {
 			</div>
 		</section>
 	);
+=======
+      {/* Logout & Delete Account */}
+      <div className="extra-actions">
+        <button className="logout-button clickable" onClick={logout} type="button">
+		  {t('logout_button')}
+        </button>
+        <button
+          className="delete-data-button clickable"
+          onClick={deleteAccount}
+          type="button"
+        >
+		  {t('delete_account_button')}
+        </button>
+      </div>
+	  </section>
+  );
+>>>>>>> refs/remotes/origin/Prod
 }

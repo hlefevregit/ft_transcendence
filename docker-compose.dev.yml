@@ -193,7 +193,7 @@ services:
   #     - ./elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
   #   networks:
   #     - ft_network
-
+  #
   # logstash:
   #   build:
   #     context: ./elk/logstash
@@ -210,7 +210,7 @@ services:
   #     - ./logs:/app/logs
   #   networks:
   #     - ft_network
-
+  #
   # filebeat:
   #   build:
   #     context: ./elk/filebeat
