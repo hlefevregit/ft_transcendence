@@ -6,67 +6,78 @@
 #    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/07/02 12:34:43 by hulefevr         ###   ########.fr        #
+#    Updated: 2025/07/02 13:40:50 by hulefevr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# Variables
 PROJECT_NAME = ft_transcendence
 DEV_COMPOSE = docker-compose.dev.yml
 PROD_COMPOSE = docker-compose.yml
 
+VOLUME_DIRS = \
+	vault/data \
+	vault/secrets \
+	elk/elasticsearch/data \
+	backend/main/prisma/sqlite
+
 .PHONY: build up down restart logs prune clean rebuild \
         build-dev up-dev down-dev restart-dev logs-dev rebuild-dev \
         build-prod up-prod down-prod restart-prod logs-prod rebuild-prod \
-		reset-db log \
+		reset-db log prepare post-build
 
 #########################################################
 ### ------------------ ENV DEV ---------------------- ###
 #########################################################
 
+prepare:
+	@echo "📁 Création des dossiers nécessaires..."
+	@mkdir -p $(VOLUME_DIRS)
+	@touch ./vault/secrets/.env
+
+post-build:
+	@make rebuild name=backend
+	@make rebuild name=kibana
+	@make rebuild name=nginx
+
 build:
+	@make prepare
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) build
 
 up:
-	mkdir -p vault/data
+	@make prepare
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up -d
-	# @make rebuild name=backend
+	@make post-build
 
 down:
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down
 
 restart:
-	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down
-	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up -d
-	# @make rebuild name=backend
+	@make down
+	@make up
 
-logs-prod:
+logs:
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) logs -f
 
 re:
-	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) down --volumes --remove-orphans --rmi all
+	@make prepare
+	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down --volumes --remove-orphans --rmi all
 	docker volume prune -f
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up --build -d
-
+	@make post-build
 
 rebuild-prod:
-	mkdir -p vault/data
-	make reset_vault 2>/dev/null || true
-	touch ./vault/secrets/.env
-
+	@make prepare
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down -v --remove-orphans
 	docker system prune -af
 	docker volume prune -f
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) build --no-cache
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up -d
-	# @make rebuild name=backend
+	@make post-build
 
 reset_vault:
-	docker exec -it ft_transcendence-vault-1 chmod -R 777 ./vault/file
+	docker exec -it ft_transcendence-vault-1 chmod -R 777 ./vault/file || true
 	rm -rf ./vault/data ./vault/secrets
 	mkdir -p ./vault/data ./vault/secrets
-
-
 
 #########################################################
 ### ------------------ GLOBALES --------------------- ###
@@ -85,8 +96,7 @@ prune:
 	docker system prune -af
 	docker volume prune -f
 
-
-logs:
+logs-all:
 	@mkdir -p ./logs
 	@for container in $$(docker ps --format '{{.Names}}'); do \
 		echo "Redirecting logs for $$container"; \
