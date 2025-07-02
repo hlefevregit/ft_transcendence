@@ -239,6 +239,8 @@ services:
       - T_ENDPOINT_LOGGING=kibana
       - T_SERVER_NAME=localhost
       - T_KIBANA_MAXSOCKS=100
+      - server.basePath=/kibana
+      - server.rewriteBasePath=true
       - VAULT_ADDR=https://vault:8200
       - VAULT_SKIP_VERIFY=true
       - VAULT_TOKEN=${VAULT_TOKEN}
@@ -250,6 +252,7 @@ services:
     networks:
       - ft_network
 
+
   # ------------------ ELK END -----------------------------------------------------------
   #---------------------------------------------------------------------------------------
 
@@ -257,67 +260,69 @@ services:
   # ------------------ PROMETHEUS / GRAFANA ----------------------------------------------
   # --------------------------------------------------------------------------------------
 
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./monitoring/prometheus/alert.rules.yml:/etc/prometheus/alert.rules.yml
-      - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.retention.time=30d'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.enable-lifecycle'
-    networks:
-      - ft_network
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: prometheus
+  #   ports:
+  #     - "9090:9090"
+  #   volumes:
+  #     - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  #     - ./monitoring/prometheus/alert.rules.yml:/etc/prometheus/alert.rules.yml
+  #     - prometheus_data:/prometheus
+  #   command:
+  #     - '--config.file=/etc/prometheus/prometheus.yml'
+  #     - '--storage.tsdb.retention.time=30d'
+  #     - '--storage.tsdb.path=/prometheus'
+  #     - '--web.enable-lifecycle'
+  #   networks:
+  #     - ft_network
 
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
-    container_name: cadvisor
-    ports:
-      - "8081:8080"
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-    networks:
-      - ft_network
+  # cadvisor:
+  #   image: gcr.io/cadvisor/cadvisor:latest
+  #   container_name: cadvisor
+  #   ports:
+  #     - "8081:8080"
+  #   volumes:
+  #     - /:/rootfs:ro
+  #     - /var/run:/var/run:ro
+  #     - /sys:/sys:ro
+  #     - /var/lib/docker/:/var/lib/docker:ro
+  #   networks:
+  #     - ft_network
 
-  grafana:
-    build:
-      context: ./monitoring/grafana
-      dockerfile: Dockerfile.dev
-    container_name: grafana
-    environment:
-      - VAULT_ADDR=https://vault:8200
-      - VAULT_SKIP_VERIFY=true
-      - VAULT_TOKEN=${VAULT_TOKEN}
-      - VAULT_SECRET_PATH=cubbyhole/default
-    ports:
-      - "3001:3000"
-    volumes:
-      - grafana_data:/var/lib/grafana
-    networks:
-      - ft_network
-    depends_on:
-      - vault
-      - vault_init
+  # grafana:
+  #   build:
+  #     context: ./monitoring/grafana
+  #     dockerfile: Dockerfile.dev
+  #   container_name: grafana
+  #   environment:
+  #     - VAULT_ADDR=https://vault:8200
+  #     - VAULT_SKIP_VERIFY=true
+  #     - VAULT_TOKEN=${VAULT_TOKEN}
+  #     - VAULT_SECRET_PATH=cubbyhole/default
+  #     - GF_SERVER_ROOT_URL=https://localhost:8080/grafana/
+  #     - GF_SERVER_SERVE_FROM_SUB_PATH=true
+  #   ports:
+  #     - "3001:3000"
+  #   volumes:
+  #     - grafana_data:/var/lib/grafana
+  #   networks:
+  #     - ft_network
+  #   depends_on:
+  #     - vault
+  #     - vault_init
 
-  nginx-exporter:
-    image: nginx/nginx-prometheus-exporter:latest
-    container_name: nginx-exporter
-    command:
-      - '-nginx.scrape-uri=http://nginx:8082/nginx_status'
-    ports:
-      - "9113:9113"
-    depends_on:
-      - nginx
-    networks:
-      - ft_network
+  # nginx-exporter:
+  #   image: nginx/nginx-prometheus-exporter:latest
+  #   container_name: nginx-exporter
+  #   command:
+  #     - '-nginx.scrape-uri=http://nginx:8082/nginx_status'
+  #   ports:
+  #     - "9113:9113"
+  #   depends_on:
+  #     - nginx
+  #   networks:
+  #     - ft_network
 
 
 
@@ -353,19 +358,19 @@ volumes:
       device: ${PWD}/elk/elasticsearch/data
       o: bind
 
-  prometheus_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${PWD}/monitoring/prometheus/data
-      o: bind
+  # prometheus_data:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: ${PWD}/monitoring/prometheus/data
+  #     o: bind
 
-  grafana_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${PWD}/monitoring/grafana/data
-      o: bind
+  # grafana_data:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: ${PWD}/monitoring/grafana/data
+  #     o: bind
 
 networks:
   ft_network:

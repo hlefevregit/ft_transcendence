@@ -1,5 +1,18 @@
 #!/bin/bash
 
+
+
+VAULT_HOST=${VAULT_HOST:-vault}
+VAULT_PORT=${VAULT_PORT:-8200}
+
+echo "⏳ Waiting for Vault to be ready..."
+until curl -sk https://$VAULT_HOST:$VAULT_PORT/v1/sys/health | grep -q '"initialized":true'; do
+  sleep 1
+done
+
+
+echo "✅ vault:8200 is up!"
+
 vault_export_to_env() {
   local secret_path="$1"
   local env_file=".env"
@@ -44,15 +57,6 @@ vault_export_to_env "cubbyhole/default"
 env > .env
 
 
-host=$1
-port=$2
-
-echo "⏳ Waiting for $host:$port..."
-until nc -z $host $port; do
-  sleep 1
-done
-
-echo "✅ $host:$port is up!"
 
 npm install -g typescript ts-node ts-node-dev pm2 fastify
 

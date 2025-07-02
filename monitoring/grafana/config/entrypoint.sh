@@ -1,5 +1,16 @@
 #!/bin/bash
 
+VAULT_HOST=${VAULT_HOST:-vault}
+VAULT_PORT=${VAULT_PORT:-8200}
+
+echo "⏳ Waiting for Vault to be ready..."
+until curl -sk https://$VAULT_HOST:$VAULT_PORT/v1/sys/health | grep -q '"initialized":true'; do
+  sleep 1
+done
+
+echo "✅ Vault is ready!"
+
+
 vault_export_to_env() {
   local secret_path="$1"
   local env_file=".env"
