@@ -163,7 +163,7 @@ services:
       - "8080:8080"  # Changed from "8080:8080" to bind to all interfaces
       - "8082:8082"  # Changed from "8082:8082" to bind to all interfaces
     volumes:
-      - ./frontend/nginx_conf/certs/:/etc/nginx/certs:ro
+      - ./frontend/nginx_conf/certs/:/etc/nginx/certs
     depends_on:
       - frontend
       - backend
