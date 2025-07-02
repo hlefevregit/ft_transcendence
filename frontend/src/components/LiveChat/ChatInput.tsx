@@ -2,6 +2,7 @@
 import { useState, KeyboardEvent } from 'react'
 import { MdSend } from 'react-icons/md'
 import '@/styles/LiveChat/ChatInput.css'
+import { useTranslation } from 'react-i18next';
 
 interface ChatInputProps {
   onSend: (text: string) => void
@@ -12,6 +13,7 @@ export default function ChatInput({
   onSend,
   disabled = false,
 }: ChatInputProps) {
+  const { t } = useTranslation();
   const [text, setText] = useState('')
 
   const send = () => {
@@ -34,7 +36,7 @@ export default function ChatInput({
       onChange={e => setText(e.target.value)}
       onKeyDown={onKeyDown}
       disabled={disabled}
-      placeholder={disabled ? '...' : 'Type a message'}
+      placeholder={disabled ? '...' : t('type_a_message')}
       />
       <button
       onClick={send}

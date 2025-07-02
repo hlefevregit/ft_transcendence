@@ -10,6 +10,7 @@ import '@/styles/LiveChat/Conversation.css'
 import { getCurrentUser } from '@/components/LiveChat/api'
 import * as game from '@/libs/pongLibs'
 import * as baby from '@/libs/babylonLibs'
+import { useTranslation } from 'react-i18next';
 
 interface ConversationProps {
   className?: string
@@ -17,6 +18,7 @@ interface ConversationProps {
 }
 
 export default function Conversation({ className = '', states }: ConversationProps) {
+  const { t } = useTranslation();
   const { open, selectedUserId, contactsById } = useChatStore()
   const selectedUser = selectedUserId != null ? contactsById[selectedUserId] : null
   const { id: meId } = getCurrentUser()
@@ -73,13 +75,13 @@ export default function Conversation({ className = '', states }: ConversationPro
       <div className="chat-conversation__messages" ref={containerRef}>
         {!selectedUser ? (
           <p className="chat-conversation__placeholder">
-            Sélectionnez un contact
+            {t('select_user')}
           </p>
         ) : isBlocked ? (
-          <p className="chat-conversation__blocked">Blocked.</p>
+          <p className="chat-conversation__blocked">t{('blocked')}</p>
         ) : messages.length === 0 ? (
           <p className="chat-conversation__placeholder">
-            Aucune conversation
+            {t('no_messages_placeholder')}
           </p>
         ) : (
           messages.map((m) => (
@@ -101,11 +103,11 @@ export default function Conversation({ className = '', states }: ConversationPro
         <div className="chat-invite-banner">
           <span>
             {contactsById[currentInvite.inviterId]?.username ||
-              'Quelqu\'un'}{' '}
-            vous invite à jouer
+              t('somebody')}{' '}
+            {t('invites_you_to_join')}
           </span>
           <button onClick={() => handleJoin(currentInvite.roomId)}>
-            Rejoindre
+            {t('join')}
           </button>
         </div>
       )}
