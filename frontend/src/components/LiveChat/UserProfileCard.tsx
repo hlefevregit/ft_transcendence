@@ -9,6 +9,7 @@ import {
 } from '@/components/LiveChat/api'
 import type { ChatUser } from '@/types'
 import '@/styles/LiveChat/UserProfileCard.css'
+import { useTranslation } from 'react-i18next';
 
 // Cache par userId pour ne fetcher qu'une seule fois par utilisateur
 const profileCache = new Map<
@@ -27,6 +28,7 @@ export const UserProfileCard: FC<UserProfileCardProps> = ({
   onClose,
   style,
 }) => {
+  const { t } = useTranslation()
   const [history, setHistory] = useState<any[]>([])
   const [isBlocked, setIsBlocked] = useState(false)
   const [blockLoading, setBlockLoading] = useState(false)
@@ -112,14 +114,14 @@ export const UserProfileCard: FC<UserProfileCardProps> = ({
               onClick={toggleBlock}
               disabled={blockLoading}
             >
-              {isBlocked ? 'Débloquer' : 'Bloquer'}
+              {isBlocked ? t('unblock') : t('block')}
             </button>
           )}
         </div>
       </div>
       <div className="user-profile-card__body">
         {history.length === 0 ? (
-          <p className="no-history">Aucune partie enregistrée</p>
+          <p className="no-history">{t('no_game_history')}</p>
         ) : (
           <div className="user-profile-card__matches">
             {history.map(m => (

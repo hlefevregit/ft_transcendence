@@ -9,6 +9,8 @@ import { useChatStore } from '@/components/LiveChat/ChatStore'
 import axios from 'axios'
 import '@/styles/LiveChat/ChatPanel.css'
 import * as game from '@/libs/pongLibs'
+import { useTranslation } from 'react-i18next';
+
 
 interface ChatPanelProps {
   visible: boolean
@@ -47,6 +49,7 @@ export default function ChatPanel({
   const [error, setError] = useState('')
   const [pendingInviteeId, setPendingInviteeId] = useState<number | null>(null)
   const [hasUpdatedInvite, setHasUpdatedInvite] = useState(false)
+  const { t } = useTranslation();
 
   const clearPendingInviteeId = () => {
     setPendingInviteeId(null)
@@ -194,7 +197,7 @@ export default function ChatPanel({
       <div className="chat-panel__sidebar">
         <input
           type="text"
-          placeholder="Nouveau message à..."
+          placeholder={t('new_message_placeholder')}
           className="chat-panel__search"
           value={searchText}
           onChange={e => { setSearchText(e.target.value); setError('') }}
@@ -212,7 +215,7 @@ export default function ChatPanel({
               onClick={handleInvite}
               disabled={isInvited}
             >
-              {isInvited ? 'Invité ✔' : 'Inviter'}
+              {isInvited ? t('invited') : t('invite')}
             </button>
           )}
           <span className="chat-panel__title">

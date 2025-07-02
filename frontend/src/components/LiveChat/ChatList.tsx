@@ -5,6 +5,7 @@ import { useChatStore } from '@/components/LiveChat/ChatStore'
 import { UserProfileCard } from '@/components/LiveChat/UserProfileCard'
 import type { ChatUser } from '@/types'
 import '@/styles/LiveChat/ChatList.css'
+import { useTranslation } from 'react-i18next';
 
 // Timings
 const OPEN_DELAY = 1000
@@ -23,6 +24,7 @@ export default function ChatList({ className = '' }: { className?: string }) {
     null
   )
 
+  const { t } = useTranslation();
   const openTimer = useRef<number | null>(null)
   const closeTimer = useRef<number | null>(null)
 
@@ -90,7 +92,7 @@ export default function ChatList({ className = '' }: { className?: string }) {
     <>
       <div className={`chat-list ${className}`} style={{ overflow: 'visible' }}>
         {recentContactIds.length === 0 ? (
-          <p className="chat-list__empty">Aucun contact</p>
+          <p className="chat-list__empty">{t('no_contact')}</p>
         ) : (
           recentContactIds.map(id => {
             const user = contactsById[id]
