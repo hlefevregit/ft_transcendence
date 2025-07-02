@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { handleRegister, googleLogin } from '@/services/authServices';
 import '@/styles/style.css';
 import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from '../components/ChangeLanguage';
+import LanguageSwitcher from '@/components/ChangeLanguage';
 
 const RegisterForm: React.FC = () => {
   const { t } = useTranslation();
@@ -68,19 +68,6 @@ const RegisterForm: React.FC = () => {
       setErrors(e => ({ ...e, general: t('google_auth_error') }));
     }
   };
-  const handleGoogleLogin = async (idToken: string) => {
-      try {
-        const res = await googleLogin(idToken);
-        if (res.success) {
-          localStorage.setItem('authToken', res.token);
-          navigate('/museum');
-        } else {
-          setError(res.message || 'Google login failed');
-        }
-      } catch {
-        setError('Google login error.');
-      }
-    };
     useEffect(() => {
       if (window.google && window.google.accounts) {
         window.google.accounts.id.initialize({
@@ -134,7 +121,6 @@ const RegisterForm: React.FC = () => {
                   required
                   placeholder={t('username_placeholder')}
                   className="bg-white border border-gray-300 w-full text-sm text-gray-800 pl-4 py-2.5 rounded-md outline-blue-500"
-                  placeholder="Enter name"
                 />
               </div>
               <div>
@@ -149,7 +135,6 @@ const RegisterForm: React.FC = () => {
                   required
                   placeholder={t('email_placeholder')}
                   className="bg-white border border-gray-300 w-full text-sm text-gray-800 pl-4 py-2.5 rounded-md outline-blue-500"
-                  placeholder="Enter email"
                 />
               </div>
               <div>
@@ -164,7 +149,6 @@ const RegisterForm: React.FC = () => {
                   required
                   placeholder={t('password_placeholder')}
                   className="bg-white border border-gray-300 w-full text-sm text-gray-800 pl-4 py-2.5 rounded-md outline-blue-500"
-                  placeholder="Enter password"
                 />
               </div>
               {/* <div className="flex items-center">

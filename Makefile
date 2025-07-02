@@ -36,7 +36,7 @@ prepare:
 
 post-build:
 	@make rebuild name=backend
-	@make rebuild name=kibana
+	# @make rebuild name=kibana
 	@make rebuild name=nginx
 
 build:
