@@ -209,6 +209,20 @@ export const PlayGame = async (
 	    console.log("Dealer wins against Player 1!");
 		winState.current = game.winState.dealer_win;
       } else if (player1Value === dealerValue && player1Value <= 21) {
+				const res = await fetch('/api/bj/win', {
+				method: 'POST',
+				headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+				body: JSON.stringify({
+				bet: 10,
+				})
+			});
+			if (!res.ok) {
+				console.error("Failed to update player money after Blackjack win");
+			}
+
   	    console.log("It's a tie between Player 1 and the dealer!");
 		winState.current = game.winState.tie;
       }
@@ -415,33 +429,47 @@ export const dealerTurn = async (
 	const scene = bjRef.current.scene;
 	if (!scene) return;
 
-	// Reveal hidden card if applicable
-	if (dealerCards.length >= 2) {
-		meshes[5].rotation.z = 0;
-		meshes[5].position.y -= 0.2;
-		dealerCards.push(dealerHiddenCard[0]);
-		console.log(`Revealed dealer's hidden card`);
-		await delay(100);
-	}
+	if (dealerHiddenCard.length > 0) {
+		const hiddenCard = dealerHiddenCard[0];
+		const cardValue = ((hiddenCard - 1) % 13) + 1;
+		const cardSuit = Math.floor((hiddenCard - 1) / 13) + 1;
 
+		const value = game.ReverseValueMap[cardValue];
+		const suit = game.ReverseSuitMap[cardSuit];
+
+		const expectedName = `${suit}${value.charAt(0).toUpperCase() + value.slice(1)}_hidden_clone`;
+
+		const hiddenMesh = meshes.find(mesh => mesh.name === expectedName);
+
+		if (hiddenMesh) {
+			hiddenMesh.rotation.z = 0;
+			hiddenMesh.position.y -= 0.2;
+			console.log(`Revealed dealer's hidden card`);
+			dealerCards.push(hiddenCard);
+			await delay(100);
+		} else {
+			console.error(`Hidden mesh "${expectedName}" not found!`);
+			}
+		}
 	// Keep dealing cards until dealer has at least 17
 	while (dealerCards.length < 2 || getCardValues(dealerCards) < 17) {
 		x += 3.5;
 		y += 0.01;
 
 		const card = await dealCard(false, meshes, bjRef);
-		const value = ((card - 1) % 13) + 1;
-		const suit = Math.floor((card - 1) / 13) + 1;
-
-		if (card) {
-			dealerCards.push(card);
-			console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to dealer`);
-		} else {
+		if (!card) {
 			console.error('Failed to deal card');
 			return;
 		}
 
+		dealerCards.push(card);
+		const value = ((card - 1) % 13) + 1;
+		const suit = Math.floor((card - 1) / 13) + 1;
+
+		console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to dealer`);
 		console.log(`Dealer's total value: ${getCardValues(dealerCards)}`);
+
+		await delay(100);
 	}
 };
 
@@ -480,7 +508,11 @@ export const dealCard = async (
 	if (originalMesh)
 	{
 		console.log(`Dealing card: ${game.ReverseValueMap[((card - 1) % 13) + 1]} of ${game.ReverseSuitMap[Math.floor((card - 1) / 13) + 1]}`);
-		const clonedMesh = originalMesh.clone(`${originalMesh.name}_clone`, originalMesh.parent);
+		let clonedMesh: baby.Mesh;
+		if (hidden)
+			clonedMesh = originalMesh.clone(`${originalMesh.name}_hidden_clone`, originalMesh.parent);
+		else
+			clonedMesh = originalMesh.clone(`${originalMesh.name}_clone`, originalMesh.parent);
 		const cardValue = ((card - 1) % 13);
 		const cardSuit = Math.floor((card - 1) / 13);
 		const offsetX = game.CardXOffset[cardValue] || 10;
@@ -495,7 +527,7 @@ export const dealCard = async (
 
 		meshes.push(clonedMesh);
 
-		await delay(100); // Small delay after dealing the card
+		await delay(250); // Small delay after dealing the card
 	}
 	return card;
 };
