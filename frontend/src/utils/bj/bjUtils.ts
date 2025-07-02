@@ -304,3 +304,16 @@ export	const	debugKeys =
 		}
 	}
 }
+
+// Language utility functions
+export const	getLanguageFromStorage = (): string =>
+{
+	return localStorage.getItem('i18nextLng') || 'en';
+};
+
+export const	setLanguageInStorage = (language: string): void =>
+{
+	localStorage.setItem('i18nextLng', language);
+	// Optionally trigger a storage event for other components to react
+	window.dispatchEvent(new Event('storage'));
+};

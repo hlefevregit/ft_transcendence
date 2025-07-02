@@ -150,6 +150,7 @@ export const    instantiateSettingsGUI =
 	// Language selection buttons
 	const	englishButton = bj.createButton("englishButton", "🇺🇸", () =>
 	{
+		bj.setLanguageInStorage("en");
 		lang.current = bj.language.english;
 		bj.updateGUIValues(bjRef, lang);
 		bj.findComponentByName(bjRef, "debugActiveLanguageTextValue").text = lang.current;
@@ -160,6 +161,7 @@ export const    instantiateSettingsGUI =
 
 	const	frenchButton = bj.createButton("frenchButton", "🇲🇫", () =>
 	{
+		bj.setLanguageInStorage("fr");
 		lang.current = bj.language.french;
 		bj.updateGUIValues(bjRef, lang);
 		bj.findComponentByName(bjRef, "debugActiveLanguageTextValue").text = lang.current;
@@ -170,6 +172,7 @@ export const    instantiateSettingsGUI =
 
 	const	italianButton = bj.createButton("italianButton", "🇮🇹", () =>
 	{
+		bj.setLanguageInStorage("it");
 		lang.current = bj.language.italian;
 		bj.updateGUIValues(bjRef, lang);
 		bj.findComponentByName(bjRef, "debugActiveLanguageTextValue").text = lang.current;
@@ -181,6 +184,7 @@ export const    instantiateSettingsGUI =
 
 	const	brailButton = bj.createButton("brailButton", "🦮", () =>
 	{
+		bj.setLanguageInStorage("en");
 		lang.current = bj.language.braille;
 		bj.updateGUIValues(bjRef, lang);
 		bj.findComponentByName(bjRef, "debugActiveLanguageTextValue").text = lang.current;

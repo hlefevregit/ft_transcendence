@@ -18,6 +18,14 @@ const BlackJack: React.FC = () => {
 	const navigate = useNavigate();
 
 	React.useEffect(() => {
+		// Use i18n language from localStorage
+		if (bj.getLanguageFromStorage() === "fr")
+			language.current = bj.language.french;
+		else if (bj.getLanguageFromStorage() === "it")
+			language.current = bj.language.italian;
+		else
+			language.current = bj.language.english;
+
 		if (!canvasRef.current) return;
 
 		canvasRef.current.focus();
