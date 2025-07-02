@@ -5,7 +5,7 @@ import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
 import * as bj from '@/libs/bjLibs';
 
-import pongMapUrl from '@/assets/transcendence_map.gltf?url';
+import pongMapUrl from '@/assets/transcendence_map_final.gltf?url';
 import bjMapUrl from '@/assets/blackjack_map.gltf?url';
 import cardUrl from '@/assets/models/card/Card.gltf?url';
 
@@ -43,15 +43,16 @@ export const	setupBabylonBJ = async (bjRef: bj.bjStruct, canvasRef: any): Promis
 	}
 	catch (error) { /*console.error("Error while loading map:", error);*/ }
 	try
-{
+	{
 		const modelMeshes = await importGLTF(sceneInstance, cardUrl, false, false);
 		if (modelMeshes && modelMeshes.length > 0)
 		{
 			modelMeshes[0].scaling = new baby.Vector3(1.35, 1.35, 1.35); // Make cards bigger
-			modelMeshes[0].position = new baby.Vector3(0, 0.62, 1.4); // All cards sitting on the table
-			modelMeshes[0].rotation = new baby.Vector3(Math.PI / -2, 0, 0); // Cards are flat on the table
+			modelMeshes[0].position = new baby.Vector3(0, 0.62, 0.4); // All cards sitting on the table
+			modelMeshes[0].rotation = new baby.Vector3(Math.PI / -2, Math.PI, 0); // Cards are flat on the table
+			modelMeshes[0].isVisible = true;
+			modelMeshes[0].setEnabled(true);
 		}
-		  // Ensure bjRef.cards is initialized
 		  if (!bjRef.cards) {
 			bjRef.cards = {};
 		  }
@@ -66,7 +67,6 @@ export const	setupBabylonBJ = async (bjRef: bj.bjStruct, canvasRef: any): Promis
 		  }
 		}
 	  }
-
 	}
 	catch (error) { /*console.error("Error while loading card model:", error);*/ }
 
@@ -86,7 +86,6 @@ export const	setupBabylonBJ = async (bjRef: bj.bjStruct, canvasRef: any): Promis
 
 	const	transitionCamera = new baby.FreeCamera("transitionCamera", baby.Vector3.Zero(), sceneInstance);
 	bjRef.transitionCamera = transitionCamera;
-
 }
 
 export const	setupBabylonPong = async (pong: React.RefObject<game.pongStruct>, canvasRef: React.RefObject<HTMLCanvasElement | null>): Promise<void> =>
@@ -135,7 +134,7 @@ export const	setupBabylonPong = async (pong: React.RefObject<game.pongStruct>, c
 	arenaCamera.rotation = new baby.Vector3(Math.PI / 2, 0, Math.PI);
 	pong.current.arenaCam = arenaCamera;
 
-	const	pongSettingsCamera = new baby.FreeCamera("settingsCam", new baby.Vector3(-10, 1.5, -12), sceneInstance);
+	const	pongSettingsCamera = new baby.FreeCamera("settingsCam", new baby.Vector3(-10, 1.5, -25), sceneInstance);
 	pongSettingsCamera.rotation = new baby.Vector3(0, Math.PI , 0);
 	pong.current.pongSettingsCam = pongSettingsCamera;
 
@@ -214,8 +213,8 @@ export const importGLTF = async (scene: baby.Scene, modelUrl: string, visible: b
 
     result.meshes.forEach(mesh => {
       mesh.receiveShadows = true;
-	  // mesh.isVisible = !!visible;
-	  // mesh.setEnabled = !!enabled;
+	  mesh.isVisible = !!visible;
+	  mesh.setEnabled(!!enabled);
 	});
 
 

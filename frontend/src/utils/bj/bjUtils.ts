@@ -3,6 +3,7 @@ import React from 'react';
 
 import * as baby from '@/libs/babylonLibs';
 import * as bj from '@/libs/bjLibs';
+import { stat } from 'fs';
 
 // export function fitCameraToArena(pong: game.pongStruct): void
 // {
@@ -259,3 +260,60 @@ export const	transitionToCamera = async (
 	bj.updateGUIVisibilityStates(bjRef, states.current);
 	return;
 }
+
+export const	manageLocalKeyboardInputs = (bjRef: bj.bjStruct): void =>
+{
+	// Adds or removes the currently pressed keys to the `pressedKeys` set
+	bjRef.scene?.onKeyboardObservable.add((kbInfo) =>
+	{
+		const	key = kbInfo.event.key.toLowerCase();
+
+		if (kbInfo.type === baby.KeyboardEventTypes.KEYDOWN)	bjRef.pressedKeys.add(key);
+		else if (kbInfo.type === baby.KeyboardEventTypes.KEYUP)	bjRef.pressedKeys.delete(key);
+	});
+}
+
+export	const	debugKeys =
+(
+	bjRef: React.RefObject<bj.bjStruct>,
+	states: React.RefObject<bj.States>,
+): void => 
+{
+	if (bjRef.current.debugGUI)
+	{
+		if (bjRef.current.pressedKeys.has('p'))
+		{
+			bjRef.current.debugMode = !bjRef.current.debugMode;
+			bjRef.current.debugGUI.isVisible = bjRef.current.debugGUI.isEnabled = bjRef.current.debugMode;
+			console.debug(`Debug mode: ${bjRef.current.debugMode}`);
+			bj.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.scene?.activeCamera as baby.FreeCamera, 0.1, bjRef, states);
+		}
+		if (bjRef.current.pressedKeys.has('o') && states.current !== bj.States.in_transition)
+		{
+			console.debug(`free cam: ${bjRef.current.scene?.activeCamera !== bjRef.current.freeCamera}`);
+			if (bjRef.current.scene?.activeCamera === bjRef.current.freeCamera)
+			{
+				states.current = bj.States.main_menu;
+				bj.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, states);
+			}
+			else
+			{
+				states.current = bj.States.not_found;
+				bj.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.freeCamera, 1, bjRef, states);
+			}
+		}
+	}
+}
+
+// Language utility functions
+export const	getLanguageFromStorage = (): string =>
+{
+	return localStorage.getItem('i18nextLng') || 'en';
+};
+
+export const	setLanguageInStorage = (language: string): void =>
+{
+	localStorage.setItem('i18nextLng', language);
+	// Optionally trigger a storage event for other components to react
+	window.dispatchEvent(new Event('storage'));
+};

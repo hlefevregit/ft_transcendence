@@ -72,7 +72,9 @@ export	const	doPaddleMovement =
 	(states.current !== game.states.in_game
 		&& states.current !== game.states.in_game1
 		&& states.current !== game.states.in_game2
-		&& states.current !== game.states.tournament_final) )) return;
+		&& states.current !== game.states.tournament_final
+		&& states.current !== game.states.main_menu
+		&& states.current !== game.states.not_found) )) return;
 	switch (gamemode.current)
 	{
 		case game.gameModes.local:
@@ -128,6 +130,30 @@ export	const	doPaddleMovement =
 			if (pong.current.pressedKeys.has('w')) pong.current.paddle2.position.z = movePaddleUp(pong, pong.current.paddle2.position.z);
 			if (pong.current.pressedKeys.has('s')) pong.current.paddle2.position.z = movePaddleDown(pong, pong.current.paddle2.position.z);
 			break;
+	}
+	if (pong.current.debugGUI)
+	{
+		if (pong.current.pressedKeys.has('p'))
+		{
+			pong.current.debugMode = !pong.current.debugMode;
+			pong.current.debugGUI.isVisible = pong.current.debugGUI.isEnabled = pong.current.debugMode;
+			console.debug(`Debug mode: ${pong.current.debugMode}`);
+			game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.scene?.activeCamera as baby.FreeCamera, 0.1, pong, states);
+		}
+		if (pong.current.pressedKeys.has('o'))
+		{
+			console.debug(`free cam: ${pong.current.scene?.activeCamera !== pong.current.notFoundCam}`);
+			if (pong.current.scene?.activeCamera === pong.current.notFoundCam)
+			{
+				states.current = game.states.main_menu;
+				game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.mainMenuCam, 1, pong, states);
+			}
+			else
+			{
+				states.current = game.states.not_found;
+				game.transitionToCamera(pong.current.scene?.activeCamera as baby.FreeCamera, pong.current.notFoundCam, 1, pong, states);
+			}
+		}
 	}
 }
 
