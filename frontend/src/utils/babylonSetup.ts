@@ -27,13 +27,29 @@ export const	setupBabylonBJ = async (bjRef: bj.bjStruct, canvasRef: any): Promis
 	bjRef.mainMenuCamera = cameraInstance;
 	bjRef.scene.activeCamera = cameraInstance;
 
-	sceneInstance.createDefaultEnvironment();
-	const ssaoRenderingPipeline = new baby.SSAORenderingPipeline("ssao", sceneInstance,1);
-	ssaoRenderingPipeline.scene.setRenderingOrder(0, null, null, null);
-	sceneInstance.postProcessRenderPipelineManager.attachCamerasToRenderPipeline("ssao", sceneInstance.cameras);
+	
 
 	// Set rendering groups so GUI renders after post-processing
     sceneInstance.setRenderingAutoClearDepthStencil(1, false); // Don't clear depth for rendering group 1
+
+	
+
+	const	freeCamera = new baby.FlyCamera("freeCam", new baby.Vector3(0, 1, 0), sceneInstance);
+	freeCamera.position = new baby.Vector3(0, 10, 0);
+	freeCamera.attachControl(canvasRef);
+	freeCamera.keysUp = [87, 38];		// W, Up arrow
+	freeCamera.keysDown = [83, 40];		// S, Down arrow
+	freeCamera.keysLeft = [65, 37];		// A, Left arrow
+	freeCamera.keysRight = [68, 39];	// D, Right arrow
+	bjRef.freeCamera = freeCamera;
+
+	const	gameCamera = new baby.FreeCamera("mainMenuCam", new baby.Vector3(0, 1.5, 2.7), sceneInstance);
+	gameCamera.inputs.clear();
+	gameCamera.rotation = new baby.Vector3(0.5, Math.PI / 1.001, 0);
+	bjRef.gameCamera = gameCamera;
+
+	const	transitionCamera = new baby.FreeCamera("transitionCamera", baby.Vector3.Zero(), sceneInstance);
+	bjRef.transitionCamera = transitionCamera;
 
 	try
 	{
@@ -41,7 +57,7 @@ export const	setupBabylonBJ = async (bjRef: bj.bjStruct, canvasRef: any): Promis
 		if (mapMeshes && mapMeshes.length > 0) bjRef.map = mapMeshes[0];
 			// else console.warn("Failed to load map");
 	}
-	catch (error) { /*console.error("Error while loading map:", error);*/ }
+	catch (error) { console.error("Error while loading map:", error); }
 	try
 	{
 		const modelMeshes = await importGLTF(sceneInstance, cardUrl, false, false);
@@ -70,22 +86,10 @@ export const	setupBabylonBJ = async (bjRef: bj.bjStruct, canvasRef: any): Promis
 	}
 	catch (error) { /*console.error("Error while loading card model:", error);*/ }
 
-	const	freeCamera = new baby.FlyCamera("freeCam", new baby.Vector3(0, 1, 0), sceneInstance);
-	freeCamera.position = new baby.Vector3(0, 10, 0);
-	freeCamera.attachControl(canvasRef);
-	freeCamera.keysUp = [87, 38];		// W, Up arrow
-	freeCamera.keysDown = [83, 40];		// S, Down arrow
-	freeCamera.keysLeft = [65, 37];		// A, Left arrow
-	freeCamera.keysRight = [68, 39];	// D, Right arrow
-	bjRef.freeCamera = freeCamera;
-
-	const	gameCamera = new baby.FreeCamera("mainMenuCam", new baby.Vector3(0, 1.5, 2.7), sceneInstance);
-	gameCamera.inputs.clear();
-	gameCamera.rotation = new baby.Vector3(0.5, Math.PI / 1.001, 0);
-	bjRef.gameCamera = gameCamera;
-
-	const	transitionCamera = new baby.FreeCamera("transitionCamera", baby.Vector3.Zero(), sceneInstance);
-	bjRef.transitionCamera = transitionCamera;
+	sceneInstance.createDefaultEnvironment();
+	const ssaoRenderingPipeline = new baby.SSAORenderingPipeline("ssao", sceneInstance,1);
+	ssaoRenderingPipeline.scene.setRenderingOrder(0, null, null, null);
+	sceneInstance.postProcessRenderPipelineManager.attachCamerasToRenderPipeline("ssao", sceneInstance.cameras);
 }
 
 export const	setupBabylonPong = async (pong: React.RefObject<game.pongStruct>, canvasRef: React.RefObject<HTMLCanvasElement | null>): Promise<void> =>
