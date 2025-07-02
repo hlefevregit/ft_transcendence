@@ -6,7 +6,7 @@
 #    By: hulefevr <hulefevr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/26 17:45:30 by hulefevr          #+#    #+#              #
-#    Updated: 2025/07/01 17:30:16 by hulefevr         ###   ########.fr        #
+#    Updated: 2025/07/02 12:34:43 by hulefevr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,31 +24,33 @@ PROD_COMPOSE = docker-compose.yml
 ### ------------------ ENV DEV ---------------------- ###
 #########################################################
 
-build-dev:
+build:
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) build
 
-up-dev:
+up:
+	mkdir -p vault/data
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up -d
-	@make rebuild name=backend
+	# @make rebuild name=backend
 
-down-dev:
+down:
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down
 
-restart-dev:
+restart:
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up -d
-	@make rebuild name=backend
+	# @make rebuild name=backend
 
-logs-dev:
+logs-prod:
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) logs -f
 
-re-dev:
+re:
 	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) down --volumes --remove-orphans --rmi all
 	docker volume prune -f
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) up --build -d
 
 
-rebuild-dev:
+rebuild-prod:
+	mkdir -p vault/data
 	make reset_vault 2>/dev/null || true
 	touch ./vault/secrets/.env
 
@@ -65,32 +67,6 @@ reset_vault:
 	mkdir -p ./vault/data ./vault/secrets
 
 
-#########################################################
-### ------------------ ENV PROD --------------------- ###
-#########################################################
-
-build-prod:
-	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) build
-
-up-prod:
-	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) up -d
-
-down-prod:
-	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) down
-
-restart-prod:
-	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) down
-	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) up -d
-
-logs-prod:
-	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) logs -f
-
-rebuild-prod:
-	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) down -v --remove-orphans
-	docker system prune -af
-	docker volume prune -f
-	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) build --no-cache
-	docker-compose -f $(PROD_COMPOSE) -p $(PROJECT_NAME) up -d
 
 #########################################################
 ### ------------------ GLOBALES --------------------- ###
