@@ -61,7 +61,7 @@ export default function Conversation({ className = '', states }: ConversationPro
     // console.log('handleJoin appelé avec roomId=', roomId)
     try {
       navigate(`/pong?joinRoomId=${roomId}`)
- 
+
       // setState()
     } catch (err) {
       // console.error('Erreur handleJoin:', err)
@@ -78,7 +78,7 @@ export default function Conversation({ className = '', states }: ConversationPro
             {t('select_user')}
           </p>
         ) : isBlocked ? (
-          <p className="chat-conversation__blocked">t{('blocked')}</p>
+          <p className="chat-conversation__blocked">{t('blocked')}</p>
         ) : messages.length === 0 ? (
           <p className="chat-conversation__placeholder">
             {t('no_messages_placeholder')}

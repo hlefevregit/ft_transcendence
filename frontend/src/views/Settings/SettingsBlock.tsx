@@ -55,12 +55,12 @@ export default function SettingsBlock() {
   if (loading) return <div className="sb-loading">Loading…</div>;
   if (error)   return <div className="sb-error">{error}</div>;
   if (blockedUsers.length === 0) {
-    return <div className="sb-empty">No blocked users.</div>;
+    return <div className="sb-empty">{t('no_blocked_users')}</div>;
   }
 
   return (
     <div className="sb-container">
-      <h2 className="sb-title">Blocked Users</h2>
+      <h2 className="sb-title">{t('blocked_users')}</h2>
       <ul className="sb-list">
         {blockedUsers.map(({ id, pseudo, avatarUrl }) => (
           <li key={id} className="sb-item">
@@ -74,7 +74,7 @@ export default function SettingsBlock() {
               onClick={() => handleUnblock(id)}
               className="sb-unblock-btn"
             >
-              Unblock
+			  {t('unblock')}
             </button>
           </li>
         ))}
