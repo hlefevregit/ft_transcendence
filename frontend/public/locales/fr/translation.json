@@ -82,5 +82,20 @@
 	"generic_cancel_error": "Échec de l'annulation de l'action. Veuillez réessayer.",
 	"generic_send_error": "Échec de l'envoi des données. Veuillez réessayer.",
 	"suppression_error": "Échec de la suppression. Veuillez réessayer.",
-	"unknown_message_type_error": "Type de message inconnu."
+	"unknown_message_type_error": "Type de message inconnu.",
+
+	"_live_chat": ":Live Chat",
+	"invited": "Invité",
+	"invite": "Inviter",
+	"new_message_placeholder": "Entrez un message",
+	"select_user": "Sélectionnez un utilisateur",
+	"blocked": "Bloqué",
+	"no_messages_placeholder": "Pas encore de messages",
+	"somebody": "Quelqu’un",
+	"invites_you_to_join": "vous invite à rejoindre",
+	"join": "Rejoindre",
+	"no_contact": "Pas de contacts",
+	"block": "Bloquer",
+	"unblock": "Débloquer",
+	"no_game_history": "Aucun historique de jeu disponible"
 }

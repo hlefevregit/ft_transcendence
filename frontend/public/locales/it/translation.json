@@ -82,5 +82,20 @@
 	"generic_cancel_error": "Annullamento azione fallito. Riprova.",
 	"generic_send_error": "Invio dati fallito. Riprova.",
 	"suppression_error": "Eliminazione fallita. Riprova.",
-	"unknown_message_type_error": "Tipo di messaggio sconosciuto."
+	"unknown_message_type_error": "Tipo di messaggio sconosciuto.",
+
+	"_live_chat": "Live Chat",
+	"invited": "Invitato",
+	"invite": "Invita",
+	"new_message_placeholder": "Inserisci un messaggio",
+	"select_user": "Seleziona un utente",
+	"blocked": "Bloccato",
+	"no_messages_placeholder": "Nessun messaggio ancora",
+	"somebody": "Qualcuno",
+	"invites_you_to_join": "ti invita a unirti",
+	"join": "Unisciti",
+	"no_contact": "Nessun contatto",
+	"block": "Blocca",
+	"unblock": "Sblocca",
+	"no_game_history": "Nessuna cronologia di gioco disponibile"
 }

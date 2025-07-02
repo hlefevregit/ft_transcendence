@@ -82,5 +82,20 @@
 	"generic_cancel_error": "Failed to cancel action. Please try again.",
 	"generic_send_error": "Failed to send data. Please try again.",
 	"suppression_error": "Suppression failed. Please try again.",
-	"unknown_message_type_error": "Unknown message type."
+	"unknown_message_type_error": "Unknown message type.",
+
+	"_live_chat": "Live Chat",
+	"invited": "Invited",
+	"invite": "Invite",
+	"new_message_placeholder": "Enter a message",
+	"select_user": "Select a user",
+	"blocked": "Blocked",
+	"no_messages_placeholder": "No messages yet",
+	"somebody": "Somebody",
+	"invites_you_to_join": "invites you to join",
+	"join": "Join",
+	"no_contact": "No contacts",
+	"block": "Block",
+	"unblock": "Unblock",
+	"no_game_history": "No game history available"
 }

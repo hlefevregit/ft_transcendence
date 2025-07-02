@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     bash \
     git \
     zsh \
+	curl \
     net-tools
 
 RUN npm install
