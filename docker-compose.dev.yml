@@ -34,24 +34,24 @@ services:
       - ft_network
     entrypoint: sh -c "apk add --no-cache curl bash && bash /vault/init/setup.sh"
 
-  # watcher:
-  #   image: alpine
-  #   restart: unless-stopped
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #   depends_on:
-  #     - vault
-  #     - vault_init
-  #   entrypoint: >
-  #     sh -c "
-  #       apk add --no-cache docker-cli;
-  #       echo '👀 Watching for vault restarts...';
-  #       docker events --filter container=ft_transcendence-vault-1 --filter event=die --filter event=stop --filter event=restart |
-  #       while read -r event; do
-  #         echo '🔁 Vault restarted. Restarting vault_init...';
-  #         docker restart ft_transcendence-vault_init-1;
-  #       done
-  #     "
+  watcher:
+    image: alpine
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - vault
+      - vault_init
+    entrypoint: >
+      sh -c "
+        apk add --no-cache docker-cli;
+        echo '👀 Watching for vault restarts...';
+        docker events --filter container=ft_transcendence-vault-1 --filter event=die --filter event=stop --filter event=restart |
+        while read -r event; do
+          echo '🔁 Vault restarted. Restarting vault_init...';
+          docker restart ft_transcendence-vault_init-1;
+        done
+      "
 
   vault_nginx:
     image: nginx:latest
@@ -160,10 +160,9 @@ services:
       context: ./frontend
       dockerfile: Dockerfile.nginx.dev
     ports:
-      - "0.0.0.0:8080:8080"  # Changed from "8080:8080" to bind to all interfaces
-      - "0.0.0.0:8082:8082"  # Changed from "8082:8082" to bind to all interfaces
+      - "8080:8080"  # Changed from "8080:8080" to bind to all interfaces
+      - "8082:8082"  # Changed from "8082:8082" to bind to all interfaces
     volumes:
-      #- ./nginx.dev.conf:/etc/nginx/nginx.conf
       - ./frontend/nginx_conf/certs/:/etc/nginx/certs:ro
     depends_on:
       - frontend
@@ -301,6 +300,7 @@ services:
       - "3001:3000"
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./frontend/nginx_conf/certs/:/etc/grafana/:ro
     networks:
       - ft_network
     depends_on:

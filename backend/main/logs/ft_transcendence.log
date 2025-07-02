@@ -9862,3 +9862,71 @@
 2025-07-01 12:52:42: {"level":30,"time":1751374362624,"pid":58,"hostname":"072390d7d520","reqId":"req-ab2","res":{"statusCode":200},"responseTime":3.114489999599755,"msg":"request completed"}
 2025-07-01 12:52:42: {"level":30,"time":1751374362628,"pid":58,"hostname":"072390d7d520","reqId":"req-ab3","req":{"method":"GET","url":"/api/messages?with=3&sinceId=34","host":"localhost","remoteAddress":"172.18.0.8","remotePort":59128},"msg":"incoming request"}
 2025-07-01 12:52:42: {"level":30,"time":1751374362630,"pid":58,"hostname":"072390d7d520","reqId":"req-ab3","res":{"statusCode":200},"responseTime":1.6086069997400045,"msg":"request completed"}
+2025-07-02 10:52:49: src/routes/user.ts(266,18): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:52:49: src/routes/user.ts(266,47): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:52:49: src/routes/user.ts(273,24): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
+2025-07-02 10:52:49: 
+2025-07-02 10:52:53: src/routes/user.ts(266,18): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:52:53: src/routes/user.ts(266,47): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:52:53: src/routes/user.ts(273,24): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
+2025-07-02 10:52:53: 
+2025-07-02 10:52:56: src/routes/user.ts(266,18): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:52:56: src/routes/user.ts(266,47): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:52:56: src/routes/user.ts(273,24): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
+2025-07-02 10:52:56: 
+2025-07-02 10:53:00: src/routes/user.ts(266,18): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:00: src/routes/user.ts(266,47): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:00: src/routes/user.ts(273,24): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
+2025-07-02 10:53:00: 
+2025-07-02 10:53:03: src/routes/user.ts(266,18): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:03: src/routes/user.ts(266,47): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:03: src/routes/user.ts(273,24): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
+2025-07-02 10:53:03: 
+2025-07-02 10:53:07: src/routes/user.ts(266,18): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:07: src/routes/user.ts(266,47): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:07: src/routes/user.ts(273,24): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
+2025-07-02 10:53:07: 
+2025-07-02 10:53:10: src/routes/user.ts(266,18): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:10: src/routes/user.ts(266,47): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:10: src/routes/user.ts(273,24): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
+2025-07-02 10:53:10: 
+2025-07-02 10:53:14: src/routes/user.ts(266,18): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:14: src/routes/user.ts(266,47): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:14: src/routes/user.ts(273,24): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
+2025-07-02 10:53:14: 
+2025-07-02 10:53:19: src/routes/user.ts(266,18): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:19: src/routes/user.ts(266,47): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:19: src/routes/user.ts(273,24): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
+2025-07-02 10:53:19: 
+2025-07-02 10:53:22: src/routes/user.ts(266,18): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:22: src/routes/user.ts(266,47): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:22: src/routes/user.ts(273,24): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
+2025-07-02 10:53:22: 
+2025-07-02 10:53:26: src/routes/user.ts(266,18): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:26: src/routes/user.ts(266,47): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:26: src/routes/user.ts(273,24): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
+2025-07-02 10:53:26: 
+2025-07-02 10:53:29: src/routes/user.ts(266,18): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:29: src/routes/user.ts(266,47): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:29: src/routes/user.ts(273,24): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
+2025-07-02 10:53:29: 
+2025-07-02 10:53:33: src/routes/user.ts(266,18): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:33: src/routes/user.ts(266,47): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:33: src/routes/user.ts(273,24): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
+2025-07-02 10:53:33: 
+2025-07-02 10:53:37: src/routes/user.ts(266,18): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:37: src/routes/user.ts(266,47): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:37: src/routes/user.ts(273,24): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
+2025-07-02 10:53:37: 
+2025-07-02 10:53:40: src/routes/user.ts(266,18): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:40: src/routes/user.ts(266,47): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:40: src/routes/user.ts(273,24): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
+2025-07-02 10:53:40: 
+2025-07-02 10:53:44: src/routes/user.ts(266,18): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:44: src/routes/user.ts(266,47): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:44: src/routes/user.ts(273,24): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
+2025-07-02 10:53:44: 
+2025-07-02 10:53:47: src/routes/user.ts(266,18): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:47: src/routes/user.ts(266,47): error TS2322: Type 'number' is not assignable to type 'string | StringFilter<"GameResult">'.
+2025-07-02 10:53:47: src/routes/user.ts(273,24): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
+2025-07-02 10:53:47: 
