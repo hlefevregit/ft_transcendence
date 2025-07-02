@@ -152,6 +152,7 @@ export const    instantiateSettingsGUI =
 	// Language selection buttons
 	const	englishButton = game.createButton("englishButton", "🇺🇸", () =>
 	{
+		game.setLanguageInStorage("en");
 		lang.current = game.lang.english;
 		game.updateGUIValues(pong, lang);
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").text = lang.current;
@@ -162,6 +163,7 @@ export const    instantiateSettingsGUI =
 
 	const	frenchButton = game.createButton("frenchButton", "🇲🇫", () =>
 	{
+		game.setLanguageInStorage("fr");
 		lang.current = game.lang.french;
 		game.updateGUIValues(pong, lang);
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").text = lang.current;
@@ -172,6 +174,7 @@ export const    instantiateSettingsGUI =
 
 	const	italianButton = game.createButton("italianButton", "🇮🇹", () =>
 	{
+		game.setLanguageInStorage("it");
 		lang.current = game.lang.italian;
 		game.updateGUIValues(pong, lang);
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").text = lang.current;
@@ -183,6 +186,7 @@ export const    instantiateSettingsGUI =
 
 	const	brailButton = game.createButton("brailButton", "🦮", () =>
 	{
+		game.setLanguageInStorage("en");
 		lang.current = game.lang.braille;
 		game.updateGUIValues(pong, lang);
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").text = lang.current;
@@ -199,14 +203,14 @@ export const    instantiateSettingsGUI =
 	settingsPanel.addControl(settingsMenuTitle);
 
 	// Music and Sound sliders
-	settingsVolumePanel1.addControl(musicSliderText);
-	settingsVolumePanel1.addControl(musicSliderTextValue);
-	settingsPanel.addControl(settingsVolumePanel1);
-	settingsPanel.addControl(musicSlider);
-	settingsVolumePanel2.addControl(soundSliderText);
-	settingsVolumePanel2.addControl(soundSliderTextValue);
-	settingsPanel.addControl(settingsVolumePanel2);
-	settingsPanel.addControl(soundSlider);
+	// settingsVolumePanel1.addControl(musicSliderText);
+	// settingsVolumePanel1.addControl(musicSliderTextValue);
+	// settingsPanel.addControl(settingsVolumePanel1);
+	// settingsPanel.addControl(musicSlider);
+	// settingsVolumePanel2.addControl(soundSliderText);
+	// settingsVolumePanel2.addControl(soundSliderTextValue);
+	// settingsPanel.addControl(settingsVolumePanel2);
+	// settingsPanel.addControl(soundSlider);
 
 	// language selection panels
 	settingsPanel.addControl(settingsLanguagePanel1);
