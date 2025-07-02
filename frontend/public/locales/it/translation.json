@@ -45,6 +45,9 @@
 	"wins": "Vittorie",
 	"losses": "Sconfitte",
 	"trophies": "Trofei",
+	"blocked_users": "Utenti bloccati",
+	"no_blocked_users": "Nessun utente bloccato",
+
 
 	"_messages": "Messaggi",
 	"disable_2fa_confirmation": "Sei sicuro di voler disabilitare il 2FA? Dovrai riattivarlo in seguito.",
