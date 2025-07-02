@@ -1,8 +1,9 @@
 // imports
-import React from 'react';
+import React, { RefObject } from 'react';
 
 import * as baby from '@/libs/babylonLibs';
 import * as game from '@/libs/pongLibs';
+import { pongStruct } from '@/libs/pongLibs';
 
 export const	instantiateGUI = (pong: React.RefObject<game.pongStruct>): void =>
 {
@@ -44,6 +45,8 @@ export const initializeAllGUIScreens =
 	game.instantiateBracketGUI(pong, states, gameModes, socketRef);
 	game.instantiateInputUsernameGUI(pong, states, gameModes, playerStates, lastState);
 	game.instantiateDebugGUI(pong, states, gameModes, playerStates, lang);
+	game.instantiateKeybindsLeftGUI(pong);
+	game.instantiateKeybindsRightGUI(pong);
 	// etc.
 	console.log("complete initializing GUI screens");
 }
@@ -127,6 +130,8 @@ export const	updateScreensVisibilityStates =
 	game.updateComponentControls(pong.current.waitingTournamentToStartGUI, game.states.waiting_tournament_to_start, pong, states);
 	game.updateComponentControls(pong.current.waitingScreenGUI, game.states.hosting_waiting_players, pong, states);
 	game.updateComponentControls(pong.current.bracketGUI, game.states.tournament_bracket_preview, pong, states);
+	game.updateComponentControls(pong.current.keybindsLeftGUI, game.states.in_game, pong, states);
+	game.updateComponentControls(pong.current.keybindsRightGUI, game.states.in_game, pong, states);
 
 	game.updateComponentControls(pong.current.countdownGUI,
 	[

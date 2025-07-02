@@ -1527,3 +1527,79 @@ export const instantiateInputUsernameGUI =
 	// Add the screen to the GUI texture
 	pong.current.inputUsernameGUI = inputUsernameGUI;
 }
+
+// ****************************************************************************** //
+//                                                                                //
+//                               KEYBINDS LEFT                                    //
+//                                                                                //
+// ****************************************************************************** //
+
+export const	instantiateKeybindsLeftGUI =
+(
+	pong: React.RefObject<game.pongStruct>,
+): void =>
+{
+	const	keybindsLeftGUI = game.createScreen("keybindsLeftGUI", "left");
+			keybindsLeftGUI.width = "75px";
+			keybindsLeftGUI.height = "240px";
+
+	const	keybindsLeftContainer = game.createAdaptiveContainer("keybindsLeftContainer", "75px", "240px");
+	const	keybindsLeftVerticalPanel = game.createVerticalStackPanel("keybindsLeftVerticalPanel", 0);
+
+	const	keybindsLeftUp = game.createText("keybindsLeftUp", "W");
+			keybindsLeftUp.fontSize = 48;
+	const	keybindsLeftDown = game.createText("keybindsLeftDown", "S");
+			keybindsLeftDown.fontSize = 48;
+
+	// Layout
+	keybindsLeftGUI.addControl(keybindsLeftContainer);
+	keybindsLeftContainer.addControl(keybindsLeftVerticalPanel);
+
+	// Left side
+	keybindsLeftContainer.addControl(keybindsLeftVerticalPanel);
+	keybindsLeftVerticalPanel.addControl(game.createSpacer(64, 16));
+	keybindsLeftVerticalPanel.addControl(keybindsLeftUp);
+	keybindsLeftVerticalPanel.addControl(game.createSpacer(64, 16));
+	keybindsLeftVerticalPanel.addControl(keybindsLeftDown);
+	keybindsLeftVerticalPanel.addControl(game.createSpacer(64, 16));
+
+	pong.current.keybindsLeftGUI = keybindsLeftGUI;
+}
+
+// ****************************************************************************** //
+//                                                                                //
+//                               KEYBINDS RIGHT                                   //
+//                                                                                //
+// ****************************************************************************** //
+
+export const	instantiateKeybindsRightGUI =
+(
+	pong: React.RefObject<game.pongStruct>,
+): void =>
+{
+	const	keybindsRightGUI = game.createScreen("keybindsRightGUI", "right");
+			keybindsRightGUI.width = "75px";
+			keybindsRightGUI.height = "240px";
+	
+	const	keybindsRightContainer = game.createAdaptiveContainer("keybindsRightContainer", "75px", "240px");
+	const	keybindsRightVerticalPanel = game.createVerticalStackPanel("keybindsRightVerticalPanel", 0);
+
+	const	keybindsRightUp = game.createText("keybindsRightUp", "↑");
+			keybindsRightUp.fontSize = 48;
+	const	keybindsRightDown = game.createText("keybindsRightDown", "↓");
+			keybindsRightDown.fontSize = 48;
+
+	// Layout
+	keybindsRightGUI.addControl(keybindsRightContainer);
+	keybindsRightContainer.addControl(keybindsRightVerticalPanel);
+
+	// Right side
+	keybindsRightContainer.addControl(keybindsRightVerticalPanel);
+	keybindsRightVerticalPanel.addControl(game.createSpacer(64, 16));
+	keybindsRightVerticalPanel.addControl(keybindsRightUp);
+	keybindsRightVerticalPanel.addControl(game.createSpacer(64, 16));
+	keybindsRightVerticalPanel.addControl(keybindsRightDown);
+	keybindsRightVerticalPanel.addControl(game.createSpacer(64, 16));
+
+	pong.current.keybindsRightGUI = keybindsRightGUI;
+}

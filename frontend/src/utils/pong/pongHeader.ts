@@ -249,6 +249,9 @@ export type pongStruct =
 	waitingTournamentToStartGUI?: baby.Rectangle;
 	bracketGUI?: baby.Rectangle;
 	inputUsernameGUI?: baby.Rectangle;
+	// keybindsGUI?: baby.Rectangle;
+	keybindsLeftGUI?: baby.Rectangle;
+	keybindsRightGUI?: baby.Rectangle;
 
 	inputUsernameTextBox1?: baby.StackPanel;
 	inputUsernameTextBox2?: baby.StackPanel;

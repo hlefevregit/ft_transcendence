@@ -230,7 +230,7 @@ export const	createScreen =
 	screen.height = "100%";
 	screen.background = "transparent";
 	screen.isPointerBlocker = false;
-	screen.thickness = 0;
+	screen.thickness = 1;
 
 	game.setAlignment(screen, alignment);
 
