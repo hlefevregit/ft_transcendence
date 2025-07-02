@@ -108,7 +108,7 @@ export default function Settings() {
               onClick={() => setActiveTab("block")}
               type="button"
             >
-              Block
+            {t('blocked_users')}
             </button>
 
             {/* ─── Barre de soulignement qui se déplace ─── */}
