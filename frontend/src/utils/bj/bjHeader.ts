@@ -86,6 +86,29 @@ export const ReverseValueMap = {
   13: "king",
 }
 
+export const CardXOffset = {
+	1: 10,
+	2: 42,
+	3: 46.8,
+	4: 55,
+	5: 65,
+	6: 75,
+	7: 87.75,
+	8: 96.8,
+	9: 107.325,
+	10: 118.20,
+	11: 129.14,
+	12: 139.8,
+	13: 150.15,
+}
+
+export const CardZOffset = {
+	0: 0,
+	1: 15,
+	2: 45,
+	3: 30,
+}
+
 export enum States
 {
 	main_menu,
@@ -94,6 +117,7 @@ export enum States
 	in_game,
 	game_over,
 	in_transition,
+	not_found,
 }
 
 export enum GameState
@@ -106,6 +130,24 @@ export enum PlayerChoices
 {
 	stand,
 	hit,
+}
+
+export enum gameMode
+{
+	none,
+	solo,
+	duo,
+}
+
+export enum winState
+{
+	none,
+	dealer_win,
+	player_1_win,
+	player_2_win,
+	player_1_blackjack,
+	player_2_blackjack,
+	tie,
 }
 
 export type bjStruct =
@@ -127,6 +169,7 @@ export type bjStruct =
 	chips?: baby.Mesh;
 
 	// Variables
+	balance?: number;
 	player1Money: number;
 	player2Money: number;
 	player1Score: number;
@@ -145,6 +188,13 @@ export type bjStruct =
 	playerScoreGUI?: baby.Rectangle;
 	finishedGameGUI?: baby.Rectangle;
 
+	finishedGameDealerWin?: baby.StackPanel;
+	finishedGamePlayer1Win?: baby.StackPanel;
+	finishedGamePlayer2Win?: baby.StackPanel;
+	finishedGamePlayer1Blackjack?: baby.StackPanel;
+	finishedGamePlayer2Blackjack?: baby.StackPanel;
+	finishedGameTie?: baby.StackPanel;
+
 	// Textures
 	guiTexture?: baby.AdvancedDynamicTexture;
 
@@ -154,18 +204,25 @@ export type bjStruct =
 	// Game
 	player1Cards: number[];
 	player2Cards: number[];
+	dealerCards: number[];
+
+	pressedKeys: Set<string>;
+	debugMode: boolean;
 };
 
 export function initBJStruct(): bjStruct
 {
 	return {
 		cards: {},
-		player1Money: 1000, // Starting money for player 1
+		player1Money: 0, // Starting money for player 1
 		player2Money: 1000, // Starting money for player 2
 		// playerMoney: 1000, // Starting money for the player
 		player1Score: 0,
 		player2Score: 0,
 		dealerScore: 0,
+
+		pressedKeys: new Set<string>(),
+		debugMode: false,
 	};
 }
 
@@ -201,7 +258,13 @@ export const	translations =
 
 	// Finished game
 	gameFinishedTitle: ["Game Finished", "Partie terminée", "Gioco terminato", "⠨⠛⠁⠍⠑ ⠨⠋⠊⠝⠊⠎⠓⠑⠙"],
-	winner: ["Winner:", "Gagnant:", "Vincitore:", "⠨⠺⠊⠝⠝⠑⠗ :"],
+	// winner: ["Winner:", "Gagnant:", "Vincitore:", "⠨⠺⠊⠝⠝⠑⠗ :"],
+	dealer_win: ["Dealer wins!", "Le croupier gagne !", "Il banco vince!", "⠨⠙⠑⠁⠇⠑⠗ ⠺⠊⠝⠎ !"],
+	player_1_win: ["Player 1 wins!", "Le joueur 1 gagne !", "Il giocatore 1 vince!", "⠨⠏⠇⠁⠽⠑⠗ ⠁ ⠺⠊⠝⠎ !"],
+	player_2_win: ["Player 2 wins!", "Le joueur 2 gagne !", "Il giocatore 2 vince!", "⠨⠏⠇⠁⠽⠑⠗ ⠃ ⠺⠊⠝⠎ !"],
+	player_1_blackjack: ["Player 1 \nhas a Blackjack!", "Le joueur 1 \na un Blackjack !", "Il giocatore 1 \nha un Blackjack!", "⠨⠏⠇⠁⠽⠑⠗ ⠁ ⠓⠁⠎ ⠁ \n⠃⠇⠁⠉⠅ ⠁⠝⠙ ⠺⠊⠝⠎ !"],
+	player_2_blackjack: ["Player 2 \nhas a Blackjack!", "Le joueur 2 \na un Blackjack !", "Il giocatore 2 \nha un Blackjack!", "⠨⠏⠇⠁⠽⠑⠗ ⠃ ⠓⠁⠎ ⠁ \n⠃⠇⠁⠉⠅ ⠁⠝⠙ ⠺⠊⠝⠎ !"],
+	tie: ["It's a tie!", "C'est une égalité !", "È un pareggio!", "⠨⠊⠞'⠎ ⠁ ⠞⠊⠑ !"],
 } as const;
 
 export type	labelKey = keyof typeof translations;

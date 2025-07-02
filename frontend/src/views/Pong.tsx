@@ -10,9 +10,8 @@ import LiveChat from '@/components/LiveChat/LiveChat'
 import { useSearchParams } from 'react-router-dom'
 import { join } from 'path';
 
-
-
-const Pong: React.FC = () => {
+const	Pong: React.FC = () =>
+{
 	// Refs
 	const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 	const pong = React.useRef<game.pongStruct>(game.initPongStruct());
@@ -70,62 +69,49 @@ const Pong: React.FC = () => {
 			useWebSocketOnline(pong, socketRef, gameModes, state, lang, userNameRef, ws, roomIdRef);
 			
 			// import('@/utils/pong/tournament').then(tournamentModule => {
-				// 	tournamentModule.useTournamentWebSocket(
-					// 		pong,
-					// 		socketRef,
-					// 		gameModes,
-					// 		state,
-					// 		lang,
-					// 		userNameRef,
-					// 		ws,
-					// 		lastState,
-					// 	);
-					// });
-				}
-			}, [gameModeTrigger]);
-			
-			React.useEffect(() => {
-				if (joinRoomId) {
-					gameModes.current = game.gameModes.online;
-					// console.log("Joining room with ID:", joinRoomId);
-					// const ws = new WebSocket(`wss://${window.location.hostname}:8080/ws?token=${localStorage.getItem('authToken') || ''}`);
-					// socketRef.current = ws;
-				}
-				if (joinRoomId && socketRef.current?.readyState === WebSocket.OPEN) {
-					// console.log("💡 socketRef:", socketRef.current);
-					socketRef.current.send(JSON.stringify({
-						type: 'join_game',
-						gameId: joinRoomId,
-					}))
-				}
-			}, [joinRoomId, socketRef.current])
-			
-			React.useEffect(() => {
-				const handler = (e: KeyboardEvent) => {
-					if (e.key === "F4") {
-						// console.log("🔍 F4 pressed, launching easter egg...");
-						fetch('/api/launch-easter-egg'); // Appelle le backend
-					}
-				};
-				window.addEventListener("keydown", handler);
-				return () => window.removeEventListener("keydown", handler);
-			}, []);
-			
-			React.useEffect(() => {
-				
-				
-				// if (mode === 'invite') {
-					// 	console.log("Joining invite mode with roomId:", joinRoomId);
-					// 	gameModes.current = game.gameModes.online;
-					// 	state.current = game.states.join_invite;
-					// }
-					
-					if (!canvasRef.current) return;
-					canvasRef.current.focus();
-					
-					// Initialize babylon
-					game.setupBabylonPong(pong, canvasRef);
-					// Initialize all the GUI screens
+			// 	tournamentModule.useTournamentWebSocket(
+			// 		pong,
+			// 		socketRef,
+			// 		gameModes,
+			// 		state,
+			// 		lang,
+			// 		userNameRef,
+			// 		ws,
+			// 		lastState,
+			// 	);
+			// });
+		}
+	}, [gameModeTrigger]);
+
+
+	React.useEffect(() => {
+		const handler = (e: KeyboardEvent) => {
+			if (e.key === "F4") {
+				console.log("🔍 F4 pressed, launching easter egg...");
+				fetch('/api/launch-easter-egg'); // Appelle le backend
+			}
+		};
+		window.addEventListener("keydown", handler);
+		return () => window.removeEventListener("keydown", handler);
+	}, []);
+
+	React.useEffect(() =>
+	{
+		// Use i18n language from localStorage
+		if (game.getLanguageFromStorage() === "fr")
+			lang.current = game.lang.french;
+		else if (game.getLanguageFromStorage() === "it")
+			lang.current = game.lang.italian;
+		else
+			lang.current = game.lang.english;
+
+
+		if (!canvasRef.current) return;
+		canvasRef.current.focus();
+
+		// Initialize babylon
+		game.setupBabylonPong(pong, canvasRef);
+		// Initialize all the GUI screens
 		game.initializeAllGUIScreens
 			(
 				pong,

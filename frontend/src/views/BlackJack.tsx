@@ -7,6 +7,8 @@ import * as bj from '@/libs/bjLibs';
 const BlackJack: React.FC = () => {
 	const bjRef = React.useRef<bj.bjStruct>(bj.initBJStruct());
 	const state = React.useRef<bj.States>(bj.States.main_menu);
+	const winState = React.useRef<bj.winState>(bj.winState.none);
+	const gameMode = React.useRef<bj.gameMode>(bj.gameMode.none);
 	const gameState = React.useRef<bj.GameState>(bj.GameState.waiting);
 	const lastState = React.useRef<bj.States>(state.current);
 	const language = React.useRef<bj.language>(bj.language.english);
@@ -16,6 +18,14 @@ const BlackJack: React.FC = () => {
 	const navigate = useNavigate();
 
 	React.useEffect(() => {
+		// Use i18n language from localStorage
+		if (bj.getLanguageFromStorage() === "fr")
+			language.current = bj.language.french;
+		else if (bj.getLanguageFromStorage() === "it")
+			language.current = bj.language.italian;
+		else
+			language.current = bj.language.english;
+
 		if (!canvasRef.current) return;
 
 		canvasRef.current.focus();
@@ -24,6 +34,8 @@ const BlackJack: React.FC = () => {
 		bj.initializeAllGUIScreens(
 			bjRef,
 			state,
+			gameMode,
+			winState,
 			language,
 			navigate,
 			lastState
@@ -31,13 +43,22 @@ const BlackJack: React.FC = () => {
 
 		bj.updateGUIVisibilityStates(bjRef, state.current);
 		bj.updateGUIValues(bjRef, language);
+		bj.manageLocalKeyboardInputs(bjRef.current);
 
 		if (!bjRef.current.engine) return;
 		bjRef.current.engine.runRenderLoop(() =>
 		{
 			// if (state.current !== bj.States.in_transition)
-				bj.updateGUIsWhenNeeded(bjRef, state, language, lastState, lastLanguage);
+				bj.updateGUIsWhenNeeded
+				(
+					bjRef,
+					state,
+					winState,
+					language,
+					lastState,
+					lastLanguage);
 
+			
 			if (bjRef.current.scene) bjRef.current.scene.render();
 		});
 
@@ -49,20 +70,27 @@ const BlackJack: React.FC = () => {
 
 		window.addEventListener('resize', handleResize);
 
+		const debugKeys = setInterval(() => { bj.debugKeys(bjRef, state); }, 100);
 		const	backgroundCalculations = setInterval(() =>
 		{
+			
+			bj.updateFinishedGameGUI(bjRef, winState);
 			// if (state.current !== bj.States.in_transition)
 				bj.updateGUIValues(bjRef, language);
 			if (state.current === bj.States.in_game && bjRef.current.cards)
 			{
 				bjRef.current.player1Score = bj.getCardValues(bjRef.current.player1Cards);
 				bjRef.current.player2Score = bj.getCardValues(bjRef.current.player2Cards);
-				bjRef.current.dealerScore = bj.getCardValues(Array.isArray(bjRef.current.cards['dealer']) ? bjRef.current.cards['dealer'] : [] );
+				bjRef.current.dealerScore = bj.getCardValues(bjRef.current.dealerCards);
+
+				bj.getBalance(bjRef);
+				bj.findComponentByName(bjRef, "balanceValue").markAsDirty();
 			}
 		}, 200);
 
 		// Cleanup on unmount
 		return () => {
+			clearInterval(debugKeys);
 			clearInterval(backgroundCalculations);
 			window.removeEventListener('resize', handleResize);
 			if (bjRef.current.engine) {

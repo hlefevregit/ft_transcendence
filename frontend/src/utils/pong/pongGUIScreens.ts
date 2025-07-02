@@ -152,6 +152,7 @@ export const    instantiateSettingsGUI =
 	// Language selection buttons
 	const	englishButton = game.createButton("englishButton", "🇺🇸", () =>
 	{
+		game.setLanguageInStorage("en");
 		lang.current = game.lang.english;
 		game.updateGUIValues(pong, lang);
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").text = lang.current;
@@ -162,6 +163,7 @@ export const    instantiateSettingsGUI =
 
 	const	frenchButton = game.createButton("frenchButton", "🇲🇫", () =>
 	{
+		game.setLanguageInStorage("fr");
 		lang.current = game.lang.french;
 		game.updateGUIValues(pong, lang);
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").text = lang.current;
@@ -172,6 +174,7 @@ export const    instantiateSettingsGUI =
 
 	const	italianButton = game.createButton("italianButton", "🇮🇹", () =>
 	{
+		game.setLanguageInStorage("it");
 		lang.current = game.lang.italian;
 		game.updateGUIValues(pong, lang);
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").text = lang.current;
@@ -183,6 +186,7 @@ export const    instantiateSettingsGUI =
 
 	const	brailButton = game.createButton("brailButton", "🦮", () =>
 	{
+		game.setLanguageInStorage("en");
 		lang.current = game.lang.braille;
 		game.updateGUIValues(pong, lang);
 		game.findComponentByName(pong, "debugActiveLanguageTextValue").text = lang.current;
@@ -199,14 +203,14 @@ export const    instantiateSettingsGUI =
 	settingsPanel.addControl(settingsMenuTitle);
 
 	// Music and Sound sliders
-	settingsVolumePanel1.addControl(musicSliderText);
-	settingsVolumePanel1.addControl(musicSliderTextValue);
-	settingsPanel.addControl(settingsVolumePanel1);
-	settingsPanel.addControl(musicSlider);
-	settingsVolumePanel2.addControl(soundSliderText);
-	settingsVolumePanel2.addControl(soundSliderTextValue);
-	settingsPanel.addControl(settingsVolumePanel2);
-	settingsPanel.addControl(soundSlider);
+	// settingsVolumePanel1.addControl(musicSliderText);
+	// settingsVolumePanel1.addControl(musicSliderTextValue);
+	// settingsPanel.addControl(settingsVolumePanel1);
+	// settingsPanel.addControl(musicSlider);
+	// settingsVolumePanel2.addControl(soundSliderText);
+	// settingsVolumePanel2.addControl(soundSliderTextValue);
+	// settingsPanel.addControl(settingsVolumePanel2);
+	// settingsPanel.addControl(soundSlider);
 
 	// language selection panels
 	settingsPanel.addControl(settingsLanguagePanel1);
@@ -313,7 +317,7 @@ export const	instentiatePongSettingsGUI =
 			{
 				game.findComponentByName(pong, "pongSettingsArenaWidthTextValue").text = pong.current.arenaWidth.toString();
 			});
-	const	pongSettingsArenaWidth = game.createSlider("pongSettingsArenaWidth", 7, 80, 1, pong.current.arenaWidth, (value: number) =>
+	const	pongSettingsArenaWidth = game.createSlider("pongSettingsArenaWidth", 7, 20, 1, pong.current.arenaWidth, (value: number) =>
 	{
 		pong.current.arenaWidth = value;
 		game.resizeArenaShell(pong);
@@ -599,6 +603,7 @@ export const	instantiateDebugGUI =
 	// Add the screen to the GUI texture
 	pong.current.debugGUI = debugGUI;
 	pong.current.guiTexture?.addControl(debugGUI);
+	debugGUI.isVisible = debugGUI.isEnabled = false;
 }
 
 // ****************************************************************************** //
@@ -1526,4 +1531,80 @@ export const instantiateInputUsernameGUI =
 
 	// Add the screen to the GUI texture
 	pong.current.inputUsernameGUI = inputUsernameGUI;
+}
+
+// ****************************************************************************** //
+//                                                                                //
+//                               KEYBINDS LEFT                                    //
+//                                                                                //
+// ****************************************************************************** //
+
+export const	instantiateKeybindsLeftGUI =
+(
+	pong: React.RefObject<game.pongStruct>,
+): void =>
+{
+	const	keybindsLeftGUI = game.createScreen("keybindsLeftGUI", "left");
+			keybindsLeftGUI.width = "75px";
+			keybindsLeftGUI.height = "240px";
+
+	const	keybindsLeftContainer = game.createAdaptiveContainer("keybindsLeftContainer", "75px", "240px");
+	const	keybindsLeftVerticalPanel = game.createVerticalStackPanel("keybindsLeftVerticalPanel", 0);
+
+	const	keybindsLeftUp = game.createText("keybindsLeftUp", "W");
+			keybindsLeftUp.fontSize = 48;
+	const	keybindsLeftDown = game.createText("keybindsLeftDown", "S");
+			keybindsLeftDown.fontSize = 48;
+
+	// Layout
+	keybindsLeftGUI.addControl(keybindsLeftContainer);
+	keybindsLeftContainer.addControl(keybindsLeftVerticalPanel);
+
+	// Left side
+	keybindsLeftContainer.addControl(keybindsLeftVerticalPanel);
+	keybindsLeftVerticalPanel.addControl(game.createSpacer(64, 16));
+	keybindsLeftVerticalPanel.addControl(keybindsLeftUp);
+	keybindsLeftVerticalPanel.addControl(game.createSpacer(64, 16));
+	keybindsLeftVerticalPanel.addControl(keybindsLeftDown);
+	keybindsLeftVerticalPanel.addControl(game.createSpacer(64, 16));
+
+	pong.current.keybindsLeftGUI = keybindsLeftGUI;
+}
+
+// ****************************************************************************** //
+//                                                                                //
+//                               KEYBINDS RIGHT                                   //
+//                                                                                //
+// ****************************************************************************** //
+
+export const	instantiateKeybindsRightGUI =
+(
+	pong: React.RefObject<game.pongStruct>,
+): void =>
+{
+	const	keybindsRightGUI = game.createScreen("keybindsRightGUI", "right");
+			keybindsRightGUI.width = "75px";
+			keybindsRightGUI.height = "240px";
+	
+	const	keybindsRightContainer = game.createAdaptiveContainer("keybindsRightContainer", "75px", "240px");
+	const	keybindsRightVerticalPanel = game.createVerticalStackPanel("keybindsRightVerticalPanel", 0);
+
+	const	keybindsRightUp = game.createText("keybindsRightUp", "↑");
+			keybindsRightUp.fontSize = 48;
+	const	keybindsRightDown = game.createText("keybindsRightDown", "↓");
+			keybindsRightDown.fontSize = 48;
+
+	// Layout
+	keybindsRightGUI.addControl(keybindsRightContainer);
+	keybindsRightContainer.addControl(keybindsRightVerticalPanel);
+
+	// Right side
+	keybindsRightContainer.addControl(keybindsRightVerticalPanel);
+	keybindsRightVerticalPanel.addControl(game.createSpacer(64, 16));
+	keybindsRightVerticalPanel.addControl(keybindsRightUp);
+	keybindsRightVerticalPanel.addControl(game.createSpacer(64, 16));
+	keybindsRightVerticalPanel.addControl(keybindsRightDown);
+	keybindsRightVerticalPanel.addControl(game.createSpacer(64, 16));
+
+	pong.current.keybindsRightGUI = keybindsRightGUI;
 }

@@ -13,6 +13,8 @@ export const initializeAllGUIScreens =
 (
 	bjRef: React.RefObject<bj.bjStruct>,
 	states: React.RefObject<bj.States>,
+	gameMode: React.RefObject<bj.gameMode>,
+	winState: React.RefObject<bj.winState>,
 	lang: React.RefObject<bj.language>,
 	navigate: (path: string) => void,
 	lastState: React.RefObject<bj.States>,
@@ -27,13 +29,12 @@ export const initializeAllGUIScreens =
 	// console.log("initialized GUI screens...");
 	bj.instantiateMainMenuGUI(bjRef, states, navigate);
 	bj.instantiateSettingsGUI(bjRef, states, lang);
-	bj.instantiateGameModeGUI(bjRef, states);
-	bj.instantiateActionGUI(bjRef, states);
+	bj.instantiateGameModeGUI(bjRef, states, gameMode, winState);
+	bj.instantiateActionGUI(bjRef);
 	bj.instantiateBalanceGUI(bjRef);
 	bj.instantiatePlayerScoreGUI(bjRef);
-	bj.instantiateFinishedGameGUI(bjRef, states,lang);
-	// bj.instantiateArenaGUI(pong);
-	bj.instantiateDebugGUI(bjRef, states, lang);
+	bj.instantiateFinishedGameGUI(bjRef, states, gameMode, winState, lang);
+	bj.instantiateDebugGUI(bjRef, states, winState, lang);
 	// etc.
 	// console.log("complete initializing GUI screens");
 }
@@ -114,6 +115,7 @@ export const	updateGUIsWhenNeeded =
 (
 	bjRef: React.RefObject<bj.bjStruct>,
 	states: React.RefObject<bj.States>,
+	winState: React.RefObject<bj.winState>,
 	lang: React.RefObject<bj.language>,
 	lastState: React.RefObject<bj.States>,
 	lastLang: React.RefObject<bj.language>
@@ -126,6 +128,7 @@ export const	updateGUIsWhenNeeded =
 	{
 		bj.updateGUIVisibilityStates(bjRef, states.current);
 		bj.updateGUIValues(bjRef, lang);
+		bj.updateFinishedGameGUI(bjRef, winState);
 		// bj.updateActionsVisibility(bjRef, bjRef.current.gameState!);
 		lastState.current = states.current;
 	}
@@ -137,11 +140,11 @@ export const	updateGUIsWhenNeeded =
 	}
 }
 
-export const updateComponentVisibilityBasedOnStates =
+export const updateComponentVisibilityBasedOnWinStates =
 (
 	ui: baby.Container | baby.StackPanel | undefined,
-	statesToCheck: bj.States | bj.States[],
-	activeState: bj.States
+	statesToCheck: bj.winState | bj.winState[],
+	activeState: bj.winState
 ): void =>
 {
 	if (ui === undefined) return;
@@ -150,4 +153,19 @@ export const updateComponentVisibilityBasedOnStates =
 	const	shouldShow: boolean = statesArray.includes(activeState);
 
 	ui.isVisible = ui.isEnabled = shouldShow;
+}
+
+export const	updateFinishedGameGUI =
+(
+	bjRef: React.RefObject<bj.bjStruct>,
+	winState: React.RefObject<bj.winState>,
+): void =>
+{
+	// reset visibility of all finished game components
+	updateComponentVisibilityBasedOnWinStates(bjRef.current.finishedGameDealerWin, bj.winState.dealer_win, winState.current);
+	updateComponentVisibilityBasedOnWinStates(bjRef.current.finishedGamePlayer1Win, bj.winState.player_1_win, winState.current);
+	updateComponentVisibilityBasedOnWinStates(bjRef.current.finishedGamePlayer2Win, bj.winState.player_2_win, winState.current);
+	updateComponentVisibilityBasedOnWinStates(bjRef.current.finishedGamePlayer1Blackjack, bj.winState.player_1_blackjack, winState.current);
+	updateComponentVisibilityBasedOnWinStates(bjRef.current.finishedGamePlayer1Blackjack, bj.winState.player_2_blackjack, winState.current);
+	updateComponentVisibilityBasedOnWinStates(bjRef.current.finishedGameTie, bj.winState.tie, winState.current);
 }

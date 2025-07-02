@@ -76,6 +76,8 @@ export const	instantiateGameModeGUI =
 (
 	bjRef: React.RefObject<bj.bjStruct>,
 	states: React.RefObject<bj.States>,
+	gameMode: React.RefObject<bj.gameMode>,
+	winState: React.RefObject<bj.winState>,
 ): void =>
 {
 	const	gameModeGUI = bj.createScreen("gameModeGUI", "center");
@@ -89,13 +91,15 @@ export const	instantiateGameModeGUI =
 	{
 		states.current = bj.States.in_game;
 		bjRef.current.gameState = bj.GameState.waiting;
-		await bj.PlayGame(bjRef, states, 1);
+		gameMode.current = bj.gameMode.solo;
+		await bj.PlayGame(bjRef, states, winState, 1);
 	}, bjRef, "solo");
 	const gameModeDuoButton = bj.createDynamicButton("gameModeDuoButton", async () =>
 	{
 		states.current = bj.States.in_game;
 		bjRef.current.gameState = bj.GameState.waiting;
-		await bj.PlayGame(bjRef, states, 2);
+		gameMode.current = bj.gameMode.duo;
+		await bj.PlayGame(bjRef, states, winState, 2);
 	}, bjRef, "duo");
 	const	gameModeBackButton = bj.createDynamicButton("gameModeBackButton", () =>
 	{
@@ -146,6 +150,7 @@ export const    instantiateSettingsGUI =
 	// Language selection buttons
 	const	englishButton = bj.createButton("englishButton", "🇺🇸", () =>
 	{
+		bj.setLanguageInStorage("en");
 		lang.current = bj.language.english;
 		bj.updateGUIValues(bjRef, lang);
 		bj.findComponentByName(bjRef, "debugActiveLanguageTextValue").text = lang.current;
@@ -156,6 +161,7 @@ export const    instantiateSettingsGUI =
 
 	const	frenchButton = bj.createButton("frenchButton", "🇲🇫", () =>
 	{
+		bj.setLanguageInStorage("fr");
 		lang.current = bj.language.french;
 		bj.updateGUIValues(bjRef, lang);
 		bj.findComponentByName(bjRef, "debugActiveLanguageTextValue").text = lang.current;
@@ -166,6 +172,7 @@ export const    instantiateSettingsGUI =
 
 	const	italianButton = bj.createButton("italianButton", "🇮🇹", () =>
 	{
+		bj.setLanguageInStorage("it");
 		lang.current = bj.language.italian;
 		bj.updateGUIValues(bjRef, lang);
 		bj.findComponentByName(bjRef, "debugActiveLanguageTextValue").text = lang.current;
@@ -177,6 +184,7 @@ export const    instantiateSettingsGUI =
 
 	const	brailButton = bj.createButton("brailButton", "🦮", () =>
 	{
+		bj.setLanguageInStorage("en");
 		lang.current = bj.language.braille;
 		bj.updateGUIValues(bjRef, lang);
 		bj.findComponentByName(bjRef, "debugActiveLanguageTextValue").text = lang.current;
@@ -216,6 +224,7 @@ export const	instantiateDebugGUI =
 (
 	bjRef: React.RefObject<bj.bjStruct>,
 	states: React.RefObject<bj.States>,
+	winState: React.RefObject<bj.winState>,
 	lang: React.RefObject<bj.language>
 ): void =>
 {
@@ -294,6 +303,17 @@ export const	instantiateDebugGUI =
 				Object.keys(bj.language).find(key => bj.language[key as keyof typeof bj.language] === lang.current);
 			});
 
+	// active winState
+	const	debugActiveWinStateText = bj.createText("debugActiveWinStateText", "Active winState:");
+			(debugActiveWinStateText.children[0] as baby.TextBlock).fontSize = 12;
+	const	debugActiveWinStateTextValue = bj.createDynamicText("debugActiveWinStateTextValue");
+			(debugActiveWinStateTextValue.children[0] as baby.TextBlock).fontSize = 12;
+			(debugActiveWinStateTextValue.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
+			{
+				bj.findComponentByName(bjRef, "debugActiveWinStateTextValue").text =
+				Object.keys(bj.winState).find(key => bj.winState[key as keyof typeof bj.winState] === winState.current);
+			});
+
 
 	// Add GUI components to the debug GUI
 	// The order of adding controls matters for the layout
@@ -323,9 +343,14 @@ export const	instantiateDebugGUI =
 	debugVerticalStackPanel.addControl(debugActiveLanguageText);
 	debugVerticalStackPanel.addControl(debugActiveLanguageTextValue);
 
+	debugVerticalStackPanel.addControl(debugActiveWinStateText);
+	debugVerticalStackPanel.addControl(debugActiveWinStateTextValue);
+
 	// Add the screen to the GUI texture
 	bjRef.current.debugGUI = debugGUI;
 	bjRef.current.guiTexture?.addControl(debugGUI);
+
+	debugGUI.isVisible = debugGUI.isEnabled = false;
 }
 
 // ****************************************************************************** //
@@ -337,7 +362,6 @@ export const	instantiateDebugGUI =
 export const instantiateActionGUI =
 (
 	bjRef: React.RefObject<bj.bjStruct>,
-	states: React.RefObject<bj.States>,
 ): void =>
 {
 	// Canvas that will be used for the GUI
@@ -345,6 +369,7 @@ export const instantiateActionGUI =
 
 	// All GUI components needed
 	const	actionContainer = bj.createAdaptiveContainer("actionContainer");
+			actionContainer.top = "200px";
 	const	actionVerticalStackPanel = bj.createVerticalStackPanel("actionVerticalStackPanel");
 	const	actionHorizontalStackPanel = bj.createHorizontalStackPanel("actionHorizontalStackPanel", 0);
 	const	actionTitle = bj.createDynamicTitle("actionTitle", "actionTitle");
@@ -397,8 +422,8 @@ export const	instantiateBalanceGUI =
 	const	balanceValue = bj.createTitle("balanceValue", "NaN");
 			(balanceValue.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
 			{
-				if (bjRef.current.player1Money !== undefined)
-					(balanceValue.children[0] as baby.TextBlock).text = bjRef.current.player1Money.toString();
+				if (bjRef.current.balance !== undefined)
+					(balanceValue.children[0] as baby.TextBlock).text = bjRef.current.balance.toString() + "$";
 				else
 					(balanceValue.children[0] as baby.TextBlock).text = "NaN";
 			});
@@ -491,6 +516,8 @@ export const	instantiateFinishedGameGUI =
 (
 	bjRef: React.RefObject<bj.bjStruct>,
 	states: React.RefObject<bj.States>,
+	gameMode: React.RefObject<bj.gameMode>,
+	winState: React.RefObject<bj.winState>,
 	lang: React.RefObject<bj.language>
 ): void =>
 {
@@ -504,13 +531,18 @@ export const	instantiateFinishedGameGUI =
 	const	finishedGameBackButton = bj.createDynamicButton("finishedGameBackButton", () =>
 	{
 		states.current = bj.States.main_menu;
+		gameMode.current = bj.gameMode.none;
+		winState.current = bj.winState.none;
 		bj.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, states);
 	}, bjRef, "back");
 
 	const	finishedGameReplayButton = bj.createDynamicButton("finishedGameReplayButton", () =>
 	{
-		states.current = bj.States.main_menu;
-		bj.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, states);
+		if (gameMode.current === bj.gameMode.solo) bj.PlayGame(bjRef, states, winState, 1);
+		if (gameMode.current === bj.gameMode.duo) bj.PlayGame(bjRef, states, winState, 2);
+		states.current = bj.States.in_game;
+		winState.current = bj.winState.none;
+		// bj.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, states);
 	}, bjRef, "replay");
 			(finishedGameReplayButton.children[0] as baby.Button).color = game.colorsScheme.auroraAccent4;
 			(finishedGameReplayButton.children[0] as baby.Button).onPointerEnterObservable.add(() =>
@@ -524,23 +556,43 @@ export const	instantiateFinishedGameGUI =
 				(finishedGameReplayButton.children[0] as baby.Button).background = game.colorsScheme.dark1;
 			});
 
+	const	finishedGameDealerWin = bj.createDynamicText("finishedGameDealerWin", "dealer_win");
+			finishedGameDealerWin.isEnabled = finishedGameDealerWin.isVisible = false;
+	const	finishedGamePlayer1Win = bj.createDynamicText("finishedGamePlayer1Win", "player_1_win");
+			finishedGamePlayer1Win.isEnabled = finishedGamePlayer1Win.isVisible = false;
+	const	finishedGamePlayer2Win = bj.createDynamicText("finishedGamePlayer2Win", "player_2_win");
+			finishedGamePlayer2Win.isEnabled = finishedGamePlayer2Win.isVisible = false;
+	const	finishedGamePlayer1Blackjack = bj.createDynamicText("finishedGamePlayer1Blackjack", "player_1_blackjack");
+			finishedGamePlayer1Blackjack.isEnabled = finishedGamePlayer1Blackjack.isVisible = false;
+	const	finishedGamePlayer2Blackjack = bj.createDynamicText("finishedGamePlayer2Blackjack", "player_2_blackjack");
+			finishedGamePlayer2Blackjack.isEnabled = finishedGamePlayer2Blackjack.isVisible = false;
+	const	finishedGameTie = bj.createDynamicText("finishedGameTie", "tie");
+			finishedGameTie.isEnabled = finishedGameTie.isVisible = false;
+
+	bjRef.current.finishedGameDealerWin = finishedGameDealerWin;
+	bjRef.current.finishedGamePlayer1Win = finishedGamePlayer1Win;
+	bjRef.current.finishedGamePlayer2Win = finishedGamePlayer2Win;
+	bjRef.current.finishedGamePlayer1Blackjack = finishedGamePlayer1Blackjack;
+	bjRef.current.finishedGamePlayer2Blackjack = finishedGamePlayer2Blackjack;
+	bjRef.current.finishedGameTie = finishedGameTie;
+
 	// Winner
-	const	winnerText = bj.createDynamicText("winnerText", "winner");
-	const	winnerName = bj.createText("winnerName", "prout");
-			(winnerName.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
-			{
-				if (bjRef.current.player1Score > bjRef.current.player2Score)
-					bj.findComponentByName(bjRef, "winnerName").text = bj.getLabel("player1", lang.current);
-				else if (bjRef.current.player1Score < bjRef.current.player2Score)
-					bj.findComponentByName(bjRef, "winnerName").text = bj.getLabel("player2", lang.current);
-				else if (bjRef.current.player1Score < bjRef.current.dealerScore && bjRef.current.player2Score < bjRef.current.dealerScore)
-					bj.findComponentByName(bjRef, "winnerName").text = bj.getLabel("dealer", lang.current);
-			});
-	const	winnerScore = bj.createText("winnerScore", "prout");
-			(winnerScore.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
-			{
-				bj.findComponentByName(bjRef, "winnerScore").text = ": " + Math.max(bjRef.current.player1Score, bjRef.current.player2Score, bjRef.current.dealerScore).toString();
-			});
+	// const	winnerText = bj.createDynamicText("winnerText", "winner");
+	// const	winnerName = bj.createText("winnerName", "prout");
+	// 		(winnerName.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
+	// 		{
+	// 			if (bjRef.current.player1Score > bjRef.current.player2Score)
+	// 				bj.findComponentByName(bjRef, "winnerName").text = bj.getLabel("player1", lang.current);
+	// 			else if (bjRef.current.player1Score < bjRef.current.player2Score)
+	// 				bj.findComponentByName(bjRef, "winnerName").text = bj.getLabel("player2", lang.current);
+	// 			else if (bjRef.current.player1Score < bjRef.current.dealerScore && bjRef.current.player2Score < bjRef.current.dealerScore)
+	// 				bj.findComponentByName(bjRef, "winnerName").text = bj.getLabel("dealer", lang.current);
+	// 		});
+	// const	winnerScore = bj.createText("winnerScore", "prout");
+	// 		(winnerScore.children[0] as baby.TextBlock).onDirtyObservable.add(() =>
+	// 		{
+	// 			bj.findComponentByName(bjRef, "winnerScore").text = ": " + Math.max(bjRef.current.player1Score, bjRef.current.player2Score, bjRef.current.dealerScore).toString();
+	// 		});
 
 	// Add GUI components to the finished game GUI
 	// Layout
@@ -553,9 +605,17 @@ export const	instantiateFinishedGameGUI =
 	finishedGameGUI.addControl(finishedGameContainer);
 	
 	// Winner
-	finishedGameHorizontalStackPanel1.addControl(winnerText);
-	finishedGameHorizontalStackPanel1.addControl(winnerName);
-	finishedGameHorizontalStackPanel1.addControl(winnerScore);
+	// finishedGameHorizontalStackPanel1.addControl(winnerText);
+	// finishedGameHorizontalStackPanel1.addControl(winnerName);
+	// finishedGameHorizontalStackPanel1.addControl(winnerScore);
+
+	// Win texts
+	finishedGameHorizontalStackPanel1.addControl(finishedGameDealerWin);
+	finishedGameHorizontalStackPanel1.addControl(finishedGamePlayer1Win);
+	finishedGameHorizontalStackPanel1.addControl(finishedGamePlayer2Win);
+	finishedGameHorizontalStackPanel1.addControl(finishedGamePlayer1Blackjack);
+	finishedGameHorizontalStackPanel1.addControl(finishedGamePlayer2Blackjack);
+	finishedGameHorizontalStackPanel1.addControl(finishedGameTie);
 
 	// Buttons
 	finishedGameHorizontalStackPanel2.addControl(finishedGameBackButton);

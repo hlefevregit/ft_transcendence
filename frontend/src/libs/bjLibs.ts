@@ -8,4 +8,4 @@ export * from '@/utils/bj/bjGUIScreens';
 
 export * from '@/utils/bj/bjUtils';
 
-export * from '@/utils/bj/gameLogic';
+export * from '@/utils/bj/bjLogic';

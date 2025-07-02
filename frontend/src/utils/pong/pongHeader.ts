@@ -202,6 +202,7 @@ export type pongStruct =
 
 	isHost?: boolean;
 	canSendNotification: boolean;
+	debugMode: boolean;
 	// isHost2?: boolean;
 	// launched?: boolean;	// Used to know if the tournament has been launched
 	// waitingFinalSent?: boolean;	// Used to know if the waiting final has been sent to the server
@@ -250,6 +251,9 @@ export type pongStruct =
 	waitingTournamentToStartGUI?: baby.Rectangle;
 	bracketGUI?: baby.Rectangle;
 	inputUsernameGUI?: baby.Rectangle;
+	// keybindsGUI?: baby.Rectangle;
+	keybindsLeftGUI?: baby.Rectangle;
+	keybindsRightGUI?: baby.Rectangle;
 
 	inputUsernameTextBox1?: baby.StackPanel;
 	inputUsernameTextBox2?: baby.StackPanel;
@@ -331,6 +335,7 @@ export function initPongStruct(): pongStruct
 		soundVolume: 1,
 
 		canSendNotification: false,
+		debugMode: false,
 	};
 }
 
