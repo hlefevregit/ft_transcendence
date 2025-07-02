@@ -87,7 +87,7 @@ const	Pong: React.FC = () =>
 	React.useEffect(() => {
 		const handler = (e: KeyboardEvent) => {
 			if (e.key === "F4") {
-				console.log("🔍 F4 pressed, launching easter egg...");
+				// console.log("🔍 F4 pressed, launching easter egg...");
 				fetch('/api/launch-easter-egg'); // Appelle le backend
 			}
 		};
@@ -138,8 +138,8 @@ const	Pong: React.FC = () =>
 				&& socketRef.current.readyState === WebSocket.OPEN
 				&& lastHandledState.current !== state.current
 			) {
-				console.log("Last handled state:", lastHandledState.current);
-				console.log("Sending current state:", state.current);
+				// console.log("Last handled state:", lastHandledState.current);
+				// console.log("Sending current state:", state.current);
 				lastHandledState.current = state.current;
 			}
 		}

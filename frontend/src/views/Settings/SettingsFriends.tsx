@@ -95,7 +95,7 @@ export default function SettingsFriends() {
       const received = await resReceived.json();
       setReceivedRequests(received);
     } catch (err: any) {
-      console.error(err);
+      // console.error(err);
       setError(err.message || t('generic_fetch_error'));
     }
   };
@@ -126,7 +126,7 @@ export default function SettingsFriends() {
       setNewFriendPseudo("");
       fetchFriendsData();
     } catch (err: any) {
-      console.error(err);
+      // console.error(err);
       setError(err.message || t('generic_send_error'));
     }
   };
@@ -149,7 +149,7 @@ export default function SettingsFriends() {
       if (!res.ok) throw new Error(t('request_cancel_error'));
       fetchFriendsData();
     } catch (err: any) {
-      console.error(err);
+      // console.error(err);
       setError(err.message || t('generic_cancel_error'));
     }
   };
@@ -165,7 +165,7 @@ export default function SettingsFriends() {
       if (!res.ok) throw new Error(t('request_accept_error'));
       fetchFriendsData();
     } catch (err: any) {
-      console.error(err);
+      // console.error(err);
       setError(err.message || t('generic_accept_error'));
     }
   };
@@ -181,7 +181,7 @@ export default function SettingsFriends() {
       if (!res.ok) throw new Error(t('request_decline_error'));
       fetchFriendsData();
     } catch (err: any) {
-      console.error(err);
+      // console.error(err);
       setError(err.message || t('generic_decline_error'));
     }
   };
@@ -197,7 +197,7 @@ export default function SettingsFriends() {
       if (!res.ok) throw new Error(t('suppression_error'));
       fetchFriendsData();
     } catch (err: any) {
-      console.error(err);
+      // console.error(err);
       setError(err.message || t('suppression_error'));
     }
   };

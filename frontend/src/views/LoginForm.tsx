@@ -95,7 +95,7 @@ const LoginForm: React.FC = () => {
     script.onload = () => {
       if (window.google?.accounts) {
         window.google.accounts.id.initialize({
-          client_id: '930883947615-3ful7pfe6k38qbdqfph7ja2lp76spahf.apps.googleusercontent.com',
+          client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
           callback: (response: any) => handleGoogle(response.credential),
         });
         window.google.accounts.id.renderButton(
