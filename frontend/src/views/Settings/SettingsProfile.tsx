@@ -409,7 +409,7 @@ export default function SettingsProfile() {
             <p className="qr-instruction">
 			  {t('scan_qr_code_instruction')}
             </p>
-            <img src={qrCodeUrl} alt="QR Code 2FA" className="qr-image" />
+            <img src={qrCodeUrl || ''} alt="QR Code 2FA" className="qr-image" />
             <div className="qr-input-group">
               <input
                 className="qr-input"
@@ -429,132 +429,6 @@ export default function SettingsProfile() {
         )}
       </div>
 
-			{/* Avatar + Change + Save/Reset */}
-			<div className="profile-block">
-				<div className="profile-row">
-					<div className="avatar-wrapper">
-						<img src={avatarUrl} alt="Avatar" className="avatar-image" />
-						<button
-							className={`status-dot status-${status}`}
-							onClick={toggleStatus}
-							type="button"
-						/>
-					</div>
-					<div className="pseudo-area">
-						{isEditingPseudo ? (
-							<input
-								ref={pseudoInputRef}
-								className={`pseudo-input ${pseudo.length > 16 ? 'error' : ''}`}
-								value={pseudo}
-								maxLength={16}
-								onChange={e => setPseudo(e.target.value)}
-								onKeyDown={handlePseudoKey}
-								onBlur={handlePseudoBlur}
-							/>
-						) : (
-							<button
-								className="pseudo-text editable"
-								onClick={() => setIsEditingPseudo(true)}
-								type="button"
-							>
-								{pseudo || 'Enter username'}
-							</button>
-						)}
-					</div>
-					<FaPencilAlt className="pencil-icon" />
-				</div>
-
-				<div className="avatar-actions">
-					<button
-						title="jpg, jpeg, png"
-						className="change-avatar-btn"
-						onClick={triggerFileSelect}
-						type="button"
-					>
-						Change Avatar
-					</button>
-					<button
-						className="delete-avatar-btn"
-						onClick={() => setAvatarUrl(defaultAvatar)}
-						type="button"
-					>
-						Delete Avatar
-					</button>
-				</div>
-				<input
-					ref={fileInputRef}
-					type="file"
-					accept=".jpg,.jpeg,.png"
-					onChange={onAvatarFileChange}
-					style={{ display: 'none' }}
-				/>
-
-				<div className="save-reset-container">
-					<button
-						className="save-button"
-						onClick={handleSave}
-						disabled={!isDirty}
-						type="button"
-					>
-						Save
-					</button>
-					<button
-						className="reset-button"
-						onClick={handleReset}
-						disabled={!isDirty}
-						type="button"
-					>
-						✕
-					</button>
-				</div>
-			</div>
-
-			{/* 2FA block */}
-			<div className="twofa-block">
-				<button
-					className={`profile-row clickable toggle-row ${twoFAEnabled ? 'enabled' : 'disabled'
-						}`}
-					onClick={handleToggle2FA}
-					type="button"
-				>
-					<span className="row-text">2FA: {twoFAEnabled ? 'On' : 'Off'}</span>
-					<div className="switch">
-						<div className="slider" />
-					</div>
-				</button>
-				{true && (
-					<div className="qr-section">
-						<p className="qr-instruction">
-							Scan this QR code with your authentication app:
-						</p>
-						<img src={qrCodeUrl} alt="QR Code 2FA" className="qr-image" />
-						<div className="qr-input-group">
-							<input
-								className="qr-input"
-								placeholder="Enter 2FA code"
-								value={totp}
-								onChange={e => setTotp(e.target.value)}
-							/>
-							<button
-								className="verify-button"
-								onClick={handleVerify2FA}
-								type="button"
-							>
-								Verify
-							</button>
-						</div>
-					</div>
-				)}
-			</div>
-
-			{error && <p className="error-text">{error}</p>}
-
-			{/* Logout & Delete Account */}
-			<div className="extra-actions">
-				<button className="logout-button clickable" onClick={logout} type="button">
-					Logout
-				</button>
-			</div>
 		</section>
 	);
 }
