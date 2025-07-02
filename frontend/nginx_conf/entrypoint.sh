@@ -62,7 +62,7 @@ CERT="$CERT_DIR/server.crt"
 KEY="$CERT_DIR/server.key"
 
 # Génère un cert auto-signé si manquant
-if [[ ! -f "$CERT" ] || [ ! -f "$KEY" ]]; then
+if [[ ! -f "$CERT" || ! -f "$KEY" ]]; then
   echo "🔐 Generating self-signed certificate..."
   mkdir -p "$CERT_DIR"
   openssl req -x509 -nodes -days 365 \
