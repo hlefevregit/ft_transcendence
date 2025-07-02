@@ -1,6 +1,7 @@
 // SettingsBlock.tsx
 import React, { useState, useEffect } from "react";
 import "@/styles/SettingsBlock.css";
+import { useTranslation } from 'react-i18next';
 
 interface BlockedUser {
   id: number;
@@ -9,6 +10,7 @@ interface BlockedUser {
 }
 
 export default function SettingsBlock() {
+  const { t } = useTranslation();
   const [blockedUsers, setBlockedUsers] = useState<BlockedUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
