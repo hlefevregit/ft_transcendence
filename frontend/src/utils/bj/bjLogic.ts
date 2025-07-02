@@ -57,7 +57,8 @@ export const PlayGame = async (
   bjRef.current.playerChoice = undefined;
 //   bjRef.current.playerChoice = null;
 
-  dealInitialCards(bjRef, state, player1Cards, player2Cards, dealerCards, dealerHiddenCard, players, cardMeshes);
+  await dealInitialCards(bjRef, state, player1Cards, player2Cards, dealerCards, dealerHiddenCard, players, cardMeshes);
+  await delay(1000);
   if (getCardValues(player1Cards) === 21 && player1Cards.length === 2) {
     console.log("Player 1 has a Blackjack!");
 	winState.current = game.winState.player_1_blackjack;
@@ -73,6 +74,7 @@ export const PlayGame = async (
   y = 0.02;
   z = -40;
   await playerTurn(bjRef, state, player1Cards, cardMeshes);
+  await delay(1000);
   if (players === 2) {
 	bjRef.current.playerChoice = undefined;
 	// bjRef.current.playerChoice = null;
@@ -80,6 +82,7 @@ export const PlayGame = async (
 	y = 0.02;
 	z = -40;
     await playerTurn(bjRef, state, player2Cards, cardMeshes);
+	await delay(1000);
 	if (getCardValues(player2Cards) > 21) {
 	  console.log("Player 2 has busted!");
 	  player2Busted = true;
@@ -108,7 +111,8 @@ export const PlayGame = async (
   x = 77;
   y = 0.02;
   z = 35;
-  dealerTurn(bjRef, state, dealerCards, dealerHiddenCard, cardMeshes);
+  await dealerTurn(bjRef, state, dealerCards, dealerHiddenCard, cardMeshes);
+  await delay(1000);
   const player1Value = getCardValues(player1Cards);
   const player2Value = players === 2 ? getCardValues(player2Cards) : 0;
   const dealerValue = getCardValues(dealerCards);
@@ -269,7 +273,7 @@ export const PlayGame = async (
 //   game.transitionToCamera(bjRef.current.scene?.activeCamera as baby.FreeCamera, bjRef.current.mainMenuCamera, 1, bjRef, state);
 };
 
-export const dealInitialCards = (
+export const dealInitialCards = async (
 	bjRef: React.RefObject<game.bjStruct>,
 	state: React.RefObject<game.States>,
 	player1Cards: number[],
@@ -278,16 +282,18 @@ export const dealInitialCards = (
 	dealerHiddenCard: number[],
 	players: number,
 	meshes: baby.Mesh[]
-): void => {
+): Promise<void> => {
 	if (!bjRef.current) return;
 	const scene = bjRef.current.scene;
 	if (!scene) return;
 
 	for (let i = 0; i < 2; i++) {
+		// Player 1
 		x = 25 + (i * 3.5);
 		y = 0 + (i * 0.01);
 		z = -40;
-		const player1Card = dealCard(false, meshes, bjRef);
+
+		const player1Card = await dealCard(false, meshes, bjRef);
 		if (player1Card) {
 			player1Cards.push(player1Card);
 			const value = ((player1Card - 1) % 13) + 1;
@@ -297,41 +303,48 @@ export const dealInitialCards = (
 			console.error('Failed to deal card to player 1');
 			return;
 		}
-		x = 120 + (i * 3.5);
-		y = 0 + (i * 0.01);
-		z = -40;
-		const player2Card = players === 2 ? dealCard(false, meshes, bjRef) : 0;
-		if (player2Card && players === 2) {
-			player2Cards.push(player2Card);
-			const value = ((player2Card - 1) % 13) + 1;
-			const suit = Math.floor((player2Card - 1) / 13) + 1;
-			console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to player 2`);
-		} else if (players === 2) {
-			console.error('Failed to deal card to player 2');
-			return;
+
+		// Player 2
+		if (players === 2) {
+			x = 120 + (i * 3.5);
+			y = 0 + (i * 0.01);
+			z = -40;
+
+			const player2Card = await dealCard(false, meshes, bjRef);
+			if (player2Card) {
+				player2Cards.push(player2Card);
+				const value = ((player2Card - 1) % 13) + 1;
+				const suit = Math.floor((player2Card - 1) / 13) + 1;
+				console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to player 2`);
+			} else {
+				console.error('Failed to deal card to player 2');
+				return;
+			}
 		}
+
+		// Dealer
 		x = 70 + (i * 3.5);
 		y = 0 + (i * 0.01);
 		z = 35;
-		const hidden = i === 0 ? false : true;
-		const dealerCard = dealCard(hidden, meshes, bjRef);
+
+		const hidden = i === 1;
+		const dealerCard = await dealCard(hidden, meshes, bjRef);
 		if (dealerCard) {
-			if (i === 1)
+			if (hidden) {
 				dealerHiddenCard.push(dealerCard);
-			else
-				dealerCards.push(dealerCard);
-			const value = ((dealerCard - 1) % 13) + 1;
-			const suit = Math.floor((dealerCard - 1) / 13) + 1;
-			if (i === 0) {
-				console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to dealer`);
-			} else {
 				console.log(`Dealt hidden card to dealer`);
+			} else {
+				dealerCards.push(dealerCard);
+				const value = ((dealerCard - 1) % 13) + 1;
+				const suit = Math.floor((dealerCard - 1) / 13) + 1;
+				console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to dealer`);
 			}
 		} else {
 			console.error('Failed to deal card to dealer');
 			return;
 		}
 	}
+
 	console.log(`Player 1's total value: ${getCardValues(player1Cards)}`);
 	if (players === 2) {
 		console.log(`Player 2's total value: ${getCardValues(player2Cards)}`);
@@ -348,71 +361,86 @@ export const playerTurn = async (
   if (!bjRef.current) return;
   const scene = bjRef.current.scene;
   if (!scene) return;
+
   while (getCardValues(playerCards) < 21) {
-	x += 3.5;
-	y += 0.01;
+    x += 3.5;
+    y += 0.01;
+
     const playerChoice = await waitForPlayerChoice(bjRef);
+
     switch (playerChoice) {
       case game.PlayerChoices.hit: {
-        const card = dealCard(false, meshes, bjRef);
-        const value = ((card - 1) % 13) + 1;
-        const suit = Math.floor((card - 1) / 13) + 1;
+        const card = await dealCard(false, meshes, bjRef);
         if (!card) {
           console.error("Failed to deal card");
           return;
         }
+
+        const value = ((card - 1) % 13) + 1;
+        const suit = Math.floor((card - 1) / 13) + 1;
+
         playerCards.push(card);
-        console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to player${playerChoice === game.PlayerChoices.double ? " (double)" : ""}`);
+        console.log(
+          `Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to player${playerChoice === game.PlayerChoices.double ? " (double)" : ""}`
+        );
         console.log(`Player's total value: ${getCardValues(playerCards)}`);
+
         if (getCardValues(playerCards) >= 21) {
-		  if (getCardValues(playerCards) === 21) {
-			console.log("Player has reached 21!");
-		  } else {
-			console.log("Player has busted!");
-		  }
+          if (getCardValues(playerCards) === 21) {
+            console.log("Player has reached 21!");
+          } else {
+            console.log("Player has busted!");
+          }
           return;
         }
         break;
       }
       case game.PlayerChoices.stand:
         console.log("Player stands");
-		return;
+        return;
     }
-	bjRef.current.playerChoice = null;
+
+    bjRef.current.playerChoice = null;
   }
 };
 
-export const dealerTurn = (
+export const dealerTurn = async (
 	bjRef: React.RefObject<game.bjStruct>,
     state: React.RefObject<game.States>,
 	dealerCards: number[],
 	dealerHiddenCard: number[],
 	meshes: baby.Mesh[]
-): void => {
+): Promise<void> => {
 	if (!bjRef.current) return;
 	const scene = bjRef.current.scene;
 	if (!scene) return;
 
+	// Reveal hidden card if applicable
 	if (dealerCards.length >= 2) {
-		meshes[5].rotation.z = Math.PI;
+		meshes[5].rotation.z = 0;
 		meshes[5].position.y -= 0.2;
 		dealerCards.push(dealerHiddenCard[0]);
+		console.log(`Revealed dealer's hidden card`);
+		await delay(100);
 	}
 
+	// Keep dealing cards until dealer has at least 17
 	while (dealerCards.length < 2 || getCardValues(dealerCards) < 17) {
 		x += 3.5;
 		y += 0.01;
-		const card = dealCard(false, meshes, bjRef);
+
+		const card = await dealCard(false, meshes, bjRef);
 		const value = ((card - 1) % 13) + 1;
 		const suit = Math.floor((card - 1) / 13) + 1;
+
 		if (card) {
 			dealerCards.push(card);
 			console.log(`Dealt ${game.ReverseValueMap[value]} of ${game.ReverseSuitMap[suit]} to dealer`);
-		}
-		else {
+		} else {
 			console.error('Failed to deal card');
 			return;
 		}
+
 		console.log(`Dealer's total value: ${getCardValues(dealerCards)}`);
 	}
 };
@@ -439,11 +467,11 @@ export const getCardValues = (cards: number[]): number => {
 	return totalValue;
 };
 
-export const dealCard = (
+export const dealCard = async (
 	hidden: boolean,
 	meshes: baby.Mesh[],
 	bjRef: React.RefObject<game.bjStruct>
-): number => {
+): Promise<number> => {
 	const scene = bjRef.current?.scene;
 	if (!scene) return 0;
 
@@ -466,6 +494,8 @@ export const dealCard = (
 	    clonedMesh.setEnabled(true);
 
 		meshes.push(clonedMesh);
+
+		await delay(100); // Small delay after dealing the card
 	}
 	return card;
 };
@@ -516,3 +546,5 @@ export const	getBalance = async (bjRef: React.RefObject<game.bjStruct>) =>
 	bjRef.current.balance = data.balance;
 	console.log(`Fetched balance: ${bjRef.current.balance}`);
 };
+
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

@@ -48,7 +48,9 @@ re-dev:
 
 rebuild-dev:
 	make reset_vault 2>/dev/null || true
-	touch ./vault/secrets/.env
+	if [ ! -f ./vault/secrets/.env ]; then \
+		touch ./vault/secrets/.env; \
+	fi
 
 	docker-compose -f $(DEV_COMPOSE) -p $(PROJECT_NAME) down -v --remove-orphans
 	docker system prune -af
